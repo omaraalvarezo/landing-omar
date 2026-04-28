@@ -2,7 +2,7 @@
 
 export const WHATSAPP_NUMBER = '573202569486';
 export const EMAIL = 'omaraalvarezo@gmail.com';
-export const LOCATION = 'Cúcuta, Colombia';
+export const LOCATION = 'Colombia';
 export const TIMEZONE = 'GMT-5';
 
 export const SOCIALS = {
