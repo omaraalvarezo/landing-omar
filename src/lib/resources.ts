@@ -28,7 +28,7 @@ export const RESOURCES: Resource[] = [
     slug: 'prompt-bot-whatsapp-reportes',
     title: 'Prompt — Bot de WhatsApp para reportes diarios',
     description:
-      'El prompt completo que opera el bot de Enzo Motorsport. Llega un reporte cada 8pm con ventas, ratio insumos, márgenes y alertas operativas. Adaptable a cualquier pyme con POS.',
+      'El prompt completo que opera el reporte automático de Enzo Motorsport. Llega un mensaje cada 8pm con ventas, porcentaje de insumos, márgenes y alertas operativas. Adaptable a cualquier pyme con POS.',
     category: 'prompt',
     fileType: 'md',
     fileName: 'prompt-bot-whatsapp-reportes.md',
