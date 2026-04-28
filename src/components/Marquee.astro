@@ -1,0 +1,96 @@
+---
+const ITEMS = [
+  'ENZO MOTORSPORT',
+  'ARKHĒ COWORKING',
+  'UNIVERSIDAD EAFIT',
+  'UPB MEDELLÍN',
+  'LA SALLE BARCELONA',
+  'O&P INGENIERÍA',
+];
+
+// Repetimos 2 veces para que el loop no muestre cortes (translate -50%)
+const TRACK = [...ITEMS, ...ITEMS];
+---
+
+<section class="marquee" aria-label="Operaciones y formación">
+  <div class="marquee__viewport">
+    <div class="marquee__track">
+      {TRACK.map((item) => (
+        <span class="marquee__item">
+          <span class="marquee__text">{item}</span>
+          <span class="marquee__sep" aria-hidden="true">/</span>
+        </span>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee {
+    width: 100%;
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+    background-color: var(--bg);
+    padding: clamp(20px, 3vw, 32px) 0;
+    overflow: hidden;
+  }
+
+  .marquee__viewport {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    flex-shrink: 0;
+    gap: clamp(28px, 4vw, 56px);
+    animation: marquee-scroll 40s linear infinite;
+    will-change: transform;
+    padding-right: clamp(28px, 4vw, 56px);
+  }
+
+  .marquee__viewport:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(28px, 4vw, 56px);
+    flex-shrink: 0;
+  }
+
+  .marquee__text {
+    font-family: 'Geist Variable', system-ui, sans-serif;
+    font-size: clamp(20px, 2.5vw, 32px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text-dim);
+    white-space: nowrap;
+    transition: color 0.3s ease;
+  }
+
+  .marquee__item:hover .marquee__text {
+    color: var(--text);
+  }
+
+  .marquee__sep {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: clamp(20px, 2.5vw, 32px);
+    color: var(--accent);
+  }
+
+  @keyframes marquee-scroll {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+  }
+</style>

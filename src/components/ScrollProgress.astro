@@ -1,0 +1,35 @@
+---
+// Barra de progreso de scroll — lima, 2px, fija arriba del todo.
+---
+
+<div id="scroll-progress-track" aria-hidden="true">
+  <span id="scroll-progress"></span>
+</div>
+
+<style>
+  #scroll-progress-track {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 80;
+    pointer-events: none;
+    background-color: transparent;
+  }
+
+  #scroll-progress {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background-color: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    will-change: transform;
+  }
+</style>
+
+<script>
+  import { initScrollProgress } from '../scripts/scrollProgress';
+  initScrollProgress();
+</script>

@@ -1,0 +1,158 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import { Database, Workflow, Brain } from '@lucide/astro';
+
+const CARDS = [
+  {
+    n: '01',
+    title: 'Dueño de pyme con datos sin usar',
+    body: 'Tienes hojas de Excel, ventas en POS, reservas en calendario. Pero las decisiones siguen siendo por intuición. La IA puede leer todo eso y devolverte un dashboard accionable cada mañana.',
+    Icon: Database,
+  },
+  {
+    n: '02',
+    title: 'CEO que delega mal',
+    body: 'Tu negocio depende de ti. Si no respondes, no avanza. Necesitas sistemas que decidan, prioricen y respondan en tu nombre — no más empleados.',
+    Icon: Workflow,
+  },
+  {
+    n: '03',
+    title: 'Emprendedor con MBA-mind',
+    body: 'Sabes lo que es WACC y NPS, pero no has implementado IA porque parece complicado o caro. Yo lo opero todos los días en mis dos negocios — te muestro cómo.',
+    Icon: Brain,
+  },
+];
+---
+
+<section id="para-quien" class="forwho scroll-mt-24" aria-labelledby="forwho-title">
+  <div class="container-page forwho__grid">
+    <div class="forwho__label">
+      <SectionLabel number="01" title="PARA QUIÉN" />
+    </div>
+
+    <div class="forwho__content">
+      <h2 id="forwho-title" class="h2-section forwho__headline" data-split-reveal style="--reveal-stagger: 35ms;">
+        Trabajo con operadores que <span class="accent-italic">ya</span> tienen tracción y necesitan apalancarse con IA.
+      </h2>
+
+      <ul class="forwho__cards" role="list">
+        {CARDS.map(({ n, title, body, Icon }) => (
+          <li class="forwho-card" data-reveal>
+            <Icon class="forwho-card__icon" size={160} stroke-width={0.6} aria-hidden="true" />
+            <p class="forwho-card__num">{n}</p>
+            <h3 class="forwho-card__title">{title}</h3>
+            <p class="forwho-card__body">{body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .forwho {
+    padding-block: clamp(96px, 14vw, 200px);
+    border-top: 0.5px solid var(--border);
+  }
+
+  .forwho__grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+
+  .forwho__content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 80px);
+  }
+
+  .forwho__headline {
+    margin: 0;
+    max-width: 18ch;
+  }
+
+  .forwho__cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .forwho-card {
+    position: relative;
+    overflow: hidden;
+    padding: 28px 24px 32px;
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    background-color: var(--bg);
+    transition:
+      transform 0.4s var(--ease-out-expo),
+      border-color 0.3s ease;
+    isolation: isolate;
+  }
+  .forwho-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-hi);
+  }
+  .forwho-card:hover .forwho-card__num {
+    color: var(--accent);
+  }
+
+  .forwho-card__icon {
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    color: var(--text);
+    opacity: 0.06;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .forwho-card__num {
+    position: relative;
+    z-index: 1;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin: 0 0 24px;
+    letter-spacing: 0.1em;
+    transition: color 0.3s ease;
+  }
+
+  .forwho-card__title {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 12px;
+    font-size: clamp(20px, 2.4vw, 24px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .forwho-card__body {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-mute);
+    max-width: 38ch;
+  }
+
+  @media (min-width: 768px) {
+    .forwho__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .forwho-card { padding: 32px 28px 36px; }
+  }
+
+  @media (min-width: 1024px) {
+    .forwho__grid {
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 48px;
+    }
+    .forwho__cards { gap: 16px; }
+  }
+</style>

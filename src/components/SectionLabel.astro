@@ -1,0 +1,48 @@
+---
+// Sticky section label — visible al lado izquierdo durante toda la sección.
+// En mobile cae arriba sin sticky.
+interface Props {
+  number: string; // ej "01"
+  title: string;  // ej "PARA QUIÉN"
+}
+const { number, title } = Astro.props;
+---
+
+<div class="section-label">
+  <p class="section-label__inner">
+    <span class="section-label__num">{number}</span>
+    <span class="section-label__sep" aria-hidden="true">/</span>
+    <span class="section-label__title">{title}</span>
+  </p>
+</div>
+
+<style>
+  .section-label {
+    /* En desktop hace sticky desde su contenedor section */
+  }
+
+  .section-label__inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    margin: 0;
+  }
+
+  .section-label__num { color: var(--accent); }
+  .section-label__sep { color: var(--text-dim); }
+  .section-label__title { color: var(--text-mute); }
+
+  @media (min-width: 1024px) {
+    .section-label {
+      position: sticky;
+      top: 96px;
+      align-self: flex-start;
+    }
+  }
+</style>

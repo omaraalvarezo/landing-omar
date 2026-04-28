@@ -1,0 +1,417 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
+---
+
+<section id="casos" class="cases scroll-mt-24" aria-labelledby="cases-title">
+  <div class="container-page cases__grid">
+    <div class="cases__label">
+      <SectionLabel number="04" title="CASOS" />
+    </div>
+
+    <div class="cases__content">
+      <h2 id="cases-title" class="h2-section cases__headline" data-split-reveal style="--reveal-stagger: 35ms;">
+        Tres negocios. Tres formas de <span class="accent-italic">apalancar</span> con IA.
+      </h2>
+
+      <div class="cases__bento">
+        <!-- Caso 1: Enzo (grande) -->
+        <article class="case case--lg" data-reveal>
+          <div class="case__head">
+            <div class="case__meta">
+              <MessageCircle class="case__icon" size={18} aria-hidden="true" />
+              <span>enzo motorsport · sector automotriz</span>
+            </div>
+            <h3 class="case__title">Dashboard financiero + bot diario por WhatsApp</h3>
+            <p class="case__desc">
+              Reporte automático cada 8pm con ventas del día, ratio de insumos, márgenes por servicio. Bot interactivo que responde preguntas sobre el negocio.
+            </p>
+            <ul class="case__metrics">
+              <li><strong>$81M</strong><span>cop/mes operados</span></li>
+              <li><strong>3hr</strong><span>ahorro diario en reportería</span></li>
+              <li><strong>1</strong><span>persona vs equipo de finanzas</span></li>
+            </ul>
+          </div>
+
+          <!-- Mockup visual: bot WhatsApp -->
+          <div class="case__visual case__visual--whatsapp" aria-hidden="true">
+            <div class="wa">
+              <div class="wa__head">
+                <span class="wa__avatar"></span>
+                <div>
+                  <p class="wa__name">enzo · reporte 8pm</p>
+                  <p class="wa__status">en línea</p>
+                </div>
+              </div>
+              <div class="wa__bubble">
+                <p class="wa__line"><strong>$3.4M</strong> ventas hoy</p>
+                <p class="wa__line">PPF · 2 servicios · margen 68%</p>
+                <p class="wa__line">cerámico · 3 servicios · margen 72%</p>
+                <p class="wa__line">insumos: 18% (target ≤17%)</p>
+                <p class="wa__line wa__line--alert">alert: cita JD mañana 9am sin confirmar</p>
+              </div>
+              <div class="wa__bubble wa__bubble--user">
+                <p>¿cómo vamos vs la semana pasada?</p>
+              </div>
+              <div class="wa__bubble">
+                <p class="wa__line">+12.3% vs misma fecha sem-1</p>
+                <p class="wa__line">PPF traccionando, polarizado plano</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Caso 2: Arkhē -->
+        <article class="case" data-reveal>
+          <div class="case__head">
+            <div class="case__meta">
+              <BarChart3 class="case__icon" size={18} aria-hidden="true" />
+              <span>arkhē coworking · 240m²</span>
+            </div>
+            <h3 class="case__title">Análisis de 1,340 reservas históricas</h3>
+            <p class="case__desc">
+              Cluster de patrones de uso por día/hora. Identificación del valle de ocupación 12pm–4pm que perdía 41% de revenue potencial.
+            </p>
+          </div>
+
+          <!-- Mockup visual: mini bar chart con valle -->
+          <div class="case__visual case__visual--chart" aria-hidden="true">
+            <p class="chart__caption">ocupación por hora · l-v</p>
+            <div class="chart">
+              {[55, 78, 88, 92, 60, 38, 32, 35, 48, 72, 84, 88].map((h, i) => (
+                <span class="chart__bar" style={`--h: ${h}%; --i: ${i};`}></span>
+              ))}
+            </div>
+            <div class="chart__legend">
+              <span>8am</span>
+              <span class="chart__valley">valle</span>
+              <span>8pm</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Caso 3: O&P -->
+        <article class="case" data-reveal>
+          <div class="case__head">
+            <div class="case__meta">
+              <Ship class="case__icon" size={18} aria-hidden="true" />
+              <span>importación o&p · hdpe polyfusion</span>
+            </div>
+            <h3 class="case__title">Sourcing China end-to-end con IA</h3>
+            <p class="case__desc">
+              Validación de proveedores, cálculo de freight + nacionalización, comparativa de quotes. De 6 semanas de research manual a 4 días.
+            </p>
+          </div>
+
+          <!-- Mockup visual: timeline de hitos -->
+          <div class="case__visual case__visual--timeline" aria-hidden="true">
+            <ol class="tline">
+              <li><span class="tline__dot tline__dot--done"></span><div><p class="tline__label">sourcing</p><p class="tline__sub">6 prov · top 3 IA</p></div></li>
+              <li><span class="tline__dot tline__dot--done"></span><div><p class="tline__label">quotes</p><p class="tline__sub">comparativa landed cost</p></div></li>
+              <li><span class="tline__dot tline__dot--done"></span><div><p class="tline__label">freight</p><p class="tline__sub">china → cartagena</p></div></li>
+              <li><span class="tline__dot tline__dot--active"></span><div><p class="tline__label">nacionalización</p><p class="tline__sub">en proceso</p></div></li>
+            </ol>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cases {
+    padding-block: clamp(96px, 14vw, 200px);
+    border-top: 0.5px solid var(--border);
+  }
+  .cases__grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+  .cases__content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 80px);
+  }
+  .cases__headline {
+    margin: 0;
+    max-width: 16ch;
+  }
+
+  /* Bento */
+  .cases__bento {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .case {
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    background-color: var(--bg);
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    transition: border-color 0.3s ease, transform 0.4s var(--ease-out-expo);
+    isolation: isolate;
+  }
+  .case:hover {
+    border-color: var(--border-hi);
+    transform: translateY(-2px);
+  }
+
+  .case__head {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .case__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .case__icon { color: var(--accent); }
+
+  .case__title {
+    margin: 0;
+    font-size: clamp(20px, 2.4vw, 26px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .case__desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-mute);
+  }
+
+  .case__metrics {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    border-top: 0.5px solid var(--border);
+    padding-top: 16px;
+  }
+  .case__metrics li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .case__metrics strong {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .case__metrics span {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* Visual area */
+  .case__visual {
+    background-color: var(--bg-elev);
+    border-top: 0.5px solid var(--border);
+    padding: 24px;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* WhatsApp mockup */
+  .wa {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 320px;
+  }
+  .wa__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .wa__avatar {
+    width: 32px; height: 32px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    flex-shrink: 0;
+  }
+  .wa__name {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .wa__status {
+    margin: 0;
+    font-size: 10px;
+    color: var(--accent);
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  }
+  .wa__bubble {
+    background-color: var(--bg-soft);
+    border-radius: 4px;
+    padding: 10px 12px;
+    align-self: flex-start;
+    max-width: 90%;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-mute);
+  }
+  .wa__bubble--user {
+    align-self: flex-end;
+    background-color: rgba(232, 255, 79, 0.08);
+    color: var(--text);
+  }
+  .wa__line { margin: 0; }
+  .wa__line strong { color: var(--accent); font-weight: 500; }
+  .wa__line--alert { color: #ff7a7a; margin-top: 4px; font-size: 11px; }
+
+  /* Bar chart */
+  .chart__caption {
+    margin: 0 0 12px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .chart {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 4px;
+    align-items: end;
+    height: 140px;
+    margin-bottom: 10px;
+  }
+  .chart__bar {
+    background-color: var(--text);
+    height: var(--h, 50%);
+    opacity: 0.18;
+    border-radius: 2px 2px 0 0;
+    transform-origin: bottom;
+    transform: scaleY(0);
+    transition: transform 0.6s var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 50ms + 200ms);
+  }
+  .case.is-revealed .chart__bar { transform: scaleY(1); }
+  /* Highlight valley bars */
+  .chart__bar:nth-child(5),
+  .chart__bar:nth-child(6),
+  .chart__bar:nth-child(7),
+  .chart__bar:nth-child(8) {
+    background-color: var(--accent);
+    opacity: 1;
+  }
+
+  .chart__legend {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+  .chart__valley { color: var(--accent); }
+
+  /* Timeline */
+  .tline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+  .tline::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 8px;
+    bottom: 8px;
+    width: 0.5px;
+    background-color: var(--border);
+  }
+  .tline li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 12px 1fr;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .tline__dot {
+    width: 11px;
+    height: 11px;
+    margin-top: 4px;
+    border-radius: 9999px;
+    border: 0.5px solid var(--border-hi);
+    background-color: var(--bg);
+    z-index: 1;
+  }
+  .tline__dot--done {
+    background-color: var(--text-mute);
+    border-color: var(--text-mute);
+  }
+  .tline__dot--active {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(232, 255, 79, 0.15);
+  }
+  .tline__label {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .tline__sub {
+    margin: 0;
+    font-size: 11px;
+    color: var(--text-mute);
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  }
+
+  /* Bento layout — desktop */
+  @media (min-width: 900px) {
+    .cases__bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+    .case--lg {
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: 1fr;
+    }
+    .case--lg .case__visual {
+      border-top: 0;
+      border-left: 0.5px solid var(--border);
+    }
+    .case__head { padding: 32px; }
+    .case__visual { padding: 32px; }
+  }
+
+  @media (min-width: 1024px) {
+    .cases__grid {
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+</style>

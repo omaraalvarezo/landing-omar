@@ -1,0 +1,354 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import { whatsappUrl } from '../lib/contact';
+
+interface Service {
+  n: string;
+  title: string;
+  meta: string;
+  desc: string;
+  bullets: string[];
+  takeaway: { label: string; body: string }[];
+  cta: string;
+  ctaText: string;
+  flipped?: boolean;
+}
+
+const SERVICES: Service[] = [
+  {
+    n: '01',
+    title: 'Diagnóstico Express',
+    meta: '2h · desde $500K COP',
+    desc: 'Una sesión intensiva donde reviso tu operación de punta a punta. Salgo con un mapa claro de dónde la IA puede comprimir 3 horas en 10 minutos.',
+    bullets: [
+      'Auditoría de operación en sesión de 2h',
+      'Identificación de cuellos manuales y datos sin uso',
+      'Top 5 oportunidades de IA priorizadas por ROI',
+      'PDF entregable con hallazgos en 48h',
+      'Roadmap 30/60/90 días para implementar',
+    ],
+    takeaway: [
+      { label: 'PDF de hallazgos', body: 'Documento ejecutivo con todos los puntos detectados, ordenados por impacto y costo de implementación.' },
+      { label: 'Mapa de oportunidades', body: 'Visualización 2x2 (impacto × esfuerzo) de los procesos que la IA puede absorber.' },
+      { label: 'Priorización', body: 'Recomendación clara de qué hacer primero, qué pausar y qué dejar manual por ahora.' },
+    ],
+    cta: whatsappUrl('Hola Omar, quiero agendar un diagnóstico express.'),
+    ctaText: 'agendar diagnóstico',
+  },
+  {
+    n: '02',
+    title: 'Implementación 1:1',
+    meta: '4 semanas · cotizar',
+    desc: 'Tomo la oportunidad #1 de tu diagnóstico y la construyo contigo en 4 semanas. Todo queda documentado para que tu equipo lo opere sin mí.',
+    bullets: [
+      'Build customizado: Claude API, automations, dashboards',
+      '4 sesiones de trabajo semanales (2h c/u)',
+      'Documentación viva + SOPs para tu equipo',
+      'Soporte por WhatsApp en horario hábil',
+      'Handoff técnico al equipo + sesión de capacitación',
+    ],
+    takeaway: [
+      { label: 'Sistema en producción', body: 'Funcionando en tu stack real, no en demos. Métricas de uso desde el día uno.' },
+      { label: 'Equipo entrenado', body: 'Tu gente sabe operarlo, mantenerlo y extenderlo. Sin lock-in conmigo.' },
+      { label: 'Documentación', body: 'Notion o Confluence con arquitectura, prompts, edge cases y troubleshooting.' },
+    ],
+    cta: whatsappUrl('Hola Omar, quiero cotizar una implementación 1:1.'),
+    ctaText: 'cotizar implementación',
+    flipped: true,
+  },
+  {
+    n: '03',
+    title: 'Mentoría mensual',
+    meta: 'recurrente · cotizar',
+    desc: 'Para operadores que ya tienen su sistema y necesitan un sparring partner técnico cada mes. Reviso, sugiero, debugueo, escalo.',
+    bullets: [
+      '2 sesiones 1:1 mensuales (1h c/u)',
+      'Revisión continua de tu roadmap de IA',
+      'Acceso a mis frameworks Notion (board, pulse, decisions)',
+      'Soporte asíncrono por WhatsApp dentro del mes',
+      'Pricing fijo. Cancela con 30 días de aviso.',
+    ],
+    takeaway: [
+      { label: 'Sparring técnico', body: 'Discutimos arquitectura, prompts, agentes, costos. Sin BS, directo al grano.' },
+      { label: 'Frameworks compartidos', body: 'Acceso a templates probados en Enzo y Arkhē — board sessions, pulse financiero, decision logs.' },
+      { label: 'Continuidad', body: 'Conozco tu negocio mes a mes. No re-explicas contexto cada sesión.' },
+    ],
+    cta: whatsappUrl('Hola Omar, quiero info sobre la mentoría mensual.'),
+    ctaText: 'cotizar mentoría',
+  },
+];
+---
+
+<section id="servicios" class="services scroll-mt-24" aria-labelledby="services-title">
+  <div class="container-page services__grid">
+    <div class="services__label">
+      <SectionLabel number="02" title="SERVICIOS" />
+    </div>
+
+    <div class="services__content">
+      <h2 id="services-title" class="h2-section services__headline" data-split-reveal style="--reveal-stagger: 35ms;">
+        Tres formatos para integrar IA en tu <span class="accent-italic">operación</span>.
+      </h2>
+
+      <ul class="services__list" role="list">
+        {SERVICES.map((s) => (
+          <li class={`service-card${s.flipped ? ' service-card--flipped' : ''}`} data-reveal>
+            <div class="service-card__main">
+              <p class="service-card__num">{s.n}</p>
+              <div class="service-card__head">
+                <h3 class="service-card__title">{s.title}</h3>
+                <p class="service-card__meta">{s.meta}</p>
+              </div>
+              <p class="service-card__desc">{s.desc}</p>
+              <ul class="service-card__bullets" role="list">
+                {s.bullets.map((b) => (
+                  <li>
+                    <span class="service-card__check" aria-hidden="true">+</span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+              <a href={s.cta} target="_blank" rel="noopener" class="service-card__cta" data-magnetic data-magnetic-strength="0.18">
+                {s.ctaText}
+                <span class="service-card__arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            <aside class="service-card__aside" aria-label={`Qué te llevas con ${s.title}`}>
+              <p class="service-card__aside-label">Qué te llevas</p>
+              <ul class="service-card__takeaway" role="list">
+                {s.takeaway.map((t) => (
+                  <li>
+                    <p class="service-card__takeaway-label">{t.label}</p>
+                    <p class="service-card__takeaway-body">{t.body}</p>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services {
+    padding-block: clamp(96px, 14vw, 200px);
+    border-top: 0.5px solid var(--border);
+  }
+
+  .services__grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+
+  .services__content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 80px);
+  }
+
+  .services__headline {
+    margin: 0;
+    max-width: 16ch;
+  }
+
+  .services__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+
+  .service-card {
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    background-color: var(--bg);
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .service-card:hover { border-color: var(--border-hi); }
+  .service-card:hover .service-card__num { color: var(--accent); }
+
+  .service-card__main {
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .service-card__num {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: clamp(56px, 8vw, 88px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--text-dim);
+    margin: 0;
+    transition: color 0.4s var(--ease-out-expo);
+  }
+
+  .service-card__head {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .service-card__title {
+    margin: 0;
+    font-size: clamp(28px, 3.5vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .service-card__meta {
+    margin: 0;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .service-card__desc {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-mute);
+    max-width: 50ch;
+  }
+
+  .service-card__bullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 0.5px solid var(--border);
+    padding-top: 20px;
+  }
+  .service-card__bullets li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-mute);
+  }
+  .service-card__check {
+    flex-shrink: 0;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    color: var(--accent);
+    line-height: 1.55;
+  }
+
+  .service-card__cta {
+    align-self: flex-start;
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 9999px;
+    border: 0.5px solid var(--border-hi);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    transition: border-color 0.3s ease, color 0.3s ease;
+    will-change: transform;
+  }
+  .service-card__cta:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .service-card__arrow {
+    display: inline-block;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .service-card__cta:hover .service-card__arrow {
+    transform: translateX(4px);
+  }
+
+  /* Aside (qué te llevas) */
+  .service-card__aside {
+    background-color: var(--bg-elev);
+    border-top: 0.5px solid var(--border);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .service-card__aside-label {
+    margin: 0;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .service-card__takeaway {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .service-card__takeaway li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .service-card__takeaway li:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+  .service-card__takeaway-label {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .service-card__takeaway-body {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-mute);
+    line-height: 1.55;
+  }
+
+  /* Tablet+ — layout asimétrico horizontal */
+  @media (min-width: 900px) {
+    .service-card {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    }
+    .service-card__main {
+      padding: 40px 36px 44px;
+      gap: 24px;
+    }
+    .service-card__aside {
+      border-top: 0;
+      border-left: 0.5px solid var(--border);
+      padding: 40px 32px;
+    }
+    .service-card--flipped .service-card__main { order: 2; border-left: 0.5px solid var(--border); }
+    .service-card--flipped .service-card__aside { order: 1; border-left: 0; }
+  }
+
+  @media (min-width: 1024px) {
+    .services__grid {
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+</style>

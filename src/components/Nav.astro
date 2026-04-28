@@ -1,0 +1,260 @@
+---
+import { whatsappUrl } from '../lib/contact';
+
+const NAV_LINKS = [
+  { href: '#servicios', label: 'servicios' },
+  { href: '#casos', label: 'casos' },
+  { href: '#metodo', label: 'método' },
+  { href: '#sobre', label: 'sobre' },
+];
+
+const ctaUrl = whatsappUrl(
+  'Hola Omar, vi tu landing y quiero agendar una consultoría.'
+);
+---
+
+<header id="site-nav" data-scrolled="false" aria-label="Navegación principal">
+  <div class="container-page nav__inner">
+    <a href="#top" class="nav__logo" aria-label="Inicio">omar álvarez</a>
+
+    <nav class="nav__links" aria-label="Secciones">
+      {NAV_LINKS.map((l) => (
+        <a href={l.href} class="nav__link">{l.label}</a>
+      ))}
+    </nav>
+
+    <div class="nav__cta-wrap">
+      <a href={ctaUrl} target="_blank" rel="noopener" class="nav__cta">
+        agendar →
+      </a>
+
+      <button id="nav-toggle" class="nav__toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-overlay">
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="nav-overlay" data-state="closed" aria-hidden="true">
+  <nav class="nav-overlay__inner container-page" aria-label="Menú móvil">
+    <ul>
+      {NAV_LINKS.map((l) => (
+        <li><a href={l.href} class="nav-overlay__link" data-overlay-link>{l.label}</a></li>
+      ))}
+      <li>
+        <a href={ctaUrl} target="_blank" rel="noopener" class="nav-overlay__link nav-overlay__link--cta" data-overlay-link>
+          agendar por whatsapp →
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<style>
+  #site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 70;
+    height: 80px;
+    background-color: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid transparent;
+    transition:
+      height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.3s ease,
+      background-color 0.3s ease;
+  }
+
+  #site-nav[data-scrolled='true'] {
+    height: 60px;
+    border-bottom-color: var(--border);
+    background-color: rgba(10, 10, 10, 0.85);
+  }
+
+  .nav__inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .nav__logo {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    color: var(--text);
+    transition: color 0.2s ease;
+  }
+  .nav__logo:hover { color: var(--accent); }
+
+  .nav__links {
+    display: none;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav__link {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--text-mute);
+    transition: color 0.2s ease;
+  }
+  .nav__link:hover { color: var(--accent); }
+
+  .nav__cta-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav__cta {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: var(--accent);
+    color: var(--bg);
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+  }
+  .nav__cta:hover {
+    transform: translateY(-1px);
+    background-color: var(--accent-dim);
+  }
+  @media (min-width: 768px) {
+    .nav__cta { display: inline-flex; }
+  }
+
+  .nav__toggle {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 0.5px solid var(--border-hi);
+    border-radius: 9999px;
+    padding: 0;
+  }
+  .nav__toggle span {
+    display: block;
+    width: 14px;
+    height: 1px;
+    background-color: var(--text);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  }
+  .nav__toggle[aria-expanded='true'] span:first-child {
+    transform: translateY(3px) rotate(45deg);
+  }
+  .nav__toggle[aria-expanded='true'] span:last-child {
+    transform: translateY(-3px) rotate(-45deg);
+  }
+
+  @media (min-width: 768px) {
+    .nav__links { display: flex; }
+    .nav__toggle { display: none; }
+  }
+
+  /* Mobile overlay */
+  #nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 65;
+    background-color: var(--bg);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
+    overflow-y: auto;
+    padding-top: 96px;
+    padding-bottom: 48px;
+  }
+  #nav-overlay[data-state='open'] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-overlay__inner ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .nav-overlay__link {
+    display: block;
+    padding: 16px 0;
+    font-size: clamp(36px, 9vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-weight: 500;
+    color: var(--text);
+    border-bottom: 0.5px solid var(--border);
+    transition: color 0.2s ease;
+  }
+  .nav-overlay__link:hover { color: var(--accent); }
+  .nav-overlay__link--cta {
+    color: var(--accent);
+    margin-top: 16px;
+    border-bottom: 0;
+  }
+
+  @media (min-width: 768px) {
+    #nav-overlay { display: none; }
+  }
+</style>
+
+<script>
+  // --- Scroll shrink ---
+  const nav = document.getElementById('site-nav');
+  if (nav) {
+    let last = -1;
+    function onScroll() {
+      const scrolled = window.scrollY > 16;
+      const v = scrolled ? 1 : 0;
+      if (v === last) return;
+      last = v;
+      nav!.dataset.scrolled = String(scrolled);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // --- Mobile overlay toggle ---
+  const toggle = document.getElementById('nav-toggle');
+  const overlay = document.getElementById('nav-overlay');
+  function setOpen(open: boolean) {
+    if (!toggle || !overlay) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    overlay.dataset.state = open ? 'open' : 'closed';
+    overlay.setAttribute('aria-hidden', String(!open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  toggle?.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    setOpen(!isOpen);
+  });
+  overlay?.querySelectorAll('[data-overlay-link]').forEach((a) => {
+    a.addEventListener('click', () => setOpen(false));
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+    }
+  });
+
+  // Close overlay if viewport grows past mobile breakpoint
+  const mq = window.matchMedia('(min-width: 768px)');
+  mq.addEventListener('change', (e) => {
+    if (e.matches) setOpen(false);
+  });
+</script>

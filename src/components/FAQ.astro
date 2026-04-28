@@ -1,0 +1,183 @@
+---
+import SectionLabel from './SectionLabel.astro';
+
+const FAQS = [
+  {
+    q: '¿Funciona si no tengo equipo técnico?',
+    a: 'Sí. La mayoría de mis clientes son operadores, no ingenieros. El handoff incluye documentación + capacitación de 2h. Tu gente termina operando el sistema sin mí en menos de un mes.',
+  },
+  {
+    q: '¿En cuánto tiempo veo resultados?',
+    a: 'Diagnóstico Express te entrega un PDF accionable en 48h. Implementación 1:1 tiene primer entregable en producción a las 2 semanas. Mentoría es continuo — el primer "ahá" suele ser en la primera sesión.',
+  },
+  {
+    q: '¿Trabajas con negocios pequeños?',
+    a: 'Sí, siempre que ya facturen. Mi sweet spot es pymes con $30M–$300M COP/mes. Si tu negocio está pre-revenue te recomiendo invertir en producto antes que en IA.',
+  },
+  {
+    q: '¿Atiendes fuera de Colombia?',
+    a: 'Sí, todo es remoto. He trabajado con operadores en México, Perú, Chile y España. Las sesiones son por Google Meet en zona horaria GMT-5. Pago en COP, USD o EUR vía transferencia o Stripe.',
+  },
+  {
+    q: '¿Qué necesito tener antes?',
+    a: 'Operación en marcha + voluntad de meter mano. No necesitas data limpia ni stack moderno — usamos lo que tengas. Si todavía estás validando producto, este servicio no es para ti.',
+  },
+  {
+    q: '¿Cómo es el pago?',
+    a: '50% al inicio, 50% al entregable. Diagnóstico Express es pago único. Implementación se pacta por hito. Mentoría es mensual con 30 días de aviso para cancelar. Facturación con NIT colombiano o invoice internacional.',
+  },
+];
+---
+
+<section id="faq" class="faq scroll-mt-24" aria-labelledby="faq-title">
+  <div class="container-page faq__grid">
+    <div class="faq__label">
+      <SectionLabel number="06" title="FAQ" />
+    </div>
+
+    <div class="faq__content">
+      <h2 id="faq-title" class="h2-section faq__headline" data-split-reveal style="--reveal-stagger: 35ms;">
+        Lo que la gente <span class="accent-italic">pregunta</span> antes de agendar.
+      </h2>
+
+      <ul class="faq__list" role="list">
+        {FAQS.map(({ q, a }) => (
+          <li class="faq__item" data-reveal>
+            <details>
+              <summary>
+                <span class="faq__question">{q}</span>
+                <span class="faq__icon" aria-hidden="true">
+                  <span class="faq__icon-h"></span>
+                  <span class="faq__icon-v"></span>
+                </span>
+              </summary>
+              <div class="faq__answer">
+                <p>{a}</p>
+              </div>
+            </details>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    padding-block: clamp(96px, 14vw, 200px);
+    border-top: 0.5px solid var(--border);
+  }
+  .faq__grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+  .faq__content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 80px);
+  }
+  .faq__headline {
+    margin: 0;
+    max-width: 18ch;
+  }
+
+  .faq__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .faq__item {
+    border-bottom: 0.5px solid var(--border);
+  }
+  .faq__item:first-child {
+    border-top: 0.5px solid var(--border);
+  }
+
+  details {
+    width: 100%;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px 0;
+    cursor: pointer;
+    list-style: none;
+    transition: color 0.3s ease;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { color: var(--accent); }
+  summary:hover .faq__icon { color: var(--accent); }
+
+  .faq__question {
+    font-size: clamp(16px, 1.7vw, 18px);
+    line-height: 1.4;
+    font-weight: 500;
+    color: inherit;
+  }
+
+  .faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--text-mute);
+    transition: color 0.3s ease, transform 0.4s var(--ease-out-expo);
+  }
+  .faq__icon-h,
+  .faq__icon-v {
+    position: absolute;
+    background-color: currentColor;
+    transition: transform 0.4s var(--ease-out-expo), background-color 0.3s ease;
+  }
+  .faq__icon-h {
+    left: 0; right: 0;
+    top: 50%;
+    height: 1px;
+    transform: translateY(-50%);
+  }
+  .faq__icon-v {
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    transform: translateX(-50%);
+  }
+
+  details[open] summary .faq__icon {
+    color: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  .faq__answer {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition:
+      max-height 0.4s var(--ease-out-expo),
+      opacity 0.3s ease,
+      padding 0.4s var(--ease-out-expo);
+  }
+  details[open] .faq__answer {
+    max-height: 500px;
+    opacity: 1;
+    padding: 0 0 24px;
+  }
+  .faq__answer p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-mute);
+    max-width: 60ch;
+  }
+
+  @media (min-width: 1024px) {
+    .faq__grid {
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+</style>

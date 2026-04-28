@@ -1,0 +1,242 @@
+---
+import SectionLabel from './SectionLabel.astro';
+
+const STEPS = [
+  {
+    n: '01',
+    title: 'Diagnóstico',
+    body: 'Auditoría de tu operación en sesión 2h. Mapeo de procesos manuales, datos sin uso y cuellos invisibles.',
+  },
+  {
+    n: '02',
+    title: 'Mapeo',
+    body: 'Identificación de los 5 puntos donde la IA tiene mayor ROI. Priorizado por impacto × esfuerzo, no por hype.',
+  },
+  {
+    n: '03',
+    title: 'Build',
+    body: 'Implementación con Claude API, automatizaciones (Make/n8n), dashboards. Pruebas en tu stack real, no en demos.',
+  },
+  {
+    n: '04',
+    title: 'Handoff',
+    body: 'Entrenamiento al equipo + documentación + métricas de adopción. Tu gente lo opera sola desde el día uno.',
+  },
+];
+---
+
+<section id="metodo" class="method scroll-mt-24" aria-labelledby="method-title">
+  <div class="container-page method__grid">
+    <div class="method__label">
+      <SectionLabel number="03" title="MÉTODO" />
+    </div>
+
+    <div class="method__content">
+      <h2 id="method-title" class="h2-section method__headline" data-split-reveal style="--reveal-stagger: 35ms;">
+        4 pasos. Sin <span class="accent-italic">humo</span>. Cada uno con entregable concreto.
+      </h2>
+
+      <ol class="method__steps" data-method-steps>
+        <!-- SVG line connector (desktop) -->
+        <svg class="method__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true">
+          <line
+            x1="0" y1="2" x2="1000" y2="2"
+            stroke="currentColor"
+            stroke-width="0.5"
+            stroke-dasharray="1000"
+            stroke-dashoffset="1000"
+            class="method__line-stroke"
+          />
+        </svg>
+
+        {STEPS.map(({ n, title, body }, i) => (
+          <li class="method-step" style={`--step-index: ${i};`} data-reveal>
+            <span class="method-step__node" aria-hidden="true">
+              <span class="method-step__node-dot"></span>
+            </span>
+            <p class="method-step__num">{n}</p>
+            <h3 class="method-step__title">{title}</h3>
+            <p class="method-step__body">{body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .method {
+    padding-block: clamp(96px, 14vw, 200px);
+    border-top: 0.5px solid var(--border);
+  }
+  .method__grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+  .method__content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 80px);
+  }
+  .method__headline {
+    margin: 0;
+    max-width: 18ch;
+  }
+
+  .method__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* Vertical line (mobile) */
+  .method__line {
+    display: none;
+  }
+
+  .method-step {
+    position: relative;
+    padding: 28px 0 28px 56px;
+    border-top: 0.5px solid var(--border);
+  }
+  .method-step:last-child { border-bottom: 0.5px solid var(--border); }
+
+  /* Connecting vertical line (mobile) */
+  .method-step::before {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 0;
+    bottom: 0;
+    width: 0.5px;
+    background-color: var(--border);
+  }
+
+  .method-step__node {
+    position: absolute;
+    left: 8px;
+    top: 28px;
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    background-color: var(--bg);
+    border: 0.5px solid var(--border-hi);
+    display: grid;
+    place-items: center;
+  }
+  .method-step__node-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background-color: var(--accent);
+    transform: scale(0);
+    transition: transform 0.4s var(--ease-out-expo);
+    transition-delay: calc(var(--step-index, 0) * 100ms + 200ms);
+  }
+  .method-step.is-revealed .method-step__node-dot {
+    transform: scale(1);
+  }
+
+  .method-step__num {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin: 0 0 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .method-step__title {
+    margin: 0 0 8px;
+    font-size: clamp(22px, 2.4vw, 28px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .method-step__body {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-mute);
+    max-width: 38ch;
+  }
+
+  /* Desktop: 4 columns horizontal timeline */
+  @media (min-width: 900px) {
+    .method__steps {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      padding-top: 60px;
+    }
+
+    .method__line {
+      display: block;
+      position: absolute;
+      top: 32px;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 1px;
+      color: var(--border-hi);
+    }
+    .method__line-stroke {
+      transition: stroke-dashoffset 1.4s var(--ease-out-expo);
+    }
+    .method__steps.is-line-drawn .method__line-stroke {
+      stroke-dashoffset: 0;
+    }
+
+    .method-step {
+      border-top: 0;
+      border-bottom: 0;
+      padding: 40px 24px 0 0;
+    }
+    .method-step:last-child { border-bottom: 0; }
+    .method-step::before { display: none; }
+
+    .method-step__node {
+      left: 0;
+      top: -40px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .method__grid {
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .method__line-stroke { stroke-dashoffset: 0 !important; }
+    .method-step__node-dot { transform: scale(1) !important; }
+  }
+</style>
+
+<script>
+  // Animate SVG line drawing when timeline enters viewport (desktop only)
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const list = document.querySelector('[data-method-steps]');
+  if (list && !reduced) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            list.classList.add('is-line-drawn');
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    io.observe(list);
+  } else if (list) {
+    list.classList.add('is-line-drawn');
+  }
+</script>

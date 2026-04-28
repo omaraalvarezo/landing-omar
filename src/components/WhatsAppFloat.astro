@@ -1,0 +1,122 @@
+---
+import { whatsappUrl } from '../lib/contact';
+
+const url = whatsappUrl('Hola Omar, vi tu landing y quiero hablar contigo.');
+---
+
+<a
+  id="wa-float"
+  href={url}
+  target="_blank"
+  rel="noopener"
+  aria-label="Hablar por WhatsApp"
+  data-state="hidden"
+>
+  <span class="wa-float__tooltip" aria-hidden="true">hablemos →</span>
+  <svg
+    class="wa-float__icon"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.198.295-.768.964-.94 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.018-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.41-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375a9.869 9.869 0 0 1-1.516-5.26c.001-5.45 4.436-9.884 9.892-9.884 2.64 0 5.122 1.03 6.99 2.898a9.825 9.825 0 0 1 2.892 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652a12.062 12.062 0 0 0 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/>
+  </svg>
+</a>
+
+<style>
+  #wa-float {
+    position: fixed;
+    bottom: clamp(16px, 3vw, 24px);
+    right: clamp(16px, 3vw, 24px);
+    z-index: 75;
+    width: 56px;
+    height: 56px;
+    border-radius: 9999px;
+    background-color: var(--accent);
+    color: var(--bg);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition:
+      transform 0.4s var(--ease-out-expo),
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+    will-change: transform, opacity;
+  }
+
+  /* Hidden state: only on desktop until scrolled */
+  @media (min-width: 768px) {
+    #wa-float[data-state='hidden'] {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(12px) scale(0.95);
+    }
+  }
+
+  #wa-float:hover {
+    transform: scale(1.06);
+    background-color: var(--accent-dim);
+  }
+
+  .wa-float__icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .wa-float__tooltip {
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--bg);
+    color: var(--text);
+    border: 0.5px solid var(--border-hi);
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.3s var(--ease-out-expo);
+  }
+  #wa-float:hover .wa-float__tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-4px);
+  }
+  @media (max-width: 767px) {
+    .wa-float__tooltip { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #wa-float {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Show after 30% scroll on desktop. Always visible on mobile.
+  const float = document.getElementById('wa-float');
+  if (float) {
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    if (isMobile) {
+      float.dataset.state = 'visible';
+    } else {
+      let last = 'hidden';
+      function check() {
+        const scroll = window.scrollY;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio = max > 0 ? scroll / max : 0;
+        const next = ratio > 0.25 ? 'visible' : 'hidden';
+        if (next !== last) {
+          last = next;
+          float!.dataset.state = next;
+        }
+      }
+      window.addEventListener('scroll', check, { passive: true });
+      window.addEventListener('resize', check);
+      check();
+    }
+  }
+</script>

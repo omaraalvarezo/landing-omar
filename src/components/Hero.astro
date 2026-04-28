@@ -1,0 +1,372 @@
+---
+import { whatsappUrl } from '../lib/contact';
+
+const ctaUrl = whatsappUrl(
+  'Hola Omar, vi tu landing y quiero agendar una consultoría.'
+);
+---
+
+<section id="hero" class="hero">
+  <!-- Grid sutil de fondo (decorativo, opacity 0.03) -->
+  <div class="hero__grid" aria-hidden="true"></div>
+
+  <!-- Glow lima difuso muy sutil -->
+  <div class="hero__glow" aria-hidden="true"></div>
+
+  <div class="hero__inner container-page">
+    <!-- Pill superior izquierda -->
+    <p class="hero__badge" data-reveal>
+      <span class="hero__badge-dot" aria-hidden="true"></span>
+      disponible · cúcuta, co
+    </p>
+
+    <!-- Headline -->
+    <h1 class="hero__headline display-1" data-split-reveal style="--reveal-delay: 200ms; --reveal-stagger: 50ms;">
+      ia aplicada<br />
+      a la operación<br />
+      real de <span class="accent-italic">pymes</span><br />
+      en latam.
+    </h1>
+
+    <!-- Subheadline -->
+    <p class="hero__sub body-lg" data-reveal style="--reveal-delay: 700ms;">
+      Operador de dos negocios reales en Cúcuta. Te ayudo a integrar IA en tu operación sin humo — con métricas, casos y handoff a tu equipo.
+    </p>
+
+    <!-- CTAs -->
+    <div class="hero__ctas" data-reveal style="--reveal-delay: 850ms;">
+      <a
+        href={ctaUrl}
+        target="_blank"
+        rel="noopener"
+        class="hero__cta hero__cta--primary"
+        data-magnetic
+        data-magnetic-strength="0.25"
+      >
+        agendar por whatsapp
+        <span class="hero__cta-arrow" aria-hidden="true">→</span>
+      </a>
+      <a
+        href="#casos"
+        class="hero__cta hero__cta--ghost"
+        data-magnetic
+        data-magnetic-strength="0.15"
+      >
+        ver casos
+      </a>
+    </div>
+
+    <!-- Métricas + scroll indicator -->
+    <div class="hero__bottom" data-reveal style="--reveal-delay: 1000ms;">
+      <ul class="hero__metrics" aria-label="Métricas operacionales">
+        <li class="hero__metric">
+          <span class="hero__metric-value" data-counter="81" data-counter-format="money-m" aria-label="$81 millones de pesos colombianos por mes">$0M</span>
+          <span class="hero__metric-label">cop/mes operados</span>
+        </li>
+        <li class="hero__metric">
+          <span class="hero__metric-value" data-counter="2" data-counter-duration="900">0</span>
+          <span class="hero__metric-label">negocios activos</span>
+        </li>
+        <li class="hero__metric">
+          <span class="hero__metric-value" data-counter="1340" data-counter-format="thousand">0</span>
+          <span class="hero__metric-label">reservas analizadas</span>
+        </li>
+      </ul>
+
+      <div class="hero__scroll" aria-hidden="true">
+        <span class="hero__scroll-line"></span>
+        <span class="hero__scroll-label">scroll</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh; /* small-viewport-height handles mobile browser chrome */
+    width: 100%;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Background grid */
+  .hero__grid {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image:
+      linear-gradient(to right, var(--text) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--text) 1px, transparent 1px);
+    background-size: clamp(60px, 8vw, 96px) clamp(60px, 8vw, 96px);
+    opacity: 0.03;
+    mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
+    pointer-events: none;
+  }
+
+  /* Lima glow blob */
+  .hero__glow {
+    position: absolute;
+    bottom: -25%;
+    left: -10%;
+    width: 60vmax;
+    height: 60vmax;
+    z-index: 0;
+    background: radial-gradient(closest-side, rgba(232, 255, 79, 0.06), transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+    padding-top: clamp(96px, 14vh, 140px);
+    padding-bottom: clamp(32px, 6vh, 64px);
+    gap: clamp(20px, 3vh, 32px);
+  }
+
+  /* Badge */
+  .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    padding: 7px 14px;
+    border: 0.5px solid var(--border-hi);
+    border-radius: 9999px;
+    font-size: 13px;
+    color: var(--text-mute);
+    margin: 0;
+  }
+  .hero__badge-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background-color: var(--accent);
+    box-shadow: 0 0 0 0 rgba(232, 255, 79, 0.6);
+    animation: badge-pulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+  @keyframes badge-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(232, 255, 79, 0.5);
+    }
+    70% {
+      box-shadow: 0 0 0 8px rgba(232, 255, 79, 0);
+    }
+  }
+
+  /* Headline */
+  .hero__headline {
+    margin: 0;
+    max-width: 12ch;
+    color: var(--text);
+  }
+  .hero__headline .accent-italic {
+    /* span inherits these via splitText */
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* Subheadline */
+  .hero__sub {
+    margin: 0;
+    max-width: 480px;
+    color: var(--text-mute);
+  }
+
+  /* CTAs */
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .hero__cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 22px;
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: 500;
+    overflow: hidden;
+    transition: transform 0.4s var(--ease-out-expo);
+    will-change: transform;
+  }
+  .hero__cta--primary {
+    background-color: var(--accent);
+    color: var(--bg);
+  }
+  .hero__cta--primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--accent-dim);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.45s var(--ease-out-expo);
+    z-index: 0;
+  }
+  .hero__cta--primary:hover::before {
+    transform: scaleX(1);
+  }
+  .hero__cta--primary > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero__cta--ghost {
+    background-color: transparent;
+    color: var(--text);
+    border: 0.5px solid var(--border-hi);
+  }
+  .hero__cta--ghost:hover {
+    border-color: var(--text);
+  }
+
+  .hero__cta-arrow {
+    display: inline-block;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .hero__cta--primary:hover .hero__cta-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Bottom row */
+  .hero__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: auto;
+    padding-top: clamp(32px, 6vh, 56px);
+  }
+
+  .hero__metrics {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .hero__metric {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 16px;
+    border-left: 0.5px solid var(--border-hi);
+  }
+  .hero__metric-value {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .hero__metric-label {
+    font-size: 12px;
+    color: var(--text-mute);
+  }
+
+  /* Scroll indicator */
+  .hero__scroll {
+    display: none;
+  }
+
+  /* Tablet+ */
+  @media (min-width: 640px) {
+    .hero__metrics {
+      grid-template-columns: repeat(3, minmax(0, max-content));
+      gap: 32px;
+    }
+    .hero__metric {
+      padding-left: 20px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero__bottom {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 32px;
+    }
+    .hero__scroll {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      align-self: flex-end;
+    }
+    .hero__scroll-line {
+      display: block;
+      width: 1px;
+      height: 40px;
+      background-color: var(--border-hi);
+      transform-origin: top center;
+      animation: scroll-line 1.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    }
+    .hero__scroll-label {
+      font-family: 'Geist Mono Variable', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    @keyframes scroll-line {
+      0% { transform: scaleY(0); transform-origin: top center; }
+      45% { transform: scaleY(1); transform-origin: top center; }
+      55% { transform: scaleY(1); transform-origin: bottom center; }
+      100% { transform: scaleY(0); transform-origin: bottom center; }
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__badge-dot,
+    .hero__scroll-line {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { splitAndReveal } from '../scripts/splitText';
+  import { initCounters } from '../scripts/counter';
+  import { initMagnetic } from '../scripts/magnetic';
+
+  splitAndReveal({ selector: '[data-split-reveal]', staggerMs: 50, durationMs: 800 });
+  initCounters();
+  initMagnetic();
+
+  // Generic [data-reveal] (non-split): observe and add .is-revealed
+  const reveals = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-split-reveal])');
+  if (reveals.length) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      reveals.forEach((el) => el.classList.add('is-revealed'));
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              (e.target as HTMLElement).classList.add('is-revealed');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      reveals.forEach((el) => io.observe(el));
+    }
+  }
+</script>

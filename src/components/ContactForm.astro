@@ -1,0 +1,222 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import { WHATSAPP_NUMBER, TIMEZONE } from '../lib/contact';
+---
+
+<section id="contacto" class="contact scroll-mt-24" aria-labelledby="contact-title">
+  <div class="container-page contact__grid">
+    <div class="contact__label">
+      <SectionLabel number="07" title="CONTACTO" />
+    </div>
+
+    <div class="contact__content">
+      <h2 id="contact-title" class="display-2 contact__headline" data-split-reveal style="--reveal-stagger: 40ms;">
+        ¿Listo para integrar <span class="accent-italic">IA</span> en tu operación?
+      </h2>
+
+      <p class="contact__sub body-lg" data-reveal>
+        Cuéntame de tu negocio. Te respondo en menos de 24h.
+      </p>
+
+      <form class="contact__form" data-reveal data-contact-form data-whatsapp-number={WHATSAPP_NUMBER}>
+        <label class="contact__field">
+          <span class="sr-only">Tu nombre</span>
+          <input
+            type="text"
+            name="nombre"
+            placeholder="tu nombre"
+            required
+            autocomplete="name"
+            class="contact__input"
+          />
+        </label>
+
+        <label class="contact__field">
+          <span class="sr-only">Tu negocio o sector</span>
+          <input
+            type="text"
+            name="negocio"
+            placeholder="tu negocio o sector"
+            required
+            class="contact__input"
+          />
+        </label>
+
+        <label class="contact__field">
+          <span class="sr-only">Qué quieres resolver</span>
+          <textarea
+            name="problema"
+            rows="3"
+            placeholder="qué quieres resolver"
+            required
+            class="contact__input contact__textarea"
+          ></textarea>
+        </label>
+
+        <button type="submit" class="contact__submit" data-magnetic data-magnetic-strength="0.18">
+          iniciar conversación
+          <span class="contact__arrow" aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <p class="contact__meta" data-reveal>
+        respuesta promedio: 4 horas · zona horaria {TIMEZONE}
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-block: clamp(120px, 18vw, 240px);
+    border-top: 0.5px solid var(--border);
+  }
+  .contact__grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+  .contact__content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 720px;
+  }
+  .contact__headline {
+    margin: 0;
+    max-width: 18ch;
+  }
+  .contact__sub {
+    margin: 0;
+    color: var(--text-mute);
+    max-width: 480px;
+  }
+
+  .contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .contact__field {
+    position: relative;
+    display: block;
+  }
+
+  .contact__input {
+    width: 100%;
+    padding: 18px 0 16px;
+    background: transparent;
+    border: 0;
+    border-bottom: 0.5px solid var(--border);
+    border-radius: 0;
+    color: var(--text);
+    font-family: inherit;
+    font-size: clamp(18px, 2.4vw, 24px);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    outline: 0;
+    transition: border-color 0.3s ease;
+    /* fake bottom border that fills on focus */
+    background-image: linear-gradient(to right, var(--accent), var(--accent));
+    background-size: 0 1px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    transition:
+      background-size 0.5s var(--ease-out-expo),
+      border-color 0.3s ease;
+  }
+  .contact__input::placeholder {
+    color: var(--text-dim);
+    transition: color 0.3s ease;
+  }
+  .contact__input:focus,
+  .contact__input:focus-visible {
+    outline: 0;
+    background-size: 100% 1px;
+    border-bottom-color: transparent;
+  }
+  .contact__input:focus::placeholder {
+    color: var(--text-mute);
+  }
+
+  .contact__textarea {
+    resize: vertical;
+    min-height: 96px;
+  }
+
+  .contact__submit {
+    align-self: flex-start;
+    margin-top: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 28px;
+    background-color: var(--accent);
+    color: var(--bg);
+    border: 0;
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s var(--ease-out-expo);
+    will-change: transform;
+  }
+  .contact__submit:hover {
+    background-color: var(--accent-dim);
+  }
+
+  .contact__arrow {
+    display: inline-block;
+    animation: arrow-loop 1.6s var(--ease-out-expo) infinite;
+  }
+  @keyframes arrow-loop {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+
+  .contact__meta {
+    margin: 8px 0 0;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+  }
+
+  @media (min-width: 1024px) {
+    .contact__grid {
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact__arrow { animation: none !important; }
+    .contact__input { transition: none !important; }
+  }
+</style>
+
+<script>
+  import { initMagnetic } from '../scripts/magnetic';
+  import { whatsappUrl, buildLeadMessage } from '../lib/contact';
+
+  initMagnetic('[data-magnetic]');
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const nombre = String(fd.get('nombre') ?? '').trim();
+      const negocio = String(fd.get('negocio') ?? '').trim();
+      const problema = String(fd.get('problema') ?? '').trim();
+
+      if (!nombre || !negocio || !problema) return;
+
+      const message = buildLeadMessage({ nombre, negocio, problema });
+      const url = whatsappUrl(message);
+      window.open(url, '_blank', 'noopener');
+    });
+  }
+</script>
