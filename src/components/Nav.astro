@@ -1,25 +1,46 @@
 ---
 import { whatsappUrl } from '../lib/contact';
 
+interface Props {
+  currentPath?: string;
+}
+const { currentPath = Astro.url.pathname } = Astro.props;
+const isHome = currentPath === '/' || currentPath === '';
+
+// Anchors a secciones del home: si estamos en /, usar hash. Si no, prefijar con /.
+const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
+
 const NAV_LINKS = [
-  { href: '#servicios', label: 'servicios' },
-  { href: '#casos', label: 'casos' },
-  { href: '#metodo', label: 'método' },
-  { href: '#sobre', label: 'sobre' },
+  { href: anchor('#servicios'), label: 'servicios', match: null },
+  { href: anchor('#casos'), label: 'casos', match: null },
+  { href: anchor('#metodo'), label: 'método', match: null },
+  { href: '/recursos', label: 'recursos', match: '/recursos' },
 ];
+
+const logoHref = isHome ? '#top' : '/';
 
 const ctaUrl = whatsappUrl(
   'Hola Omar, vi tu landing y quiero agendar una consultoría.'
 );
+
+function isActive(match: string | null): boolean {
+  return match !== null && currentPath.startsWith(match);
+}
 ---
 
 <header id="site-nav" data-scrolled="false" aria-label="Navegación principal">
   <div class="container-page nav__inner">
-    <a href="#top" class="nav__logo" aria-label="Inicio">omar álvarez</a>
+    <a href={logoHref} class="nav__logo" aria-label="Inicio">omar álvarez</a>
 
     <nav class="nav__links" aria-label="Secciones">
       {NAV_LINKS.map((l) => (
-        <a href={l.href} class="nav__link">{l.label}</a>
+        <a
+          href={l.href}
+          class={`nav__link${isActive(l.match) ? ' nav__link--active' : ''}`}
+          aria-current={isActive(l.match) ? 'page' : undefined}
+        >
+          {l.label}
+        </a>
       ))}
     </nav>
 
@@ -40,7 +61,16 @@ const ctaUrl = whatsappUrl(
   <nav class="nav-overlay__inner container-page" aria-label="Menú móvil">
     <ul>
       {NAV_LINKS.map((l) => (
-        <li><a href={l.href} class="nav-overlay__link" data-overlay-link>{l.label}</a></li>
+        <li>
+          <a
+            href={l.href}
+            class={`nav-overlay__link${isActive(l.match) ? ' nav-overlay__link--active' : ''}`}
+            aria-current={isActive(l.match) ? 'page' : undefined}
+            data-overlay-link
+          >
+            {l.label}
+          </a>
+        </li>
       ))}
       <li>
         <a href={ctaUrl} target="_blank" rel="noopener" class="nav-overlay__link nav-overlay__link--cta" data-overlay-link>
@@ -104,6 +134,7 @@ const ctaUrl = whatsappUrl(
     transition: color 0.2s ease;
   }
   .nav__link:hover { color: var(--accent); }
+  .nav__link--active { color: var(--accent); }
 
   .nav__cta-wrap {
     display: flex;
@@ -201,6 +232,7 @@ const ctaUrl = whatsappUrl(
     transition: color 0.2s ease;
   }
   .nav-overlay__link:hover { color: var(--accent); }
+  .nav-overlay__link--active { color: var(--accent); }
   .nav-overlay__link--cta {
     color: var(--accent);
     margin-top: 16px;

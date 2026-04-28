@@ -13,7 +13,7 @@ export default defineConfig({
   vite: {
     server: {
       // Permitir túneles públicos (localhost.run, ngrok, trycloudflare) en dev
-      allowedHosts: ['.lhr.life', '.localhost.run', '.ngrok-free.app', '.trycloudflare.com'],
+      allowedHosts: ['.lhr.life', '.localhost.run', '.ngrok-free.app', '.trycloudflare.com', '.serveousercontent.com', '.serveo.net'],
     },
   },
 });

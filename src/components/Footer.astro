@@ -1,13 +1,17 @@
 ---
 import { EMAIL, LOCATION, SOCIALS, whatsappUrl } from '../lib/contact';
 
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
+const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
+
 const NAV_LINKS = [
-  { href: '#servicios', label: 'servicios' },
-  { href: '#metodo', label: 'método' },
-  { href: '#casos', label: 'casos' },
-  { href: '#sobre', label: 'sobre' },
-  { href: '#faq', label: 'faq' },
-  { href: '#contacto', label: 'contacto' },
+  { href: anchor('#servicios'), label: 'servicios' },
+  { href: anchor('#metodo'), label: 'método' },
+  { href: anchor('#casos'), label: 'casos' },
+  { href: anchor('#sobre'), label: 'sobre' },
+  { href: '/recursos', label: 'recursos' },
+  { href: anchor('#faq'), label: 'faq' },
+  { href: anchor('#contacto'), label: 'contacto' },
 ];
 
 const CONTACT_LINKS = [

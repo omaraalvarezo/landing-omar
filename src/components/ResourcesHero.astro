@@ -1,0 +1,105 @@
+---
+import { RESOURCES } from '../lib/resources';
+const total = RESOURCES.length;
+---
+
+<header class="rhero">
+  <p class="mono-label rhero__label">
+    <span class="rhero__num">08</span>
+    <span class="rhero__sep" aria-hidden="true">/</span>
+    recursos
+    <span class="rhero__sep" aria-hidden="true">·</span>
+    <span class="rhero__free">gratis</span>
+  </p>
+
+  <h1 class="display-2 rhero__title" data-split-reveal style="--reveal-stagger: 40ms;">
+    Lo que <span class="accent-italic">uso</span> yo. Sin paywall.
+  </h1>
+
+  <p class="body-lg rhero__sub" data-reveal>
+    Prompts, frameworks y plantillas que opero todos los días en Enzo y Arkhē. Cero email, cero spam — descarga, abre, y úsalo en tu negocio.
+  </p>
+
+  <div class="rhero__stats" data-reveal>
+    <div class="rhero__stat">
+      <p class="rhero__stat-value">{total}</p>
+      <p class="rhero__stat-label">recursos disponibles</p>
+    </div>
+    <div class="rhero__stat">
+      <p class="rhero__stat-value">$0</p>
+      <p class="rhero__stat-label">costo</p>
+    </div>
+    <div class="rhero__stat">
+      <p class="rhero__stat-value">0</p>
+      <p class="rhero__stat-label">campos a llenar</p>
+    </div>
+  </div>
+</header>
+
+<style>
+  .rhero {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vw, 32px);
+    padding-top: clamp(120px, 16vw, 180px);
+    padding-bottom: clamp(48px, 8vw, 96px);
+  }
+
+  .rhero__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-mute);
+  }
+  .rhero__num { color: var(--accent); }
+  .rhero__sep { color: var(--text-dim); }
+  .rhero__free { color: var(--accent); }
+
+  .rhero__title {
+    margin: 0;
+    max-width: 16ch;
+  }
+
+  .rhero__sub {
+    margin: 0;
+    color: var(--text-mute);
+    max-width: 540px;
+  }
+
+  .rhero__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, max-content));
+    gap: clamp(20px, 4vw, 40px);
+    border-top: 0.5px solid var(--border);
+    padding-top: clamp(20px, 3vw, 32px);
+    margin-top: clamp(8px, 2vw, 16px);
+  }
+
+  .rhero__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 16px;
+    border-left: 0.5px solid var(--border-hi);
+  }
+
+  .rhero__stat-value {
+    margin: 0;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .rhero__stat-label {
+    margin: 0;
+    font-size: 11px;
+    color: var(--text-mute);
+  }
+
+  @media (max-width: 480px) {
+    .rhero__stats { grid-template-columns: 1fr 1fr; }
+    .rhero__stat:last-child { grid-column: span 2; }
+  }
+</style>

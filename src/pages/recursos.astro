@@ -1,0 +1,133 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResourcesHero from '../components/ResourcesHero.astro';
+import ResourceGrid from '../components/ResourceGrid.astro';
+import Footer from '../components/Footer.astro';
+import { RESOURCES } from '../lib/resources';
+import { whatsappUrl } from '../lib/contact';
+
+const ctaUrl = whatsappUrl(
+  'Hola Omar, descargué un recurso de tu landing y quiero algo más a medida.'
+);
+---
+
+<Layout
+  title="Recursos gratis — Omar Álvarez"
+  description="Prompts, frameworks y plantillas que Omar Álvarez usa en Enzo y Arkhē. Descarga sin paywall, sin email, sin friction."
+>
+  <section class="container-page recursos__inner">
+    <ResourcesHero />
+    <ResourceGrid resources={RESOURCES} />
+
+    <aside class="recursos__cta" data-reveal>
+      <p class="mono-label recursos__cta-label">¿algo más a medida?</p>
+      <h2 class="h2-section recursos__cta-headline">
+        Si esto te sirvió, lo <span class="accent-italic">customizado</span> te va a multiplicar.
+      </h2>
+      <a
+        href={ctaUrl}
+        target="_blank"
+        rel="noopener"
+        class="recursos__cta-btn"
+        data-magnetic
+        data-magnetic-strength="0.2"
+      >
+        agendar diagnóstico
+        <span class="recursos__cta-arrow" aria-hidden="true">→</span>
+      </a>
+    </aside>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .recursos__inner {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(48px, 8vw, 96px);
+    padding-bottom: clamp(96px, 14vw, 180px);
+  }
+
+  .recursos__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: clamp(40px, 6vw, 64px) clamp(28px, 5vw, 56px);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    background: linear-gradient(
+      135deg,
+      var(--bg-elev) 0%,
+      var(--bg) 100%
+    );
+    margin-top: clamp(40px, 6vw, 80px);
+  }
+
+  .recursos__cta-label {
+    margin: 0;
+    color: var(--text-mute);
+  }
+
+  .recursos__cta-headline {
+    margin: 0;
+    max-width: 22ch;
+  }
+
+  .recursos__cta-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 14px 24px;
+    background-color: var(--accent);
+    color: var(--bg);
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: 500;
+    will-change: transform;
+    transition: background-color 0.3s ease;
+  }
+  .recursos__cta-btn:hover {
+    background-color: var(--accent-dim);
+  }
+
+  .recursos__cta-arrow {
+    display: inline-block;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .recursos__cta-btn:hover .recursos__cta-arrow {
+    transform: translateX(4px);
+  }
+</style>
+
+<script>
+  import { initMagnetic } from '../scripts/magnetic';
+  import { splitAndReveal } from '../scripts/splitText';
+
+  splitAndReveal({ selector: '[data-split-reveal]', staggerMs: 40, durationMs: 700 });
+  initMagnetic();
+
+  // Generic data-reveal observer
+  const reveals = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-split-reveal])');
+  if (reveals.length) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      reveals.forEach((el) => el.classList.add('is-revealed'));
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              (e.target as HTMLElement).classList.add('is-revealed');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      reveals.forEach((el) => io.observe(el));
+    }
+  }
+</script>

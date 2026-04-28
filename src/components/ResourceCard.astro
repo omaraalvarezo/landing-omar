@@ -1,0 +1,158 @@
+---
+import { type Resource, formatSize } from '../lib/resources';
+import { Download } from '@lucide/astro';
+
+interface Props {
+  resource: Resource;
+}
+const { resource } = Astro.props;
+
+const fileUrl = `/resources/${resource.fileName}`;
+---
+
+<article class="resource-card" data-reveal data-category={resource.category}>
+  <header class="resource-card__head">
+    <p class="resource-card__meta">
+      <span class="resource-card__category">{resource.category}</span>
+      <span class="resource-card__sep" aria-hidden="true">·</span>
+      <span class="resource-card__type">{resource.fileType}</span>
+    </p>
+    <h3 class="resource-card__title">{resource.title}</h3>
+  </header>
+
+  <p class="resource-card__desc">{resource.description}</p>
+
+  <footer class="resource-card__foot">
+    <p class="resource-card__stats">
+      <span>{formatSize(resource.sizeBytes)}</span>
+      <span class="resource-card__sep" aria-hidden="true">·</span>
+      <span>{resource.date}</span>
+    </p>
+    <a
+      href={fileUrl}
+      download={resource.fileName}
+      class="resource-card__cta"
+      data-magnetic
+      data-magnetic-strength="0.18"
+      aria-label={`Descargar ${resource.title}`}
+    >
+      <Download size={14} aria-hidden="true" />
+      <span>descargar</span>
+    </a>
+  </footer>
+</article>
+
+<style>
+  .resource-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px 24px;
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    background-color: var(--bg);
+    transition:
+      transform 0.4s var(--ease-out-expo),
+      border-color 0.3s ease,
+      opacity 0.4s ease;
+    isolation: isolate;
+    height: 100%;
+  }
+  .resource-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-hi);
+  }
+  .resource-card:hover .resource-card__category {
+    color: var(--accent);
+  }
+
+  .resource-card[data-hidden='true'] {
+    display: none;
+  }
+
+  .resource-card__head {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .resource-card__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .resource-card__category {
+    color: var(--text-mute);
+    transition: color 0.3s ease;
+  }
+
+  .resource-card__sep {
+    color: var(--text-dim);
+  }
+
+  .resource-card__type {
+    color: var(--text-dim);
+  }
+
+  .resource-card__title {
+    margin: 0;
+    font-size: clamp(18px, 2vw, 22px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .resource-card__desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-mute);
+    flex-grow: 1;
+  }
+
+  .resource-card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 0.5px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .resource-card__stats {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .resource-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 0.5px solid var(--border-hi);
+    border-radius: 9999px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+    transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+    will-change: transform;
+  }
+  .resource-card__cta:hover {
+    border-color: var(--accent);
+    background-color: var(--accent);
+    color: var(--bg);
+  }
+</style>

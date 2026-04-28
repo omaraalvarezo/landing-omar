@@ -1,0 +1,164 @@
+---
+import ResourceCard from './ResourceCard.astro';
+import { CATEGORIES, type Resource, countByCategory } from '../lib/resources';
+
+interface Props {
+  resources: Resource[];
+}
+const { resources } = Astro.props;
+const counts = countByCategory();
+---
+
+<section class="resource-grid" aria-labelledby="resource-grid-label">
+  <h2 id="resource-grid-label" class="sr-only">Recursos descargables</h2>
+
+  <div class="resource-grid__filters" role="tablist" aria-label="Filtrar por categoría">
+    {CATEGORIES.map((c, i) => (
+      <button
+        type="button"
+        class="resource-grid__chip"
+        data-filter={c.value}
+        role="tab"
+        aria-selected={i === 0 ? 'true' : 'false'}
+        aria-controls="resource-grid-list"
+      >
+        {c.label}
+        <span class="resource-grid__count">{counts[c.value] ?? 0}</span>
+      </button>
+    ))}
+  </div>
+
+  <div id="resource-grid-list" class="resource-grid__list" role="list">
+    {resources.map((r) => (
+      <div role="listitem" class="resource-grid__item" data-category={r.category}>
+        <ResourceCard resource={r} />
+      </div>
+    ))}
+  </div>
+
+  <p class="resource-grid__empty" data-empty hidden>
+    No hay recursos en esta categoría todavía. Vuelve pronto.
+  </p>
+</section>
+
+<style>
+  .resource-grid {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 4vw, 48px);
+  }
+
+  /* Filter chips */
+  .resource-grid__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 0.5px solid var(--border);
+    padding-bottom: 24px;
+  }
+
+  .resource-grid__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: transparent;
+    border: 0.5px solid var(--border);
+    border-radius: 9999px;
+    color: var(--text-mute);
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    cursor: pointer;
+    transition:
+      border-color 0.3s ease,
+      color 0.3s ease,
+      background-color 0.3s ease;
+  }
+  .resource-grid__chip:hover {
+    color: var(--text);
+    border-color: var(--border-hi);
+  }
+  .resource-grid__chip[aria-selected='true'] {
+    color: var(--bg);
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .resource-grid__count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 18px;
+    padding: 0 5px;
+    height: 16px;
+    font-size: 10px;
+    line-height: 1;
+    border-radius: 9999px;
+    background-color: rgba(245, 245, 245, 0.08);
+    color: inherit;
+  }
+  .resource-grid__chip[aria-selected='true'] .resource-grid__count {
+    background-color: rgba(10, 10, 10, 0.2);
+  }
+
+  /* Grid */
+  .resource-grid__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .resource-grid__item {
+    display: block;
+    transition: opacity 0.3s ease;
+  }
+  .resource-grid__item[data-hidden='true'] {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .resource-grid__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .resource-grid__list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .resource-grid__empty {
+    margin: 0;
+    padding: 48px 0;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+</style>
+
+<script>
+  const grid = document.querySelector<HTMLElement>('.resource-grid');
+  if (grid) {
+    const chips = grid.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const items = grid.querySelectorAll<HTMLElement>('.resource-grid__item');
+    const empty = grid.querySelector<HTMLElement>('[data-empty]');
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const filter = chip.dataset.filter ?? 'all';
+
+        chips.forEach((c) => c.setAttribute('aria-selected', String(c === chip)));
+
+        let visible = 0;
+        items.forEach((it) => {
+          const matches = filter === 'all' || it.dataset.category === filter;
+          it.dataset.hidden = String(!matches);
+          if (matches) visible++;
+        });
+
+        if (empty) empty.hidden = visible > 0;
+      });
+    });
+  }
+</script>
