@@ -30,7 +30,13 @@ function isActive(match: string | null): boolean {
 
 <header id="site-nav" data-scrolled="false" aria-label="Navegación principal">
   <div class="container-page nav__inner">
-    <a href={logoHref} class="nav__logo" aria-label="Inicio">omar álvarez</a>
+    <a href={logoHref} class="nav__logo" aria-label="Inicio">
+      <svg class="nav__logo-mark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
+        <circle cx="14" cy="18" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="23" cy="10" r="2.5" fill="#E8FF4F"/>
+      </svg>
+      <span class="nav__logo-text">omar <span class="nav__logo-accent">álvarez</span></span>
+    </a>
 
     <nav class="nav__links" aria-label="Secciones">
       {NAV_LINKS.map((l) => (
@@ -114,13 +120,36 @@ function isActive(match: string | null): boolean {
   }
 
   .nav__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-size: 14px;
     font-weight: 500;
     letter-spacing: -0.005em;
     color: var(--text);
     transition: color 0.2s ease;
   }
-  .nav__logo:hover { color: var(--accent); }
+  .nav__logo:hover {
+    color: var(--accent);
+  }
+  .nav__logo-mark {
+    flex-shrink: 0;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .nav__logo:hover .nav__logo-mark {
+    transform: rotate(-8deg);
+  }
+  .nav__logo-text {
+    line-height: 1;
+  }
+  .nav__logo-accent {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+  }
 
   .nav__links {
     display: none;

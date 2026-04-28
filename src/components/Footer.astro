@@ -28,11 +28,17 @@ const year = new Date().getFullYear();
 <footer class="footer" aria-label="Pie de página">
   <div class="container-page footer__grid">
     <div class="footer__col footer__col--brand">
-      <p class="footer__logo">omar álvarez</p>
-      <p class="footer__tagline">
-        ia aplicada a la operación real de pymes en latam.
+      <p class="footer__logo">
+        <svg class="footer__logo-mark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
+          <circle cx="14" cy="18" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="23" cy="10" r="2.5" fill="#E8FF4F"/>
+        </svg>
+        <span>omar <span class="footer__logo-accent">álvarez</span></span>
       </p>
-      <p class="footer__copy">© {year} omar álvarez · {LOCATION.toLowerCase()}</p>
+      <p class="footer__tagline">
+        IA aplicada a la operación real de pymes en LATAM.
+      </p>
+      <p class="footer__copy">© {year} omar álvarez · {LOCATION}</p>
     </div>
 
     <nav class="footer__col" aria-label="Navegación">
@@ -106,10 +112,24 @@ const year = new Date().getFullYear();
   }
 
   .footer__col--brand .footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-size: 16px;
     font-weight: 500;
     color: var(--text);
     margin: 0;
+  }
+  .footer__logo-mark {
+    flex-shrink: 0;
+  }
+  .footer__logo-accent {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+    font-size: 18px;
+    letter-spacing: -0.01em;
   }
   .footer__tagline {
     margin: 0;

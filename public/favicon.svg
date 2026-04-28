@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Omar Álvarez">
   <rect width="32" height="32" fill="#0A0A0A" rx="6"/>
-  <text x="16" y="22" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="500" fill="#E8FF4F" text-anchor="middle">o</text>
+  <circle cx="14" cy="18" r="8" fill="none" stroke="#F5F5F5" stroke-width="1.5"/>
+  <circle cx="23" cy="10" r="2.5" fill="#E8FF4F"/>
 </svg>
