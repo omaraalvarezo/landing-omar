@@ -1,5 +1,6 @@
 ---
 import { whatsappUrl } from '../lib/contact';
+import Logo from './Logo.astro';
 
 interface Props {
   currentPath?: string;
@@ -30,12 +31,8 @@ function isActive(match: string | null): boolean {
 
 <header id="site-nav" data-scrolled="false" aria-label="Navegación principal">
   <div class="container-page nav__inner">
-    <a href={logoHref} class="nav__logo" aria-label="Inicio">
-      <svg class="nav__logo-mark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
-        <circle cx="14" cy="18" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
-        <circle cx="23" cy="10" r="2.5" fill="#E8FF4F"/>
-      </svg>
-      <span class="nav__logo-text">omar <span class="nav__logo-accent">álvarez</span></span>
+    <a href={logoHref} class="nav__logo" aria-label="omar.alvarez · inicio">
+      <Logo variant="horizontal" size={18} />
     </a>
 
     <nav class="nav__links" aria-label="Secciones">
@@ -95,20 +92,16 @@ function isActive(match: string | null): boolean {
     right: 0;
     z-index: 70;
     height: 80px;
-    background-color: rgba(10, 10, 10, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background-color: var(--bg);
     border-bottom: 0.5px solid transparent;
     transition:
       height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-      border-color 0.3s ease,
-      background-color 0.3s ease;
+      border-color 0.3s ease;
   }
 
   #site-nav[data-scrolled='true'] {
     height: 60px;
-    border-bottom-color: var(--border);
-    background-color: rgba(10, 10, 10, 0.85);
+    border-bottom-color: var(--line);
   }
 
   .nav__inner {
@@ -122,33 +115,10 @@ function isActive(match: string | null): boolean {
   .nav__logo {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: -0.005em;
-    color: var(--text);
-    transition: color 0.2s ease;
+    transition: opacity 0.2s ease;
   }
   .nav__logo:hover {
-    color: var(--accent);
-  }
-  .nav__logo-mark {
-    flex-shrink: 0;
-    transition: transform 0.4s var(--ease-out-expo);
-  }
-  .nav__logo:hover .nav__logo-mark {
-    transform: rotate(-8deg);
-  }
-  .nav__logo-text {
-    line-height: 1;
-  }
-  .nav__logo-accent {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic;
-    color: var(--accent);
-    font-weight: 400;
-    font-size: 16px;
-    letter-spacing: -0.01em;
+    opacity: 0.7;
   }
 
   .nav__links {
@@ -157,13 +127,15 @@ function isActive(match: string | null): boolean {
     gap: 28px;
   }
   .nav__link {
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
-    font-size: 13px;
-    color: var(--text-mute);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--mute);
     transition: color 0.2s ease;
   }
-  .nav__link:hover { color: var(--accent); }
-  .nav__link--active { color: var(--accent); }
+  .nav__link:hover { color: var(--ink); }
+  .nav__link--active { color: var(--ink); }
 
   .nav__cta-wrap {
     display: flex;
@@ -175,17 +147,18 @@ function isActive(match: string | null): boolean {
     display: none;
     align-items: center;
     gap: 6px;
-    padding: 8px 16px;
+    padding: 7px 14px;
     background-color: var(--accent);
     color: var(--bg);
-    border-radius: 9999px;
-    font-size: 13px;
+    font-family: var(--font-mono);
+    font-size: 12px;
     font-weight: 500;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+    letter-spacing: 0.04em;
+    border-radius: 0;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .nav__cta:hover {
-    transform: translateY(-1px);
-    background-color: var(--accent-dim);
+    opacity: 0.85;
   }
   @media (min-width: 768px) {
     .nav__cta { display: inline-flex; }
@@ -200,15 +173,15 @@ function isActive(match: string | null): boolean {
     width: 40px;
     height: 40px;
     background: transparent;
-    border: 0.5px solid var(--border-hi);
-    border-radius: 9999px;
+    border: 0.5px solid var(--line);
+    border-radius: 0;
     padding: 0;
   }
   .nav__toggle span {
     display: block;
     width: 14px;
     height: 1px;
-    background-color: var(--text);
+    background-color: var(--ink);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
   }
   .nav__toggle[aria-expanded='true'] span:first-child {
@@ -252,16 +225,17 @@ function isActive(match: string | null): boolean {
   .nav-overlay__link {
     display: block;
     padding: 16px 0;
-    font-size: clamp(36px, 9vw, 56px);
+    font-family: var(--font-mono);
+    font-size: clamp(32px, 8vw, 48px);
     line-height: 1;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.025em;
     font-weight: 500;
-    color: var(--text);
-    border-bottom: 0.5px solid var(--border);
-    transition: color 0.2s ease;
+    color: var(--ink);
+    border-bottom: 0.5px solid var(--line);
+    transition: opacity 0.2s ease;
   }
-  .nav-overlay__link:hover { color: var(--accent); }
-  .nav-overlay__link--active { color: var(--accent); }
+  .nav-overlay__link:hover { opacity: 0.7; }
+  .nav-overlay__link--active { color: var(--ink); }
   .nav-overlay__link--cta {
     color: var(--accent);
     margin-top: 16px;

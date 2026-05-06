@@ -36,7 +36,7 @@ const fileUrl = `/resources/${resource.fileName}`;
       data-magnetic-strength="0.18"
       aria-label={`Descargar ${resource.title}`}
     >
-      <Download size={14} aria-hidden="true" />
+      <Download size={14} stroke-width={1.5} aria-hidden="true" />
       <span>descargar</span>
     </a>
   </footer>
@@ -48,7 +48,7 @@ const fileUrl = `/resources/${resource.fileName}`;
     flex-direction: column;
     gap: 16px;
     padding: 28px 24px;
-    border: 0.5px solid var(--border);
+    border: 0.5px solid var(--line);
     border-radius: 4px;
     background-color: var(--bg);
     transition:
@@ -60,7 +60,7 @@ const fileUrl = `/resources/${resource.fileName}`;
   }
   .resource-card:hover {
     transform: translateY(-2px);
-    border-color: var(--border-hi);
+    border-color: var(--line-hi);
   }
   .resource-card:hover .resource-card__category {
     color: var(--accent);
@@ -81,24 +81,24 @@ const fileUrl = `/resources/${resource.fileName}`;
     align-items: center;
     gap: 8px;
     margin: 0;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: var(--mute);
   }
 
   .resource-card__category {
-    color: var(--text-mute);
+    color: var(--mute);
     transition: color 0.3s ease;
   }
 
   .resource-card__sep {
-    color: var(--text-dim);
+    color: var(--mute);
   }
 
   .resource-card__type {
-    color: var(--text-dim);
+    color: var(--mute);
   }
 
   .resource-card__title {
@@ -107,14 +107,14 @@ const fileUrl = `/resources/${resource.fileName}`;
     line-height: 1.2;
     letter-spacing: -0.02em;
     font-weight: 500;
-    color: var(--text);
+    color: var(--ink);
   }
 
   .resource-card__desc {
     margin: 0;
     font-size: 14px;
     line-height: 1.55;
-    color: var(--text-mute);
+    color: var(--mute);
     flex-grow: 1;
   }
 
@@ -123,7 +123,7 @@ const fileUrl = `/resources/${resource.fileName}`;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    border-top: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--line);
     padding-top: 16px;
   }
 
@@ -132,9 +132,9 @@ const fileUrl = `/resources/${resource.fileName}`;
     align-items: center;
     gap: 6px;
     margin: 0;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--mute);
   }
 
   .resource-card__cta {
@@ -142,9 +142,9 @@ const fileUrl = `/resources/${resource.fileName}`;
     align-items: center;
     gap: 8px;
     padding: 10px 16px;
-    border: 0.5px solid var(--border-hi);
+    border: 0.5px solid var(--line-hi);
     border-radius: 9999px;
-    color: var(--text);
+    color: var(--ink);
     font-size: 13px;
     font-weight: 500;
     transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;

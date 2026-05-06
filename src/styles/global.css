@@ -1,32 +1,46 @@
 /* ---------- Fonts (must be first per CSS spec) ---------- */
-@import '@fontsource-variable/geist';
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource/instrument-serif/400.css';
-@import '@fontsource/instrument-serif/400-italic.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ---------- Design tokens ---------- */
+/* ---------- Design tokens · omar-brand v2.1 ---------- */
 :root {
-  --bg:        #0A0A0A;
-  --bg-elev:   #111111;
-  --bg-soft:   #1A1A1A;
-  --border:    rgba(245, 245, 245, 0.08);
-  --border-hi: rgba(245, 245, 245, 0.16);
-  --text:      #F5F5F5;
-  --text-mute: rgba(245, 245, 245, 0.55);
-  --text-dim:  rgba(245, 245, 245, 0.35);
-  --accent:    #E8FF4F;
-  --accent-dim:#A8B838;
+  /* Surfaces */
+  --bg:        #FAFAF9;
+  --bg-soft:   #F4F4F2;
 
+  /* Ink */
+  --ink:       #0A0A0A;
+  --ink-soft:  #262626;
+  --mute:      #525252;
+
+  /* Lines */
+  --line:      #E5E5E2;
+  --line-hi:   #D4D4D0;
+
+  /* Accent — único acento */
+  --accent:      #1E5FA8;
+  --accent-soft: #E8F0FA;
+
+  /* Semantic — uso restringido (deltas numéricos) */
+  --positive:  #15803D;
+  --negative:  #B91C1C;
+
+  /* Type */
+  --font-mono:  'Geist Mono Variable', ui-monospace, Menlo, monospace;
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+
+  /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
+  /* Layout */
   --container-x: clamp(20px, 4vw, 48px);
   --section-y:   clamp(80px, 12vw, 200px);
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 /* ---------- Base ---------- */
@@ -42,31 +56,27 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     background-color: var(--bg);
-    color: var(--text);
-    font-family: 'Geist Variable', system-ui, sans-serif;
+    color: var(--ink);
+    font-family: var(--font-mono);
     font-feature-settings: 'ss01', 'ss02', 'cv11';
-    /* Prevent horizontal scroll on narrow viewports */
     overflow-x: clip;
   }
 
   body {
     margin: 0;
     background-color: var(--bg);
-    color: var(--text);
-    font-size: 16px;
+    color: var(--ink);
+    font-size: 15px;
     line-height: 1.6;
     font-weight: 400;
+    letter-spacing: -0.005em;
     min-height: 100vh;
     overflow-x: clip;
-    /* Subtle grain over the entire page to avoid banding on flat black */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-attachment: fixed;
-    background-size: 200px 200px;
   }
 
   ::selection {
-    background-color: var(--accent);
-    color: var(--bg);
+    background-color: var(--accent-soft);
+    color: var(--ink);
   }
 
   a {
@@ -96,21 +106,26 @@
     padding-inline: var(--container-x);
   }
 
+  /* Display: Instrument Serif Regular para hooks editoriales */
   .display-1 {
+    font-family: var(--font-serif);
     font-size: clamp(48px, 8vw, 112px);
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-    font-weight: 500;
+    line-height: 1.0;
+    letter-spacing: -0.015em;
+    font-weight: 400;
   }
 
   .display-2 {
+    font-family: var(--font-serif);
     font-size: clamp(36px, 5vw, 72px);
-    line-height: 1;
-    letter-spacing: -0.04em;
-    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    font-weight: 400;
   }
 
+  /* Títulos de sección en Geist Mono Medium */
   .h2-section {
+    font-family: var(--font-mono);
     font-size: clamp(28px, 3.5vw, 56px);
     line-height: 1.05;
     letter-spacing: -0.02em;
@@ -124,46 +139,97 @@
   }
 
   .body {
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.6;
   }
 
   .caption {
     font-size: 13px;
     line-height: 1.5;
-    color: var(--text-mute);
+    color: var(--mute);
   }
 
   .mono-label {
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
-    font-size: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
     line-height: 1.5;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--text-mute);
+    color: var(--mute);
+    font-weight: 500;
   }
 
-  .accent-italic {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic;
-    color: var(--accent);
+  .meta-path {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    color: var(--mute);
     font-weight: 400;
+  }
+
+  /* Editorial highlight: palabra protagonista — serif Regular + underline azul fino.
+     El subrayado carga señal (no decora), respeta la regla "el acento nunca decora,
+     siempre carga sentido". Misma técnica que .link. */
+  .accent-serif,
+  .accent-italic {
+    font-family: var(--font-serif);
+    color: var(--ink);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    text-decoration-line: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
+  /* Big number protagónico */
+  .number-display {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  /* Logo wordmark */
+  .logo {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .logo .dot {
+    color: var(--accent);
   }
 
   .pill {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 14px;
-    border: 0.5px solid var(--border-hi);
+    padding: 6px 12px;
+    border: 0.5px solid var(--line);
     border-radius: 9999px;
-    font-size: 13px;
-    color: var(--text-mute);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mute);
+    background-color: transparent;
   }
 
   .divider {
     height: 0.5px;
-    background-color: var(--border);
+    background-color: var(--line);
+  }
+
+  /* Standard editorial link */
+  .link {
+    color: var(--accent);
+    border-bottom: 1px solid var(--accent);
+    transition: opacity 0.2s ease;
+  }
+  .link:hover {
+    opacity: 0.7;
   }
 }
 

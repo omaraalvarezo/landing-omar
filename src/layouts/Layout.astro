@@ -14,8 +14,8 @@ interface Props {
 }
 
 const {
-  title = 'Omar Álvarez — Consultor de IA para pymes LATAM',
-  description = 'CEO de Enzo Motorsport y Arkhē Coworking. Integro IA en la operación real de pymes en Latinoamérica. Base en Colombia.',
+  title = 'omar.alvarez — Negocios reales, código real',
+  description = 'Operador de dos negocios. Documento IA aplicada y operación para emprendimientos pequeños y medianos en LATAM. Sin teoría, sin gurús.',
   image = '/og-image.svg',
   showNav = true,
 } = Astro.props;
@@ -48,7 +48,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(image, Astro.site)} />
 
-    <meta name="theme-color" content="#0A0A0A" />
+    <meta name="theme-color" content="#FAFAF9" />
 
     <!-- Schema.org Person + ProfessionalService -->
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -57,11 +57,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         {
           "@type": "Person",
           "name": "Omar Álvarez",
-          "jobTitle": "Consultor de IA para pymes LATAM",
+          "jobTitle": "Operador",
+          "description": "Documento IA aplicada y operación para emprendimientos pequeños y medianos en LATAM.",
           "url": canonicalURL.toString(),
           "email": "omaraalvarezo@gmail.com",
           "address": {
             "@type": "PostalAddress",
+            "addressLocality": "Cúcuta",
+            "addressRegion": "Norte de Santander",
             "addressCountry": "CO"
           },
           "alumniOf": [
@@ -72,7 +75,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         },
         {
           "@type": "ProfessionalService",
-          "name": "Omar Álvarez · IA aplicada a pymes",
+          "name": "omar.alvarez · IA aplicada a operación",
           "url": canonicalURL.toString(),
           "areaServed": ["CO", "MX", "PE", "CL", "ES"],
           "priceRange": "$$"
@@ -84,6 +87,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[120] focus:bg-accent focus:px-4 focus:py-2 focus:text-bg focus:rounded-sm"
+      style="font-family: var(--font-mono);"
     >
       Saltar al contenido
     </a>

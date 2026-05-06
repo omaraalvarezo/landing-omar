@@ -52,7 +52,7 @@ const CARDS = [
 <style>
   .forwho {
     padding-block: clamp(96px, 14vw, 200px);
-    border-top: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--line);
   }
 
   .forwho__grid {
@@ -85,7 +85,7 @@ const CARDS = [
     position: relative;
     overflow: hidden;
     padding: 28px 24px 32px;
-    border: 0.5px solid var(--border);
+    border: 0.5px solid var(--line);
     border-radius: 4px;
     background-color: var(--bg);
     transition:
@@ -95,7 +95,7 @@ const CARDS = [
   }
   .forwho-card:hover {
     transform: translateY(-2px);
-    border-color: var(--border-hi);
+    border-color: var(--line-hi);
   }
   .forwho-card:hover .forwho-card__num {
     color: var(--accent);
@@ -105,7 +105,7 @@ const CARDS = [
     position: absolute;
     right: -20px;
     bottom: -20px;
-    color: var(--text);
+    color: var(--ink);
     opacity: 0.06;
     z-index: 0;
     pointer-events: none;
@@ -114,9 +114,9 @@ const CARDS = [
   .forwho-card__num {
     position: relative;
     z-index: 1;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 13px;
-    color: var(--text-dim);
+    color: var(--mute);
     margin: 0 0 24px;
     letter-spacing: 0.1em;
     transition: color 0.3s ease;
@@ -130,7 +130,7 @@ const CARDS = [
     line-height: 1.2;
     letter-spacing: -0.02em;
     font-weight: 500;
-    color: var(--text);
+    color: var(--ink);
   }
 
   .forwho-card__body {
@@ -139,7 +139,7 @@ const CARDS = [
     margin: 0;
     font-size: 15px;
     line-height: 1.6;
-    color: var(--text-mute);
+    color: var(--mute);
     max-width: 38ch;
   }
 
@@ -150,7 +150,7 @@ const CARDS = [
 
   @media (min-width: 1024px) {
     .forwho__grid {
-      grid-template-columns: 200px minmax(0, 1fr);
+      grid-template-columns: 1fr;
       gap: 48px;
     }
     .forwho__cards { gap: 16px; }

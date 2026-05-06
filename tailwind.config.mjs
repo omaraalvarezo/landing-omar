@@ -6,35 +6,38 @@ export default {
       colors: {
         bg: {
           DEFAULT: 'var(--bg)',
-          elev: 'var(--bg-elev)',
           soft: 'var(--bg-soft)',
         },
-        border: {
-          DEFAULT: 'var(--border)',
-          hi: 'var(--border-hi)',
-        },
         ink: {
-          DEFAULT: 'var(--text)',
-          mute: 'var(--text-mute)',
-          dim: 'var(--text-dim)',
+          DEFAULT: 'var(--ink)',
+          soft: 'var(--ink-soft)',
+          mute: 'var(--mute)',
+        },
+        line: {
+          DEFAULT: 'var(--line)',
+          hi: 'var(--line-hi)',
         },
         accent: {
           DEFAULT: 'var(--accent)',
-          dim: 'var(--accent-dim)',
+          soft: 'var(--accent-soft)',
         },
+        positive: 'var(--positive)',
+        negative: 'var(--negative)',
       },
       fontFamily: {
-        sans: ['"Geist Variable"', 'system-ui', 'sans-serif'],
-        mono: ['"Geist Mono Variable"', 'ui-monospace', 'monospace'],
-        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+        sans: ['"Geist Mono Variable"', 'ui-monospace', 'Menlo', 'monospace'],
+        mono: ['"Geist Mono Variable"', 'ui-monospace', 'Menlo', 'monospace'],
+        serif: ['"Instrument Serif"', 'Georgia', '"Times New Roman"', 'serif'],
       },
       fontSize: {
         'caption': ['13px', { lineHeight: '1.5' }],
-        'mono-label': ['12px', { lineHeight: '1.5', letterSpacing: '0.1em' }],
+        'mono-label': ['11px', { lineHeight: '1.5', letterSpacing: '0.18em' }],
+        'meta': ['11px', { lineHeight: '1.5', letterSpacing: '0.04em' }],
       },
       letterSpacing: {
         tightest: '-0.04em',
-        tighter: '-0.02em',
+        tighter: '-0.025em',
+        tight2: '-0.02em',
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',

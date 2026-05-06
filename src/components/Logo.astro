@@ -1,0 +1,49 @@
+---
+interface Props {
+  variant?: 'horizontal' | 'avatar' | 'mark';
+  size?: number;
+  inverse?: boolean;
+  class?: string;
+}
+const {
+  variant = 'horizontal',
+  size = 20,
+  inverse = false,
+  class: className = '',
+} = Astro.props;
+---
+
+<span
+  class={`logo ${inverse ? 'logo--inverse' : ''} ${className}`.trim()}
+  style={`font-size:${size}px`}
+>
+  {variant === 'horizontal' && (
+    <>omar<span class="dot">.</span>alvarez</>
+  )}
+  {variant === 'avatar' && (
+    <>o<span class="dot">.</span>a</>
+  )}
+  {variant === 'mark' && (
+    <>o<span class="dot">.</span></>
+  )}
+</span>
+
+<style>
+  .logo {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .logo .dot {
+    color: var(--accent);
+  }
+  .logo--inverse {
+    color: var(--bg);
+  }
+  .logo--inverse .dot {
+    color: var(--accent);
+  }
+</style>

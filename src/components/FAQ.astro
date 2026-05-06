@@ -65,7 +65,7 @@ const FAQS = [
 <style>
   .faq {
     padding-block: clamp(96px, 14vw, 200px);
-    border-top: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--line);
   }
   .faq__grid {
     display: grid;
@@ -89,10 +89,10 @@ const FAQS = [
   }
 
   .faq__item {
-    border-bottom: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--line);
   }
   .faq__item:first-child {
-    border-top: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--line);
   }
 
   details {
@@ -125,7 +125,7 @@ const FAQS = [
     flex-shrink: 0;
     width: 18px;
     height: 18px;
-    color: var(--text-mute);
+    color: var(--mute);
     transition: color 0.3s ease, transform 0.4s var(--ease-out-expo);
   }
   .faq__icon-h,
@@ -170,13 +170,13 @@ const FAQS = [
     margin: 0;
     font-size: 15px;
     line-height: 1.65;
-    color: var(--text-mute);
+    color: var(--mute);
     max-width: 60ch;
   }
 
   @media (min-width: 1024px) {
     .faq__grid {
-      grid-template-columns: 200px minmax(0, 1fr);
+      grid-template-columns: 1fr;
       gap: 48px;
     }
   }

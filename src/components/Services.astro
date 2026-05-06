@@ -135,7 +135,7 @@ const SERVICES: Service[] = [
 <style>
   .services {
     padding-block: clamp(96px, 14vw, 200px);
-    border-top: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--line);
   }
 
   .services__grid {
@@ -164,7 +164,7 @@ const SERVICES: Service[] = [
   }
 
   .service-card {
-    border: 0.5px solid var(--border);
+    border: 0.5px solid var(--line);
     border-radius: 4px;
     background-color: var(--bg);
     overflow: hidden;
@@ -172,7 +172,7 @@ const SERVICES: Service[] = [
     display: grid;
     grid-template-columns: 1fr;
   }
-  .service-card:hover { border-color: var(--border-hi); }
+  .service-card:hover { border-color: var(--line-hi); }
   .service-card:hover .service-card__num { color: var(--accent); }
 
   .service-card__main {
@@ -183,11 +183,11 @@ const SERVICES: Service[] = [
   }
 
   .service-card__num {
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: clamp(56px, 8vw, 88px);
     line-height: 0.9;
     letter-spacing: -0.04em;
-    color: var(--text-dim);
+    color: var(--mute);
     margin: 0;
     transition: color 0.4s var(--ease-out-expo);
   }
@@ -204,23 +204,23 @@ const SERVICES: Service[] = [
     line-height: 1.05;
     letter-spacing: -0.02em;
     font-weight: 500;
-    color: var(--text);
+    color: var(--ink);
   }
 
   .service-card__meta {
     margin: 0;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: var(--mute);
   }
 
   .service-card__desc {
     margin: 0;
     font-size: 16px;
     line-height: 1.6;
-    color: var(--text-mute);
+    color: var(--mute);
     max-width: 50ch;
   }
 
@@ -231,7 +231,7 @@ const SERVICES: Service[] = [
     display: flex;
     flex-direction: column;
     gap: 10px;
-    border-top: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--line);
     padding-top: 20px;
   }
   .service-card__bullets li {
@@ -240,11 +240,11 @@ const SERVICES: Service[] = [
     align-items: flex-start;
     font-size: 14px;
     line-height: 1.55;
-    color: var(--text-mute);
+    color: var(--mute);
   }
   .service-card__check {
     flex-shrink: 0;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     color: var(--accent);
     line-height: 1.55;
   }
@@ -257,8 +257,8 @@ const SERVICES: Service[] = [
     gap: 8px;
     padding: 12px 20px;
     border-radius: 9999px;
-    border: 0.5px solid var(--border-hi);
-    color: var(--text);
+    border: 0.5px solid var(--line-hi);
+    color: var(--ink);
     font-size: 14px;
     font-weight: 500;
     transition: border-color 0.3s ease, color 0.3s ease;
@@ -278,8 +278,8 @@ const SERVICES: Service[] = [
 
   /* Aside (qué te llevas) */
   .service-card__aside {
-    background-color: var(--bg-elev);
-    border-top: 0.5px solid var(--border);
+    background-color: var(--bg-soft);
+    border-top: 0.5px solid var(--line);
     padding: 32px 24px;
     display: flex;
     flex-direction: column;
@@ -288,11 +288,11 @@ const SERVICES: Service[] = [
 
   .service-card__aside-label {
     margin: 0;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: var(--mute);
   }
 
   .service-card__takeaway {
@@ -308,7 +308,7 @@ const SERVICES: Service[] = [
     flex-direction: column;
     gap: 4px;
     padding-bottom: 16px;
-    border-bottom: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--line);
   }
   .service-card__takeaway li:last-child {
     padding-bottom: 0;
@@ -317,13 +317,13 @@ const SERVICES: Service[] = [
   .service-card__takeaway-label {
     margin: 0;
     font-size: 14px;
-    color: var(--text);
+    color: var(--ink);
     font-weight: 500;
   }
   .service-card__takeaway-body {
     margin: 0;
     font-size: 13px;
-    color: var(--text-mute);
+    color: var(--mute);
     line-height: 1.55;
   }
 
@@ -338,16 +338,16 @@ const SERVICES: Service[] = [
     }
     .service-card__aside {
       border-top: 0;
-      border-left: 0.5px solid var(--border);
+      border-left: 0.5px solid var(--line);
       padding: 40px 32px;
     }
-    .service-card--flipped .service-card__main { order: 2; border-left: 0.5px solid var(--border); }
+    .service-card--flipped .service-card__main { order: 2; border-left: 0.5px solid var(--line); }
     .service-card--flipped .service-card__aside { order: 1; border-left: 0; }
   }
 
   @media (min-width: 1024px) {
     .services__grid {
-      grid-template-columns: 200px minmax(0, 1fr);
+      grid-template-columns: 1fr;
       gap: 48px;
     }
   }

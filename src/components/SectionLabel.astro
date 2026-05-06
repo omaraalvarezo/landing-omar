@@ -1,48 +1,66 @@
 ---
-// Sticky section label — visible al lado izquierdo durante toda la sección.
-// En mobile cae arriba sin sticky.
+// Header recurrente brandbook v2.1
+// Estructura: [etiqueta de pilar en mono caps]   [path con timestamp]
+// Ej: 01 · PARA QUIÉN                            ~/omar.alvarez · 2026.05.06
 interface Props {
   number: string; // ej "01"
   title: string;  // ej "PARA QUIÉN"
+  date?: string;  // override; default = build date YYYY.MM.DD
 }
-const { number, title } = Astro.props;
+const { number, title, date } = Astro.props;
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth() + 1).padStart(2, '0');
+const dd = String(today.getDate()).padStart(2, '0');
+const stamp = date ?? `${yyyy}.${mm}.${dd}`;
 ---
 
-<div class="section-label">
-  <p class="section-label__inner">
-    <span class="section-label__num">{number}</span>
-    <span class="section-label__sep" aria-hidden="true">/</span>
-    <span class="section-label__title">{title}</span>
+<div class="section-header">
+  <p class="section-header__pillar">
+    <span class="section-header__num">{number}</span>
+    <span class="section-header__sep" aria-hidden="true">·</span>
+    <span class="section-header__title">{title}</span>
   </p>
+  <p class="section-header__path">~/omar.alvarez · {stamp}</p>
 </div>
 
 <style>
-  .section-label {
-    /* En desktop hace sticky desde su contenedor section */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+    border-bottom: 0.5px solid var(--line);
+    margin-bottom: clamp(40px, 6vw, 64px);
   }
 
-  .section-label__inner {
+  .section-header__pillar {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
-    font-size: 12px;
-    line-height: 1.5;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-mute);
     margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
   }
 
-  .section-label__num { color: var(--accent); }
-  .section-label__sep { color: var(--text-dim); }
-  .section-label__title { color: var(--text-mute); }
+  .section-header__num { color: var(--ink); }
+  .section-header__sep { color: var(--line-hi); }
+  .section-header__title { color: var(--mute); }
 
-  @media (min-width: 1024px) {
-    .section-label {
-      position: sticky;
-      top: 96px;
-      align-self: flex-start;
-    }
+  .section-header__path {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    font-weight: 400;
   }
 </style>

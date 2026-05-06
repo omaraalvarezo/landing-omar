@@ -4,33 +4,36 @@ import { whatsappUrl } from '../lib/contact';
 const ctaUrl = whatsappUrl(
   'Hola Omar, vi tu landing y quiero agendar una consultoría.'
 );
+
+const today = new Date();
+const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
 ---
 
 <section id="hero" class="hero">
-  <!-- Grid sutil de fondo (decorativo, opacity 0.03) -->
-  <div class="hero__grid" aria-hidden="true"></div>
-
-  <!-- Glow lima difuso muy sutil -->
-  <div class="hero__glow" aria-hidden="true"></div>
-
   <div class="hero__inner container-page">
-    <!-- Pill superior izquierda -->
+    <!-- Header recurrente: pilar + path/timestamp -->
+    <div class="hero__top">
+      <p class="hero__pillar">PERFIL · OPERADOR EDITORIAL</p>
+      <p class="hero__path">~/omar.alvarez · {stamp}</p>
+    </div>
+
+    <!-- Pill superior: estado disponible -->
     <p class="hero__badge" data-reveal>
-      <span class="hero__badge-dot" aria-hidden="true"></span>
-      disponible · Colombia
+      <span class="hero__badge-dot-wrap" aria-hidden="true">
+        <span class="hero__badge-dot"></span>
+        <span class="hero__badge-pulse"></span>
+      </span>
+      DISPONIBLE · CÚCUTA, CO
     </p>
 
-    <!-- Headline -->
+    <!-- Headline editorial: Instrument Serif Regular -->
     <h1 class="hero__headline display-1" data-split-reveal style="--reveal-delay: 200ms; --reveal-stagger: 50ms;">
-      IA aplicada<br />
-      a la operación<br />
-      real de <span class="accent-italic">pymes</span><br />
-      en LATAM.
+      IA aplicada a la operación real de pymes en LATAM.
     </h1>
 
-    <!-- Subheadline -->
+    <!-- Subheadline en mono -->
     <p class="hero__sub body-lg" data-reveal style="--reveal-delay: 700ms;">
-      Operador de dos negocios reales en Colombia. Te ayudo a integrar IA en tu operación con métricas, casos reales y entrega completa a tu equipo.
+      Operador de dos negocios. Documento lo que construyo: IA, finanzas, procesos. Sin teoría, sin gurús.
     </p>
 
     <!-- CTAs -->
@@ -60,15 +63,15 @@ const ctaUrl = whatsappUrl(
     <div class="hero__bottom" data-reveal style="--reveal-delay: 1000ms;">
       <ul class="hero__metrics" aria-label="Métricas operacionales">
         <li class="hero__metric">
-          <span class="hero__metric-value" data-counter="81" data-counter-format="money-m" aria-label="$81 millones de pesos colombianos por mes">$0M</span>
+          <span class="hero__metric-value number-display" data-counter="81" data-counter-format="money-m" aria-label="$81 millones de pesos colombianos por mes">$0M</span>
           <span class="hero__metric-label">cop/mes operados</span>
         </li>
         <li class="hero__metric">
-          <span class="hero__metric-value" data-counter="2" data-counter-duration="900">0</span>
+          <span class="hero__metric-value number-display" data-counter="2" data-counter-duration="900">0</span>
           <span class="hero__metric-label">negocios activos</span>
         </li>
         <li class="hero__metric">
-          <span class="hero__metric-value" data-counter="1340" data-counter-format="thousand">0</span>
+          <span class="hero__metric-value number-display" data-counter="1340" data-counter-format="thousand">0</span>
           <span class="hero__metric-label">reservas analizadas</span>
         </li>
       </ul>
@@ -84,43 +87,13 @@ const ctaUrl = whatsappUrl(
 <style>
   .hero {
     position: relative;
-    min-height: 100svh; /* small-viewport-height handles mobile browser chrome */
+    min-height: 100svh;
     width: 100%;
     overflow: hidden;
-    isolation: isolate;
-  }
-
-  /* Background grid */
-  .hero__grid {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-image:
-      linear-gradient(to right, var(--text) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--text) 1px, transparent 1px);
-    background-size: clamp(60px, 8vw, 96px) clamp(60px, 8vw, 96px);
-    opacity: 0.03;
-    mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
-    pointer-events: none;
-  }
-
-  /* Lima glow blob */
-  .hero__glow {
-    position: absolute;
-    bottom: -25%;
-    left: -10%;
-    width: 60vmax;
-    height: 60vmax;
-    z-index: 0;
-    background: radial-gradient(closest-side, rgba(232, 255, 79, 0.06), transparent 70%);
-    filter: blur(40px);
-    pointer-events: none;
   }
 
   .hero__inner {
     position: relative;
-    z-index: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -130,55 +103,88 @@ const ctaUrl = whatsappUrl(
     gap: clamp(20px, 3vh, 32px);
   }
 
+  /* Top: pillar + path */
+  .hero__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+    border-bottom: 0.5px solid var(--line);
+    margin-bottom: clamp(16px, 3vh, 24px);
+  }
+  .hero__pillar {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .hero__path {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+  }
+
   /* Badge */
   .hero__badge {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     align-self: flex-start;
-    padding: 7px 14px;
-    border: 0.5px solid var(--border-hi);
-    border-radius: 9999px;
-    font-size: 13px;
-    color: var(--text-mute);
+    padding: 6px 12px;
+    border: 0.5px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--mute);
     margin: 0;
   }
-  .hero__badge-dot {
+  .hero__badge-dot-wrap {
+    position: relative;
     display: inline-block;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
+  }
+  .hero__badge-dot {
+    position: absolute;
+    inset: 0;
     border-radius: 9999px;
     background-color: var(--accent);
-    box-shadow: 0 0 0 0 rgba(232, 255, 79, 0.6);
-    animation: badge-pulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
   }
-  @keyframes badge-pulse {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(232, 255, 79, 0.5);
-    }
-    70% {
-      box-shadow: 0 0 0 8px rgba(232, 255, 79, 0);
-    }
+  .hero__badge-pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background-color: var(--accent);
+    opacity: 0.6;
+    transform: scale(1);
+    animation: pulse-clean 2.4s var(--ease-out-expo) infinite;
+  }
+  @keyframes pulse-clean {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    70% { transform: scale(2.4); opacity: 0; }
   }
 
   /* Headline */
   .hero__headline {
     margin: 0;
-    max-width: 12ch;
-    color: var(--text);
-  }
-  .hero__headline .accent-italic {
-    /* span inherits these via splitText */
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic;
-    color: var(--accent);
+    max-width: 16ch;
+    color: var(--ink);
   }
 
   /* Subheadline */
   .hero__sub {
     margin: 0;
-    max-width: 480px;
-    color: var(--text-mute);
+    max-width: 56ch;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
   }
 
   /* CTAs */
@@ -194,43 +200,30 @@ const ctaUrl = whatsappUrl(
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 14px 22px;
-    border-radius: 9999px;
-    font-size: 15px;
+    padding: 12px 20px;
+    font-family: var(--font-mono);
+    font-size: 13px;
     font-weight: 500;
-    overflow: hidden;
-    transition: transform 0.4s var(--ease-out-expo);
+    letter-spacing: 0.04em;
+    border-radius: 0;
+    transition: opacity 0.3s var(--ease-out-expo);
     will-change: transform;
   }
   .hero__cta--primary {
     background-color: var(--accent);
     color: var(--bg);
   }
-  .hero__cta--primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: var(--accent-dim);
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 0.45s var(--ease-out-expo);
-    z-index: 0;
-  }
-  .hero__cta--primary:hover::before {
-    transform: scaleX(1);
-  }
-  .hero__cta--primary > * {
-    position: relative;
-    z-index: 1;
+  .hero__cta--primary:hover {
+    opacity: 0.85;
   }
 
   .hero__cta--ghost {
     background-color: transparent;
-    color: var(--text);
-    border: 0.5px solid var(--border-hi);
+    color: var(--ink);
+    border: 0.5px solid var(--line-hi);
   }
   .hero__cta--ghost:hover {
-    border-color: var(--text);
+    border-color: var(--ink);
   }
 
   .hero__cta-arrow {
@@ -263,18 +256,21 @@ const ctaUrl = whatsappUrl(
     flex-direction: column;
     gap: 4px;
     padding-left: 16px;
-    border-left: 0.5px solid var(--border-hi);
+    border-left: 0.5px solid var(--line);
   }
   .hero__metric-value {
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
+    font-weight: 400;
     font-size: clamp(28px, 4vw, 40px);
     line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--text);
+    letter-spacing: -0.04em;
+    color: var(--ink);
   }
   .hero__metric-label {
-    font-size: 12px;
-    color: var(--text-mute);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
   }
 
   /* Scroll indicator */
@@ -311,16 +307,17 @@ const ctaUrl = whatsappUrl(
       display: block;
       width: 1px;
       height: 40px;
-      background-color: var(--border-hi);
+      background-color: var(--line-hi);
       transform-origin: top center;
       animation: scroll-line 1.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
     }
     .hero__scroll-label {
-      font-family: 'Geist Mono Variable', ui-monospace, monospace;
+      font-family: var(--font-mono);
       font-size: 11px;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--mute);
+      font-weight: 500;
     }
     @keyframes scroll-line {
       0% { transform: scaleY(0); transform-origin: top center; }
@@ -330,9 +327,8 @@ const ctaUrl = whatsappUrl(
     }
   }
 
-  /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
-    .hero__badge-dot,
+    .hero__badge-pulse,
     .hero__scroll-line {
       animation: none !important;
     }
@@ -348,7 +344,6 @@ const ctaUrl = whatsappUrl(
   initCounters();
   initMagnetic();
 
-  // Generic [data-reveal] (non-split): observe and add .is-revealed
   const reveals = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-split-reveal])');
   if (reveals.length) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

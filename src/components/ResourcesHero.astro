@@ -49,10 +49,10 @@ const total = RESOURCES.length;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: var(--text-mute);
+    color: var(--mute);
   }
   .rhero__num { color: var(--accent); }
-  .rhero__sep { color: var(--text-dim); }
+  .rhero__sep { color: var(--mute); }
   .rhero__free { color: var(--accent); }
 
   .rhero__title {
@@ -62,7 +62,7 @@ const total = RESOURCES.length;
 
   .rhero__sub {
     margin: 0;
-    color: var(--text-mute);
+    color: var(--mute);
     max-width: 540px;
   }
 
@@ -70,7 +70,7 @@ const total = RESOURCES.length;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, max-content));
     gap: clamp(20px, 4vw, 40px);
-    border-top: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--line);
     padding-top: clamp(20px, 3vw, 32px);
     margin-top: clamp(8px, 2vw, 16px);
   }
@@ -80,22 +80,22 @@ const total = RESOURCES.length;
     flex-direction: column;
     gap: 4px;
     padding-left: 16px;
-    border-left: 0.5px solid var(--border-hi);
+    border-left: 0.5px solid var(--line-hi);
   }
 
   .rhero__stat-value {
     margin: 0;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: clamp(24px, 3vw, 32px);
     line-height: 1;
     letter-spacing: -0.02em;
-    color: var(--text);
+    color: var(--ink);
   }
 
   .rhero__stat-label {
     margin: 0;
     font-size: 11px;
-    color: var(--text-mute);
+    color: var(--mute);
   }
 
   @media (max-width: 480px) {

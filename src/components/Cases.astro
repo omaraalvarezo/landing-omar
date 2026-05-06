@@ -19,7 +19,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
         <article class="case case--lg" data-reveal>
           <div class="case__head">
             <div class="case__meta">
-              <MessageCircle class="case__icon" size={18} aria-hidden="true" />
+              <MessageCircle class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
               <span>enzo motorsport · sector automotriz</span>
             </div>
             <h3 class="case__title">Tablero financiero + reporte diario por WhatsApp</h3>
@@ -65,7 +65,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
         <article class="case" data-reveal>
           <div class="case__head">
             <div class="case__meta">
-              <BarChart3 class="case__icon" size={18} aria-hidden="true" />
+              <BarChart3 class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
               <span>arkhē coworking · 240m²</span>
             </div>
             <h3 class="case__title">Análisis de 1,340 reservas históricas</h3>
@@ -94,7 +94,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
         <article class="case" data-reveal>
           <div class="case__head">
             <div class="case__meta">
-              <Ship class="case__icon" size={18} aria-hidden="true" />
+              <Ship class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
               <span>importación o&p · hdpe polyfusion</span>
             </div>
             <h3 class="case__title">Importación desde China de principio a fin con IA</h3>
@@ -121,7 +121,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
 <style>
   .cases {
     padding-block: clamp(96px, 14vw, 200px);
-    border-top: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--line);
   }
   .cases__grid {
     display: grid;
@@ -146,7 +146,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
   }
 
   .case {
-    border: 0.5px solid var(--border);
+    border: 0.5px solid var(--line);
     border-radius: 4px;
     background-color: var(--bg);
     overflow: hidden;
@@ -156,7 +156,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     isolation: isolate;
   }
   .case:hover {
-    border-color: var(--border-hi);
+    border-color: var(--line-hi);
     transform: translateY(-2px);
   }
 
@@ -171,11 +171,11 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: var(--mute);
   }
   .case__icon { color: var(--accent); }
 
@@ -185,14 +185,14 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     line-height: 1.15;
     letter-spacing: -0.02em;
     font-weight: 500;
-    color: var(--text);
+    color: var(--ink);
   }
 
   .case__desc {
     margin: 0;
     font-size: 14px;
     line-height: 1.55;
-    color: var(--text-mute);
+    color: var(--mute);
   }
 
   .case__metrics {
@@ -202,7 +202,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    border-top: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--line);
     padding-top: 16px;
   }
   .case__metrics li {
@@ -211,22 +211,22 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     gap: 2px;
   }
   .case__metrics strong {
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 22px;
     line-height: 1;
     letter-spacing: -0.02em;
-    color: var(--text);
+    color: var(--ink);
     font-weight: 500;
   }
   .case__metrics span {
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--mute);
   }
 
   /* Visual area */
   .case__visual {
-    background-color: var(--bg-elev);
-    border-top: 0.5px solid var(--border);
+    background-color: var(--bg-soft);
+    border-top: 0.5px solid var(--line);
     padding: 24px;
     min-height: 240px;
     display: flex;
@@ -246,25 +246,25 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     align-items: center;
     gap: 10px;
     padding-bottom: 10px;
-    border-bottom: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--line);
   }
   .wa__avatar {
     width: 32px; height: 32px;
     border-radius: 9999px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    background-color: var(--accent);
     flex-shrink: 0;
   }
   .wa__name {
     margin: 0;
     font-size: 13px;
     font-weight: 500;
-    color: var(--text);
+    color: var(--ink);
   }
   .wa__status {
     margin: 0;
     font-size: 10px;
     color: var(--accent);
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
   }
   .wa__bubble {
     background-color: var(--bg-soft);
@@ -274,25 +274,25 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     max-width: 90%;
     font-size: 12px;
     line-height: 1.5;
-    color: var(--text-mute);
+    color: var(--mute);
   }
   .wa__bubble--user {
     align-self: flex-end;
-    background-color: rgba(232, 255, 79, 0.08);
-    color: var(--text);
+    background-color: var(--accent-soft);
+    color: var(--ink);
   }
   .wa__line { margin: 0; }
   .wa__line strong { color: var(--accent); font-weight: 500; }
-  .wa__line--alert { color: #ff7a7a; margin-top: 4px; font-size: 11px; }
+  .wa__line--alert { color: var(--negative); margin-top: 4px; font-size: 11px; }
 
   /* Bar chart */
   .chart__caption {
     margin: 0 0 12px;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: var(--mute);
   }
   .chart {
     display: grid;
@@ -303,7 +303,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     margin-bottom: 10px;
   }
   .chart__bar {
-    background-color: var(--text);
+    background-color: var(--ink);
     height: var(--h, 50%);
     opacity: 0.18;
     border-radius: 2px 2px 0 0;
@@ -325,9 +325,9 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
   .chart__legend {
     display: flex;
     justify-content: space-between;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
-    color: var(--text-dim);
+    color: var(--mute);
   }
   .chart__valley { color: var(--accent); }
 
@@ -348,7 +348,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     top: 8px;
     bottom: 8px;
     width: 0.5px;
-    background-color: var(--border);
+    background-color: var(--line);
   }
   .tline li {
     position: relative;
@@ -362,30 +362,29 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     height: 11px;
     margin-top: 4px;
     border-radius: 9999px;
-    border: 0.5px solid var(--border-hi);
+    border: 0.5px solid var(--line-hi);
     background-color: var(--bg);
     z-index: 1;
   }
   .tline__dot--done {
-    background-color: var(--text-mute);
-    border-color: var(--text-mute);
+    background-color: var(--mute);
+    border-color: var(--mute);
   }
   .tline__dot--active {
     background-color: var(--accent);
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(232, 255, 79, 0.15);
   }
   .tline__label {
     margin: 0;
     font-size: 13px;
     font-weight: 500;
-    color: var(--text);
+    color: var(--ink);
   }
   .tline__sub {
     margin: 0;
     font-size: 11px;
-    color: var(--text-mute);
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    color: var(--mute);
+    font-family: var(--font-mono);
   }
 
   /* Bento layout — desktop */
@@ -402,7 +401,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     }
     .case--lg .case__visual {
       border-top: 0;
-      border-left: 0.5px solid var(--border);
+      border-left: 0.5px solid var(--line);
     }
     .case__head { padding: 32px; }
     .case__visual { padding: 32px; }
@@ -410,7 +409,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
 
   @media (min-width: 1024px) {
     .cases__grid {
-      grid-template-columns: 200px minmax(0, 1fr);
+      grid-template-columns: 1fr;
       gap: 48px;
     }
   }

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="o.a — Omar Álvarez">
+  <title>o.a — Omar Álvarez avatar mark (dark)</title>
+  <desc>Square avatar mark dark variant: lowercase "o.a" in warm off-white on near-black, with the dot separator in signal blue.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@500&display=swap');
+    .wm { font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace; font-weight: 500; font-size: 380px; letter-spacing: -0.025em; }
+    .bg-text { fill: #FAFAF9; }
+    .accent { fill: #1E5FA8; }
+  </style>
+  <rect width="1024" height="1024" fill="#0A0A0A"/>
+  <text x="512" y="512" class="wm bg-text" text-anchor="middle" dominant-baseline="middle">
+    <tspan>o</tspan><tspan class="accent">.</tspan><tspan>a</tspan>
+  </text>
+</svg>

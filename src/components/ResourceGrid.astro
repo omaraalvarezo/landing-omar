@@ -53,7 +53,7 @@ const counts = countByCategory();
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    border-bottom: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--line);
     padding-bottom: 24px;
   }
 
@@ -63,10 +63,10 @@ const counts = countByCategory();
     gap: 8px;
     padding: 8px 14px;
     background: transparent;
-    border: 0.5px solid var(--border);
+    border: 0.5px solid var(--line);
     border-radius: 9999px;
-    color: var(--text-mute);
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    color: var(--mute);
+    font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.05em;
     text-transform: lowercase;
@@ -77,8 +77,8 @@ const counts = countByCategory();
       background-color 0.3s ease;
   }
   .resource-grid__chip:hover {
-    color: var(--text);
-    border-color: var(--border-hi);
+    color: var(--ink);
+    border-color: var(--line-hi);
   }
   .resource-grid__chip[aria-selected='true'] {
     color: var(--bg);
@@ -132,7 +132,7 @@ const counts = countByCategory();
     margin: 0;
     padding: 48px 0;
     text-align: center;
-    color: var(--text-dim);
+    color: var(--mute);
     font-size: 14px;
   }
 </style>

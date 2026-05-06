@@ -24,15 +24,15 @@
     width: 6px;
     height: 6px;
     border-radius: 9999px;
-    background-color: var(--text);
-    mix-blend-mode: difference;
+    background-color: var(--ink);
   }
 
   #cursor-ring {
     width: 32px;
     height: 32px;
     border-radius: 9999px;
-    border: 1px solid var(--border-hi);
+    border: 1px solid var(--ink);
+    background-color: transparent;
     transition:
       opacity 0.2s ease,
       width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
@@ -42,11 +42,10 @@
   }
 
   #cursor-ring.cursor-ring--hover {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
     background-color: var(--accent);
     border-color: var(--accent);
-    mix-blend-mode: difference;
   }
 
   /* Hide native cursor only when custom one is active */

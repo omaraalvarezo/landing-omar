@@ -54,19 +54,14 @@ const ctaUrl = whatsappUrl(
     flex-direction: column;
     gap: 20px;
     padding: clamp(40px, 6vw, 64px) clamp(28px, 5vw, 56px);
-    border: 0.5px solid var(--border);
-    border-radius: 4px;
-    background: linear-gradient(
-      135deg,
-      var(--bg-elev) 0%,
-      var(--bg) 100%
-    );
+    border: 0.5px solid var(--line);
+    background-color: var(--bg-soft);
     margin-top: clamp(40px, 6vw, 80px);
   }
 
   .recursos__cta-label {
     margin: 0;
-    color: var(--text-mute);
+    color: var(--mute);
   }
 
   .recursos__cta-headline {
@@ -90,7 +85,7 @@ const ctaUrl = whatsappUrl(
     transition: background-color 0.3s ease;
   }
   .recursos__cta-btn:hover {
-    background-color: var(--accent-dim);
+    background-color: var(--accent);
   }
 
   .recursos__cta-arrow {

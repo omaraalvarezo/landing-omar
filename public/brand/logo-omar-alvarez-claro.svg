@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="omar.alvarez">
+  <title>omar.alvarez — Omar Álvarez personal mark</title>
+  <desc>Wordmark logo: lowercase "omar.alvarez" in Geist Mono Medium, near-black on warm off-white, with the dot separator in signal blue.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@500&display=swap');
+    .wm { font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace; font-weight: 500; font-size: 200px; letter-spacing: -0.025em; }
+    .ink { fill: #0A0A0A; }
+    .accent { fill: #1E5FA8; }
+  </style>
+  <rect width="1600" height="900" fill="#FAFAF9"/>
+  <text x="800" y="450" class="wm ink" text-anchor="middle" dominant-baseline="middle">
+    <tspan>omar</tspan><tspan class="accent">.</tspan><tspan>alvarez</tspan>
+  </text>
+</svg>

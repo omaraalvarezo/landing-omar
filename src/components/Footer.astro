@@ -1,5 +1,6 @@
 ---
 import { EMAIL, LOCATION, SOCIALS, whatsappUrl } from '../lib/contact';
+import Logo from './Logo.astro';
 
 const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
 const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
@@ -29,16 +30,12 @@ const year = new Date().getFullYear();
   <div class="container-page footer__grid">
     <div class="footer__col footer__col--brand">
       <p class="footer__logo">
-        <svg class="footer__logo-mark" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
-          <circle cx="14" cy="18" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
-          <circle cx="23" cy="10" r="2.5" fill="#E8FF4F"/>
-        </svg>
-        <span>omar <span class="footer__logo-accent">álvarez</span></span>
+        <Logo variant="horizontal" size={18} />
       </p>
       <p class="footer__tagline">
-        IA aplicada a la operación real de pymes en LATAM.
+        Negocios reales, código real.
       </p>
-      <p class="footer__copy">© {year} omar álvarez · {LOCATION}</p>
+      <p class="footer__copy">© {year} · {LOCATION}</p>
     </div>
 
     <nav class="footer__col" aria-label="Navegación">
@@ -69,31 +66,23 @@ const year = new Date().getFullYear();
 
     <div class="footer__col">
       <p class="footer__col-label">construido</p>
-      <p class="footer__small">
-        astro · tailwind · motion one · lenis
-      </p>
-      <p class="footer__small">
-        deployado en vercel
-      </p>
-      <p class="footer__small">
-        diseño + código por omar
-      </p>
+      <p class="footer__small">astro · tailwind · motion one · lenis</p>
+      <p class="footer__small">deployado en vercel</p>
+      <p class="footer__small">diseño + código por omar</p>
     </div>
   </div>
 
-  <!-- Cierre dramático estilo Awwwards -->
+  <!-- Cierre estilo slide 8 del brandbook v2.1: fondo --ink, wordmark grande con punto azul -->
   <div class="footer__finale" aria-hidden="true">
-    <p class="footer__finale-text">
-      OMAR <span class="accent-italic">ÁLVAREZ</span>
-    </p>
+    <Logo variant="horizontal" size={120} inverse class="footer__wordmark" />
   </div>
 </footer>
 
 <style>
   .footer {
     padding-top: clamp(80px, 12vw, 140px);
-    padding-bottom: 24px;
-    border-top: 0.5px solid var(--border);
+    padding-bottom: 0;
+    border-top: 0.5px solid var(--line);
     background-color: var(--bg);
     overflow: hidden;
   }
@@ -114,45 +103,34 @@ const year = new Date().getFullYear();
   .footer__col--brand .footer__logo {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--text);
     margin: 0;
-  }
-  .footer__logo-mark {
-    flex-shrink: 0;
-  }
-  .footer__logo-accent {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic;
-    color: var(--accent);
-    font-weight: 400;
-    font-size: 18px;
-    letter-spacing: -0.01em;
   }
   .footer__tagline {
     margin: 0;
-    font-size: 14px;
+    font-family: var(--font-serif);
+    font-size: 18px;
     line-height: 1.5;
-    color: var(--text-mute);
+    color: var(--ink-soft);
+    letter-spacing: -0.015em;
     max-width: 36ch;
   }
   .footer__copy {
     margin: 0;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--mute);
     margin-top: 8px;
+    letter-spacing: 0.04em;
   }
 
   .footer__col-label {
     margin: 0 0 8px;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: var(--mute);
+    font-weight: 500;
   }
 
   .footer__col ul {
@@ -164,8 +142,9 @@ const year = new Date().getFullYear();
     gap: 10px;
   }
   .footer__col a {
-    font-size: 14px;
-    color: var(--text-mute);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-soft);
     transition: color 0.2s ease;
   }
   .footer__col a:hover {
@@ -174,31 +153,26 @@ const year = new Date().getFullYear();
 
   .footer__small {
     margin: 0;
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.5;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--mute);
+    line-height: 1.6;
+    letter-spacing: 0.04em;
   }
 
-  /* Finale block */
+  /* Finale block — fondo --ink, wordmark grande con punto azul */
   .footer__finale {
-    border-top: 0.5px solid var(--border);
-    padding-top: clamp(48px, 8vw, 96px);
-    text-align: center;
+    background-color: var(--ink);
+    padding: clamp(64px, 10vw, 112px) var(--container-x);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
-  .footer__finale-text {
-    margin: 0;
-    font-size: clamp(56px, 18vw, 240px);
-    line-height: 0.9;
-    letter-spacing: -0.05em;
-    font-weight: 500;
-    color: var(--text);
+  .footer__finale :global(.footer__wordmark) {
+    font-size: clamp(48px, 14vw, 180px) !important;
+    line-height: 1;
     user-select: none;
-  }
-  .footer__finale-text .accent-italic {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic;
-    color: var(--accent);
-    font-weight: 400;
   }
 
   @media (min-width: 768px) {
