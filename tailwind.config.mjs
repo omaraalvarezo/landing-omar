@@ -25,7 +25,7 @@ export default {
         negative: 'var(--negative)',
       },
       fontFamily: {
-        sans: ['"Geist Mono Variable"', 'ui-monospace', 'Menlo', 'monospace'],
+        sans: ['"Geist Variable"', '-apple-system', 'BlinkMacSystemFont', '"Helvetica Neue"', 'sans-serif'],
         mono: ['"Geist Mono Variable"', 'ui-monospace', 'Menlo', 'monospace'],
         serif: ['"Instrument Serif"', 'Georgia', '"Times New Roman"', 'serif'],
       },
