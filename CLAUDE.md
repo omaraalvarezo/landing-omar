@@ -10,6 +10,83 @@
 
 ---
 
+## Arquitectura — tres capas (patrón Karpathy LLM Wiki)
+
+```
+raw/      → fuentes inmutables. LLM lee, NUNCA modifica ni borra.
+wiki/     → conocimiento sintetizado. LLM crea y mantiene. Omar lee.
+src/      → código Astro de producción (componentes, layouts, páginas).
+CLAUDE.md → este archivo. Schema del proyecto. Co-evoluciona con Omar.
+index.md  → catálogo de páginas wiki y fuentes raw relevantes.
+log.md    → bitácora append-only (ingests, decisiones, migraciones).
+```
+
+**Heurística de delineación:**
+
+| Pregunta | Si SÍ → |
+|---|---|
+| ¿Es un brief original, screenshot de competencia, mensaje WhatsApp con feedback, captura de Stratechery? | `raw/` |
+| ¿Es una decisión de diseño / copy / SEO con su porqué? | `wiki/decisiones/` |
+| ¿Es un framework, métrica, principio editorial? | `wiki/conceptos/` |
+| ¿Es un análisis cruzado entre fuentes? | `wiki/sintesis/` |
+| ¿Es código de producción (componente, layout, página)? | `src/` |
+
+---
+
+## Convenciones de nombres
+
+```
+DIRECTORIOS:
+  kebab-case, sin tildes, sin mayúsculas, sin espacios.
+
+RAW (fechado siempre):
+  raw/{tipo}/YYYY-MM-DD-{descriptor-kebab}.{md|png|jpg|pdf}
+  Ejemplos:
+    raw/briefs/2026-05-11-objetivo-conversion-whatsapp.md
+    raw/benchmarks/2026-05-11-stratechery-hero.png
+    raw/capturas/2026-05-11-feedback-cliente.png
+    raw/notas/2026-05-11-conversacion-positioning.md
+
+WIKI (sin fecha en nombre, frontmatter lleva las fechas):
+  Decisiones: wiki/decisiones/{slug}.md
+  Conceptos:  wiki/conceptos/{slug}.md
+  Síntesis:   wiki/sintesis/{slug}.md
+```
+
+---
+
+## Frontmatter obligatorio (wiki)
+
+Todo archivo `.md` en `wiki/` lleva frontmatter YAML:
+
+```yaml
+---
+titulo: "Nombre legible de la página"
+tipo: decision | concepto | sintesis
+dominio: [diseño, copy, seo, conversion, brand, infra, performance]
+tags: [tag1, tag2]
+fuentes:
+  - "[[raw/briefs/2026-05-11-objetivo-conversion-whatsapp]]"
+  - "[[wiki/conceptos/jerarquia-editorial]]"
+creado: YYYY-MM-DD
+actualizado: YYYY-MM-DD
+---
+```
+
+**Obligatorios:** `titulo, tipo, dominio, creado, actualizado`.
+**Opcionales:** `tags, fuentes` (pero `fuentes` debería estar casi siempre).
+
+**Dominios fijos** (no inventar nuevos sin preguntar):
+- `diseño` — paleta, tipografía, espaciado, composición visual
+- `copy` — hooks, body, microcopy, CTAs, tono editorial
+- `seo` — meta tags, OG, sitemap, schema.org, keywords
+- `conversion` — flujo WhatsApp, posicionamiento de CTAs, A/B, friction
+- `brand` — identidad v2.1, voz, jerarquía 3 familias
+- `infra` — Astro, Tailwind, build, deploy, Vercel, dominios
+- `performance` — Lighthouse, LCP, fuentes, imágenes, bundle
+
+---
+
 ## Sistema de diseño (resumen ejecutivo)
 
 ### Concepto
@@ -43,27 +120,31 @@ Marca personal **operador editorial**. Terminal de builder con alma de editorial
 5. **El azul nunca decora.** Solo carga sentido: número clave, link, CTA, palabra que el lector debe recordar, punto del logo.
 6. **Acento <8% por viewport.** Excepción: el punto del logo.
 
-### Tipografía
+### Tipografía — sistema 3-familias (landing)
 
-| Familia | Uso | Pesos |
-|---------|-----|-------|
-| **Geist Mono Variable** | Voz dominante: cuerpo, UI, datos, etiquetas, código, **logo**, firma, captions. ~95% de la pieza. | 400, 500 |
-| **Instrument Serif** | Voz editorial: hooks, citas grandes. <5%, máximo 1 aparición por sección. | 400 (sin italic) |
+> La landing **no aplica** la regla "Mono 95%" del SKILL OAAO v2.1 puro (ese aplica a decks y social). Aquí rige el sistema 3-familias documentado en `wiki/decisiones/tipografia-3-familias-landing.md`.
+
+| Familia | Rol | Aprox. % |
+|---------|-----|---------|
+| **Instrument Serif Regular** | Headlines editoriales (`display-1`, `display-2`, `h2-section`), hooks, palabra protagonista (`accent-italic`), tagline + statement del footer | ~15% |
+| **Geist Sans Variable** | Cuerpos largos (`body-lg`, `body`), descripciones de card, H3 de card (`h3-card`), preguntas FAQ | ~55% |
+| **Geist Mono Variable** | Toda meta-info: paths, timestamps, etiquetas CAPS, números grandes (`number-display`), CTAs, badges, marquee, footer cols, captions del chart, FACT-XX, copy de mocks, logo wordmark | ~30% |
 
 **Tracking:**
 - `-0.04em` en displays de número grande
 - `-0.025em` en logo
-- `-0.02em` en titulares mono
-- `-0.015em` en hooks serif
-- `-0.005em` body
-- `+0.18em` en etiquetas CAPS, `+0.04em` en path/meta
+- `-0.02em` en H2/H3 sans
+- `-0.018em` en serif (display-1, display-2, h2-section)
+- `-0.005em` body sans
+- `+0.18em` en etiquetas CAPS mono, `+0.04em` en path/meta mono
 
 **Reglas:**
-- Geist Mono manda 95%. Instrument Serif Regular máximo 1 vez por sección.
-- Cuerpos largos también en Geist Mono.
-- Nunca bold pesado (>500).
+- Instrument Serif Regular para headlines y máximo **1 hook por sección** (palabra subrayada en azul via `.accent-italic`).
+- Sans para body largo. Mono para body solo cuando es textura ambiente (mocks).
+- Nunca bold pesado (>500). Sans 400/500. Mono 400/500.
 - Etiquetas CAPS solo en mono.
-- Números siempre en mono.
+- Números grandes y deltas siempre en mono.
+- Acento azul `#1E5FA8` único, <8% por viewport, carga señal nunca decora.
 
 ### Sistema de tamaños
 
@@ -241,5 +322,6 @@ Todo en `src/lib/contact.ts`:
 6. Continuar desde el último hito del README.md.
 
 ## Changelog
-- **2026.05** — Migración a omar-brand v2.1: paleta clara `#FAFAF9` + azul señal `#1E5FA8`, Geist Mono dominante (Sans desinstalado), wordmark `omar.alvarez` en navbar/footer/OG/favicon, header recurrente con path/timestamp, eliminación de efectos prohibidos (box-shadow, gradientes decorativos, duotono lima, grain noise, backdrop-filter blur).
+- **2026.05.11 (pm)** — Pase frontend-design: reescritura del hero (headline con tensión, badge con cupos, métricas FACT-XX, créditos académicos express), métricas + anotación −41% en Cases, strip de cierre del bento → CTA, selects de calificación opcionales + salida directa WhatsApp/email en ContactForm, statement editorial en footer finale. Decisión tipográfica 3-familias formalizada (`wiki/decisiones/tipografia-3-familias-landing.md`). Reconciliada la sección Tipografía del CLAUDE.md.
+- **2026.05** — Migración a omar-brand v2.1: paleta clara `#FAFAF9` + azul señal `#1E5FA8`, sistema 3-familias (serif + sans + mono), wordmark `omar.alvarez` en navbar/footer/OG/favicon, header recurrente con path/timestamp, eliminación de efectos prohibidos (box-shadow, gradientes decorativos, duotono lima, grain noise, backdrop-filter blur).
 - **2026.04** — Versión inicial dark + lima `#E8FF4F` (deprecada).

@@ -6,12 +6,14 @@
 
 import { prefersReducedMotion } from './motion-utils';
 
-type Format = 'money-m' | 'thousand' | 'plain';
+type Format = 'money-m' | 'thousand' | 'plain' | 'percent-neg' | 'percent';
 
 const formatters: Record<Format, (n: number) => string> = {
   'money-m': (n) => `$${Math.round(n)}M`,
   'thousand': (n) => Math.round(n).toLocaleString('en-US'),
   'plain': (n) => String(Math.round(n)),
+  'percent-neg': (n) => `−${Math.round(n)}%`,
+  'percent': (n) => `${Math.round(n)}%`,
 };
 
 const easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));

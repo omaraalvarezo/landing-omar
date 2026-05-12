@@ -48,6 +48,23 @@ function isActive(match: string | null): boolean {
     </nav>
 
     <div class="nav__cta-wrap">
+      <button
+        id="theme-toggle"
+        class="nav__theme"
+        type="button"
+        aria-label="Cambiar a tema oscuro"
+        aria-pressed="false"
+        title="Cambiar tema"
+      >
+        <svg class="nav__theme-icon nav__theme-icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <svg class="nav__theme-icon nav__theme-icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+
       <a href={ctaUrl} target="_blank" rel="noopener" class="nav__cta">
         agendar →
       </a>
@@ -162,6 +179,40 @@ function isActive(match: string | null): boolean {
   }
   @media (min-width: 768px) {
     .nav__cta { display: inline-flex; }
+  }
+
+  /* Theme toggle (sol/luna). Vive antes del CTA azul. */
+  .nav__theme {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 0.5px solid var(--line);
+    border-radius: 0;
+    color: var(--ink);
+    padding: 0;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .nav__theme:hover { border-color: var(--ink); }
+  .nav__theme-icon {
+    position: absolute;
+    transition:
+      opacity 0.25s ease,
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* Estado light: el botón ofrece "ir a dark" → mostrar luna */
+  .nav__theme-icon--sun { opacity: 0; transform: rotate(-45deg) scale(0.85); }
+  .nav__theme-icon--moon { opacity: 1; transform: rotate(0) scale(1); }
+  /* Estado dark: el botón ofrece "ir a light" → mostrar sol */
+  :global([data-theme='dark']) .nav__theme-icon--sun { opacity: 1; transform: rotate(0) scale(1); }
+  :global([data-theme='dark']) .nav__theme-icon--moon { opacity: 0; transform: rotate(45deg) scale(0.85); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav__theme-icon { transition: opacity 0.01ms ease, transform 0.01ms ease; }
   }
 
   .nav__toggle {

@@ -45,6 +45,24 @@
   color-scheme: light;
 }
 
+/* ---------- Dark theme tokens · WCAG AA verificado ----------
+   Activado vía [data-theme='dark'] en <html>. El script anti-FOUC
+   de Layout.astro lo aplica antes del primer paint. */
+[data-theme='dark'] {
+  --bg:          #0D0D0D;
+  --bg-soft:     #1A1A1A;
+  --ink:         #F5F5F4;
+  --ink-soft:    #D4D4D2;
+  --mute:        #8A8A87;
+  --line:        #2A2A2A;
+  --line-hi:     #3D3D3D;
+  --accent:      #5B9BE0;
+  --accent-soft: #102A47;
+  --positive:    #4ADE80;
+  --negative:    #F87171;
+  color-scheme: dark;
+}
+
 /* ---------- Base ---------- */
 @layer base {
   *,
@@ -62,6 +80,8 @@
     font-family: var(--font-sans);
     font-feature-settings: 'ss01', 'ss02', 'cv11';
     overflow-x: clip;
+    /* Smooth scroll fallback nativo si Lenis falla. Reduced-motion lo neutraliza más abajo. */
+    scroll-behavior: smooth;
   }
 
   body {
@@ -97,6 +117,16 @@
     outline: 2px solid var(--accent);
     outline-offset: 4px;
     border-radius: 2px;
+  }
+
+  /* CTAs sobre fondo --accent: ring en --ink para no fundirse con el botón.
+     Light: 8.0:1 sobre azul. Dark: 3.4:1 → AA UI. */
+  .hero__cta--primary:focus-visible,
+  .contact__submit:focus-visible,
+  .nav__cta:focus-visible,
+  #wa-float:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
   }
 }
 
@@ -251,14 +281,24 @@
   }
 }
 
-/* ---------- Split-text reveal ---------- */
+/* ---------- Split-text reveal ----------
+   .word es la caja de clip durante el reveal (translateY 115% → 0).
+   Después de que la palabra termina su transform, JS añade `.is-shown` y
+   liberamos el clip para que descenders e underlines accent se vean completos
+   (caso "decide" italic, "ya" italic, etc.). */
 @layer components {
   [data-split-reveal] .word {
     display: inline-block;
     overflow: hidden;
     vertical-align: top;
     line-height: inherit;
-    padding-bottom: 0.05em;
+    /* Espacio generoso debajo del baseline para alojar descender + underline.
+       Compensado con margin negativo para no afectar el flow vertical. */
+    padding-bottom: 0.18em;
+    margin-bottom: -0.18em;
+  }
+  [data-split-reveal] .word.is-shown {
+    overflow: visible;
   }
   [data-split-reveal] .word__inner {
     display: inline-block;

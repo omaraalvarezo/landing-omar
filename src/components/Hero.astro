@@ -23,17 +23,26 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
         <span class="hero__badge-dot"></span>
         <span class="hero__badge-pulse"></span>
       </span>
-      DISPONIBLE · COLOMBIA
+      DISPONIBLE · 2 CUPOS · Q2 2026
     </p>
 
     <!-- Headline editorial: Instrument Serif Regular -->
     <h1 class="hero__headline display-1" data-split-reveal style="--reveal-delay: 200ms; --reveal-stagger: 50ms;">
-      IA aplicada a la operación real de pymes en LATAM.
+      Tu pyme genera datos. Casi ninguno <span class="accent-italic">decide</span>.
     </h1>
 
     <!-- Subheadline en mono -->
     <p class="hero__sub body-lg" data-reveal style="--reveal-delay: 700ms;">
-      Operador de dos negocios. Documento lo que construyo: IA, finanzas, procesos. Sin teoría, sin gurús.
+      Documento, construyo y entrego IA aplicada para operación real. Lo que ves aquí lo opero todos los días en mis dos negocios.
+    </p>
+
+    <!-- Credenciales académicas express (mono, inline) -->
+    <p class="hero__creds" data-reveal style="--reveal-delay: 800ms;" aria-label="Formación académica">
+      <span>EAFIT</span>
+      <span aria-hidden="true">·</span>
+      <span>UPB MEDELLÍN</span>
+      <span aria-hidden="true">·</span>
+      <span>LA SALLE BARCELONA</span>
     </p>
 
     <!-- CTAs -->
@@ -63,16 +72,19 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
     <div class="hero__bottom" data-reveal style="--reveal-delay: 1000ms;">
       <ul class="hero__metrics" aria-label="Métricas operacionales">
         <li class="hero__metric">
+          <span class="hero__metric-key">FACT-01</span>
           <span class="hero__metric-value number-display" data-counter="81" data-counter-format="money-m" aria-label="$81 millones de pesos colombianos por mes">$0M</span>
-          <span class="hero__metric-label">cop/mes operados</span>
+          <span class="hero__metric-label">cop / mes operados en mis negocios</span>
         </li>
         <li class="hero__metric">
-          <span class="hero__metric-value number-display" data-counter="2" data-counter-duration="900">0</span>
-          <span class="hero__metric-label">negocios activos</span>
-        </li>
-        <li class="hero__metric">
+          <span class="hero__metric-key">FACT-02</span>
           <span class="hero__metric-value number-display" data-counter="1340" data-counter-format="thousand">0</span>
-          <span class="hero__metric-label">reservas analizadas</span>
+          <span class="hero__metric-label">reservas analizadas en arkhē</span>
+        </li>
+        <li class="hero__metric">
+          <span class="hero__metric-key">FACT-03</span>
+          <span class="hero__metric-value number-display" data-counter="92" data-counter-format="percent-neg" aria-label="92 por ciento menos tiempo">−0%</span>
+          <span class="hero__metric-label">tiempo de investigación en importación</span>
         </li>
       </ul>
 
@@ -190,6 +202,24 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
     letter-spacing: -0.01em;
   }
 
+  /* Credenciales académicas express */
+  .hero__creds {
+    margin: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .hero__creds span[aria-hidden='true'] {
+    color: var(--line-hi);
+  }
+
   /* CTAs */
   .hero__ctas {
     display: flex;
@@ -257,9 +287,21 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
   .hero__metric {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     padding-left: 16px;
     border-left: 0.5px solid var(--line);
+    transition: border-color 0.3s var(--ease-out-expo);
+  }
+  .hero__metric:hover {
+    border-left-color: var(--accent);
+  }
+  .hero__metric-key {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
   }
   .hero__metric-value {
     font-family: var(--font-mono);
@@ -274,6 +316,8 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
     font-size: 11px;
     letter-spacing: 0.04em;
     color: var(--mute);
+    max-width: 22ch;
+    line-height: 1.4;
   }
 
   /* Scroll indicator */

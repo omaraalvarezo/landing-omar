@@ -23,7 +23,9 @@ const CONTACT_LINKS = [
   { href: SOCIALS.linkedin, label: 'linkedin' },
 ];
 
-const year = new Date().getFullYear();
+const today = new Date();
+const year = today.getFullYear();
+const buildStamp = `${year}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
 ---
 
 <footer class="footer" aria-label="Pie de página">
@@ -72,9 +74,30 @@ const year = new Date().getFullYear();
     </div>
   </div>
 
-  <!-- Cierre estilo slide 8 del brandbook v2.1: fondo --ink, wordmark grande con punto azul -->
-  <div class="footer__finale" aria-hidden="true">
-    <Logo variant="horizontal" size={120} inverse class="footer__wordmark" />
+  <!-- Cierre editorial minimal: statement serif + wordmark mediano + firma mono.
+       Sobre --bg (no bloque oscuro), funciona limpio en light y dark. -->
+  <div class="footer__finale">
+    <div class="footer__finale-inner container-page">
+      <p class="footer__finale-pretitle">
+        <span>FIN · COL.III</span>
+        <span aria-hidden="true">·</span>
+        <span>EDICIÓN {year}</span>
+      </p>
+
+      <p class="footer__finale-line">
+        No hay magia. Hay <span class="footer__finale-italic">criterio</span>, datos y código.
+      </p>
+
+      <div class="footer__finale-wordmark">
+        <Logo variant="horizontal" size={36} class="footer__wordmark" />
+      </div>
+
+      <p class="footer__finale-signature">
+        <span>© {year} omar.alvarez · {LOCATION}</span>
+        <span aria-hidden="true">·</span>
+        <span>build · {buildStamp}</span>
+      </p>
+    </div>
   </div>
 </footer>
 
@@ -160,19 +183,79 @@ const year = new Date().getFullYear();
     letter-spacing: 0.04em;
   }
 
-  /* Finale block — fondo --ink, wordmark grande con punto azul */
+  /* Finale block — cinta editorial sobre --bg.
+     Sin background inverso: funciona idéntico en light y dark. */
   .footer__finale {
-    background-color: var(--ink);
-    padding: clamp(64px, 10vw, 112px) var(--container-x);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: var(--bg);
+    border-top: 0.5px solid var(--line);
+    color: var(--ink);
+    padding: clamp(48px, 8vw, 88px) 0 clamp(32px, 5vw, 48px);
     overflow: hidden;
   }
+  .footer__finale-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: clamp(20px, 3vw, 32px);
+  }
+  .footer__finale-pretitle {
+    margin: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
+  }
+  .footer__finale-pretitle span[aria-hidden='true'] {
+    color: var(--line-hi);
+  }
+  .footer__finale-line {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(22px, 3vw, 36px);
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+    color: var(--ink-soft);
+    max-width: 22ch;
+  }
+  .footer__finale-italic {
+    font-style: italic;
+    color: var(--ink);
+    text-decoration-line: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.14em;
+  }
+  .footer__finale-wordmark {
+    display: inline-flex;
+    padding-top: clamp(8px, 2vw, 16px);
+  }
   .footer__finale :global(.footer__wordmark) {
-    font-size: clamp(48px, 14vw, 180px) !important;
+    font-size: clamp(28px, 4vw, 40px) !important;
     line-height: 1;
     user-select: none;
+  }
+  .footer__finale-signature {
+    margin: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+  }
+  .footer__finale-signature span[aria-hidden='true'] {
+    color: var(--line-hi);
   }
 
   @media (min-width: 768px) {

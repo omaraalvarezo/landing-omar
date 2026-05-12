@@ -1,6 +1,9 @@
 ---
 import SectionLabel from './SectionLabel.astro';
-import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
+import { MessageCircle, ChartColumn, Ship } from '@lucide/astro';
+import { whatsappUrl } from '../lib/contact';
+
+const ctaUrl = whatsappUrl('Hola Omar, vi los casos y quiero que el mío sea el cuarto.');
 ---
 
 <section id="casos" class="cases scroll-mt-24" aria-labelledby="cases-title">
@@ -65,7 +68,7 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
         <article class="case" data-reveal>
           <div class="case__head">
             <div class="case__meta">
-              <BarChart3 class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
+              <ChartColumn class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
               <span>arkhē coworking · 240m²</span>
             </div>
             <h3 class="case__title">Análisis de 1,340 reservas históricas</h3>
@@ -81,10 +84,14 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
               {[55, 78, 88, 92, 60, 38, 32, 35, 48, 72, 84, 88].map((h, i) => (
                 <span class="chart__bar" style={`--h: ${h}%; --i: ${i};`}></span>
               ))}
+              <span class="chart__annotation" aria-hidden="true">
+                <span class="chart__annotation-line"></span>
+                <span class="chart__annotation-label">−41% ingresos potenciales</span>
+              </span>
             </div>
             <div class="chart__legend">
               <span>8am</span>
-              <span class="chart__valley">valle</span>
+              <span class="chart__valley">valle 12—4pm</span>
               <span>8pm</span>
             </div>
           </div>
@@ -101,6 +108,11 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
             <p class="case__desc">
               Validación de proveedores, cálculo de transporte internacional + nacionalización y comparativa de cotizaciones. De 6 semanas de investigación manual a 4 días.
             </p>
+            <ul class="case__metrics case__metrics--sm">
+              <li><strong>−92%</strong><span>tiempo investigación</span></li>
+              <li><strong>6→4</strong><span>semanas → días</span></li>
+              <li><strong>1</strong><span>operador, sin equipo</span></li>
+            </ul>
           </div>
 
           <!-- Mockup visual: timeline de hitos -->
@@ -114,6 +126,18 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
           </div>
         </article>
       </div>
+
+      <!-- Strip de cierre: puente editorial → CTA -->
+      <a href={ctaUrl} target="_blank" rel="noopener" class="cases__closer" data-reveal data-magnetic data-magnetic-strength="0.12">
+        <span class="cases__closer-text">
+          ¿Tu negocio es el <span class="cases__closer-italic">cuarto</span> caso?
+        </span>
+        <span class="cases__closer-cta">
+          <span class="cases__closer-key">CTA-04</span>
+          <span class="cases__closer-label">hablar por whatsapp</span>
+          <span class="cases__closer-arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
     </div>
   </div>
 </section>
@@ -223,6 +247,103 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     color: var(--mute);
   }
 
+  /* Variante compacta para cards pequeñas del bento */
+  .case__metrics--sm {
+    gap: 16px;
+    padding-top: 14px;
+    margin-top: auto;
+  }
+  .case__metrics--sm strong {
+    font-size: 18px;
+  }
+  .case__metrics--sm span {
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Strip de cierre del bento */
+  .cases__closer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: clamp(24px, 4vw, 40px);
+    padding: clamp(28px, 4vw, 40px) clamp(24px, 3vw, 36px);
+    border: 0.5px solid var(--line);
+    border-radius: 4px;
+    background-color: var(--bg);
+    color: var(--ink);
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      transform 0.4s var(--ease-out-expo);
+    will-change: transform;
+  }
+  .cases__closer:hover {
+    border-color: var(--ink);
+    background-color: var(--bg-soft);
+  }
+  .cases__closer-text {
+    font-family: var(--font-serif);
+    font-size: clamp(24px, 3vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+    max-width: 22ch;
+  }
+  .cases__closer-italic {
+    font-style: italic;
+    text-decoration-line: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
+  }
+  .cases__closer-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    padding: 10px 0;
+    border-top: 0.5px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    width: 100%;
+  }
+  .cases__closer-key {
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+  .cases__closer-label {
+    color: var(--ink);
+    margin-left: auto;
+  }
+  .cases__closer-arrow {
+    color: var(--accent);
+    transition: transform 0.3s var(--ease-out-expo);
+  }
+  .cases__closer:hover .cases__closer-arrow {
+    transform: translateX(4px);
+  }
+
+  @media (min-width: 768px) {
+    .cases__closer {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+    .cases__closer-cta {
+      border-top: 0;
+      width: auto;
+      padding: 0;
+    }
+    .cases__closer-label { margin-left: 0; }
+  }
+
   /* Visual area */
   .case__visual {
     background-color: var(--bg-soft);
@@ -295,12 +416,48 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     color: var(--mute);
   }
   .chart {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 4px;
     align-items: end;
     height: 140px;
     margin-bottom: 10px;
+  }
+
+  /* Anotación editorial sobre el valle */
+  .chart__annotation {
+    position: absolute;
+    /* Cubre desde la barra 5 hasta la 8 (índices 4-7) sobre el valle */
+    left: calc(((100% + 4px) / 12) * 4);
+    width: calc(((100% + 4px) / 12) * 4 - 4px);
+    bottom: 38%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+    transition-delay: 900ms;
+  }
+  .case.is-revealed .chart__annotation {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart__annotation-line {
+    width: 100%;
+    height: 1px;
+    background-color: var(--accent);
+  }
+  .chart__annotation-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    white-space: nowrap;
+    font-weight: 500;
   }
   .chart__bar {
     background-color: var(--ink);
@@ -311,6 +468,9 @@ import { MessageCircle, BarChart3, Ship } from '@lucide/astro';
     transform: scaleY(0);
     transition: transform 0.6s var(--ease-out-expo);
     transition-delay: calc(var(--i, 0) * 50ms + 200ms);
+  }
+  :global([data-theme='dark']) .chart__bar {
+    opacity: 0.30;
   }
   .case.is-revealed .chart__bar { transform: scaleY(1); }
   /* Highlight valley bars */

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="o. — Omar Álvarez (dark)">
+  <title>Omar Álvarez favicon (dark)</title>
+  <desc>Favicon dark: lowercase "o." in Geist Mono Medium with the dot in signal blue, over near-black background.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@500&display=swap');
+    .wm { font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace; font-weight: 500; font-size: 44px; letter-spacing: -0.025em; }
+    .ink { fill: #F5F5F4; }
+    .accent { fill: #5B9BE0; }
+  </style>
+  <rect width="64" height="64" fill="#0D0D0D"/>
+  <text x="32" y="32" class="wm ink" text-anchor="middle" dominant-baseline="middle">
+    <tspan>o</tspan><tspan class="accent">.</tspan>
+  </text>
+</svg>

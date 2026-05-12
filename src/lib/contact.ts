@@ -21,10 +21,18 @@ export function buildLeadMessage({
   nombre,
   negocio,
   problema,
+  facturacion,
+  plazo,
 }: {
   nombre: string;
   negocio: string;
   problema: string;
+  facturacion?: string;
+  plazo?: string;
 }): string {
-  return `Hola Omar, soy ${nombre} de ${negocio}.\nQuiero resolver: ${problema}.\nVi tu landing y quiero agendar una consultoría.`;
+  const extras: string[] = [];
+  if (facturacion) extras.push(`Facturación mes: ${facturacion}`);
+  if (plazo) extras.push(`Plazo: ${plazo}`);
+  const tail = extras.length ? `\n${extras.join(' · ')}` : '';
+  return `Hola Omar, soy ${nombre} de ${negocio}.\nQuiero resolver: ${problema}.${tail}\nVi tu landing y quiero agendar una consultoría.`;
 }

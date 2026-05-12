@@ -32,6 +32,9 @@ export function splitAndReveal(opts: SplitOptions = {}): void {
 
     if (reduced) {
       el.classList.add('is-revealed');
+      // En reduced-motion no hay transitionend, así que liberamos el clip
+      // inmediatamente para evitar que descenders/underlines queden cortados.
+      el.querySelectorAll<HTMLElement>('.word').forEach((w) => w.classList.add('is-shown'));
       return;
     }
 
@@ -87,6 +90,18 @@ function splitElement(el: HTMLElement): void {
   fragments.forEach((f) => el.appendChild(f));
 }
 
+// Liberar el clip de la palabra al terminar la animación. Esto deja visibles
+// descenders, swashes serif y underlines accent que de otro modo quedan
+// cortados por el `overflow: hidden` del `.word`.
+function attachShownListener(word: HTMLSpanElement, inner: HTMLSpanElement): void {
+  const onEnd = (e: TransitionEvent) => {
+    if (e.propertyName !== 'transform') return;
+    word.classList.add('is-shown');
+    inner.removeEventListener('transitionend', onEnd);
+  };
+  inner.addEventListener('transitionend', onEnd);
+}
+
 function makeWord(text: string, index: number): HTMLSpanElement {
   const word = document.createElement('span');
   word.className = 'word';
@@ -94,6 +109,7 @@ function makeWord(text: string, index: number): HTMLSpanElement {
   inner.className = 'word__inner';
   inner.style.setProperty('--word-index', String(index));
   inner.textContent = text;
+  attachShownListener(word, inner);
   word.appendChild(inner);
   return word;
 }
@@ -107,6 +123,7 @@ function makeWordFromElement(el: HTMLElement, index: number): HTMLSpanElement {
   // Move all children (and any class like accent-italic) into the inner wrapper
   inner.className = `word__inner ${el.className}`.trim();
   while (el.firstChild) inner.appendChild(el.firstChild);
+  attachShownListener(word, inner);
   word.appendChild(inner);
   return word;
 }

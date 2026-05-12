@@ -29,7 +29,25 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Anti-FOUC: aplica tema antes del primer paint.
+         Lee localStorage 'omar-theme'; si no existe, respeta prefers-color-scheme. -->
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('omar-theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored || (prefersDark ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+
+    <!-- Favicon dual: light + dark según prefers-color-scheme del SO -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -51,7 +69,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="theme-color" content="#FAFAF9" />
 
     <!-- Schema.org Person + ProfessionalService -->
-    <script type="application/ld+json" set:html={JSON.stringify({
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
         {
@@ -105,6 +123,42 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <script>
       import { initLenis } from '../scripts/lenis';
       initLenis();
+    </script>
+
+    <!-- Theme toggle: sincroniza estado del botón con [data-theme] y persiste en localStorage.
+         Vive aquí (no en Nav.astro) para evitar duplicación si la nav re-renderiza. -->
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        var meta = document.querySelector('meta[name="theme-color"]');
+
+        function apply(theme) {
+          document.documentElement.setAttribute('data-theme', theme);
+          btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+          btn.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro');
+          if (meta) meta.setAttribute('content', theme === 'dark' ? '#0D0D0D' : '#FAFAF9');
+          try { localStorage.setItem('omar-theme', theme); } catch (e) {}
+        }
+
+        var current = document.documentElement.getAttribute('data-theme') || 'light';
+        apply(current);
+
+        btn.addEventListener('click', function () {
+          var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          apply(next);
+        });
+
+        var mq = window.matchMedia('(prefers-color-scheme: dark)');
+        if (mq.addEventListener) {
+          mq.addEventListener('change', function (e) {
+            // Si el usuario nunca tocó el toggle, seguir al SO en tiempo real
+            try {
+              if (!localStorage.getItem('omar-theme')) apply(e.matches ? 'dark' : 'light');
+            } catch (err) {}
+          });
+        }
+      })();
     </script>
   </body>
 </html>

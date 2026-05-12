@@ -1,6 +1,9 @@
 ---
 import SectionLabel from './SectionLabel.astro';
-import { WHATSAPP_NUMBER, TIMEZONE } from '../lib/contact';
+import { WHATSAPP_NUMBER, TIMEZONE, EMAIL, whatsappUrl } from '../lib/contact';
+
+const directWhatsapp = whatsappUrl('Hola Omar, quiero hablar directamente.');
+const directEmail = `mailto:${EMAIL}?subject=${encodeURIComponent('Consultoría IA — landing')}`;
 ---
 
 <section id="contacto" class="contact scroll-mt-24" aria-labelledby="contact-title">
@@ -38,6 +41,7 @@ import { WHATSAPP_NUMBER, TIMEZONE } from '../lib/contact';
             name="negocio"
             placeholder="tu negocio o sector"
             required
+            autocomplete="organization"
             class="contact__input"
           />
         </label>
@@ -53,14 +57,59 @@ import { WHATSAPP_NUMBER, TIMEZONE } from '../lib/contact';
           ></textarea>
         </label>
 
+        <!-- Calificación opcional (ayuda a Omar a preparar la conversación) -->
+        <fieldset class="contact__qualify">
+          <legend class="contact__qualify-legend">calificación · opcional</legend>
+
+          <label class="contact__qualify-field">
+            <span class="contact__qualify-label">facturación / mes</span>
+            <select name="facturacion" class="contact__select">
+              <option value="" selected>— sin especificar</option>
+              <option value="< $30M COP">menos de $30M cop</option>
+              <option value="$30M–$100M COP">$30m — $100m cop</option>
+              <option value="$100M–$300M COP">$100m — $300m cop</option>
+              <option value="> $300M COP">más de $300m cop</option>
+            </select>
+          </label>
+
+          <label class="contact__qualify-field">
+            <span class="contact__qualify-label">plazo</span>
+            <select name="plazo" class="contact__select">
+              <option value="" selected>— sin especificar</option>
+              <option value="esta semana">esta semana</option>
+              <option value="este mes">este mes</option>
+              <option value="este trimestre">este trimestre</option>
+              <option value="explorando">explorando</option>
+            </select>
+          </label>
+        </fieldset>
+
         <button type="submit" class="contact__submit" data-magnetic data-magnetic-strength="0.18">
-          iniciar conversación
+          abrir whatsapp con tu mensaje
           <span class="contact__arrow" aria-hidden="true">→</span>
         </button>
+
+        <!-- Live region: status/errores anunciados a screen readers + visibles.
+             Vacío por defecto; el script lo rellena tras el submit. -->
+        <p
+          class="contact__status"
+          data-contact-status
+          data-state="idle"
+          role="status"
+          aria-live="polite"
+        ></p>
       </form>
 
       <p class="contact__meta" data-reveal>
         respuesta promedio: 4 horas · zona horaria {TIMEZONE}
+      </p>
+
+      <!-- Alternativa directa: si el form se siente friction, salida fácil -->
+      <p class="contact__direct" data-reveal>
+        <span class="contact__direct-label">o directo:</span>
+        <a href={directWhatsapp} target="_blank" rel="noopener" class="contact__direct-link">whatsapp</a>
+        <span aria-hidden="true" class="contact__direct-sep">/</span>
+        <a href={directEmail} class="contact__direct-link">email</a>
       </p>
     </div>
   </div>
@@ -152,6 +201,74 @@ import { WHATSAPP_NUMBER, TIMEZONE } from '../lib/contact';
     min-height: 96px;
   }
 
+  /* Calificación opcional */
+  .contact__qualify {
+    margin-top: 16px;
+    padding: 20px 0 0;
+    border: 0;
+    border-top: 0.5px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .contact__qualify-legend {
+    padding: 0 0 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
+  }
+  .contact__qualify-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .contact__qualify-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+  }
+  .contact__select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    padding: 10px 28px 10px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 0.5px solid var(--line);
+    border-radius: 0;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    outline: 0;
+    cursor: pointer;
+    /* Caret editorial: SVG inline stroke 1.5 (sin gradiente) */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23525252' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'><path d='M1 1.5 L6 6.5 L11 1.5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    background-size: 10px 7px;
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+  .contact__select:hover,
+  .contact__select:focus-visible {
+    border-bottom-color: var(--accent);
+  }
+  /* Caret más claro en dark (el SVG inline tiene stroke hardcoded) */
+  :global([data-theme='dark']) .contact__select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%238A8A87' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'><path d='M1 1.5 L6 6.5 L11 1.5'/></svg>");
+  }
+
+  @media (min-width: 640px) {
+    .contact__qualify {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+  }
+
   .contact__submit {
     align-self: flex-start;
     margin-top: 24px;
@@ -183,6 +300,26 @@ import { WHATSAPP_NUMBER, TIMEZONE } from '../lib/contact';
     50% { transform: translateX(4px); }
   }
 
+  /* Live region: feedback del submit. Texto + icono semántico (no solo color). */
+  .contact__status {
+    margin: 12px 0 0;
+    min-height: 1.4em;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    transition: color 0.2s ease;
+  }
+  .contact__status:empty {
+    display: none;
+  }
+  .contact__status[data-state='success'] {
+    color: var(--positive);
+  }
+  .contact__status[data-state='error'] {
+    color: var(--negative);
+  }
+
   .contact__meta {
     margin: 8px 0 0;
     font-family: var(--font-mono);
@@ -190,6 +327,31 @@ import { WHATSAPP_NUMBER, TIMEZONE } from '../lib/contact';
     letter-spacing: 0.05em;
     color: var(--mute);
   }
+
+  /* Salida directa: WhatsApp/email sin pasar por el form */
+  .contact__direct {
+    margin: 4px 0 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+  }
+  .contact__direct-label { color: var(--mute); }
+  .contact__direct-link {
+    color: var(--ink);
+    border-bottom: 0.5px solid var(--line-hi);
+    padding-bottom: 1px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .contact__direct-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .contact__direct-sep { color: var(--line-hi); }
 
   @media (min-width: 1024px) {
     .contact__grid {
@@ -211,6 +373,16 @@ import { WHATSAPP_NUMBER, TIMEZONE } from '../lib/contact';
   initMagnetic('[data-magnetic]');
 
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const status = document.querySelector<HTMLElement>('[data-contact-status]');
+
+  function setStatus(state: 'idle' | 'loading' | 'success' | 'error', text: string) {
+    if (!status) return;
+    status.dataset.state = state;
+    status.textContent = text;
+    // role='alert' para errores (anuncio inmediato); 'status' para info (polite).
+    status.setAttribute('role', state === 'error' ? 'alert' : 'status');
+  }
+
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -218,12 +390,40 @@ import { WHATSAPP_NUMBER, TIMEZONE } from '../lib/contact';
       const nombre = String(fd.get('nombre') ?? '').trim();
       const negocio = String(fd.get('negocio') ?? '').trim();
       const problema = String(fd.get('problema') ?? '').trim();
+      const facturacion = String(fd.get('facturacion') ?? '').trim() || undefined;
+      const plazo = String(fd.get('plazo') ?? '').trim() || undefined;
 
-      if (!nombre || !negocio || !problema) return;
+      // Validación accesible: anuncia el campo faltante y marca aria-invalid.
+      const inputs = {
+        nombre: form.querySelector<HTMLInputElement>('[name="nombre"]'),
+        negocio: form.querySelector<HTMLInputElement>('[name="negocio"]'),
+        problema: form.querySelector<HTMLTextAreaElement>('[name="problema"]'),
+      };
+      Object.values(inputs).forEach((el) => el?.removeAttribute('aria-invalid'));
 
-      const message = buildLeadMessage({ nombre, negocio, problema });
+      if (!nombre || !negocio || !problema) {
+        const missing: string[] = [];
+        if (!nombre) { missing.push('nombre'); inputs.nombre?.setAttribute('aria-invalid', 'true'); }
+        if (!negocio) { missing.push('negocio'); inputs.negocio?.setAttribute('aria-invalid', 'true'); }
+        if (!problema) { missing.push('lo que quieres resolver'); inputs.problema?.setAttribute('aria-invalid', 'true'); }
+        setStatus('error', `falta · ${missing.join(' · ')}`);
+        // Foco en el primer campo faltante para que el usuario lo arregle.
+        const first = (!nombre && inputs.nombre) || (!negocio && inputs.negocio) || inputs.problema;
+        first?.focus();
+        return;
+      }
+
+      setStatus('loading', 'abriendo whatsapp…');
+      const message = buildLeadMessage({ nombre, negocio, problema, facturacion, plazo });
       const url = whatsappUrl(message);
-      window.open(url, '_blank', 'noopener');
+      const win = window.open(url, '_blank', 'noopener');
+
+      // Si el navegador bloquea el popup, win === null. Damos feedback claro.
+      if (!win) {
+        setStatus('error', 'tu navegador bloqueó la ventana — usa el enlace directo abajo ↓');
+        return;
+      }
+      setStatus('success', 'listo. abriendo conversación en whatsapp ✓');
     });
   }
 </script>
