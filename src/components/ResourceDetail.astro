@@ -1,0 +1,312 @@
+---
+import SkillInstallGuide from './SkillInstallGuide.astro';
+import PromptUsageGuide from './PromptUsageGuide.astro';
+import { ArrowLeft, Download } from '@lucide/astro';
+import { formatSize, type Area, type Resource } from '../lib/resources';
+
+interface Props {
+  area: Area;
+  resource: Resource;
+}
+const { area, resource } = Astro.props;
+
+const areaNum = String(area.order).padStart(2, '0');
+const fileUrl = `/resources/${resource.fileName}`;
+const fileExt = (resource.fileName.split('.').pop() ?? 'md').toLowerCase();
+const isSkill = resource.tipo === 'skill';
+const isPrompt = resource.tipo === 'prompt';
+const paragraphs = (resource.longDescription ?? '')
+  .split(/\n\n+/)
+  .map((p) => p.trim())
+  .filter(Boolean);
+
+const tipoLabel = isSkill ? 'skill para Claude Code' : resource.tipo;
+---
+
+<article class="resource-detail container-page" aria-labelledby="detail-title">
+  <nav class="resource-detail__breadcrumb" aria-label="Migas de pan">
+    <a
+      href={`/recursos/${area.slug}`}
+      class="resource-detail__back"
+      data-magnetic
+      data-magnetic-strength="0.12"
+      aria-label={`Volver al área de ${area.label}`}
+    >
+      <ArrowLeft size={14} stroke-width={1.5} aria-hidden="true" />
+      <span>{area.label.toLowerCase()}</span>
+    </a>
+  </nav>
+
+  <header class="resource-detail__head">
+    <p class="mono-label resource-detail__meta">
+      <span class="resource-detail__area-num">{areaNum}</span>
+      <span class="resource-detail__sep" aria-hidden="true">·</span>
+      {tipoLabel}
+      <span class="resource-detail__sep" aria-hidden="true">·</span>
+      {fileExt}
+    </p>
+
+    <h1
+      id="detail-title"
+      class="display-2 resource-detail__title"
+      data-split-reveal
+      style="--reveal-stagger: 30ms;"
+    >
+      {resource.title}
+    </h1>
+
+    <p class="body-lg resource-detail__sub" data-reveal>
+      {resource.description}
+    </p>
+  </header>
+
+  {paragraphs.length > 0 && (
+    <section class="resource-detail__block" data-reveal aria-labelledby="block-what">
+      <h2 id="block-what" class="mono-label resource-detail__block-label">¿qué es?</h2>
+      <div class="resource-detail__prose">
+        {paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+    </section>
+  )}
+
+  {resource.usefulFor && resource.usefulFor.length > 0 && (
+    <section class="resource-detail__block" data-reveal aria-labelledby="block-useful">
+      <h2 id="block-useful" class="mono-label resource-detail__block-label">para qué te sirve</h2>
+      <ul class="resource-detail__bullets" role="list">
+        {resource.usefulFor.map((b) => <li>{b}</li>)}
+      </ul>
+    </section>
+  )}
+
+  {resource.includes && resource.includes.length > 0 && (
+    <section class="resource-detail__block" data-reveal aria-labelledby="block-includes">
+      <h2 id="block-includes" class="mono-label resource-detail__block-label">qué contiene</h2>
+      <ul class="resource-detail__bullets" role="list">
+        {resource.includes.map((b) => <li>{b}</li>)}
+      </ul>
+    </section>
+  )}
+
+  {isSkill && <SkillInstallGuide />}
+  {isPrompt && <PromptUsageGuide />}
+
+  {resource.howToAdapt && resource.howToAdapt.length > 0 && (
+    <section class="resource-detail__block" data-reveal aria-labelledby="block-adapt">
+      <h2 id="block-adapt" class="mono-label resource-detail__block-label">cómo adaptarlo a tu negocio</h2>
+      <ul class="resource-detail__bullets resource-detail__bullets--adapt" role="list">
+        {resource.howToAdapt.map((b) => <li>{b}</li>)}
+      </ul>
+    </section>
+  )}
+
+  <aside class="resource-detail__download" data-reveal aria-labelledby="download-label">
+    <p id="download-label" class="mono-label resource-detail__download-label">descargar el recurso</p>
+    <h2 class="resource-detail__download-headline">
+      Llévatelo. <span class="accent-italic">Adáptalo</span>.
+    </h2>
+    <p class="resource-detail__download-meta">
+      {formatSize(resource.sizeBytes)} · {resource.updatedAt} · .{fileExt} · uso libre
+    </p>
+    <a
+      href={fileUrl}
+      download={resource.fileName}
+      class="resource-detail__btn"
+      data-magnetic
+      data-magnetic-strength="0.2"
+      aria-label={`Descargar ${resource.title}`}
+    >
+      <Download size={18} stroke-width={1.5} aria-hidden="true" />
+      <span>descargar — gratis</span>
+      <span class="resource-detail__arrow" aria-hidden="true">→</span>
+    </a>
+  </aside>
+</article>
+
+<style>
+  .resource-detail {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 64px);
+    padding-top: clamp(96px, 14vw, 140px);
+    padding-bottom: clamp(96px, 14vw, 180px);
+  }
+
+  /* Breadcrumb */
+  .resource-detail__breadcrumb {
+    margin-bottom: clamp(8px, 2vw, 16px);
+  }
+  .resource-detail__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 0.5px solid var(--line);
+    border-radius: 9999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    transition:
+      border-color 0.3s ease,
+      color 0.3s ease,
+      transform 0.4s var(--ease-out-expo);
+  }
+  .resource-detail__back:hover {
+    color: var(--ink);
+    border-color: var(--line-hi);
+    transform: translateX(-2px);
+  }
+
+  /* Header */
+  .resource-detail__head {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vw, 32px);
+    max-width: 760px;
+  }
+  .resource-detail__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: var(--mute);
+  }
+  .resource-detail__area-num { color: var(--accent); }
+  .resource-detail__sep { color: var(--mute); }
+  .resource-detail__title {
+    margin: 0;
+    color: var(--ink);
+  }
+  .resource-detail__sub {
+    margin: 0;
+    color: var(--ink-soft);
+    max-width: 60ch;
+  }
+
+  /* Bloques editoriales */
+  .resource-detail__block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-top: clamp(28px, 4vw, 40px);
+    border-top: 0.5px solid var(--line);
+    max-width: 760px;
+  }
+  @media (min-width: 900px) {
+    .resource-detail__block {
+      grid-template-columns: minmax(160px, 200px) 1fr;
+      gap: 32px;
+      max-width: 100%;
+    }
+  }
+  .resource-detail__block-label {
+    margin: 0;
+    color: var(--mute);
+    position: sticky;
+    align-self: start;
+    top: 96px;
+  }
+  @media (max-width: 899px) {
+    .resource-detail__block-label {
+      position: static;
+    }
+  }
+
+  .resource-detail__prose {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 60ch;
+  }
+  .resource-detail__prose p {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    letter-spacing: -0.005em;
+  }
+
+  .resource-detail__bullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 60ch;
+  }
+  .resource-detail__bullets li {
+    position: relative;
+    padding: 6px 0 6px 20px;
+    border-left: 2px solid var(--accent);
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  /* Adaptación: bloque más prominente — borde más grueso para destacar este bloque
+     sobre los otros (es el más accionable de todo el detalle). */
+  .resource-detail__bullets--adapt li {
+    border-left-width: 3px;
+    padding-left: 22px;
+    color: var(--ink);
+  }
+
+  /* CTA descargar al final */
+  .resource-detail__download {
+    margin-top: clamp(24px, 4vw, 40px);
+    padding: clamp(40px, 6vw, 64px) clamp(28px, 5vw, 56px);
+    border: 0.5px solid var(--line);
+    background-color: var(--bg-soft);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .resource-detail__download-label {
+    margin: 0;
+    color: var(--mute);
+  }
+  .resource-detail__download-headline {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    font-weight: 400;
+    color: var(--ink);
+    max-width: 22ch;
+  }
+  .resource-detail__download-meta {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+  }
+  .resource-detail__btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 16px 28px;
+    background-color: var(--accent);
+    color: var(--bg);
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: 500;
+    will-change: transform;
+    transition: opacity 0.3s ease;
+  }
+  .resource-detail__btn:hover {
+    opacity: 0.85;
+  }
+  .resource-detail__arrow {
+    display: inline-block;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .resource-detail__btn:hover .resource-detail__arrow {
+    transform: translateX(4px);
+  }
+</style>

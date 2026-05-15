@@ -1,0 +1,276 @@
+---
+import ResourceCard from './ResourceCard.astro';
+import { ArrowLeft } from '@lucide/astro';
+import { whatsappUrl } from '../lib/contact';
+import type { Area, Resource } from '../lib/resources';
+
+interface Props {
+  area: Area;
+  resources: Resource[];
+}
+const { area, resources } = Astro.props;
+
+const num = String(area.order).padStart(2, '0');
+const isEmpty = resources.length === 0;
+
+const ctaUrl = whatsappUrl(
+  `Hola Omar, estuve mirando los recursos de ${area.label} en tu landing y quiero hablar.`
+);
+const askUrl = whatsappUrl(
+  `Hola Omar, vi el área de ${area.label} en tu landing y me gustaría que publicaras un recurso sobre __.`
+);
+---
+
+<section class="area-index container-page" aria-labelledby="area-index-title">
+  <nav class="area-index__breadcrumb" aria-label="Migas de pan">
+    <a href="/recursos" class="area-index__back" data-magnetic data-magnetic-strength="0.12">
+      <ArrowLeft size={14} stroke-width={1.5} aria-hidden="true" />
+      <span>recursos</span>
+    </a>
+  </nav>
+
+  <header class="area-index__head">
+    <p class="mono-label area-index__meta">
+      <span class="area-index__num">{num}</span>
+      <span class="area-index__sep" aria-hidden="true">·</span>
+      área
+      <span class="area-index__sep" aria-hidden="true">·</span>
+      {resources.length === 0
+        ? 'próximamente'
+        : resources.length === 1
+        ? '1 recurso'
+        : `${resources.length} recursos`}
+    </p>
+
+    <h1 id="area-index-title" class="area-index__title" data-split-reveal style="--reveal-stagger: 40ms;">
+      {area.label}
+    </h1>
+
+    <p class="area-index__intro body-lg" data-reveal>
+      {area.intro}
+    </p>
+  </header>
+
+  {isEmpty ? (
+    <aside class="area-index__empty" data-reveal>
+      <p class="mono-label area-index__empty-label">aún no hay recursos publicados</p>
+      <p class="area-index__empty-body">
+        Esta carpeta está creciendo. Cuando suba el primero te aviso por aquí — o pedime algo específico y lo armo.
+      </p>
+      <a href={askUrl} target="_blank" rel="noopener" class="area-index__empty-cta">
+        pedir un recurso por whatsapp <span aria-hidden="true">→</span>
+      </a>
+    </aside>
+  ) : (
+    <ul class="area-index__grid" role="list">
+      {resources.map((r) => (
+        <li class="area-index__item">
+          <ResourceCard resource={r} />
+        </li>
+      ))}
+    </ul>
+  )}
+
+  {!isEmpty && (
+    <aside class="area-index__cta" data-reveal>
+      <p class="mono-label area-index__cta-label">¿algo más a medida?</p>
+      <h2 class="area-index__cta-headline">
+        Si esto te sirvió, lo <span class="accent-italic">customizado</span> te multiplica.
+      </h2>
+      <a
+        href={ctaUrl}
+        target="_blank"
+        rel="noopener"
+        class="area-index__cta-btn"
+        data-magnetic
+        data-magnetic-strength="0.2"
+      >
+        agendar diagnóstico
+        <span class="area-index__cta-arrow" aria-hidden="true">→</span>
+      </a>
+    </aside>
+  )}
+</section>
+
+<style>
+  .area-index {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 80px);
+    padding-top: clamp(96px, 14vw, 140px);
+    padding-bottom: clamp(96px, 14vw, 180px);
+  }
+
+  .area-index__breadcrumb {
+    margin-bottom: clamp(24px, 4vw, 40px);
+  }
+
+  .area-index__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 0.5px solid var(--line);
+    border-radius: 9999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    transition:
+      border-color 0.3s ease,
+      color 0.3s ease,
+      transform 0.4s var(--ease-out-expo);
+  }
+  .area-index__back:hover {
+    color: var(--ink);
+    border-color: var(--line-hi);
+    transform: translateX(-2px);
+  }
+
+  .area-index__head {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vw, 32px);
+    max-width: 720px;
+  }
+
+  .area-index__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: var(--mute);
+  }
+  .area-index__num { color: var(--accent); }
+  .area-index__sep { color: var(--mute); }
+
+  .area-index__title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(48px, 8vw, 112px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .area-index__intro {
+    margin: 0;
+    color: var(--mute);
+    max-width: 60ch;
+  }
+
+  .area-index__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .area-index__item {
+    display: flex;
+  }
+  .area-index__item > * {
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .area-index__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .area-index__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Estado vacío */
+  .area-index__empty {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: clamp(40px, 6vw, 64px) clamp(28px, 5vw, 56px);
+    border: 0.5px dashed var(--line-hi);
+    background-color: var(--bg-soft);
+    border-radius: 4px;
+  }
+  .area-index__empty-label {
+    margin: 0;
+    color: var(--mute);
+  }
+  .area-index__empty-body {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 50ch;
+  }
+  .area-index__empty-cta {
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 10px 16px;
+    border: 0.5px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    border-radius: 9999px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .area-index__empty-cta:hover {
+    background-color: var(--accent);
+    color: var(--bg);
+  }
+
+  /* CTA cierre */
+  .area-index__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: clamp(40px, 6vw, 64px) clamp(28px, 5vw, 56px);
+    border: 0.5px solid var(--line);
+    background-color: var(--bg-soft);
+    margin-top: clamp(24px, 4vw, 40px);
+  }
+  .area-index__cta-label {
+    margin: 0;
+    color: var(--mute);
+  }
+  .area-index__cta-headline {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    font-weight: 400;
+    color: var(--ink);
+    max-width: 22ch;
+  }
+  .area-index__cta-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 14px 24px;
+    background-color: var(--accent);
+    color: var(--bg);
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: 500;
+    will-change: transform;
+    transition: opacity 0.3s ease;
+  }
+  .area-index__cta-btn:hover {
+    opacity: 0.85;
+  }
+  .area-index__cta-arrow {
+    display: inline-block;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .area-index__cta-btn:hover .area-index__cta-arrow {
+    transform: translateX(4px);
+  }
+</style>

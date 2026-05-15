@@ -44,8 +44,11 @@
   #cursor-ring.cursor-ring--hover {
     width: 48px;
     height: 48px;
-    background-color: var(--accent);
+    background-color: rgba(30, 95, 168, 0.4); /* azul --accent al 40%, deja ver el botón debajo */
     border-color: var(--accent);
+  }
+  :global([data-theme='dark']) #cursor-ring.cursor-ring--hover {
+    background-color: rgba(91, 155, 224, 0.4); /* equivalente para el azul de dark mode */
   }
 
   /* Hide native cursor only when custom one is active */

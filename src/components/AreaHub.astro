@@ -1,0 +1,86 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import AreaCard from './AreaCard.astro';
+import type { AreaWithCount } from '../lib/resources';
+
+interface Props {
+  areas: AreaWithCount[];
+}
+const { areas } = Astro.props;
+---
+
+<section class="area-hub" aria-labelledby="area-hub-title">
+  <SectionLabel number="01" title="BIBLIOTECA · POR ÁREA" />
+
+  <h2 id="area-hub-title" class="sr-only">Áreas de la biblioteca</h2>
+
+  {areas.length === 0 ? (
+    <p class="area-hub__empty">
+      No hay áreas visibles todavía. <a href="/admin" class="link">abrir panel admin →</a>
+    </p>
+  ) : (
+    <ul class="area-hub__grid" role="list">
+      {areas.map((area) => (
+        <li class="area-hub__item">
+          <AreaCard area={area} />
+        </li>
+      ))}
+    </ul>
+  )}
+</section>
+
+<style>
+  .area-hub {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 4vw, 48px);
+  }
+
+  .area-hub__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .area-hub__item {
+    display: flex;
+  }
+  .area-hub__item > * {
+    width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .area-hub__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .area-hub__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .area-hub__empty {
+    margin: 0;
+    padding: 48px 0;
+    text-align: center;
+    color: var(--mute);
+    font-size: 14px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

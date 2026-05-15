@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "direccion",
+    "label": "Dirección",
+    "description": "Frameworks de decisión y herramientas para founders que operan con criterio, no con intuición.",
+    "intro": "Cómo decidir bien cuando el negocio depende de ti. Plantillas, logs y rutinas que uso cada semana en Enzo y Arkhē para no perder el hilo estratégico.",
+    "order": 1,
+    "icon": "Compass",
+    "hidden": false
+  },
+  {
+    "slug": "marketing",
+    "label": "Marketing",
+    "description": "Prompts y plantillas de contenido para operadores que prefieren publicar antes que reunirse.",
+    "intro": "Sistemas de contenido, prompts de IA y plantillas listas para acortar el tiempo entre idea publicada y conversación real con un cliente.",
+    "order": 2,
+    "icon": "Megaphone",
+    "hidden": false
+  },
+  {
+    "slug": "ventas",
+    "label": "Ventas",
+    "description": "Manejo de objeciones, SLAs y guiones probados en negocios reales.",
+    "intro": "Lo que usamos para vender en Enzo Motorsport sin descuentos pánico: cheat sheets de objeciones, SLAs de respuesta y SOPs de seguimiento.",
+    "order": 3,
+    "icon": "Handshake",
+    "hidden": false
+  },
+  {
+    "slug": "operaciones",
+    "label": "Operaciones",
+    "description": "Checklists, SOPs y system prompts para que tu negocio corra sin ti en cada turno.",
+    "intro": "Cómo paso conocimiento operativo de mi cabeza al equipo: checklists vivos, system prompts de agentes y SOPs sintéticos.",
+    "order": 4,
+    "icon": "Workflow",
+    "hidden": false
+  },
+  {
+    "slug": "finanzas",
+    "label": "Finanzas",
+    "description": "Pulse mensual, proyecciones y control de márgenes en lenguaje de operador.",
+    "intro": "Cómo leo el negocio cada mes sin Excel infinitos. Pulse financiero, control de margen y rutinas para que la plata se vea antes de gastarse.",
+    "order": 5,
+    "icon": "LineChart",
+    "hidden": false
+  },
+  {
+    "slug": "producto-tech",
+    "label": "Producto / Tech",
+    "description": "Plantillas de arquitectura, CLAUDE.md, second brains y vibe coding.",
+    "intro": "Cómo construyo software para mis propios negocios: schemas de proyecto, plantillas Karpathy de second brain y patrones de vibe coding listos para reutilizar.",
+    "order": 6,
+    "icon": "CircuitBoard",
+    "hidden": false
+  },
+  {
+    "slug": "rrhh",
+    "label": "RRHH",
+    "description": "Guiones de entrevista, evaluaciones y políticas que respetan al equipo y al dueño.",
+    "intro": "Contratar, evaluar y mover gente sin volver el proceso humo. Guiones reales y plantillas de evaluación 1:1.",
+    "order": 7,
+    "icon": "Users",
+    "hidden": false
+  },
+  {
+    "slug": "skills-claude",
+    "label": "Skills para Claude",
+    "description": "Skills .md instalables directo en tu Claude Code. Pega, guarda y queda activa.",
+    "intro": "Skills personalizadas para Claude Code: framework de prompts, formato de pesos en COP, cuestionarios explícitos. Descarga el .md y pégalo en ~/.claude/skills/ — listo.",
+    "order": 8,
+    "icon": "Sparkles",
+    "hidden": false
+  }
+]

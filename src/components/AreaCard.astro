@@ -1,0 +1,222 @@
+---
+import type { AreaWithCount } from '../lib/resources';
+import {
+  Compass,
+  Megaphone,
+  Handshake,
+  Workflow,
+  LineChart,
+  CircuitBoard,
+  Users,
+  Sparkles,
+  Folder,
+  ArrowRight,
+} from '@lucide/astro';
+
+interface Props {
+  area: AreaWithCount;
+}
+const { area } = Astro.props;
+
+const ICONS: Record<string, typeof Folder> = {
+  Compass,
+  Megaphone,
+  Handshake,
+  Workflow,
+  LineChart,
+  CircuitBoard,
+  Users,
+  Sparkles,
+};
+const Icon = ICONS[area.icon] ?? Folder;
+
+const num = String(area.order).padStart(2, '0');
+const href = `/recursos/${area.slug}`;
+const isSkills = area.slug === 'skills-claude';
+const isEmpty = area.count === 0;
+const countLabel =
+  area.count === 0 ? 'próximamente' : area.count === 1 ? '1 recurso' : `${area.count} recursos`;
+---
+
+<a
+  href={href}
+  class:list={['area-card', { 'area-card--skills': isSkills, 'area-card--empty': isEmpty }]}
+  data-reveal
+  aria-label={`Ver recursos de ${area.label}`}
+>
+  <Icon class="area-card__icon-bg" size={140} stroke-width={0.6} aria-hidden="true" />
+
+  <header class="area-card__head">
+    <p class="area-card__num">{num}</p>
+    {isSkills && <span class="area-card__badge">para Claude Code</span>}
+  </header>
+
+  <h3 class="area-card__title">{area.label}</h3>
+  <p class="area-card__desc">{area.description}</p>
+
+  <footer class="area-card__foot">
+    <span class="area-card__count">{countLabel}</span>
+    <span class="area-card__arrow" aria-hidden="true">
+      <ArrowRight size={16} stroke-width={1.5} />
+    </span>
+  </footer>
+</a>
+
+<style>
+  .area-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 28px 24px 24px;
+    border: 0.5px solid var(--line);
+    border-radius: 4px;
+    background-color: var(--bg);
+    color: var(--ink);
+    transition:
+      transform 0.4s var(--ease-out-expo),
+      border-color 0.3s ease;
+    isolation: isolate;
+    height: 100%;
+    min-height: 220px;
+  }
+  .area-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--line-hi);
+  }
+  .area-card:hover .area-card__num,
+  .area-card:hover .area-card__title {
+    color: var(--accent);
+  }
+  .area-card:hover .area-card__arrow {
+    transform: translateX(4px);
+    color: var(--accent);
+  }
+  .area-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  /* Variante visual exclusiva del área de skills */
+  .area-card--skills {
+    border-color: var(--accent);
+    background-color: var(--accent-soft);
+  }
+  .area-card--skills .area-card__num {
+    color: var(--accent);
+  }
+  :global([data-theme='dark']) .area-card--skills {
+    background-color: var(--bg-soft);
+  }
+
+  /* Estado próximamente — visualmente más mute */
+  .area-card--empty {
+    opacity: 0.85;
+  }
+  .area-card--empty .area-card__title {
+    color: var(--ink-soft);
+  }
+
+  .area-card__icon-bg {
+    position: absolute;
+    right: -16px;
+    bottom: -16px;
+    color: var(--ink);
+    opacity: 0.06;
+    z-index: 0;
+    pointer-events: none;
+  }
+  :global([data-theme='dark']) .area-card__icon-bg {
+    opacity: 0.1;
+  }
+  .area-card--skills .area-card__icon-bg {
+    color: var(--accent);
+    opacity: 0.1;
+  }
+
+  .area-card__head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .area-card__num {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--mute);
+    transition: color 0.3s ease;
+  }
+
+  .area-card__badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 8px;
+    border: 0.5px solid var(--accent);
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .area-card__title {
+    position: relative;
+    z-index: 1;
+    margin: 8px 0 0;
+    font-family: var(--font-serif);
+    font-size: clamp(28px, 3.5vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    font-weight: 400;
+    color: var(--ink);
+    transition: color 0.3s ease;
+  }
+
+  .area-card__desc {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--mute);
+    flex-grow: 1;
+    max-width: 38ch;
+  }
+
+  .area-card__foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 0.5px solid var(--line);
+  }
+
+  .area-card__count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--mute);
+  }
+  .area-card--empty .area-card__count {
+    font-style: italic;
+  }
+
+  .area-card__arrow {
+    display: inline-flex;
+    align-items: center;
+    color: var(--mute);
+    transition:
+      transform 0.4s var(--ease-out-expo),
+      color 0.3s ease;
+  }
+</style>

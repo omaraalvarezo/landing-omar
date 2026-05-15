@@ -1,33 +1,35 @@
 ---
-import { RESOURCES } from '../lib/resources';
-const total = RESOURCES.length;
+import { getAreasWithCounts, getTotalVisibleResources } from '../lib/resources';
+
+const totalRecursos = getTotalVisibleResources();
+const totalAreas = getAreasWithCounts().length;
 ---
 
 <header class="rhero">
   <p class="mono-label rhero__label">
     <span class="rhero__num">08</span>
     <span class="rhero__sep" aria-hidden="true">/</span>
-    recursos
+    biblioteca
     <span class="rhero__sep" aria-hidden="true">·</span>
-    <span class="rhero__free">gratis</span>
+    <span class="rhero__free">abierta</span>
   </p>
 
   <h1 class="display-2 rhero__title" data-split-reveal style="--reveal-stagger: 40ms;">
-    Lo que <span class="accent-italic">uso</span> yo. Sin paywall.
+    Lo que <span class="accent-italic">uso</span> yo, ordenado por área.
   </h1>
 
   <p class="body-lg rhero__sub" data-reveal>
-    Prompts, frameworks y plantillas que uso todos los días en Enzo y Arkhē. Cero email, cero spam — descarga, abre y úsalo en tu negocio.
+    Prompts, frameworks, plantillas y skills para Claude que uso todos los días en Enzo y Arkhē. Ordenados por área de negocio. Cero email, cero spam — descarga, abre y úsalo.
   </p>
 
   <div class="rhero__stats" data-reveal>
     <div class="rhero__stat">
-      <p class="rhero__stat-value">{total}</p>
-      <p class="rhero__stat-label">recursos disponibles</p>
+      <p class="rhero__stat-value">{totalAreas}</p>
+      <p class="rhero__stat-label">áreas abiertas</p>
     </div>
     <div class="rhero__stat">
-      <p class="rhero__stat-value">$0</p>
-      <p class="rhero__stat-label">costo</p>
+      <p class="rhero__stat-value">{totalRecursos}</p>
+      <p class="rhero__stat-label">recursos disponibles</p>
     </div>
     <div class="rhero__stat">
       <p class="rhero__stat-value">0</p>
@@ -63,7 +65,7 @@ const total = RESOURCES.length;
   .rhero__sub {
     margin: 0;
     color: var(--mute);
-    max-width: 540px;
+    max-width: 580px;
   }
 
   .rhero__stats {

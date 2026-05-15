@@ -1,21 +1,41 @@
 ---
 import { type Resource, formatSize } from '../lib/resources';
-import { Download } from '@lucide/astro';
+import { ArrowRight } from '@lucide/astro';
 
 interface Props {
   resource: Resource;
 }
 const { resource } = Astro.props;
 
-const fileUrl = `/resources/${resource.fileName}`;
+const detailUrl = `/recursos/${resource.area}/${resource.slug}`;
+const fileExt = (resource.fileName.split('.').pop() ?? 'md').toLowerCase();
+const isSkill = resource.tipo === 'skill';
+const isAdaptable = !!(resource.howToAdapt && resource.howToAdapt.length > 0);
 ---
 
-<article class="resource-card" data-reveal data-category={resource.category}>
+<a
+  href={detailUrl}
+  class="resource-card"
+  data-reveal
+  data-tipo={resource.tipo}
+  data-magnetic
+  data-magnetic-strength="0.10"
+  aria-label={`Ver detalle de ${resource.title}`}
+>
   <header class="resource-card__head">
+    {isAdaptable && (
+      <span class="resource-card__badge" aria-label="Recurso adaptable a tu negocio">adaptable</span>
+    )}
     <p class="resource-card__meta">
-      <span class="resource-card__category">{resource.category}</span>
-      <span class="resource-card__sep" aria-hidden="true">·</span>
-      <span class="resource-card__type">{resource.fileType}</span>
+      {isSkill && resource.skillTrigger ? (
+        <span class="resource-card__skill-trigger">{resource.skillTrigger}</span>
+      ) : (
+        <>
+          <span class="resource-card__tipo">{resource.tipo}</span>
+          <span class="resource-card__sep" aria-hidden="true">·</span>
+          <span class="resource-card__filetype">{fileExt}</span>
+        </>
+      )}
     </p>
     <h3 class="resource-card__title">{resource.title}</h3>
   </header>
@@ -26,21 +46,14 @@ const fileUrl = `/resources/${resource.fileName}`;
     <p class="resource-card__stats">
       <span>{formatSize(resource.sizeBytes)}</span>
       <span class="resource-card__sep" aria-hidden="true">·</span>
-      <span>{resource.date}</span>
+      <span>{resource.updatedAt}</span>
     </p>
-    <a
-      href={fileUrl}
-      download={resource.fileName}
-      class="resource-card__cta"
-      data-magnetic
-      data-magnetic-strength="0.18"
-      aria-label={`Descargar ${resource.title}`}
-    >
-      <Download size={14} stroke-width={1.5} aria-hidden="true" />
-      <span>descargar</span>
-    </a>
+    <span class="resource-card__more">
+      <span>ver detalle</span>
+      <ArrowRight size={14} stroke-width={1.5} aria-hidden="true" />
+    </span>
   </footer>
-</article>
+</a>
 
 <style>
   .resource-card {
@@ -51,19 +64,32 @@ const fileUrl = `/resources/${resource.fileName}`;
     border: 0.5px solid var(--line);
     border-radius: 4px;
     background-color: var(--bg);
+    color: var(--ink);
     transition:
       transform 0.4s var(--ease-out-expo),
       border-color 0.3s ease,
       opacity 0.4s ease;
     isolation: isolate;
     height: 100%;
+    text-decoration: none;
   }
   .resource-card:hover {
     transform: translateY(-2px);
     border-color: var(--line-hi);
   }
-  .resource-card:hover .resource-card__category {
+  .resource-card:hover .resource-card__tipo,
+  .resource-card:hover .resource-card__skill-trigger {
     color: var(--accent);
+  }
+  .resource-card:hover .resource-card__more {
+    color: var(--accent);
+  }
+  .resource-card:hover .resource-card__more svg {
+    transform: translateX(4px);
+  }
+  .resource-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
   }
 
   .resource-card[data-hidden='true'] {
@@ -74,6 +100,19 @@ const fileUrl = `/resources/${resource.fileName}`;
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
+
+  .resource-card__badge {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 3px 8px;
+    border: 0.5px solid var(--accent);
+    border-radius: 2px;
+    margin-bottom: -2px;
   }
 
   .resource-card__meta {
@@ -88,17 +127,18 @@ const fileUrl = `/resources/${resource.fileName}`;
     color: var(--mute);
   }
 
-  .resource-card__category {
+  .resource-card__tipo,
+  .resource-card__filetype,
+  .resource-card__sep {
     color: var(--mute);
     transition: color 0.3s ease;
   }
 
-  .resource-card__sep {
+  .resource-card__skill-trigger {
     color: var(--mute);
-  }
-
-  .resource-card__type {
-    color: var(--mute);
+    letter-spacing: 0.04em;
+    text-transform: none;
+    transition: color 0.3s ease;
   }
 
   .resource-card__title {
@@ -137,22 +177,17 @@ const fileUrl = `/resources/${resource.fileName}`;
     color: var(--mute);
   }
 
-  .resource-card__cta {
+  .resource-card__more {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border: 0.5px solid var(--line-hi);
-    border-radius: 9999px;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
     color: var(--ink);
-    font-size: 13px;
-    font-weight: 500;
-    transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
-    will-change: transform;
+    transition: color 0.3s ease;
   }
-  .resource-card__cta:hover {
-    border-color: var(--accent);
-    background-color: var(--accent);
-    color: var(--bg);
+  .resource-card__more svg {
+    transition: transform 0.4s var(--ease-out-expo);
   }
 </style>

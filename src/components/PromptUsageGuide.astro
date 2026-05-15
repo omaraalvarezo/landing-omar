@@ -1,0 +1,239 @@
+---
+// Bloque editorial exclusivo de las páginas detalle de recursos tipo "prompt".
+// Explica en 4 pasos cómo ejecutar el prompt en cualquiera de los entornos disponibles.
+import { ExternalLink, MessageSquare, FolderKanban, Terminal, Bot } from '@lucide/astro';
+
+const TARGETS = [
+  { Icon: MessageSquare, name: 'Claude.ai', note: 'chat web — para uso puntual sin guardar contexto' },
+  { Icon: FolderKanban, name: 'Claude Projects', note: 'espacios con contexto guardado — si vas a usarlo cada mes' },
+  { Icon: Terminal, name: 'Claude Code', note: 'si ya usas Claude Code en la terminal' },
+  { Icon: Bot, name: 'ChatGPT', note: 'alternativa si todavía no tienes Claude' },
+];
+
+const STEPS = [
+  {
+    n: '01',
+    title: 'Elige dónde lo vas a correr',
+    body: 'Estos prompts funcionan igual en cualquiera de estos entornos. Si no estás seguro, empieza por Claude.ai — es gratis para arrancar y no requiere instalación.',
+  },
+  {
+    n: '02',
+    title: 'Pega el prompt completo en el chat',
+    body: 'Abre el archivo .md descargado, copia todo el bloque del prompt (entre los marcadores que verás dentro del archivo) y pégalo como tu primer mensaje en el chat.',
+  },
+  {
+    n: '03',
+    title: 'Reemplaza los placeholders entre llaves',
+    body: 'Los prompts traen variables como {producto}, {audiencia}, {objetivo}. Cámbialas por tu información real antes de enviar — sin eso, la respuesta es genérica.',
+    code: 'Ejemplo:  {producto} → "servicio de mantenimiento de carros"\n          {audiencia} → "dueños de SUV en Cúcuta"',
+  },
+  {
+    n: '04',
+    title: 'Itera el output con preguntas de seguimiento',
+    body: 'La primera respuesta es punto de partida, no copy final. Pídele profundidad ("dame 3 ejemplos del paso 2"), cambio de tono ("hazlo más directo, menos académico") o formato ("dame esto como tabla").',
+  },
+];
+---
+
+<section class="prompt-guide" aria-labelledby="prompt-guide-title">
+  <header class="prompt-guide__head">
+    <p class="mono-label prompt-guide__label">cómo ejecutar este prompt</p>
+    <h3 id="prompt-guide-title" class="prompt-guide__title">
+      Pégalo. Reemplaza. Itera.
+    </h3>
+  </header>
+
+  <div class="prompt-guide__targets" aria-label="Dónde correr el prompt">
+    {TARGETS.map(({ Icon, name, note }) => (
+      <div class="prompt-guide__target">
+        <Icon size={18} stroke-width={1.5} aria-hidden="true" />
+        <div class="prompt-guide__target-text">
+          <p class="prompt-guide__target-name">{name}</p>
+          <p class="prompt-guide__target-note">{note}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <ol class="prompt-guide__steps" role="list">
+    {STEPS.map((s) => (
+      <li class="prompt-guide__step">
+        <p class="prompt-guide__step-num">{s.n}</p>
+        <h4 class="prompt-guide__step-title">{s.title}</h4>
+        <p class="prompt-guide__step-body">{s.body}</p>
+        {s.code && (
+          <pre class="prompt-guide__code"><code>{s.code}</code></pre>
+        )}
+      </li>
+    ))}
+  </ol>
+
+  <footer class="prompt-guide__foot">
+    <a
+      href="https://claude.ai/"
+      target="_blank"
+      rel="noopener"
+      class="prompt-guide__doc-link"
+    >
+      ¿todavía no usas Claude? abrir Claude.ai
+      <ExternalLink size={12} stroke-width={1.5} aria-hidden="true" />
+    </a>
+  </footer>
+</section>
+
+<style>
+  .prompt-guide {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 4vw, 40px);
+    padding: clamp(32px, 5vw, 56px) clamp(24px, 4vw, 48px);
+    border: 0.5px solid var(--line);
+    background-color: var(--bg-soft);
+    border-radius: 4px;
+  }
+
+  .prompt-guide__head {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .prompt-guide__label {
+    margin: 0;
+    color: var(--mute);
+  }
+
+  .prompt-guide__title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(28px, 3.5vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    font-weight: 400;
+    color: var(--ink);
+    max-width: 18ch;
+  }
+
+  /* Targets: dónde correr el prompt */
+  .prompt-guide__targets {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 16px 0;
+    border-top: 0.5px solid var(--line);
+    border-bottom: 0.5px solid var(--line);
+  }
+  @media (min-width: 640px) {
+    .prompt-guide__targets {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .prompt-guide__target {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--ink);
+  }
+  .prompt-guide__target-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .prompt-guide__target-name {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .prompt-guide__target-note {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--mute);
+  }
+
+  /* Steps */
+  .prompt-guide__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 768px) {
+    .prompt-guide__steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
+    }
+  }
+
+  .prompt-guide__step {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .prompt-guide__step-num {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .prompt-guide__step-title {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .prompt-guide__step-body {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--mute);
+  }
+
+  .prompt-guide__code {
+    margin: 8px 0 0;
+    padding: 12px 16px;
+    background-color: var(--bg);
+    border-left: 2px solid var(--accent);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    overflow-x: auto;
+    white-space: pre;
+    border-radius: 0;
+  }
+
+  .prompt-guide__foot {
+    display: flex;
+  }
+
+  .prompt-guide__doc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    border-bottom: 1px solid var(--line-hi);
+    padding-bottom: 2px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .prompt-guide__doc-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+</style>

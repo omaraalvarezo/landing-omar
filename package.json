@@ -9,7 +9,14 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "resource:add": "node scripts/add-resource.mjs",
+    "resource:toggle": "node scripts/toggle-resource.mjs",
+    "resource:hide": "node scripts/toggle-resource.mjs --state hide",
+    "resource:show": "node scripts/toggle-resource.mjs --state show",
+    "resource:list": "node scripts/list-resources.mjs",
+    "area:toggle": "node scripts/toggle-area.mjs",
+    "area:list": "node scripts/list-areas.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

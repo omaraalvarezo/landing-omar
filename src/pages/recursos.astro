@@ -1,10 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ResourcesHero from '../components/ResourcesHero.astro';
-import ResourceGrid from '../components/ResourceGrid.astro';
+import AreaHub from '../components/AreaHub.astro';
 import Footer from '../components/Footer.astro';
-import { RESOURCES } from '../lib/resources';
+import { getAreasWithCounts } from '../lib/resources';
 import { whatsappUrl } from '../lib/contact';
+
+const areas = getAreasWithCounts();
 
 const ctaUrl = whatsappUrl(
   'Hola Omar, descargué un recurso de tu landing y quiero algo más a medida.'
@@ -12,17 +14,17 @@ const ctaUrl = whatsappUrl(
 ---
 
 <Layout
-  title="Recursos gratis — Omar Álvarez"
-  description="Prompts, frameworks y plantillas que Omar Álvarez usa en Enzo y Arkhē. Descarga sin paywall, sin email, sin friction."
+  title="Recursos — biblioteca abierta de IA aplicada · Omar Álvarez"
+  description="Biblioteca abierta de IA aplicada por área de negocio. Prompts, plantillas, frameworks y skills para Claude. Descarga libre, sin email."
 >
   <section class="container-page recursos__inner">
     <ResourcesHero />
-    <ResourceGrid resources={RESOURCES} />
+    <AreaHub areas={areas} />
 
     <aside class="recursos__cta" data-reveal>
       <p class="mono-label recursos__cta-label">¿algo más a medida?</p>
-      <h2 class="h2-section recursos__cta-headline">
-        Si esto te sirvió, lo <span class="accent-italic">customizado</span> te va a multiplicar.
+      <h2 class="recursos__cta-headline">
+        Si esto te sirvió, lo <span class="accent-italic">customizado</span> te multiplica.
       </h2>
       <a
         href={ctaUrl}
@@ -56,7 +58,7 @@ const ctaUrl = whatsappUrl(
     padding: clamp(40px, 6vw, 64px) clamp(28px, 5vw, 56px);
     border: 0.5px solid var(--line);
     background-color: var(--bg-soft);
-    margin-top: clamp(40px, 6vw, 80px);
+    margin-top: clamp(24px, 4vw, 40px);
   }
 
   .recursos__cta-label {
@@ -66,6 +68,12 @@ const ctaUrl = whatsappUrl(
 
   .recursos__cta-headline {
     margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    font-weight: 400;
+    color: var(--ink);
     max-width: 22ch;
   }
 
@@ -82,10 +90,10 @@ const ctaUrl = whatsappUrl(
     font-size: 15px;
     font-weight: 500;
     will-change: transform;
-    transition: background-color 0.3s ease;
+    transition: opacity 0.3s ease;
   }
   .recursos__cta-btn:hover {
-    background-color: var(--accent);
+    opacity: 0.85;
   }
 
   .recursos__cta-arrow {
@@ -104,7 +112,6 @@ const ctaUrl = whatsappUrl(
   splitAndReveal({ selector: '[data-split-reveal]', staggerMs: 40, durationMs: 700 });
   initMagnetic();
 
-  // Generic data-reveal observer
   const reveals = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-split-reveal])');
   if (reveals.length) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

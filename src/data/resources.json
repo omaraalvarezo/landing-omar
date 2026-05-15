@@ -1,0 +1,501 @@
+[
+  {
+    "slug": "prompt-bot-whatsapp-reportes",
+    "title": "Prompt — Bot de WhatsApp para reportes diarios",
+    "description": "El prompt completo que opera el reporte automático de Enzo Motorsport. Llega un mensaje cada 8pm con ventas, porcentaje de insumos, márgenes y alertas operativas. Adaptable a cualquier pyme con POS.",
+    "longDescription": "Esto es el system prompt que opera mi reporte nocturno de Enzo Motorsport. Cada noche a las 8pm me llega un WhatsApp con las ventas del día, el porcentaje de insumos sobre venta, el margen estimado y alertas si algo se sale del rango que yo definí.\n\nNo abro POS, no abro Excel — leo el chat. Lo armé porque me cansé de cerrar el día a ciegas y enterarme al fin de mes que algo venía mal hace 3 semanas. Funciona con cualquier negocio que tenga POS y un script que mande los datos al modelo. Adáptalo a tu vertical, cambia los umbrales por los que a ti te importan.",
+    "usefulFor": [
+      "Saber cómo te fue el día sin abrir POS ni preguntarle a nadie del equipo.",
+      "Recibir alertas automáticas cuando los insumos se disparan, antes de que sea problema de fin de mes.",
+      "Comparar contra el mismo día de la semana pasada y del mes pasado, sin armar el Excel.",
+      "Replicarlo en otro negocio cambiando solo las variables — el prompt es el mismo."
+    ],
+    "includes": [
+      "El system prompt completo, listo para pegar en Claude, ChatGPT o Gemini.",
+      "Formato esperado del input — qué datos le tienes que mandar al modelo.",
+      "Tres ejemplos de output reales: un día bueno, uno regular y uno con alerta."
+    ],
+    "howToAdapt": [
+      "Cambia los umbrales de alerta a los rangos de TU vertical (un restaurante tolera 40% en insumos; un servicio profesional no debería pasar de 15%).",
+      "Adapta el formato del input al que te dé tu POS (cada software lo entrega distinto).",
+      "Si tu negocio cierra a otra hora, cambia el horario del reporte en el script de envío.",
+      "Si vendes en varias monedas, agrega el conversor en el prompt antes de calcular margen."
+    ],
+    "area": "marketing",
+    "tipo": "prompt",
+    "fileName": "prompt-bot-whatsapp-reportes.md",
+    "sizeBytes": 1419,
+    "updatedAt": "2026-04-27",
+    "featured": true,
+    "hidden": false
+  },
+  {
+    "slug": "plantilla-pulse-financiero",
+    "title": "Plantilla — Pulse financiero mensual",
+    "description": "Formato semáforo que uso cada mes en Enzo y Arkhē. Estructura para detectar desviaciones, justificarlas y planear el siguiente mes en 30 minutos.",
+    "longDescription": "Esto es lo que reviso el primer día de cada mes, en 30 minutos exactos. Es un semáforo (🟢🟡🔴) — no busca exactitud contable, busca decisión. Si algo está rojo, hay que actuar antes del día 5; si no, llegará el cierre tarde y ya no se podrá corregir.\n\nLo armé porque me cansé de cierres financieros que aterrizaban el 15 del mes siguiente, cuando ya era tarde para mover algo. Lo uso en Enzo y en Arkhē con métricas distintas. Reemplaza los números con los tuyos y adapta los umbrales del semáforo a tu vertical — lo que para mí es rojo en detailing puede ser amarillo en tu negocio.",
+    "usefulFor": [
+      "Saber el día 1 del mes si vas adelante, en línea o atrás — sin esperar al contador.",
+      "Priorizar una sola palanca que mover ese mes, no una lista de buenos deseos.",
+      "Detectar el patrón 'venimos cayendo 3 meses seguidos' antes de que sea trimestre perdido.",
+      "Tener una página clara para mostrarle a un socio o asesor, sin tener que explicar el Excel."
+    ],
+    "includes": [
+      "Cuatro métricas top-line (ingresos, margen, meses de caja disponible, y una propia).",
+      "Reglas claras de semáforo: cuándo es 🟢, cuándo 🟡, cuándo 🔴.",
+      "Sección 'decisión del mes' — una sola acción concreta para ejecutar antes del día 10."
+    ],
+    "howToAdapt": [
+      "Cambia las 4 métricas top-line por las que TE importan en tu vertical (en un restaurante puede ser ticket promedio; en e-commerce, tasa de conversión).",
+      "Ajusta los umbrales del semáforo a tu margen real (lo rojo en un negocio de alto margen no es lo mismo que en uno de bajo margen).",
+      "Si tu negocio es estacional, compara contra el mismo mes del año anterior en vez del mes inmediatamente anterior.",
+      "Imprime la plantilla y déjala en tu mesa el día 1 de cada mes — sin ese ritual, la plantilla no sirve."
+    ],
+    "area": "finanzas",
+    "tipo": "plantilla",
+    "fileName": "plantilla-pulse-financiero.md",
+    "sizeBytes": 1103,
+    "updatedAt": "2026-04-27",
+    "featured": true,
+    "hidden": false
+  },
+  {
+    "slug": "framework-decision-log",
+    "title": "Framework — Decision log para founders",
+    "description": "Cómo registrar decisiones importantes (precio, contrataciones, inversiones) sin convertirte en esclavo de la documentación. 7 campos, 5 minutos por decisión.",
+    "longDescription": "Esto es lo que uso cuando una decisión pesa más de $5M COP, es irreversible o me toca algo del tipo: contratar, despedir, cambiar proveedor, subir precios. Son 7 campos y me toma menos de 5 minutos.\n\nLa idea no es documentar por documentar — es para que en 6 meses pueda volver y entender por qué decidí lo que decidí, sin reescribir la historia con sesgo retroactivo. Yo lo aplico en Enzo y Arkhē; tú adáptalo a tus categorías de decisión (las mías no son las tuyas).",
+    "usefulFor": [
+      "Volver a una decisión vieja y recordar el contexto real, no el que tu cerebro inventó después.",
+      "Defender una decisión incómoda ante un socio o asesor con evidencia, no con opinión.",
+      "Aprender de tus propias jugadas: qué hipótesis se cumplieron, cuáles no, qué patrón se repite.",
+      "Salir del bucle 'lo decido cada lunes distinto' cuando una decisión vuelve a la mesa."
+    ],
+    "includes": [
+      "Los 7 campos con su intención (contexto, opciones, criterio, decisión, riesgo, follow-up, fecha de revisión).",
+      "Un ejemplo lleno con una decisión real anonimizada (subir el precio del PPF en Enzo).",
+      "Una regla de cuándo NO usarlo: decisiones reversibles en menos de un día no se loguean."
+    ],
+    "howToAdapt": [
+      "Define TUS categorías de decisión que ameritan log (las mías son: > $5M COP, irreversibles, gente, proveedores). Las tuyas son otras.",
+      "Si tu negocio es nuevo, baja el umbral económico a algo más bajo — toda decisión cuenta cuando estás validando.",
+      "Si trabajas con socio, llenen el log juntos. La discusión que genera vale más que el documento.",
+      "Cada 6 meses revisa tus últimas 10 decisiones — ahí aparece tu patrón de criterio (o falta de él)."
+    ],
+    "area": "direccion",
+    "tipo": "framework",
+    "fileName": "framework-decision-log.md",
+    "sizeBytes": 1848,
+    "updatedAt": "2026-04-27",
+    "featured": true,
+    "hidden": false
+  },
+  {
+    "slug": "prompt-analista-financiero-pyme",
+    "title": "Prompt — Tu analista financiero personal para pymes",
+    "description": "Pega tu estado de resultados, recibe un dashboard mensual claro: semáforos, focos rojos y 3 acciones para el mes que viene.",
+    "longDescription": "Esto es lo que uso cuando me llega el estado de resultados del mes y necesito entender qué pasó sin pasarme dos horas leyendo Excel. Lo creé pensando en pymes colombianas como las mías — los que generan el P&L en Siigo, Alegra o ContaPyme y se quedan mirando los números sin saber qué hacer con ellos.\n\nLe pegas tu estado de resultados (copy-paste directo desde tu software contable) y Claude te devuelve un dashboard en lenguaje plano: cuánto creció o cayó cada línea contra el mes anterior, qué partidas están en rojo, qué tres cosas tendrías que hacer este mes para no repetir el mismo error. Sin jerga MBA, sin asumir que sabes leer un EBITDA.",
+    "usefulFor": [
+      "Entender qué pasó este mes en tu negocio en 5 minutos, no en 2 horas.",
+      "Saber cuál es el UNO problema a atacar este mes, no una lista de 17 cosas raras.",
+      "Comparar contra el mes pasado y el mismo mes del año anterior sin armar fórmulas.",
+      "Tener un análisis listo para mostrarle a tu socio o tu contador sin que parezca que improvisaste."
+    ],
+    "includes": [
+      "El system prompt completo, listo para pegar en Claude.ai o ChatGPT.",
+      "Formato esperado de input (qué le tienes que mandar para que funcione).",
+      "Tres ejemplos: un mes bueno, un mes regular, un mes con alerta roja.",
+      "Glosario plano: ingreso, costo variable, gasto fijo, utilidad operativa, margen."
+    ],
+    "howToAdapt": [
+      "Cambia el formato esperado al que te dé tu software (Siigo, Alegra, ContaPyme, World Office o Excel propio).",
+      "Si tu negocio es estacional, pídele que compare contra el mismo mes del año anterior, no contra el inmediatamente anterior.",
+      "Si tienes varios centros de costo o sucursales, añade al prompt 'analízalos por separado y muéstrame cuál arrastra al grupo'.",
+      "Si no usas COP, cambia la moneda al inicio del prompt — todo lo demás funciona igual."
+    ],
+    "area": "finanzas",
+    "tipo": "prompt",
+    "fileName": "prompt-analista-financiero-pyme.md",
+    "sizeBytes": 6195,
+    "updatedAt": "2026-05-15",
+    "featured": true,
+    "hidden": false
+  },
+  {
+    "slug": "skill-asesor-financiero-pyme",
+    "title": "Skill — Asesor financiero de pymes para Claude Code",
+    "description": "Skill instalable: enseña a tu Claude Code a leer estados financieros, hablar plano y darte próximos pasos accionables.",
+    "longDescription": "Es la versión instalable del prompt analista para los que ya usan Claude Code todos los días. Lo instalas una vez en `~/.claude/skills/asesor-financiero-pyme/` y queda autoload: cada vez que en una conversación le pegues un P&L, le hables de margen, meses de caja o cobranza, Claude activa el skill y entra en modo asesor.\n\nLa diferencia con el prompt: no tienes que copiar y pegar el system prompt cada vez. Y aprende a manejar conversaciones largas — puedes pegarle 3 meses seguidos y te hace análisis de tendencia, no solo del mes.",
+    "usefulFor": [
+      "Tener un asesor financiero disponible 24/7 en tu Claude Code sin pagar consultoría.",
+      "Analizar 3-6 meses de P&L juntos para detectar tendencias, no solo eventos puntuales.",
+      "Convertir tu Claude Code en un copiloto que recuerda cómo medir tu negocio.",
+      "No volver a pegar el mismo prompt 15 veces al año."
+    ],
+    "includes": [
+      "El archivo SKILL.md listo para colocar en `~/.claude/skills/asesor-financiero-pyme/SKILL.md`.",
+      "Frontmatter con name + description (Claude lo activa solo cuando habla del tema).",
+      "Reglas de comportamiento: tono plano, sin jerga, siempre cerrar con 3 próximos pasos.",
+      "Instrucciones de instalación paso a paso."
+    ],
+    "howToAdapt": [
+      "Cambia los umbrales 🟢🟡🔴 a los rangos de TU vertical (el margen sano en restaurantes ≠ en servicios B2B).",
+      "Si manejas múltiples negocios, duplica el skill con nombres distintos (asesor-financiero-restaurante, asesor-financiero-servicios).",
+      "Cambia la moneda y formato de números al tuyo si no usas COP.",
+      "Si quieres que NO se autoactive, edita el campo description del frontmatter para que sea más restrictivo."
+    ],
+    "area": "skills-claude",
+    "tipo": "skill",
+    "fileName": "skill-asesor-financiero-pyme.md",
+    "sizeBytes": 5702,
+    "updatedAt": "2026-05-15",
+    "featured": true,
+    "hidden": false,
+    "skillName": "asesor-financiero-pyme",
+    "skillTrigger": "se activa cuando hablas de finanzas del negocio, le pegas un P&L o pregunta de costos/márgenes"
+  },
+  {
+    "slug": "prompt-asesor-estrategico-marketing",
+    "title": "Prompt — Asesor estratégico de marketing (estilo miembro de junta)",
+    "description": "Pega tu estrategia o ejecución actual de marketing y recibe el feedback que te daría un asesor senior en 30 minutos.",
+    "longDescription": "Esto lo armé porque la mayoría de pymes no tienen presupuesto para un asesor senior de marketing, pero sí necesitan que alguien con perspectiva les diga 'estás gastando en lo equivocado' o 'tu posicionamiento se está diluyendo'. Es un prompt que pone a Claude en modo asesor estratégico — el perfil de alguien que ha visto crecer 10 negocios distintos y se sienta en la junta a hacer preguntas duras.\n\nNo te dice 'todo bien' ni te halaga. Te pregunta lo que un asesor senior preguntaría: '¿por qué estás en TikTok si tu cliente está en LinkedIn?', '¿qué objetivo estás moviendo con esa campaña?', '¿cuánto te cuesta conseguir un cliente nuevo y cuánto te deja?'. Le pegas lo que estás haciendo y te devuelve un memo con 3-5 observaciones críticas y orden de prioridad.",
+    "usefulFor": [
+      "Tener una sesión estratégica como en una junta directiva, sin pagar un asesor de $5M COP por mes.",
+      "Salir del túnel del operador del día a día y mirar la estrategia desde arriba.",
+      "Detectar cuando estás invirtiendo en un canal solo por hábito, no por resultado.",
+      "Tener argumentos sólidos antes de la próxima reunión de socios o una decisión grande de gasto."
+    ],
+    "includes": [
+      "El prompt completo, con el perfil del asesor y las 5 preguntas guiadas.",
+      "Formato esperado de input: qué estás haciendo en marketing hoy + tus números + tus dudas.",
+      "Tres ejemplos: pyme de servicios, productos físicos, negocio digital.",
+      "Una regla para usar el output: pídele que ordene sus observaciones por impacto vs esfuerzo."
+    ],
+    "howToAdapt": [
+      "Cambia el perfil del asesor en el prompt al tipo que necesitas (especialista en B2B, retail, consumo masivo).",
+      "Si no tienes números claros (la mayoría no los tiene), pídele al final qué 3 números deberías empezar a medir.",
+      "Adapta el tono al nivel de franqueza que aguantas: el prompt tiene variable 'franqueza: alta/media/baja'.",
+      "Repite la sesión cada 90 días con la misma estrategia para ver progreso real."
+    ],
+    "area": "marketing",
+    "tipo": "prompt",
+    "fileName": "prompt-asesor-estrategico-marketing.md",
+    "sizeBytes": 6087,
+    "updatedAt": "2026-05-15",
+    "featured": true,
+    "hidden": false
+  },
+  {
+    "slug": "prompt-analista-meta-ads",
+    "title": "Prompt — Analista de campañas de Meta Ads (Facebook + Instagram)",
+    "description": "Pega los datos de tu campaña (gasto, costo por mil, % de clics, retorno de pauta) y recibe el análisis que haría un media buyer senior.",
+    "longDescription": "Esto es para los que pautan en Meta sin saber muy bien si lo están haciendo bien. La mayoría de las pymes que conozco entran al Administrador de Anuncios, ven números, y no saben si gastaron bien o tiraron la plata.\n\nLe pegas los datos crudos de tu campaña (los puedes copiar directo del Administrador de Anuncios) y Claude te devuelve un análisis con 3 cosas concretas: qué pausar, qué escalar, qué probar como variante. Decisión, no academia. El prompt incluye un glosario de términos (CPM, CTR, retorno de pauta) en lenguaje plano.",
+    "usefulFor": [
+      "Entender en 10 minutos si tu campaña va bien o si estás regalando plata a Meta.",
+      "Saber qué pausar HOY antes de seguir quemando presupuesto.",
+      "Detectar qué creativo o público está moviendo el retorno y duplicar ahí.",
+      "Tomar decisiones de pauta sin tener que contratar a un media buyer freelance."
+    ],
+    "includes": [
+      "El system prompt completo con benchmarks de costos y rendimiento por vertical LATAM.",
+      "Glosario plano de términos técnicos (CPM, CTR, retorno de pauta, frecuencia).",
+      "Formato esperado de input: qué datos copiar y pegar del Administrador de Anuncios.",
+      "Tres ejemplos: e-commerce, servicios locales, servicios B2B."
+    ],
+    "howToAdapt": [
+      "Cambia los benchmarks del prompt a los de TU vertical (e-commerce de moda tiene CTR distinto que servicios financieros).",
+      "Si tu objetivo es leads y no venta directa, ajusta la métrica clave: en lugar de retorno de pauta, pídele que evalúe costo por lead.",
+      "Si manejas muchas campañas simultáneas, pégale los datos de todas y pídele que las ordene por urgencia.",
+      "Adapta los umbrales de 'rojo' a tu apetito de riesgo y tu margen real (alto margen tolera retorno 1.5x; bajo margen necesita 3x+)."
+    ],
+    "area": "marketing",
+    "tipo": "prompt",
+    "fileName": "prompt-analista-meta-ads.md",
+    "sizeBytes": 6910,
+    "updatedAt": "2026-05-15",
+    "featured": false,
+    "hidden": false
+  },
+  {
+    "slug": "prompt-analista-tiktok-ads",
+    "title": "Prompt — Analista de campañas de TikTok Ads (incluye Spark Ads)",
+    "description": "Pega los datos de tu campaña TikTok y recibe análisis específico: qué Spark Ad escalar, qué creativo reciclar, qué pausar.",
+    "longDescription": "TikTok Ads juega distinto a Meta. La gente que llega a este prompt suele venir de pautar en Meta y trasladar el mismo manual — y se da el palo porque TikTok premia otra cosa: el contenido gana, el targeting es secundario, y los Spark Ads (publicaciones orgánicas que pauteas) suelen costar 30-50% menos que un creativo hecho para pauta.\n\nEs un prompt que pone a Claude en modo analista específico de TikTok Ads. Le pegas tus métricas y te dice qué Spark Ad está despegando, qué creativo tradicional pausar, y qué variantes probar la próxima semana. Especial atención al hook (los 3 primeros segundos) porque ahí se gana o se pierde en TikTok.",
+    "usefulFor": [
+      "Entender por qué tu campaña TikTok no rinde como esperabas con la misma plata que en Meta.",
+      "Identificar qué Spark Ads (orgánicos que pauteas) están escalando antes de que se enfríen.",
+      "Saber cuándo un creativo ya no rinde y necesita reemplazo (TikTok fatiga creativos 5x más rápido que Meta).",
+      "Decidir entre creativo hecho para pauta vs. Spark Ad según tu presupuesto."
+    ],
+    "includes": [
+      "El system prompt completo con benchmarks de TikTok Ads LATAM.",
+      "Glosario plano: CPM, CTR, watch-time, Spark Ad, UGC, hook.",
+      "Formato esperado de input desde el Administrador de Anuncios de TikTok.",
+      "Mini-guía del análisis de hook (qué evaluar en los 3 primeros segundos)."
+    ],
+    "howToAdapt": [
+      "Si tu campaña es de awareness y no de conversión, cambia la métrica clave de retorno de pauta por watch-time o engagement.",
+      "Si no usas Spark Ads aún (la mayoría no), pídele al final que te recomiende qué post orgánico convertir en Spark.",
+      "Adapta los benchmarks al país (TikTok Colombia ≠ TikTok México ≠ TikTok USA).",
+      "Si tu negocio depende de UGC, añade al prompt 'analiza qué tipo de creator está convirtiendo y dame perfil para buscar más'."
+    ],
+    "area": "marketing",
+    "tipo": "prompt",
+    "fileName": "prompt-analista-tiktok-ads.md",
+    "sizeBytes": 7020,
+    "updatedAt": "2026-05-15",
+    "featured": false,
+    "hidden": false
+  },
+  {
+    "slug": "prompt-creador-contenido-viral",
+    "title": "Prompt — Creador de piezas de contenido viral",
+    "description": "Pega tu producto + audiencia + objetivo y recibe 5 ideas de contenido con potencial viral: hook, estructura y llamado a la acción.",
+    "longDescription": "Esto lo armé porque la mayoría de emprendedores que conozco se sientan a grabar y se quedan en blanco. No es falta de creatividad — es que no tienen un marco para sacar ideas que funcionen.\n\nEs un prompt que pone a Claude en modo creator senior con criterio LATAM: le pegas tu producto, tu audiencia, qué quieres lograr (vender, dar a conocer la marca, conseguir leads), y te devuelve 5 ideas de contenido con estructura viral probada. Cada idea trae: el hook (los primeros 3 segundos), la estructura del video (qué pasa en cada bloque), el llamado a la acción al final, y por qué esa idea tiene potencial viral en tu vertical.",
+    "usefulFor": [
+      "Salir del bloqueo de 'no sé qué grabar esta semana' en 2 minutos.",
+      "Tener 5 ideas listas para producción cada vez que necesitas batch de contenido.",
+      "Aprender el patrón de qué hace viral un contenido en TU vertical, no en general.",
+      "Diversificar tu calendario sin caer siempre en los mismos 3 formatos."
+    ],
+    "includes": [
+      "El system prompt completo con marcos virales por tipo de contenido (educativo, entretenimiento, detrás de cámaras, contrarian).",
+      "Formato esperado de input: producto + audiencia + objetivo + plataforma destino.",
+      "Tres ejemplos: una idea para Reels, una para TikTok, una para LinkedIn.",
+      "Mini-guía: cómo identificar tendencias actuales para combinarlas con las ideas que da el prompt."
+    ],
+    "howToAdapt": [
+      "Cambia los placeholders {producto}, {audiencia} y {plataforma} antes de pegar el prompt.",
+      "Si tu objetivo es educativo y no comercial, cambia el tipo de llamado a la acción (de 'compra' a 'comenta', 'guarda', 'comparte').",
+      "Si tu nicho es muy específico (legal, salud, B2B), añade contexto sobre restricciones de tu vertical al final del prompt.",
+      "Después de publicar, vuelve al chat y pega las métricas — Claude aprende qué ángulos funcionan para TU audiencia."
+    ],
+    "area": "marketing",
+    "tipo": "prompt",
+    "fileName": "prompt-creador-contenido-viral.md",
+    "sizeBytes": 6362,
+    "updatedAt": "2026-05-15",
+    "featured": false,
+    "hidden": false
+  },
+  {
+    "slug": "prompt-diagnostico-estrategico-sector",
+    "title": "Prompt — Diagnóstico estratégico de tu sector en 20 minutos",
+    "description": "Claude te hace 10 preguntas sobre tu industria y te devuelve qué fuerza te aprieta más + 3 movimientos para esquivarla.",
+    "longDescription": "Esto lo saqué del material de Estrategia de mi MBA — específicamente del cruce entre el análisis del entorno (PESTEL) y las 5 Fuerzas de competencia (Porter). Las pymes no necesitan los 80 puntos de un análisis académico — necesitan saber rápido: ¿de dónde me viene el golpe? ¿es del cliente, del proveedor, del competidor, del producto sustituto, o del que viene a entrar al mercado?\n\nEl prompt te hace 10 preguntas sobre tu industria, tu producto y tu posición — todo en español plano — y te devuelve un diagnóstico con la fuerza que más te aprieta hoy y 3 movimientos concretos para esquivarla o aprovecharla. Lo armé pensando en sectores comunes en Colombia: retail, servicios profesionales, manufactura pequeña, alimentos, e-commerce.",
+    "usefulFor": [
+      "Entender por qué tu margen está cayendo aunque vendes lo mismo (probablemente entró un competidor o un proveedor te apretó).",
+      "Saber dónde debes invertir energía estratégica esta semana, en vez de improvisar.",
+      "Hablar con tu equipo o socio con un marco común, no con opiniones.",
+      "Reconocer cuando tu sector se está volviendo trampa y es hora de pivotar."
+    ],
+    "includes": [
+      "El prompt completo con las 10 preguntas guiadas (cliente, proveedor, competencia directa, productos sustitutos, nuevos entrantes, contexto macro).",
+      "Tres ejemplos completos: un restaurante, una empresa de servicios B2B, un e-commerce de moda.",
+      "Glosario plano: qué es una 'barrera de entrada', un 'producto sustituto', un 'poder de negociación'."
+    ],
+    "howToAdapt": [
+      "Si tu negocio es B2B, pídele al asesor que profundice la fuerza 'poder de negociación del cliente'.",
+      "Si tu margen depende de un proveedor único, pídele que profundice 'poder del proveedor'.",
+      "Si vas a entrar a un nuevo mercado/ciudad, corre el diagnóstico DEL nuevo mercado antes de mover plata.",
+      "Repítelo cada 12 meses o cuando pase algo grande en tu sector (entra competidor, cambia ley, aparece sustituto)."
+    ],
+    "area": "direccion",
+    "tipo": "prompt",
+    "fileName": "prompt-diagnostico-estrategico-sector.md",
+    "sizeBytes": 7273,
+    "updatedAt": "2026-05-15",
+    "featured": true,
+    "hidden": false
+  },
+  {
+    "slug": "skill-constructor-bmc",
+    "title": "Skill — Constructor de tu Business Model Canvas por preguntas",
+    "description": "Le hablas a Claude de tu negocio en lenguaje plano, él arma los 9 bloques del Business Model Canvas listo para imprimir.",
+    "longDescription": "Esto sale directo del material de Emprendimiento e Innovación de mi MBA. El Business Model Canvas (BMC) es la herramienta más útil para entender de una sola página cómo funciona un negocio: quiénes son tus clientes, qué les ofreces, cómo les llegas, cómo les cobras, cuáles son tus costos, qué actividades clave hacen funcionar todo, etc. Son 9 bloques.\n\nEl problema: cuando intentas llenarlo solo, te bloqueas en los bloques difíciles (recursos clave, socios clave, propuesta de valor). Este skill convierte ese ejercicio en una conversación. Lo instalas en Claude Code, le dices 'quiero armar el BMC de mi negocio', y te hace preguntas en orden, en español plano, sin asumir que sabes qué es un canvas. Al final te entrega los 9 bloques llenos, listos para imprimir.",
+    "usefulFor": [
+      "Tener tu modelo de negocio claro en 1 hora, en una sola página.",
+      "Identificar bloques vacíos o débiles: si no puedes contestar las preguntas del bloque 'Recursos Clave', probablemente ese sea tu problema.",
+      "Tener el documento que te van a pedir si vas a buscar inversión, socio, o crédito de banco.",
+      "Volver a armarlo cada 6 meses para ver cómo cambió tu negocio."
+    ],
+    "includes": [
+      "El archivo SKILL.md listo para colocar en `~/.claude/skills/constructor-bmc/SKILL.md`.",
+      "Frontmatter con name + description (Claude lo activa solo cuando habla del tema).",
+      "Las preguntas guiadas por bloque (5-7 preguntas por bloque, formato conversacional).",
+      "Output final estructurado para pegar en una plantilla visual o imprimir.",
+      "Reglas de diagnóstico (propuesta débil, cliente concentrado, proveedor único, etc.)."
+    ],
+    "howToAdapt": [
+      "Si tu negocio es nuevo (pre-operación), avísale 'son hipótesis' — el skill cambia las preguntas para reflejarlo.",
+      "Si tienes varias líneas de producto, pídele al final 'ahora armame un BMC por línea de producto'.",
+      "Si vas a buscar inversión, pídele que enfatice los bloques que un inversionista mira primero.",
+      "Si quieres usarlo sin Claude Code (solo Claude.ai), copia las 'Reglas del skill' como mensaje inicial."
+    ],
+    "area": "skills-claude",
+    "tipo": "skill",
+    "fileName": "skill-constructor-bmc.md",
+    "sizeBytes": 7485,
+    "updatedAt": "2026-05-15",
+    "featured": true,
+    "hidden": false,
+    "skillName": "constructor-bmc",
+    "skillTrigger": "se activa cuando hablas de modelo de negocio, Business Model Canvas, BMC, o cómo gana plata tu negocio"
+  },
+  {
+    "slug": "skill-constructor-propuesta-valor",
+    "title": "Skill — Constructor de tu Propuesta de Valor por preguntas",
+    "description": "Claude te pregunta sobre tu cliente y sus frustraciones, arma tu propuesta de valor en una frase + canvas completo.",
+    "longDescription": "Esto sale del material de Value Proposition Canvas y la metodología 'qué trabajo está pagando tu cliente para que le resuelvas' (Jobs-to-be-Done en inglés, pero acá lo traducimos a algo claro). Es la mitad del Business Model Canvas, pero merece su propio skill porque la mayoría de pymes que conozco no tienen propuesta de valor clara — venden 'lo que la gente quiera' y compiten por precio.\n\nEl skill te hace preguntas sobre tu cliente: ¿qué intenta lograr cuando contrata algo como lo tuyo? ¿qué le da rabia o ansiedad mientras lo intenta? ¿qué ganaría si lo resolviera bien? Después te pregunta sobre tu producto/servicio. Al final, te entrega: (1) una frase de propuesta de valor lista para usar en tu landing/perfil, y (2) el canvas completo de Value Proposition.",
+    "usefulFor": [
+      "Tener una frase clara para responder cuando alguien te pregunta '¿en qué te diferencias?' sin sonar a robot.",
+      "Detectar si tu producto realmente alivia la frustración del cliente o solo es 'lo que se vende en este sector'.",
+      "Reescribir tu landing/perfil/pitch con base en lo que de verdad le importa a tu cliente.",
+      "Justificar tu precio sin pedir disculpas (cuando tu propuesta es clara, el precio se sostiene)."
+    ],
+    "includes": [
+      "El archivo SKILL.md listo para Claude Code o Claude.ai.",
+      "Las preguntas guiadas en orden: lado cliente primero, luego lado oferta.",
+      "Output final: 1 frase de propuesta de valor + canvas completo en bullets.",
+      "Reglas de diagnóstico: detecta propuestas genéricas, gaps entre frustraciones y aliviadores."
+    ],
+    "howToAdapt": [
+      "Si tienes varios segmentos de cliente, corre el skill una vez por segmento — la propuesta de valor cambia.",
+      "Si tu producto/servicio acaba de salir, contesta las preguntas como hipótesis y márcalas como tales.",
+      "Si tu propuesta de valor sale muy genérica ('damos buen servicio'), el skill te lo señala y pide especificidad.",
+      "Repite cada 6 meses — tu cliente puede haber cambiado lo que valora."
+    ],
+    "area": "skills-claude",
+    "tipo": "skill",
+    "fileName": "skill-constructor-propuesta-valor.md",
+    "sizeBytes": 8409,
+    "updatedAt": "2026-05-15",
+    "featured": true,
+    "hidden": false,
+    "skillName": "constructor-propuesta-valor",
+    "skillTrigger": "se activa cuando dices propuesta de valor, no sé qué me diferencia, o me copian la idea"
+  },
+  {
+    "slug": "prompt-mapa-cliente-ideal-journey",
+    "title": "Prompt — Mapa de tu cliente ideal y su viaje de compra",
+    "description": "Claude te pregunta sobre tu cliente y te devuelve el mapa de su viaje: desde que te descubre hasta que recompra.",
+    "longDescription": "Esto viene de mezclar Marketing del MBA con la realidad LATAM. La mayoría de pymes saben quién es su cliente pero no saben por qué fases pasa: cómo te descubre, cómo te compara con otros, qué duda lo frena, qué lo hace decidirse, qué pasa después de comprar. Sin ese mapa, la pauta y el contenido son ciegos.\n\nEl prompt te hace 8 preguntas sobre tu cliente y tu producto, y te devuelve el viaje en 5 etapas (te descubre, te considera, decide, primera compra, recompra) con: qué siente el cliente en cada etapa, qué duda tiene, qué contenido o señal lo movería a la siguiente etapa, y qué número seguir para saber si va bien. Todo en español plano.",
+    "usefulFor": [
+      "Saber qué contenido producir para cada momento del cliente (no todo es venta).",
+      "Detectar dónde se te quedan los clientes atascados.",
+      "Coordinar marketing y ventas con un mismo marco — el cliente está en la misma fase para los dos.",
+      "Saber por dónde priorizar tu mejora si solo puedes mover una pieza este mes."
+    ],
+    "includes": [
+      "El prompt completo con las 8 preguntas guiadas (perfil cliente, dolor, alternativas, decisión, post-compra).",
+      "El output esperado: tabla de 5 etapas con sentimientos, dudas, contenido sugerido, métricas.",
+      "Tres ejemplos: pyme de servicios, e-commerce de moda, restaurante local.",
+      "Mini-guía: cómo conectar este mapa con tu calendario de contenido y tu pauta."
+    ],
+    "howToAdapt": [
+      "Si tienes varios segmentos, corre el mapa una vez por segmento — el viaje cambia.",
+      "Si tu negocio depende de referidos (B2B servicios), añade una fase extra 'etapa de referido' después de recompra.",
+      "Si tu venta es de un solo pago grande, profundiza la etapa 'considera comprar' — ahí se gana o se pierde.",
+      "Si tu producto es de uso diario, profundiza la etapa 'recompra' — ahí está la utilidad real."
+    ],
+    "area": "marketing",
+    "tipo": "prompt",
+    "fileName": "prompt-mapa-cliente-ideal-journey.md",
+    "sizeBytes": 6647,
+    "updatedAt": "2026-05-15",
+    "featured": false,
+    "hidden": false
+  },
+  {
+    "slug": "prompt-plan-proyecto-sprint-corto",
+    "title": "Prompt — Plan de proyecto en 2 semanas (sprint corto, sin tecnología)",
+    "description": "Claude te ayuda a planear un lanzamiento, migración o expansión en 2 semanas con metas concretas por día.",
+    "longDescription": "Esto sale del material de Gestión de Proyectos de mi MBA, donde aprendimos Scrum y Kanban — métodos diseñados para software pero que funcionan igual para cualquier proyecto donde necesitas avanzar rápido en equipo. Lo aterricé para pymes no técnicas: olvídate de 'product owner', 'velocity', 'story points'. Sprint corto significa: 'tenemos 2 semanas, esto es lo que vamos a hacer, esto es lo que vamos a entregar al final, y esto es lo que NO vamos a hacer aunque tengamos ganas'.\n\nEl prompt te pide el objetivo del sprint, tu equipo, y te devuelve: meta de cada día, distribución por persona, lista de cosas que NO entran en este sprint, y los 3 momentos de revisión (día 4, día 8, día 14).",
+    "usefulFor": [
+      "Salir del modo 'lo hacemos cuando se pueda' a 'tenemos hasta el viernes 14 para tenerlo listo'.",
+      "Coordinar a un equipo de 2-6 personas sin necesitar software de gestión.",
+      "Lanzar algo nuevo con fecha en lugar de 'algún día'.",
+      "Detectar el día 4 si vas a llegar o no, en lugar del día 14 cuando ya es tarde."
+    ],
+    "includes": [
+      "El prompt con preguntas guiadas (objetivo, equipo, restricciones).",
+      "Output esperado: calendario de 14 días con tareas, responsable, criterio de 'cerrado'.",
+      "Lista negra: qué descartas para este sprint (importante para no dispersarte).",
+      "Tres ejemplos: lanzamiento de un nuevo servicio, migración a un nuevo software, apertura de una nueva sede pequeña."
+    ],
+    "howToAdapt": [
+      "Si tu equipo es solo tú, ajusta a un sprint de 5 días con menos cosas.",
+      "Si tu proyecto necesita más de 2 semanas, divide en sprints encadenados con su propio objetivo.",
+      "Si trabajas con freelancers, pon sus entregas como hitos del sprint (no como tareas continuas).",
+      "Si tu sector tiene urgencias frecuentes, reserva 30% del tiempo del sprint para imprevistos."
+    ],
+    "area": "operaciones",
+    "tipo": "prompt",
+    "fileName": "prompt-plan-proyecto-sprint-corto.md",
+    "sizeBytes": 6008,
+    "updatedAt": "2026-05-15",
+    "featured": true,
+    "hidden": false
+  },
+  {
+    "slug": "prompt-matriz-responsabilidades-raci",
+    "title": "Prompt — Matriz de quién decide qué (RACI simplificada)",
+    "description": "Claude te ayuda a aclarar quién decide, quién ejecuta, quién consulta y quién informa para cada decisión clave.",
+    "longDescription": "Esto sale del material de Gestión de Proyectos de mi MBA. RACI es una matriz para evitar el problema más común en pymes: 'todos creían que el otro lo iba a hacer'. Son 4 letras: R (responsable, quién ejecuta), A (decisor final, quién aprueba), C (a quién consulto antes), I (a quién informo después). Para cada decisión o tarea importante, defines quién es cada cosa.\n\nEl prompt te pide qué decisiones te están confundiendo a ti y a tu equipo, qué cargos/personas hay involucradas, y te arma la matriz. Si la misma persona aparece como R y A en todas las decisiones (típico de pymes), te lo señala — es señal de que no estás delegando.",
+    "usefulFor": [
+      "Salir del bucle 'preguntaron a 3 personas, contestaron 3 cosas distintas'.",
+      "Delegar de verdad — separar quién decide de quién ejecuta es el primer paso.",
+      "Tener un documento que zanje las discusiones de pasillo sobre responsabilidades.",
+      "Detectar decisiones huérfanas (nadie es el decisor) o sobre-supervisadas (5 personas tienen que aprobar)."
+    ],
+    "includes": [
+      "El prompt completo + ejemplo de cómo describir tus decisiones para que Claude las procese bien.",
+      "La matriz output: tabla de decisiones × personas con R/A/C/I.",
+      "Reglas para usarla: solo 1 A por decisión, máximo 2 R, los C deben ser realmente necesarios.",
+      "Tres ejemplos: contratar a alguien nuevo, lanzar un producto, decidir un proveedor."
+    ],
+    "howToAdapt": [
+      "Si tu pyme tiene menos de 5 personas, no necesitas RACI formal — bastan 2 columnas (decide / ejecuta).",
+      "Si crecen las personas, añade los C primero antes que los I.",
+      "Si una persona aparece como A en 10 decisiones distintas, probablemente eres tú — el prompt te señala como cuello de botella.",
+      "Repite la matriz cada vez que entre o salga alguien clave del equipo."
+    ],
+    "area": "operaciones",
+    "tipo": "prompt",
+    "fileName": "prompt-matriz-responsabilidades-raci.md",
+    "sizeBytes": 6664,
+    "updatedAt": "2026-05-15",
+    "featured": false,
+    "hidden": false
+  },
+  {
+    "slug": "prompt-diseno-organizacional-crecimiento",
+    "title": "Prompt — Diseño de tu organización para crecer (de 10 a 30 personas)",
+    "description": "Claude te pregunta sobre tu negocio y te recomienda cómo estructurar tu equipo según la fase de crecimiento.",
+    "longDescription": "Esto sale del material de Estrategia Organizacional de mi MBA. La pyme colombiana promedio se queda atascada en la transición de '10 personas que reportan al dueño' a '30 personas con líderes intermedios'. El dueño no quiere soltar control, las decisiones se demoran, la gente nueva entra sin claridad de a quién reporta, y la cultura se diluye.\n\nEl prompt te hace preguntas sobre tu negocio (cuántas personas tienes hoy, qué hacen, dónde están los cuellos de botella, qué decisiones se demoran) y te recomienda: qué estructura tener en TU fase actual, qué líderes intermedios necesitas, qué decisiones puedes empezar a delegar, y cuáles deberías mantener tú. También te dice qué señales indican que es hora de cambiar otra vez.",
+    "usefulFor": [
+      "Saber si tu problema es que necesitas más gente, o si es que necesitas mejor estructura.",
+      "Identificar a qué líder intermedio promover/contratar antes de quemarte tú.",
+      "Tener claridad de qué decisiones vas a soltar este trimestre — el plan más concreto que un libro de liderazgo.",
+      "Detectar si tu cultura se está diluyendo porque la nueva gente no sabe cómo se hace acá."
+    ],
+    "includes": [
+      "El prompt completo con preguntas guiadas (tamaño actual, áreas funcionales, cuellos de botella, decisiones lentas).",
+      "Output esperado: estructura recomendada en organigrama simple, líderes intermedios sugeridos, decisiones a delegar.",
+      "Las 3 fases típicas (fundador, mediana, empresa) con sus señales de transición.",
+      "Tres ejemplos: pyme de servicios profesionales, e-commerce, manufactura."
+    ],
+    "howToAdapt": [
+      "Si tu negocio es muy diferente a los ejemplos (cooperativa, familiar, social), pídele que ajuste la estructura a tu contexto.",
+      "Si tu equipo es completamente remoto, las recomendaciones de líderes intermedios cambian — pídele que las ajuste.",
+      "Si vienes de heredar el negocio, corre el prompt como diagnóstico antes que como diseño.",
+      "Si tu cultura es muy informal, pídele opciones que preserven autonomía pero den claridad."
+    ],
+    "area": "rrhh",
+    "tipo": "prompt",
+    "fileName": "prompt-diseno-organizacional-crecimiento.md",
+    "sizeBytes": 7648,
+    "updatedAt": "2026-05-15",
+    "featured": true,
+    "hidden": false
+  }
+]

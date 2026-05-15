@@ -1,0 +1,413 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {
+  AREAS,
+  RESOURCES,
+  formatSize,
+} from '../lib/resources';
+
+// Hash SHA-256 del password. Si se setea PUBLIC_ADMIN_HASH en .env, se usa eso.
+// Default (cambialo): password "omar-arkhe-2026"
+const FALLBACK_HASH = 'a7edf727a275ffddaa8a3413e1fe09e21df77eaab9d2833f8c11a8b571397b2d';
+const ADMIN_HASH = import.meta.env.PUBLIC_ADMIN_HASH ?? FALLBACK_HASH;
+
+// Construcción de filas (renderizado server-side; el gate ocurre client-side)
+const resourceRows = RESOURCES.slice()
+  .sort((a, b) => a.area.localeCompare(b.area) || a.slug.localeCompare(b.slug))
+  .map((r) => ({
+    slug: r.slug,
+    area: r.area,
+    tipo: r.tipo,
+    hidden: r.hidden,
+    featured: !!r.featured,
+    size: formatSize(r.sizeBytes),
+    updatedAt: r.updatedAt,
+  }));
+
+const areaRows = AREAS.slice()
+  .sort((a, b) => a.order - b.order)
+  .map((a) => {
+    const all = RESOURCES.filter((r) => r.area === a.slug);
+    const visibles = all.filter((r) => !r.hidden).length;
+    return {
+      order: String(a.order).padStart(2, '0'),
+      slug: a.slug,
+      label: a.label,
+      hidden: a.hidden,
+      visibles,
+      total: all.length,
+    };
+  });
+
+const githubEditUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/main/src/data/resources.json';
+const githubEditAreasUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/main/src/data/areas.json';
+---
+
+<Layout
+  title="admin"
+  description="Panel privado"
+>
+  <noscript>
+    <div class="admin-noscript">
+      Esta página requiere JavaScript.
+    </div>
+  </noscript>
+
+  <div id="admin-locked" class="admin-locked">
+    <h1 class="admin-locked__code">404</h1>
+    <p class="admin-locked__text">Página no encontrada.</p>
+    <a href="/" class="admin-locked__back">volver al inicio →</a>
+  </div>
+
+  <main id="admin-panel" class="admin-panel container-page" hidden>
+    <header class="admin-panel__head">
+      <p class="mono-label">panel privado · solo lectura</p>
+      <h1 class="admin-panel__title">admin <span class="admin-panel__dot">.</span></h1>
+      <p class="admin-panel__sub">
+        Inventario de áreas y recursos. Las ediciones se hacen vía scripts CLI o editando los JSON.
+      </p>
+    </header>
+
+    <section class="admin-section" aria-labelledby="admin-areas-title">
+      <header class="admin-section__head">
+        <h2 id="admin-areas-title" class="admin-section__title">áreas · {areaRows.length}</h2>
+        <a href={githubEditAreasUrl} target="_blank" rel="noopener" class="admin-section__edit">
+          editar areas.json en GitHub ↗
+        </a>
+      </header>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>slug</th>
+              <th>label</th>
+              <th>estado</th>
+              <th>visibles</th>
+              <th>total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {areaRows.map((a) => (
+              <tr data-hidden={a.hidden ? 'true' : 'false'}>
+                <td>{a.order}</td>
+                <td class="admin-table__mono">{a.slug}</td>
+                <td>{a.label}</td>
+                <td>
+                  {a.hidden ? (
+                    <span class="admin-tag admin-tag--off">apagada</span>
+                  ) : (
+                    <span class="admin-tag admin-tag--on">visible</span>
+                  )}
+                </td>
+                <td class="admin-table__mono">{a.visibles}</td>
+                <td class="admin-table__mono">{a.total}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="admin-section" aria-labelledby="admin-resources-title">
+      <header class="admin-section__head">
+        <h2 id="admin-resources-title" class="admin-section__title">recursos · {resourceRows.length}</h2>
+        <a href={githubEditUrl} target="_blank" rel="noopener" class="admin-section__edit">
+          editar resources.json en GitHub ↗
+        </a>
+      </header>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>slug</th>
+              <th>área</th>
+              <th>tipo</th>
+              <th>estado</th>
+              <th>featured</th>
+              <th>tamaño</th>
+              <th>fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            {resourceRows.map((r) => (
+              <tr data-hidden={r.hidden ? 'true' : 'false'}>
+                <td class="admin-table__mono">{r.slug}</td>
+                <td class="admin-table__mono">{r.area}</td>
+                <td>{r.tipo}</td>
+                <td>
+                  {r.hidden ? (
+                    <span class="admin-tag admin-tag--off">oculto</span>
+                  ) : (
+                    <span class="admin-tag admin-tag--on">visible</span>
+                  )}
+                </td>
+                <td>{r.featured ? '★' : ''}</td>
+                <td class="admin-table__mono">{r.size}</td>
+                <td class="admin-table__mono">{r.updatedAt}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="admin-section admin-section--commands" aria-labelledby="admin-commands-title">
+      <h2 id="admin-commands-title" class="admin-section__title">comandos</h2>
+      <p class="admin-commands__intro">
+        Corré estos en la terminal dentro de <code class="admin-code">~/proyectos-vibe-coding/landing-omar</code>. Después de cualquier cambio: <code class="admin-code">git add . && git commit && git push</code>.
+      </p>
+      <ul class="admin-commands">
+        <li><code class="admin-code">npm run resource:add</code> — flujo interactivo para subir un .md</li>
+        <li><code class="admin-code">npm run resource:hide &lt;slug&gt;</code> — ocultar un recurso</li>
+        <li><code class="admin-code">npm run resource:show &lt;slug&gt;</code> — volver a mostrarlo</li>
+        <li><code class="admin-code">npm run resource:toggle &lt;slug&gt;</code> — alternar</li>
+        <li><code class="admin-code">npm run resource:list</code> — tabla de recursos</li>
+        <li><code class="admin-code">npm run area:toggle &lt;slug&gt;</code> — apagar / encender un área</li>
+        <li><code class="admin-code">npm run area:list</code> — tabla de áreas</li>
+      </ul>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .admin-noscript {
+    padding: 80px 24px;
+    text-align: center;
+    color: var(--mute);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  /* Estado bloqueado (default antes del JS validar el hash) */
+  .admin-locked {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 80px 24px;
+  }
+  .admin-locked__code {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+  .admin-locked__text {
+    margin: 0;
+    color: var(--mute);
+    font-size: 14px;
+  }
+  .admin-locked__back {
+    margin-top: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 2px;
+  }
+
+  /* Panel desbloqueado */
+  .admin-panel {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(48px, 8vw, 80px);
+    padding-top: clamp(96px, 14vw, 140px);
+    padding-bottom: clamp(96px, 14vw, 160px);
+  }
+
+  .admin-panel__head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-bottom: 0.5px solid var(--line);
+    padding-bottom: 32px;
+  }
+
+  .admin-panel__title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .admin-panel__dot {
+    color: var(--accent);
+  }
+
+  .admin-panel__sub {
+    margin: 0;
+    color: var(--mute);
+    font-size: 14px;
+    max-width: 60ch;
+  }
+
+  .admin-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .admin-section__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .admin-section__title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    font-weight: 500;
+    text-transform: lowercase;
+  }
+
+  .admin-section__edit {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    border-bottom: 1px solid var(--line-hi);
+    padding-bottom: 2px;
+    transition: border-color 0.2s ease;
+  }
+  .admin-section__edit:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  .admin-table-wrap {
+    overflow-x: auto;
+    border: 0.5px solid var(--line);
+    border-radius: 4px;
+  }
+
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 0.5px solid var(--line);
+    white-space: nowrap;
+  }
+
+  .admin-table th {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
+    background-color: var(--bg-soft);
+  }
+
+  .admin-table tr[data-hidden='true'] td {
+    color: var(--mute);
+    background-color: var(--bg-soft);
+  }
+
+  .admin-table__mono {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .admin-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    border: 0.5px solid;
+  }
+  .admin-tag--on {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .admin-tag--off {
+    color: var(--mute);
+    border-color: var(--line-hi);
+  }
+
+  .admin-commands {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .admin-commands__intro {
+    margin: 0;
+    font-size: 14px;
+    color: var(--mute);
+    max-width: 60ch;
+  }
+
+  .admin-code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+    background-color: var(--bg-soft);
+    padding: 2px 6px;
+    border-radius: 2px;
+    border: 0.5px solid var(--line);
+  }
+</style>
+
+<script define:vars={{ ADMIN_HASH }}>
+  async function sha256Hex(text) {
+    const buf = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  async function check() {
+    const raw = window.location.hash.replace(/^#/, '');
+    if (!raw) return;
+    const hash = await sha256Hex(raw);
+    if (hash === ADMIN_HASH) {
+      document.getElementById('admin-locked')?.setAttribute('hidden', '');
+      const panel = document.getElementById('admin-panel');
+      if (panel) panel.hidden = false;
+      // Limpiar el hash de la barra para no dejar el password expuesto en historial.
+      // Mantenemos la sesión viva con sessionStorage.
+      sessionStorage.setItem('admin-unlocked', '1');
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+
+  // Soporte de "sesión": si ya se desbloqueó en esta pestaña, no pedimos el hash de nuevo.
+  if (sessionStorage.getItem('admin-unlocked') === '1') {
+    document.getElementById('admin-locked')?.setAttribute('hidden', '');
+    const panel = document.getElementById('admin-panel');
+    if (panel) panel.hidden = false;
+  } else {
+    check();
+    window.addEventListener('hashchange', check);
+  }
+</script>

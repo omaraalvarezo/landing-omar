@@ -143,7 +143,7 @@
   .display-1 {
     font-family: var(--font-serif);
     font-size: clamp(48px, 9vw, 120px);
-    line-height: 1.0;
+    line-height: 1.08;
     letter-spacing: -0.02em;
     font-weight: 400;
   }
@@ -228,7 +228,11 @@
     text-decoration-line: underline;
     text-decoration-color: var(--accent);
     text-decoration-thickness: 1px;
-    text-underline-offset: 0.12em;
+    text-underline-offset: 0.16em;
+    /* Forzar underline continuo. Sin esto, el navegador "salta" la línea
+       cuando los glifos italic serif cruzan el underline (caso "uso": la
+       curva inferior de la "o" italic interrumpe la línea azul). */
+    text-decoration-skip-ink: none;
   }
 
   /* Big number protagónico */
@@ -283,22 +287,23 @@
 
 /* ---------- Split-text reveal ----------
    .word es la caja de clip durante el reveal (translateY 115% → 0).
-   Después de que la palabra termina su transform, JS añade `.is-shown` y
-   liberamos el clip para que descenders e underlines accent se vean completos
-   (caso "decide" italic, "ya" italic, etc.). */
+   USAMOS `clip-path` (no overflow:hidden) extendido 0.6em abajo del bottom
+   natural del .word — eso permite que descenders e underlines de Instrument
+   Serif italic + accent-italic queden visibles SIEMPRE (durante y después
+   del reveal), sin depender de un toggle .is-shown que puede no dispararse
+   en HMR o cargas rápidas. Lateralmente sí clipeamos (los swashes laterales
+   son raros y el clip lateral preserva el efecto "máscara" del reveal).
+   El inner en translateY(115%) queda fuera del clip → invisible al inicio. */
 @layer components {
   [data-split-reveal] .word {
     display: inline-block;
-    overflow: hidden;
     vertical-align: top;
     line-height: inherit;
-    /* Espacio generoso debajo del baseline para alojar descender + underline.
-       Compensado con margin negativo para no afectar el flow vertical. */
-    padding-bottom: 0.18em;
-    margin-bottom: -0.18em;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% + 0.6em), 0 calc(100% + 0.6em));
   }
+  /* .is-shown queda como no-op por compat — clip-path ya no requiere liberación */
   [data-split-reveal] .word.is-shown {
-    overflow: visible;
+    clip-path: none;
   }
   [data-split-reveal] .word__inner {
     display: inline-block;

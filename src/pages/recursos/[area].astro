@@ -1,0 +1,58 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Footer from '../../components/Footer.astro';
+import AreaIndex from '../../components/AreaIndex.astro';
+import { getVisibleAreas, getResourcesByArea, type Area } from '../../lib/resources';
+
+export function getStaticPaths() {
+  return getVisibleAreas().map((area) => ({
+    params: { area: area.slug },
+    props: { area },
+  }));
+}
+
+interface Props {
+  area: Area;
+}
+const { area } = Astro.props;
+const resources = getResourcesByArea(area.slug);
+
+const title = `${area.label} · Recursos · Omar Álvarez`;
+const description = `${resources.length} recurso${
+  resources.length === 1 ? '' : 's'
+} de IA aplicada para ${area.label}. Descarga libre, sin email.`;
+---
+
+<Layout title={title} description={description}>
+  <AreaIndex area={area} resources={resources} />
+  <Footer />
+</Layout>
+
+<script>
+  import { initMagnetic } from '../../scripts/magnetic';
+  import { splitAndReveal } from '../../scripts/splitText';
+
+  splitAndReveal({ selector: '[data-split-reveal]', staggerMs: 40, durationMs: 700 });
+  initMagnetic();
+
+  const reveals = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-split-reveal])');
+  if (reveals.length) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      reveals.forEach((el) => el.classList.add('is-revealed'));
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              (e.target as HTMLElement).classList.add('is-revealed');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      reveals.forEach((el) => io.observe(el));
+    }
+  }
+</script>
