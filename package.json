@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Landing personal de Omar Álvarez — consultoría IA pymes LATAM",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
