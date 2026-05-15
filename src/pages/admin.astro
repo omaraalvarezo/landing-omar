@@ -1,17 +1,18 @@
 ---
+// Admin panel: panel privado solo-lectura con tabla de áreas y recursos.
+// Auth: server-side via /api/admin-auth + cookie HMAC. Middleware setea Astro.locals.adminUnlocked.
+//
+// Sin sesión: muestra solo el form de login (404-style, no revela info del dashboard).
+// Con sesión: muestra dashboard completo + botón logout.
+
+export const prerender = false;
+
 import Layout from '../layouts/Layout.astro';
-import {
-  AREAS,
-  RESOURCES,
-  formatSize,
-} from '../lib/resources';
+import { AREAS, RESOURCES, formatSize } from '../lib/resources';
 
-// Hash SHA-256 del password. Si se setea PUBLIC_ADMIN_HASH en .env, se usa eso.
-// Default: password "1909omar"
-const FALLBACK_HASH = 'f835c2116b8bd1dba8469781dcd7503ff90ae37001a4aef41225c310892c135d';
-const ADMIN_HASH = import.meta.env.PUBLIC_ADMIN_HASH ?? FALLBACK_HASH;
+const unlocked = Astro.locals.adminUnlocked === true;
 
-// Construcción de filas (renderizado server-side; el gate ocurre client-side)
+// Construcción de filas (solo se evalúan si unlocked, pero la lectura es local — barata)
 const resourceRows = RESOURCES.slice()
   .sort((a, b) => a.area.localeCompare(b.area) || a.slug.localeCompare(b.slug))
   .map((r) => ({
@@ -43,145 +44,150 @@ const githubEditUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/main/s
 const githubEditAreasUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/main/src/data/areas.json';
 ---
 
-<Layout
-  title="admin"
-  description="Panel privado"
->
-  <noscript>
-    <div class="admin-noscript">
-      Esta página requiere JavaScript.
-    </div>
-  </noscript>
+<Layout title="admin" description="Panel privado">
+  {!unlocked && (
+    <main class="admin-locked container-page">
+      <h1 class="admin-locked__code">404</h1>
+      <p class="admin-locked__text">Página no encontrada.</p>
 
-  <div id="admin-locked" class="admin-locked">
-    <h1 class="admin-locked__code">404</h1>
-    <p class="admin-locked__text">Página no encontrada.</p>
-    <a href="/" class="admin-locked__back">volver al inicio →</a>
-  </div>
+      <form id="admin-login" class="admin-login" autocomplete="off">
+        <label for="admin-pw" class="admin-login__label">administrador</label>
+        <input
+          id="admin-pw"
+          name="password"
+          type="password"
+          class="admin-login__input"
+          autocomplete="current-password"
+          maxlength="128"
+          required
+          aria-label="Contraseña de administrador"
+        />
+        <button type="submit" class="admin-login__btn">entrar</button>
+        <p id="admin-login-error" class="admin-login__error" role="alert" aria-live="polite"></p>
+      </form>
 
-  <main id="admin-panel" class="admin-panel container-page" hidden>
-    <header class="admin-panel__head">
-      <p class="mono-label">panel privado · solo lectura</p>
-      <h1 class="admin-panel__title">admin <span class="admin-panel__dot">.</span></h1>
-      <p class="admin-panel__sub">
-        Inventario de áreas y recursos. Las ediciones se hacen vía scripts CLI o editando los JSON.
-      </p>
-    </header>
+      <a href="/" class="admin-locked__back">volver al inicio →</a>
+    </main>
+  )}
 
-    <section class="admin-section" aria-labelledby="admin-areas-title">
-      <header class="admin-section__head">
-        <h2 id="admin-areas-title" class="admin-section__title">áreas · {areaRows.length}</h2>
-        <a href={githubEditAreasUrl} target="_blank" rel="noopener" class="admin-section__edit">
-          editar areas.json en GitHub ↗
-        </a>
+  {unlocked && (
+    <main class="admin-panel container-page">
+      <header class="admin-panel__head">
+        <p class="mono-label">panel privado · solo lectura</p>
+        <h1 class="admin-panel__title">admin <span class="admin-panel__dot">.</span></h1>
+        <p class="admin-panel__sub">
+          Inventario de áreas y recursos. Las ediciones se hacen vía scripts CLI o editando los JSON.
+        </p>
+        <button id="admin-logout-btn" class="admin-logout-btn" type="button">cerrar sesión</button>
       </header>
 
-      <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>slug</th>
-              <th>label</th>
-              <th>estado</th>
-              <th>visibles</th>
-              <th>total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {areaRows.map((a) => (
-              <tr data-hidden={a.hidden ? 'true' : 'false'}>
-                <td>{a.order}</td>
-                <td class="admin-table__mono">{a.slug}</td>
-                <td>{a.label}</td>
-                <td>
-                  {a.hidden ? (
-                    <span class="admin-tag admin-tag--off">apagada</span>
-                  ) : (
-                    <span class="admin-tag admin-tag--on">visible</span>
-                  )}
-                </td>
-                <td class="admin-table__mono">{a.visibles}</td>
-                <td class="admin-table__mono">{a.total}</td>
+      <section class="admin-section" aria-labelledby="admin-areas-title">
+        <header class="admin-section__head">
+          <h2 id="admin-areas-title" class="admin-section__title">áreas · {areaRows.length}</h2>
+          <a href={githubEditAreasUrl} target="_blank" rel="noopener" class="admin-section__edit">
+            editar areas.json en GitHub ↗
+          </a>
+        </header>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>slug</th>
+                <th>label</th>
+                <th>estado</th>
+                <th>visibles</th>
+                <th>total</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
+            </thead>
+            <tbody>
+              {areaRows.map((a) => (
+                <tr data-hidden={a.hidden ? 'true' : 'false'}>
+                  <td>{a.order}</td>
+                  <td class="admin-table__mono">{a.slug}</td>
+                  <td>{a.label}</td>
+                  <td>
+                    {a.hidden ? (
+                      <span class="admin-tag admin-tag--off">apagada</span>
+                    ) : (
+                      <span class="admin-tag admin-tag--on">visible</span>
+                    )}
+                  </td>
+                  <td class="admin-table__mono">{a.visibles}</td>
+                  <td class="admin-table__mono">{a.total}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-    <section class="admin-section" aria-labelledby="admin-resources-title">
-      <header class="admin-section__head">
-        <h2 id="admin-resources-title" class="admin-section__title">recursos · {resourceRows.length}</h2>
-        <a href={githubEditUrl} target="_blank" rel="noopener" class="admin-section__edit">
-          editar resources.json en GitHub ↗
-        </a>
-      </header>
+      <section class="admin-section" aria-labelledby="admin-resources-title">
+        <header class="admin-section__head">
+          <h2 id="admin-resources-title" class="admin-section__title">recursos · {resourceRows.length}</h2>
+          <a href={githubEditUrl} target="_blank" rel="noopener" class="admin-section__edit">
+            editar resources.json en GitHub ↗
+          </a>
+        </header>
 
-      <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>slug</th>
-              <th>área</th>
-              <th>tipo</th>
-              <th>estado</th>
-              <th>featured</th>
-              <th>tamaño</th>
-              <th>fecha</th>
-            </tr>
-          </thead>
-          <tbody>
-            {resourceRows.map((r) => (
-              <tr data-hidden={r.hidden ? 'true' : 'false'}>
-                <td class="admin-table__mono">{r.slug}</td>
-                <td class="admin-table__mono">{r.area}</td>
-                <td>{r.tipo}</td>
-                <td>
-                  {r.hidden ? (
-                    <span class="admin-tag admin-tag--off">oculto</span>
-                  ) : (
-                    <span class="admin-tag admin-tag--on">visible</span>
-                  )}
-                </td>
-                <td>{r.featured ? '★' : ''}</td>
-                <td class="admin-table__mono">{r.size}</td>
-                <td class="admin-table__mono">{r.updatedAt}</td>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>slug</th>
+                <th>área</th>
+                <th>tipo</th>
+                <th>estado</th>
+                <th>featured</th>
+                <th>tamaño</th>
+                <th>fecha</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
+            </thead>
+            <tbody>
+              {resourceRows.map((r) => (
+                <tr data-hidden={r.hidden ? 'true' : 'false'}>
+                  <td class="admin-table__mono">{r.slug}</td>
+                  <td class="admin-table__mono">{r.area}</td>
+                  <td>{r.tipo}</td>
+                  <td>
+                    {r.hidden ? (
+                      <span class="admin-tag admin-tag--off">oculto</span>
+                    ) : (
+                      <span class="admin-tag admin-tag--on">visible</span>
+                    )}
+                  </td>
+                  <td>{r.featured ? '★' : ''}</td>
+                  <td class="admin-table__mono">{r.size}</td>
+                  <td class="admin-table__mono">{r.updatedAt}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-    <section class="admin-section admin-section--commands" aria-labelledby="admin-commands-title">
-      <h2 id="admin-commands-title" class="admin-section__title">comandos</h2>
-      <p class="admin-commands__intro">
-        Corré estos en la terminal dentro de <code class="admin-code">~/proyectos-vibe-coding/landing-omar</code>. Después de cualquier cambio: <code class="admin-code">git add . && git commit && git push</code>.
-      </p>
-      <ul class="admin-commands">
-        <li><code class="admin-code">npm run resource:add</code> — flujo interactivo para subir un .md</li>
-        <li><code class="admin-code">npm run resource:hide &lt;slug&gt;</code> — ocultar un recurso</li>
-        <li><code class="admin-code">npm run resource:show &lt;slug&gt;</code> — volver a mostrarlo</li>
-        <li><code class="admin-code">npm run resource:toggle &lt;slug&gt;</code> — alternar</li>
-        <li><code class="admin-code">npm run resource:list</code> — tabla de recursos</li>
-        <li><code class="admin-code">npm run area:toggle &lt;slug&gt;</code> — apagar / encender un área</li>
-        <li><code class="admin-code">npm run area:list</code> — tabla de áreas</li>
-      </ul>
-    </section>
-  </main>
+      <section class="admin-section admin-section--commands" aria-labelledby="admin-commands-title">
+        <h2 id="admin-commands-title" class="admin-section__title">comandos</h2>
+        <p class="admin-commands__intro">
+          Corré estos en la terminal dentro de <code class="admin-code">~/proyectos-vibe-coding/landing-omar</code>. Después de cualquier cambio: <code class="admin-code">git add . && git commit && git push</code>.
+        </p>
+        <ul class="admin-commands">
+          <li><code class="admin-code">npm run resource:add</code> — flujo interactivo para subir un .md</li>
+          <li><code class="admin-code">npm run resource:hide &lt;slug&gt;</code> — ocultar un recurso</li>
+          <li><code class="admin-code">npm run resource:show &lt;slug&gt;</code> — volver a mostrarlo</li>
+          <li><code class="admin-code">npm run resource:toggle &lt;slug&gt;</code> — alternar</li>
+          <li><code class="admin-code">npm run resource:list</code> — tabla de recursos</li>
+          <li><code class="admin-code">npm run area:toggle &lt;slug&gt;</code> — apagar / encender un área</li>
+          <li><code class="admin-code">npm run area:list</code> — tabla de áreas</li>
+        </ul>
+      </section>
+    </main>
+  )}
 </Layout>
 
 <style>
-  .admin-noscript {
-    padding: 80px 24px;
-    text-align: center;
-    color: var(--mute);
-    font-family: var(--font-mono);
-    font-size: 13px;
-  }
-
-  /* Estado bloqueado (default antes del JS validar el hash) */
+  /* Estado bloqueado (no autenticado): se ve como 404 con un input pequeño abajo */
   .admin-locked {
     min-height: 70vh;
     display: flex;
@@ -214,6 +220,64 @@ const githubEditAreasUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/m
     padding-bottom: 2px;
   }
 
+  /* Login form: visualmente discreto, solo accesible si sabes que existe */
+  .admin-login {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 280px;
+    align-items: stretch;
+  }
+  .admin-login__label {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .admin-login__input {
+    padding: 10px 12px;
+    border: 0.5px solid var(--line-hi);
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--ink);
+    background-color: var(--bg);
+  }
+  .admin-login__input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-color: var(--accent);
+  }
+  .admin-login__btn {
+    padding: 10px 14px;
+    background-color: var(--accent);
+    color: var(--bg);
+    border: 0;
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  .admin-login__btn:hover {
+    opacity: 0.85;
+  }
+  .admin-login__btn[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .admin-login__error {
+    margin: 0;
+    min-height: 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--negative);
+  }
+
   /* Panel desbloqueado */
   .admin-panel {
     display: flex;
@@ -229,6 +293,7 @@ const githubEditAreasUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/m
     gap: 16px;
     border-bottom: 0.5px solid var(--line);
     padding-bottom: 32px;
+    position: relative;
   }
 
   .admin-panel__title {
@@ -249,6 +314,25 @@ const githubEditAreasUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/m
     color: var(--mute);
     font-size: 14px;
     max-width: 60ch;
+  }
+
+  .admin-logout-btn {
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 6px 12px;
+    background: transparent;
+    border: 0.5px solid var(--line-hi);
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--mute);
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .admin-logout-btn:hover {
+    color: var(--ink);
+    border-color: var(--ink);
   }
 
   .admin-section {
@@ -377,37 +461,59 @@ const githubEditAreasUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/m
   }
 </style>
 
-<script define:vars={{ ADMIN_HASH }}>
-  async function sha256Hex(text) {
-    const buf = new TextEncoder().encode(text);
-    const digest = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(digest))
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+<script>
+  // Login: POST a /api/admin-auth. Si OK → reload (middleware lee la cookie y muestra el dashboard).
+  const form = document.getElementById('admin-login') as HTMLFormElement | null;
+  const errorEl = document.getElementById('admin-login-error');
+  const pwInput = document.getElementById('admin-pw') as HTMLInputElement | null;
+
+  if (form && pwInput) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const password = pwInput.value;
+      if (!password) return;
+
+      const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+      if (btn) btn.disabled = true;
+      if (errorEl) errorEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/admin-auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password }),
+        });
+
+        if (res.ok) {
+          // Cookie ya seteada por el servidor. Reload.
+          window.location.reload();
+          return;
+        }
+
+        if (res.status === 429) {
+          if (errorEl) errorEl.textContent = 'Demasiados intentos. Esperá 15 minutos.';
+        } else {
+          if (errorEl) errorEl.textContent = 'Credenciales inválidas.';
+        }
+      } catch {
+        if (errorEl) errorEl.textContent = 'Error de red. Intentá de nuevo.';
+      } finally {
+        if (btn) btn.disabled = false;
+        pwInput.value = '';
+      }
+    });
   }
 
-  async function check() {
-    const raw = window.location.hash.replace(/^#/, '');
-    if (!raw) return;
-    const hash = await sha256Hex(raw);
-    if (hash === ADMIN_HASH) {
-      document.getElementById('admin-locked')?.setAttribute('hidden', '');
-      const panel = document.getElementById('admin-panel');
-      if (panel) panel.hidden = false;
-      // Limpiar el hash de la barra para no dejar el password expuesto en historial.
-      // Mantenemos la sesión viva con sessionStorage.
-      sessionStorage.setItem('admin-unlocked', '1');
-      history.replaceState(null, '', window.location.pathname);
-    }
-  }
-
-  // Soporte de "sesión": si ya se desbloqueó en esta pestaña, no pedimos el hash de nuevo.
-  if (sessionStorage.getItem('admin-unlocked') === '1') {
-    document.getElementById('admin-locked')?.setAttribute('hidden', '');
-    const panel = document.getElementById('admin-panel');
-    if (panel) panel.hidden = false;
-  } else {
-    check();
-    window.addEventListener('hashchange', check);
+  // Logout
+  const logoutBtn = document.getElementById('admin-logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await fetch('/api/admin-logout', { method: 'POST' });
+      } catch {
+        // ignore — recargar igual
+      }
+      window.location.reload();
+    });
   }
 </script>

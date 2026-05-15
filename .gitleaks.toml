@@ -1,0 +1,46 @@
+# Configuración gitleaks personalizada para landing-omar.
+# Extiende los rules default + agrega patterns específicos del stack:
+# Cal.com API keys, Vercel tokens, Upstash, Supabase, etc.
+
+title = "gitleaks · landing-omar"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "calcom-api-key"
+description = "Cal.com API key"
+regex = '''cal_(live|test)_[a-f0-9]{32}'''
+keywords = ["cal_live_", "cal_test_"]
+tags = ["api-key", "cal"]
+
+[[rules]]
+id = "vercel-token"
+description = "Vercel API token"
+regex = '''(?i)vercel_[A-Za-z0-9]{24,}'''
+keywords = ["vercel_"]
+tags = ["api-key", "vercel"]
+
+[[rules]]
+id = "upstash-token"
+description = "Upstash Redis token"
+regex = '''(?i)A[A-Za-z0-9]{20,}=[A-Za-z0-9]{30,}'''
+keywords = ["UPSTASH_REDIS_REST_TOKEN"]
+tags = ["api-key", "upstash"]
+
+[[rules]]
+id = "bcrypt-hash"
+description = "bcrypt hash (no debería estar hardcodeado en repo público)"
+regex = '''\$2[abxy]\$\d{2}\$[./A-Za-z0-9]{53}'''
+keywords = ["$2a$", "$2b$", "$2y$"]
+tags = ["secret", "bcrypt"]
+
+# Allowlist: archivos de docs/ejemplos donde aparecen patterns de muestra
+[allowlist]
+description = "ignorar archivos de documentación con ejemplos"
+paths = [
+  '''\.md$''',
+  '''CHANGELOG''',
+  '''README''',
+  '''docs/''',
+]
