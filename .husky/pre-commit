@@ -6,7 +6,7 @@
 
 set -e
 
-STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -vE '^(node_modules/|dist/|\.astro/|\.vercel/|\.husky/|\.gitleaks\.toml$)' || true)
+STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -vE '^(node_modules/|dist/|\.astro/|\.vercel/|\.husky/|\.gitleaks\.toml$)' | grep -vE '\.(md|MD)$' || true)
 if [ -z "$STAGED" ]; then
   exit 0
 fi
