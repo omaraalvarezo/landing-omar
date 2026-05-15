@@ -36,4 +36,4 @@ Link a tu decision log.
 
 ---
 
-¿Necesitas ayuda armando el tuyo? → omar@omaralvarez.co
+¿Necesitas ayuda armando el tuyo? → omar@omaralvarezo.co

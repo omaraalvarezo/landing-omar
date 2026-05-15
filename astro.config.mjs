@@ -3,7 +3,7 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://omaralvarez.co',
+  site: 'https://omaralvarezo.co',
   integrations: [
     tailwind({ applyBaseStyles: false }),
   ],

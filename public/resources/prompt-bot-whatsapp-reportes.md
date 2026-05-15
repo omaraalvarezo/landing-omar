@@ -37,4 +37,4 @@ Idioma: español, COP en formato $1.250.000.
 
 ---
 
-¿Necesitas ayuda implementándolo? → omar@omaralvarez.co
+¿Necesitas ayuda implementándolo? → omar@omaralvarezo.co

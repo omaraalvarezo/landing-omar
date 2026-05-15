@@ -59,4 +59,4 @@ Todo lo demás se documenta con un mensaje en Slack o un commit, no merece su pr
 
 ---
 
-¿Quieres setup mio en Notion? → omar@omaralvarez.co
+¿Quieres setup mio en Notion? → omar@omaralvarezo.co

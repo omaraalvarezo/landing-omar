@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getVisibleAreas, getResourcesByArea } from '../lib/resources';
 
-const SITE = 'https://omaralvarez.co';
+const SITE = 'https://omaralvarezo.co';
 
 export const GET: APIRoute = () => {
   const today = new Date().toISOString().slice(0, 10);
