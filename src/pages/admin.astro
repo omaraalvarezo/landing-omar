@@ -7,8 +7,8 @@ import {
 } from '../lib/resources';
 
 // Hash SHA-256 del password. Si se setea PUBLIC_ADMIN_HASH en .env, se usa eso.
-// Default (cambialo): password "omar-arkhe-2026"
-const FALLBACK_HASH = 'a7edf727a275ffddaa8a3413e1fe09e21df77eaab9d2833f8c11a8b571397b2d';
+// Default: password "1909omar"
+const FALLBACK_HASH = 'f835c2116b8bd1dba8469781dcd7503ff90ae37001a4aef41225c310892c135d';
 const ADMIN_HASH = import.meta.env.PUBLIC_ADMIN_HASH ?? FALLBACK_HASH;
 
 // Construcción de filas (renderizado server-side; el gate ocurre client-side)
