@@ -1,10 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="o. — Omar Álvarez">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="o.a — Omar Álvarez">
   <title>omar.alvarez</title>
-  <desc>Favicon: lowercase "o" + punto azul (signal #1E5FA8) sobre fondo ink, geometría pura sin dependencia de fuente externa.</desc>
-  <!-- Caja ink con esquinas suaves estilo app icon -->
+  <desc>Favicon: avatar mark "o.a" en mono del sistema, letras washi sobre fondo ink, punto azul señal (#1E5FA8). Pensado para destacar contra el chrome claro del navegador.</desc>
   <rect width="64" height="64" rx="12" fill="#0A0A0A"/>
-  <!-- Anillo "o" en washi (offset a la izquierda) -->
-  <circle cx="24" cy="36" r="13" fill="none" stroke="#FAFAF9" stroke-width="6"/>
-  <!-- Punto azul señal a la derecha, alineado al baseline visual del anillo -->
-  <rect x="44" y="42" width="10" height="10" fill="#1E5FA8"/>
+  <text x="32" y="34"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace"
+        font-weight="500"
+        font-size="30"
+        letter-spacing="-1.6"
+        text-anchor="middle"
+        dominant-baseline="central"
+        fill="#FAFAF9">
+    <tspan>o</tspan><tspan fill="#1E5FA8">.</tspan><tspan>a</tspan>
+  </text>
 </svg>

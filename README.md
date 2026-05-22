@@ -9,7 +9,7 @@ Landing page de marca personal para vender consultorías de IA aplicada a operac
 ## Por qué
 - Consolidar marca personal de Omar como operador-consultor (no consultor de PowerPoint).
 - Vehículo de captación principal para Q2 2026, en sinergia con [marca-personal-tiktok](../marca-personal-tiktok/).
-- Conversión vía WhatsApp (form sin backend → `wa.me/573202569486` con mensaje prellenado).
+- Conversión 100% vía Cal.com (eventType `omaralvarezo/onboarding-20min`, modal + embed inline en sección 07).
 
 ## Stack
 - **Astro 4.16** (islands architecture, JS mínimo) + TypeScript strict
@@ -18,7 +18,7 @@ Landing page de marca personal para vender consultorías de IA aplicada a operac
 - **@lucide/astro** para íconos
 - **Geist Variable** (sans + mono) + **Instrument Serif** (italics editoriales)
 - Deploy: **Vercel** (auto-deploy en push a `main`)
-- Sin backend, sin DB, sin auth — todo estático + WhatsApp como conversión
+- Sin backend, sin DB, sin auth — todo estático + Cal.com como único canal de conversión
 
 ## Hitos completados
 
@@ -29,7 +29,7 @@ Landing page de marca personal para vender consultorías de IA aplicada a operac
 | 3 | Hero impecable — split-text + counters + magnetic + grid sutil | ✅ |
 | 4 | Marquee + ForWho + Services | ✅ |
 | 5 | Method (timeline) + Cases (bento) + About | ✅ |
-| 6 | FAQ + ContactForm + Footer + WhatsAppFloat | ✅ |
+| 6 | FAQ + ContactForm (Cal inline) + Footer + BookFloat | ✅ |
 | 7 | Pulido final — OG image, sitemap, robots, schema.org, README, deploy | ✅ |
 
 ## Performance objetivo (no negociable)
@@ -42,11 +42,11 @@ Landing page de marca personal para vender consultorías de IA aplicada a operac
 - JS (todos los scripts agrupados): 25 KB → **~7.5 KB gzip**
 
 ## Datos clave
-- WhatsApp CTA: `+57 320 256 9486` → `wa.me/573202569486`
-- Email: `omaraalvarezo@gmail.com`
+- Cal.com event: `omaralvarezo/onboarding-20min` (20 min · gratuito · video) → único canal de conversión público
+- Cero email ni WhatsApp visibles en la landing (eliminados 2026-05-18 para descongestionar canal personal)
 - Métricas hero: $81M cop/mes operados · 2 negocios activos · 1,340 reservas analizadas
-- Color de marca: `#E8FF4F` (lima eléctrico, único acento)
-- Site URL planeada: `https://omaralvarez.co` (configurada en `astro.config.mjs`, dominio aún por comprar)
+- Color de marca: `#1E5FA8` (azul señal, único acento; brand v2.1)
+- Site URL prod: `https://omaralvarezo.co`
 
 ## Comandos
 ```bash
@@ -94,13 +94,15 @@ src/
 │   ├── Cases.astro               ← sección 04 + bento con mockups (WA bot, chart, timeline)
 │   ├── About.astro               ← sección 05 + foto duotono + bio + stats
 │   ├── FAQ.astro                 ← sección 06 + 6 preguntas en <details>
-│   ├── ContactForm.astro         ← sección 07 + form que envía a wa.me
+│   ├── ContactForm.astro         ← sección 07 + split editorial + embed Cal.com inline
 │   ├── Footer.astro              ← 4 cols + bloque dramático "OMAR ÁLVAREZ"
 │   ├── Nav.astro                 ← fijo + shrink + mobile overlay
 │   ├── Loader.astro              ← 1.2s max + skip si reduced-motion
 │   ├── CustomCursor.astro        ← desktop only, dot + ring con lerp
 │   ├── ScrollProgress.astro      ← barra lima 2px arriba
-│   ├── WhatsAppFloat.astro       ← FAB que aparece tras 25% scroll
+│   ├── BookFloat.astro           ← FAB que dispara modal Cal.com (visible tras 25% scroll en desktop)
+│   ├── CalEmbed.astro            ← CTA reutilizable que abre modal Cal.com (6 variantes de color)
+│   ├── CalRuntime.astro          ← runtime global Cal.com (init + montaje de embeds inline)
 │   └── SectionLabel.astro        ← sticky label "0X / TÍTULO" reutilizable
 ├── scripts/
 │   ├── motion-utils.ts           ← prefersReducedMotion + isTouchDevice + lerp
@@ -113,7 +115,7 @@ src/
 │   └── magnetic.ts               ← magnetic effect en CTAs (lerp 0.18)
 ├── styles/global.css             ← variables + grain noise + base type + reveal CSS
 └── lib/
-    ├── contact.ts                ← WHATSAPP_NUMBER + helpers
+    ├── contact.ts                ← CAL_LINK, CAL_NAMESPACE, calButtonAttrs, calBookUrl, SOCIALS
     └── utils.ts
 ```
 
@@ -130,14 +132,14 @@ src/
 | Bio + stats | `src/components/About.astro` const `STATS` + texto |
 | 6 FAQ | `src/components/FAQ.astro` const `FAQS` |
 | Texto del form | `src/components/ContactForm.astro` |
-| Email / redes / WhatsApp | `src/lib/contact.ts` |
+| Cal.com link / redes | `src/lib/contact.ts` |
 | Color de marca | `src/styles/global.css` `--accent` |
 
 ## Verificación post-deploy
 1. **Lighthouse**: `npx lighthouse https://landing-omar.vercel.app --view` → 95+ en las 4 métricas
 2. **OG image**: pegar la URL en https://opengraph.xyz/ o postear en Slack para verificar el preview
 3. **Schema.org**: validar en https://validator.schema.org/
-4. **Mobile real**: abrir desde iPhone — verificar loader, hamburguesa, smooth scroll, form que abre WhatsApp
+4. **Mobile real**: abrir desde iPhone — verificar loader, hamburguesa, smooth scroll, embed Cal.com inline en sección 07, FAB agendar
 5. **Reduced motion**: macOS → Accessibility → Reduce motion → verificar que loader, splits, counters, magnetic se desactivan
 
 ## Contexto profundo

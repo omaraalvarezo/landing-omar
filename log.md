@@ -6,6 +6,36 @@ Formato: `## YYYY-MM-DD — Título corto` + cuerpo en 1-3 párrafos o bullets.
 
 ---
 
+## 2026-05-18 — Eliminación total de contacto directo + conversión 100% Cal.com
+
+Refactor para descongestionar el WhatsApp personal de Omar (saturado). Cambio de canal de venta: cero contacto directo público (sin WhatsApp ni email visible) → toda conversión por Cal.com (`omaralvarezo/onboarding-20min`).
+
+**Decisión de producto:** "agendar o nada". Email también escondido para evitar canal alternativo a la agenda.
+
+**Cambios:**
+- `src/lib/contact.ts`: eliminados `WHATSAPP_NUMBER`, `EMAIL`, `whatsappUrl`, `buildLeadMessage`. Nueva API: `CAL_LINK`, `CAL_NAMESPACE`, `calButtonAttrs({ notes? })`, `calBookUrl()`.
+- Nuevo `src/components/CalRuntime.astro`: runtime global Cal.com (init + montaje automático de `[data-cal-inline]`). Montado en `Layout.astro`.
+- `src/components/CalEmbed.astro`: agregada variante `accent` (azul brand `#1E5FA8`, filled) para el CTA primario del Hero. Script de init movido a `CalRuntime.astro`.
+- `src/components/BookFloat.astro` reemplaza `WhatsAppFloat.astro`: FAB sumi sólido con icono `Calendar`, dispara modal Cal vía `data-cal-link`. Misma lógica de scroll (25% desktop, siempre mobile).
+- `Hero.astro`: CTA primaria a `<CalEmbed variant="accent" microcopy="20 min · video · gratuito · sin compromiso" />` + nueva trust-row con "quick win brief 24h · sin venta agresiva · salida en cualquier momento".
+- `Nav.astro` (desktop + mobile overlay): `<a>` a WhatsApp → `<button>` Cal "agendar 20 min →".
+- `Cases.astro`: icono `MessageCircle` → `LineChart`; clases CSS `.wa*` renombradas a `.report*`; CTA closer "hablar por whatsapp" → "agendar 20 min" como `<button>`. Título descriptivo del caso Enzo ("...por WhatsApp") se conserva — describe la entrega real al cliente, no es canal de contacto.
+- `Footer.astro`: columna "contacto" → "agendar"; eliminadas entries `email` y `whatsapp`; CTA `agendar 20 min` en azul como primera entrada; sociales conservadas.
+- `AreaIndex.astro` y `recursos.astro`: CTAs WhatsApp → buttons Cal con `notes` pre-rellenadas.
+- `Services.astro`: bullet del servicio 04 "WhatsApp asíncrono..." → "Canal asíncrono privado..."; agregado `microcopy="20 min · gratuito · sin compromiso"` a los 4 `<CalEmbed />`.
+- `ContactForm.astro` (sección 07): reescritura completa (~430 → ~210 líneas). Eliminado form + validación + selects + JS de submit. Nuevo diseño split editorial 5/7 en desktop: izquierda con headline + lede + timeline 3 pasos (agendas → llamada → brief 24h) + trust badges; derecha con `<div data-cal-inline>` que renderiza el calendario embebido directo (cero click extra al modal). Fallback `<noscript>` a `cal.com/omaralvarezo/onboarding-20min`.
+- `FAQ.astro`: P7 ("¿Por qué 20 min?") y P8 ("Quick Win Brief") subidas a posiciones 1 y 2 — las que más reducen fricción para agendar.
+- `Layout.astro`: eliminado `"email"` del JSON-LD Schema.org Person. Importa `<BookFloat />` y `<CalRuntime />`.
+- README.md + CLAUDE.md actualizados.
+
+**Verificación:**
+- `grep -rE "wa\.me|WHATSAPP_NUMBER|whatsappUrl|573202569486|omaraalvarezo@gmail" src/` → 0 matches.
+- `npm run build` limpia (sin errores TS, sin imports rotos).
+- `grep -rE "573202569486|omaraalvarezo@gmail|wa\.me" dist/ .vercel/output/` → 0 matches en el bundle.
+- Únicas menciones "WhatsApp" residuales en código (esperadas, contenido descriptivo): `Cases.astro` línea ~28 (título del caso Enzo) y `src/data/resources.json` (resource `prompt-bot-whatsapp-reportes` — describe lo que Omar construye para clientes).
+
+---
+
 ## 2026-05-11 — Migración a raíz y adopción del patrón Karpathy LLM Wiki
 
 - Repo movido de `~/proyectos-vibe-coding/second-brain/projects/landing-omar/` a `~/proyectos-vibe-coding/landing-omar/` (nivel raíz, como hermano de `meta-ads-dashboard/` y `enzo-agente-ia/`). Git history preservado (commit `963f7a8` intacto).

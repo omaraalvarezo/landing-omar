@@ -1,15 +1,15 @@
 ---
 import SectionLabel from './SectionLabel.astro';
-import { MessageCircle, ChartColumn, Ship } from '@lucide/astro';
-import { whatsappUrl } from '../lib/contact';
+import { LineChart, ChartColumn, Ship } from '@lucide/astro';
+import { calButtonAttrs } from '../lib/contact';
 
-const ctaUrl = whatsappUrl('Hola Omar, vi los casos y quiero que el mío sea el cuarto.');
+const calAttrs = calButtonAttrs({ notes: 'Vi los casos y quiero que el mío sea el cuarto.' });
 ---
 
 <section id="casos" class="cases scroll-mt-24" aria-labelledby="cases-title">
   <div class="container-page cases__grid">
     <div class="cases__label">
-      <SectionLabel number="04" title="CASOS" />
+      <SectionLabel number="05" title="CASOS" />
     </div>
 
     <div class="cases__content">
@@ -22,7 +22,7 @@ const ctaUrl = whatsappUrl('Hola Omar, vi los casos y quiero que el mío sea el 
         <article class="case case--lg" data-reveal>
           <div class="case__head">
             <div class="case__meta">
-              <MessageCircle class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
+              <LineChart class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
               <span>enzo motorsport · sector automotriz</span>
             </div>
             <h3 class="case__title">Tablero financiero + reporte diario por WhatsApp</h3>
@@ -36,29 +36,29 @@ const ctaUrl = whatsappUrl('Hola Omar, vi los casos y quiero que el mío sea el 
             </ul>
           </div>
 
-          <!-- Mockup visual: bot WhatsApp -->
-          <div class="case__visual case__visual--whatsapp" aria-hidden="true">
-            <div class="wa">
-              <div class="wa__head">
-                <span class="wa__avatar"></span>
+          <!-- Mockup visual: bot de reporte diario -->
+          <div class="case__visual case__visual--report" aria-hidden="true">
+            <div class="report">
+              <div class="report__head">
+                <span class="report__avatar"></span>
                 <div>
-                  <p class="wa__name">enzo · reporte 8pm</p>
-                  <p class="wa__status">en línea</p>
+                  <p class="report__name">enzo · reporte 8pm</p>
+                  <p class="report__status">en línea</p>
                 </div>
               </div>
-              <div class="wa__bubble">
-                <p class="wa__line"><strong>$3.4M</strong> ventas hoy</p>
-                <p class="wa__line">PPF · 2 servicios · margen 68%</p>
-                <p class="wa__line">cerámico · 3 servicios · margen 72%</p>
-                <p class="wa__line">insumos: 18% (target ≤17%)</p>
-                <p class="wa__line wa__line--alert">alert: cita JD mañana 9am sin confirmar</p>
+              <div class="report__bubble">
+                <p class="report__line"><strong>$3.4M</strong> ventas hoy</p>
+                <p class="report__line">PPF · 2 servicios · margen 68%</p>
+                <p class="report__line">cerámico · 3 servicios · margen 72%</p>
+                <p class="report__line">insumos: 18% (target ≤17%)</p>
+                <p class="report__line report__line--alert">alert: cita JD mañana 9am sin confirmar</p>
               </div>
-              <div class="wa__bubble wa__bubble--user">
+              <div class="report__bubble report__bubble--user">
                 <p>¿cómo vamos vs la semana pasada?</p>
               </div>
-              <div class="wa__bubble">
-                <p class="wa__line">+12.3% vs misma fecha sem-1</p>
-                <p class="wa__line">PPF traccionando, polarizado plano</p>
+              <div class="report__bubble">
+                <p class="report__line">+12.3% vs misma fecha sem-1</p>
+                <p class="report__line">PPF traccionando, polarizado plano</p>
               </div>
             </div>
           </div>
@@ -128,16 +128,16 @@ const ctaUrl = whatsappUrl('Hola Omar, vi los casos y quiero que el mío sea el 
       </div>
 
       <!-- Strip de cierre: puente editorial → CTA -->
-      <a href={ctaUrl} target="_blank" rel="noopener" class="cases__closer" data-reveal data-magnetic data-magnetic-strength="0.12">
+      <button type="button" {...calAttrs} class="cases__closer" data-reveal data-magnetic data-magnetic-strength="0.12">
         <span class="cases__closer-text">
           ¿Tu negocio es el <span class="cases__closer-italic">cuarto</span> caso?
         </span>
         <span class="cases__closer-cta">
           <span class="cases__closer-key">CTA-04</span>
-          <span class="cases__closer-label">hablar por whatsapp</span>
+          <span class="cases__closer-label">agendar 20 min</span>
           <span class="cases__closer-arrow" aria-hidden="true">→</span>
         </span>
-      </a>
+      </button>
     </div>
   </div>
 </section>
@@ -272,6 +272,10 @@ const ctaUrl = whatsappUrl('Hola Omar, vi los casos y quiero que el mío sea el 
     border-radius: 4px;
     background-color: var(--bg);
     color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    width: 100%;
     transition:
       border-color 0.3s ease,
       background-color 0.3s ease,
@@ -355,39 +359,39 @@ const ctaUrl = whatsappUrl('Hola Omar, vi los casos y quiero que el mío sea el 
     overflow: hidden;
   }
 
-  /* WhatsApp mockup */
-  .wa {
+  /* Report mockup */
+  .report {
     display: flex;
     flex-direction: column;
     gap: 8px;
     max-width: 320px;
   }
-  .wa__head {
+  .report__head {
     display: flex;
     align-items: center;
     gap: 10px;
     padding-bottom: 10px;
     border-bottom: 0.5px solid var(--line);
   }
-  .wa__avatar {
+  .report__avatar {
     width: 32px; height: 32px;
     border-radius: 9999px;
     background-color: var(--accent);
     flex-shrink: 0;
   }
-  .wa__name {
+  .report__name {
     margin: 0;
     font-size: 13px;
     font-weight: 500;
     color: var(--ink);
   }
-  .wa__status {
+  .report__status {
     margin: 0;
     font-size: 10px;
     color: var(--accent);
     font-family: var(--font-mono);
   }
-  .wa__bubble {
+  .report__bubble {
     background-color: var(--bg-soft);
     border-radius: 4px;
     padding: 10px 12px;
@@ -397,14 +401,14 @@ const ctaUrl = whatsappUrl('Hola Omar, vi los casos y quiero que el mío sea el 
     line-height: 1.5;
     color: var(--mute);
   }
-  .wa__bubble--user {
+  .report__bubble--user {
     align-self: flex-end;
     background-color: var(--accent-soft);
     color: var(--ink);
   }
-  .wa__line { margin: 0; }
-  .wa__line strong { color: var(--accent); font-weight: 500; }
-  .wa__line--alert { color: var(--negative); margin-top: 4px; font-size: 11px; }
+  .report__line { margin: 0; }
+  .report__line strong { color: var(--accent); font-weight: 500; }
+  .report__line--alert { color: var(--negative); margin-top: 4px; font-size: 11px; }
 
   /* Bar chart */
   .chart__caption {

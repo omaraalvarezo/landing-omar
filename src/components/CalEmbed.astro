@@ -1,20 +1,17 @@
 ---
 // src/components/CalEmbed.astro
-// CTA que abre el modal de Cal.com para agendar onboarding de 20 minutos.
+// CTA que dispara el modal Cal.com de onboarding 20 min.
 //
-// Uso básico:
-//   <CalEmbed text="agendar onboarding →" variant="bronce" />
+// Requiere que <CalRuntime /> esté montado en la página (Layout.astro lo hace).
 //
-// Cuando se active cobro en el futuro (mes 5+), basta con:
-//   1. Sumar la prop microcopy con el texto del precio.
-//   2. Cambiar el calLink al evento pago en Cal.com.
-//   No hay que reescribir el componente.
+// Uso:
+//   <CalEmbed text="agendar 20 min →" variant="accent" microcopy="20 min · gratuito" />
 
 export interface Props {
   text?: string;
-  variant?: 'primary' | 'bronce' | 'terracota' | 'indigo' | 'musgo';
+  variant?: 'primary' | 'accent' | 'bronce' | 'terracota' | 'indigo' | 'musgo';
   calLink?: string;
-  microcopy?: string;   // FUTURO · descripción debajo del botón (ej. precio + descuento)
+  microcopy?: string;
   className?: string;
 }
 
@@ -26,15 +23,17 @@ const {
   className = '',
 } = Astro.props;
 
-// Mapa de variantes a HEX (paleta omar-brand)
+// Mapa de variantes a HEX (paleta omar-brand v2.1)
 const variantColors: Record<string, string> = {
-  primary: '#1C1917',     // sumi
-  bronce: '#8B6F47',      // bronce
-  terracota: '#C67B5C',   // terracota
-  indigo: '#3D4E6B',      // indigo
-  musgo: '#6B7F5C',       // musgo
+  primary: '#1C1917',     // sumi (outline)
+  accent: '#1E5FA8',      // azul brand (filled)
+  bronce: '#8B6F47',
+  terracota: '#C67B5C',
+  indigo: '#3D4E6B',
+  musgo: '#6B7F5C',
 };
-const accent = variantColors[variant] || variantColors.primary;
+const accentHex = variantColors[variant] || variantColors.primary;
+const isFilled = variant === 'accent';
 ---
 
 <div class={`cal-cta-wrap ${className}`}>
@@ -43,46 +42,21 @@ const accent = variantColors[variant] || variantColors.primary;
     data-cal-namespace="onboarding-20min"
     data-cal-link={calLink}
     data-cal-config='{"layout":"month_view","theme":"light"}'
-    class={`cal-cta cal-cta--${variant}`}
-    style={`--cal-accent: ${accent};`}
+    class={`cal-cta cal-cta--${variant}${isFilled ? ' cal-cta--filled' : ''}`}
+    style={`--cal-accent: ${accentHex};`}
     aria-label={text}
+    data-magnetic
+    data-magnetic-strength="0.2"
   >
     {text}
   </button>
 
   {microcopy && (
-    <p class="cal-cta-micro" style={`--cal-accent: ${accent};`}>
+    <p class="cal-cta-micro">
       {microcopy}
     </p>
   )}
 </div>
-
-<script>
-  // Inicializa el embed de Cal.com una sola vez por carga.
-  // El paquete @calcom/embed-snippet inyecta window.Cal y la API global.
-  // Los botones con `data-cal-link` + `data-cal-namespace` quedan activos al cargar el snippet.
-  import Cal from '@calcom/embed-snippet';
-
-  declare global {
-    interface Window {
-      Cal: any;
-      __calOnboardingReady?: boolean;
-    }
-  }
-
-  if (!window.__calOnboardingReady) {
-    Cal();
-    window.Cal('init', 'onboarding-20min', { origin: 'https://cal.com' });
-    window.Cal.ns['onboarding-20min']('ui', {
-      cssVarsPerTheme: {
-        light: { 'cal-brand': '#C67B5C' },
-      },
-      hideEventTypeDetails: false,
-      layout: 'month_view',
-    });
-    window.__calOnboardingReady = true;
-  }
-</script>
 
 <style>
   .cal-cta-wrap {
@@ -97,15 +71,16 @@ const accent = variantColors[variant] || variantColors.primary;
     gap: 8px;
     padding: 12px 20px;
     font-family: var(--font-mono);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.04em;
     color: var(--cal-accent);
     background: transparent;
     border: 1px solid var(--cal-accent);
-    border-radius: 2px;
+    border-radius: 0;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+    will-change: transform;
   }
   .cal-cta:hover {
     background-color: var(--cal-accent);
@@ -115,10 +90,23 @@ const accent = variantColors[variant] || variantColors.primary;
     outline: 2px solid var(--cal-accent);
     outline-offset: 4px;
   }
+
+  /* Filled — CTA primario del Hero/Nav */
+  .cal-cta--filled {
+    background-color: var(--cal-accent);
+    color: var(--bg);
+    border-color: var(--cal-accent);
+  }
+  .cal-cta--filled:hover {
+    opacity: 0.85;
+    background-color: var(--cal-accent);
+    color: var(--bg);
+  }
+
   .cal-cta-micro {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.04em;
     color: var(--mute);
   }

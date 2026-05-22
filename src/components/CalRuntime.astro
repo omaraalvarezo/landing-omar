@@ -1,0 +1,55 @@
+---
+// src/components/CalRuntime.astro
+// Runtime global de Cal.com. Sin markup — solo el script de init.
+//
+// Monta este componente UNA sola vez por página (idealmente en Layout.astro,
+// antes de </body>). Cualquier elemento con `data-cal-link` + `data-cal-namespace`
+// queda activo como trigger del modal. Adicionalmente, cualquier `<div data-cal-inline>`
+// en el DOM se renderiza como calendario embebido inline.
+---
+
+<script>
+  import Cal from '@calcom/embed-snippet';
+
+  declare global {
+    interface Window {
+      Cal: any;
+      __calOnboardingReady?: boolean;
+    }
+  }
+
+  if (!window.__calOnboardingReady) {
+    Cal();
+    window.Cal('init', 'onboarding-20min', { origin: 'https://cal.com' });
+    window.Cal.ns['onboarding-20min']('ui', {
+      cssVarsPerTheme: {
+        light: { 'cal-brand': '#1E5FA8' },
+      },
+      hideEventTypeDetails: false,
+      layout: 'month_view',
+    });
+    window.__calOnboardingReady = true;
+  }
+
+  // Inline embed: cualquier <div data-cal-inline> en la página se renderiza
+  // como calendario embebido directo (sin click extra al modal).
+  function mountInline() {
+    const nodes = document.querySelectorAll<HTMLElement>('[data-cal-inline]');
+    nodes.forEach((el) => {
+      if (el.dataset.calInlineMounted === 'true') return;
+      const calLink = el.dataset.calLink || 'omaralvarezo/onboarding-20min';
+      window.Cal.ns['onboarding-20min']('inline', {
+        elementOrSelector: el,
+        calLink,
+        config: { layout: 'month_view', theme: 'light' },
+      });
+      el.dataset.calInlineMounted = 'true';
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mountInline);
+  } else {
+    mountInline();
+  }
+</script>

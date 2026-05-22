@@ -1,5 +1,5 @@
 ---
-import { whatsappUrl } from '../lib/contact';
+import { calButtonAttrs } from '../lib/contact';
 import Logo from './Logo.astro';
 
 interface Props {
@@ -20,9 +20,7 @@ const NAV_LINKS = [
 
 const logoHref = isHome ? '#top' : '/';
 
-const ctaUrl = whatsappUrl(
-  'Hola Omar, vi tu landing y quiero agendar una consultoría.'
-);
+const calAttrs = calButtonAttrs();
 
 function isActive(match: string | null): boolean {
   return match !== null && currentPath.startsWith(match);
@@ -65,9 +63,9 @@ function isActive(match: string | null): boolean {
         </svg>
       </button>
 
-      <a href={ctaUrl} target="_blank" rel="noopener" class="nav__cta">
-        agendar →
-      </a>
+      <button type="button" {...calAttrs} class="nav__cta" data-magnetic data-magnetic-strength="0.18">
+        agendar 20 min →
+      </button>
 
       <button id="nav-toggle" class="nav__toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-overlay">
         <span></span>
@@ -93,9 +91,9 @@ function isActive(match: string | null): boolean {
         </li>
       ))}
       <li>
-        <a href={ctaUrl} target="_blank" rel="noopener" class="nav-overlay__link nav-overlay__link--cta" data-overlay-link>
-          agendar por whatsapp →
-        </a>
+        <button type="button" {...calAttrs} class="nav-overlay__link nav-overlay__link--cta" data-overlay-link>
+          agendar 20 min →
+        </button>
       </li>
     </ul>
   </nav>
@@ -172,6 +170,8 @@ function isActive(match: string | null): boolean {
     font-weight: 500;
     letter-spacing: 0.04em;
     border-radius: 0;
+    border: 0;
+    cursor: pointer;
     transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .nav__cta:hover {
@@ -291,6 +291,12 @@ function isActive(match: string | null): boolean {
     color: var(--accent);
     margin-top: 16px;
     border-bottom: 0;
+    background: transparent;
+    border: 0;
+    padding: 16px 0;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
   }
 
   @media (min-width: 768px) {

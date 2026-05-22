@@ -1,0 +1,240 @@
+---
+// src/components/Profile.astro
+// Sección 01 · PERFIL — bio block estilo consultor pro.
+//
+// Grid split 5/7 en desktop: foto sticky a la izquierda + bio editorial a la derecha
+// (headline serif, 2 párrafos en primera persona, pull-quote ancla, credenciales mono).
+//
+// La foto live en public/omar-portrait.jpg. Para cambiarla, basta reemplazar el archivo
+// con misma resolución/aspect — el componente no necesita cambios.
+import SectionLabel from './SectionLabel.astro';
+
+const CREDS = [
+  { label: 'MBA',   value: 'EAFIT (intercambio La Salle Barcelona)' },
+  { label: 'ING.',  value: 'UPB Medellín' },
+  { label: 'OPERA', value: 'Enzo Motorsport · Arkhē Coworking · Importación O&P' },
+  { label: 'BASE',  value: 'Cúcuta, Colombia' },
+];
+---
+
+<section id="perfil" class="profile scroll-mt-24" aria-labelledby="profile-title">
+  <div class="container-page">
+    <SectionLabel number="01" title="PERFIL" />
+
+    <div class="profile__grid">
+      {/* Foto retrato — pendiente. Cuando tengas la imagen final, dejarla en
+          public/omar-portrait.jpg (1080x1440, aspect 4:5) y descomentar este bloque.
+      <figure class="profile__photo">
+        <img
+          src="/omar-portrait.jpg"
+          alt="Omar Álvarez, operador y consultor de IA aplicada para pymes"
+          width="1080"
+          height="1440"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption class="profile__photo-caption">OMAR ÁLVAREZ · CÚCUTA · 2026</figcaption>
+      </figure>
+      */}
+
+      <!-- Body editorial -->
+      <div class="profile__body">
+        <h2 id="profile-title" class="profile__headline" data-split-reveal style="--reveal-stagger: 35ms;">
+          Operario antes que <span class="accent-italic">consultor</span>.
+        </h2>
+
+        <p class="profile__para" data-reveal>
+          Ingeniero Electrónico de la <strong>UPB Medellín</strong> y MBA en curso en
+          <strong>EAFIT</strong>, con intercambio en <strong>La Salle Barcelona</strong>.
+          Desde Cúcuta opero dos negocios: Enzo Motorsport (detailing premium) y
+          Arkhē Coworking (240 m²).
+        </p>
+
+        <p class="profile__para" data-reveal>
+          Empecé a usar Claude para ordenar lo que estaba mal en mis propios libros —
+          márgenes de contribución mal calculados, puntos de equilibrio que nadie medía,
+          dueños que no se pagaban a sí mismos. Cuando vi cuánto cambiaba la operación
+          con los básicos resueltos más IA encima, empecé a ayudar a otras pymes con
+          lo mismo.
+        </p>
+
+        <blockquote class="profile__pull" data-reveal>
+          No automatizo lo que está <span class="accent-italic">roto</span>.
+          Primero ordenamos los números, después construimos con Claude.
+        </blockquote>
+
+        <ul class="profile__creds" data-reveal aria-label="Credenciales y operación">
+          {CREDS.map(({ label, value }) => (
+            <li class="profile__cred">
+              <span class="profile__cred-label">{label}</span>
+              <span class="profile__cred-sep" aria-hidden="true">·</span>
+              <span class="profile__cred-value">{value}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .profile {
+    padding-block: clamp(96px, 14vw, 200px);
+    border-top: 0.5px solid var(--line);
+  }
+
+  .profile__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 6vw, 64px);
+    align-items: start;
+  }
+
+  /* Photo */
+  .profile__photo {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .profile__photo > div,
+  .profile__photo {
+    isolation: isolate;
+  }
+  .profile__photo img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    height: auto;
+    object-fit: cover;
+    object-position: 50% 18%;
+    border: 0.5px solid var(--line);
+    background-color: var(--bg-soft);
+    display: block;
+  }
+  .profile__photo-caption {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
+  }
+
+  /* Body */
+  .profile__body {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vw, 28px);
+  }
+
+  .profile__headline {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    font-weight: 400;
+    color: var(--ink);
+    max-width: 16ch;
+  }
+
+  .profile__para {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 1.6vw, 18px);
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    letter-spacing: -0.005em;
+  }
+  .profile__para strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* Pull-quote */
+  .profile__pull {
+    margin: clamp(8px, 2vw, 16px) 0;
+    padding-left: clamp(20px, 3vw, 28px);
+    border-left: 2px solid var(--accent);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(22px, 2.6vw, 32px);
+    line-height: 1.3;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+    max-width: 30ch;
+  }
+
+  /* Credenciales */
+  .profile__creds {
+    list-style: none;
+    margin: clamp(12px, 2vw, 20px) 0 0;
+    padding: 24px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 0.5px solid var(--line);
+  }
+  .profile__cred {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 14px;
+  }
+  .profile__cred-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
+    min-width: 80px;
+  }
+  .profile__cred-sep { color: var(--line-hi); }
+  .profile__cred-value {
+    color: var(--ink-soft);
+    font-family: var(--font-sans);
+  }
+
+  /* Desktop split 5/7 — solo aplica cuando la foto está presente.
+     Mientras la foto esté comentada, el body ocupa 1 columna con max-width natural. */
+  @media (min-width: 1024px) {
+    .profile__grid:has(.profile__photo) {
+      grid-template-columns: 5fr 7fr;
+      gap: 80px;
+    }
+    .profile__photo {
+      position: sticky;
+      top: 96px;
+      max-width: 100%;
+    }
+  }
+</style>
+
+<script>
+  // Reveal del body editorial (párrafos, pull-quote, credenciales).
+  const reveals = document.querySelectorAll<HTMLElement>('.profile [data-reveal]:not([data-split-reveal])');
+  if (reveals.length) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      reveals.forEach((el) => el.classList.add('is-revealed'));
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              (e.target as HTMLElement).classList.add('is-revealed');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      reveals.forEach((el) => io.observe(el));
+    }
+  }
+</script>

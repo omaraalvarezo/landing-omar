@@ -1,9 +1,5 @@
 ---
-import { whatsappUrl } from '../lib/contact';
-
-const ctaUrl = whatsappUrl(
-  'Hola Omar, vi tu landing y quiero agendar una consultoría.'
-);
+import CalEmbed from './CalEmbed.astro';
 
 const today = new Date();
 const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
@@ -47,17 +43,12 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
 
     <!-- CTAs -->
     <div class="hero__ctas" data-reveal style="--reveal-delay: 850ms;">
-      <a
-        href={ctaUrl}
-        target="_blank"
-        rel="noopener"
-        class="hero__cta hero__cta--primary"
-        data-magnetic
-        data-magnetic-strength="0.25"
-      >
-        agendar por whatsapp
-        <span class="hero__cta-arrow" aria-hidden="true">→</span>
-      </a>
+      <CalEmbed
+        text="agendar 20 min →"
+        variant="accent"
+        microcopy="20 min · video · gratuito · sin compromiso"
+        className="hero__cta-cal"
+      />
       <a
         href="#casos"
         class="hero__cta hero__cta--ghost"
@@ -68,30 +59,19 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
       </a>
     </div>
 
-    <!-- Métricas + scroll indicator -->
-    <div class="hero__bottom" data-reveal style="--reveal-delay: 1000ms;">
-      <ul class="hero__metrics" aria-label="Métricas operacionales">
-        <li class="hero__metric">
-          <span class="hero__metric-key">FACT-01</span>
-          <span class="hero__metric-value number-display" data-counter="81" data-counter-format="money-m" aria-label="$81 millones de pesos colombianos por mes">$0M</span>
-          <span class="hero__metric-label">cop / mes operados en mis negocios</span>
-        </li>
-        <li class="hero__metric">
-          <span class="hero__metric-key">FACT-02</span>
-          <span class="hero__metric-value number-display" data-counter="1340" data-counter-format="thousand">0</span>
-          <span class="hero__metric-label">reservas analizadas en arkhē</span>
-        </li>
-        <li class="hero__metric">
-          <span class="hero__metric-key">FACT-03</span>
-          <span class="hero__metric-value number-display" data-counter="92" data-counter-format="percent-neg" aria-label="92 por ciento menos tiempo">−0%</span>
-          <span class="hero__metric-label">tiempo de investigación en importación</span>
-        </li>
-      </ul>
+    <!-- Trust-row: resuelve la fricción de "qué pasa después" sin esperar al FAQ -->
+    <p class="hero__trust" data-reveal style="--reveal-delay: 950ms;" aria-label="Garantías de la llamada">
+      <span>+ quick win brief 24h post-llamada</span>
+      <span aria-hidden="true">·</span>
+      <span>sin venta agresiva</span>
+      <span aria-hidden="true">·</span>
+      <span>salida en cualquier momento</span>
+    </p>
 
-      <div class="hero__scroll" aria-hidden="true">
-        <span class="hero__scroll-line"></span>
-        <span class="hero__scroll-label">scroll</span>
-      </div>
+    <!-- Scroll indicator (esquina inferior derecha en desktop) -->
+    <div class="hero__scroll" aria-hidden="true">
+      <span class="hero__scroll-line"></span>
+      <span class="hero__scroll-label">scroll</span>
     </div>
   </div>
 </section>
@@ -225,7 +205,28 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+    align-items: flex-start;
+  }
+  .hero__cta-cal :global(.cal-cta) {
+    font-size: 13px;
+    padding: 12px 20px;
+  }
+
+  /* Trust row debajo del CTA */
+  .hero__trust {
+    margin: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
     align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    max-width: 64ch;
+  }
+  .hero__trust span[aria-hidden='true'] {
+    color: var(--line-hi);
   }
 
   .hero__cta {
@@ -267,88 +268,20 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
     transform: translateX(3px);
   }
 
-  /* Bottom row */
-  .hero__bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    margin-top: auto;
-    padding-top: clamp(32px, 6vh, 56px);
-  }
-
-  .hero__metrics {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .hero__metric {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-left: 16px;
-    border-left: 0.5px solid var(--line);
-    transition: border-color 0.3s var(--ease-out-expo);
-  }
-  .hero__metric:hover {
-    border-left-color: var(--accent);
-  }
-  .hero__metric-key {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--mute);
-    font-weight: 500;
-  }
-  .hero__metric-value {
-    font-family: var(--font-mono);
-    font-weight: 400;
-    font-size: clamp(28px, 4vw, 40px);
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--ink);
-  }
-  .hero__metric-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    color: var(--mute);
-    max-width: 22ch;
-    line-height: 1.4;
-  }
-
-  /* Scroll indicator */
+  /* Scroll indicator (esquina inferior derecha en desktop) */
   .hero__scroll {
     display: none;
   }
 
-  /* Tablet+ */
-  @media (min-width: 640px) {
-    .hero__metrics {
-      grid-template-columns: repeat(3, minmax(0, max-content));
-      gap: 32px;
-    }
-    .hero__metric {
-      padding-left: 20px;
-    }
-  }
-
   @media (min-width: 768px) {
-    .hero__bottom {
-      flex-direction: row;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 32px;
-    }
     .hero__scroll {
+      position: absolute;
+      right: clamp(20px, 4vw, 48px);
+      bottom: clamp(32px, 6vh, 64px);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 10px;
-      align-self: flex-end;
     }
     .hero__scroll-line {
       display: block;
@@ -384,11 +317,9 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
 
 <script>
   import { splitAndReveal } from '../scripts/splitText';
-  import { initCounters } from '../scripts/counter';
   import { initMagnetic } from '../scripts/magnetic';
 
   splitAndReveal({ selector: '[data-split-reveal]', staggerMs: 50, durationMs: 800 });
-  initCounters();
   initMagnetic();
 
   const reveals = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-split-reveal])');

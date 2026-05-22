@@ -98,7 +98,7 @@ const SERVICES: Service[] = [
       '2 sesiones mensuales (60 min cada una)',
       'Dashboard ejecutivo mensual con tus archivos operativos y financieros',
       'Validación continua de decisiones técnicas, herramientas e inversiones',
-      'WhatsApp asíncrono con respuesta dentro de 24h hábiles',
+      'Canal asíncrono privado con respuesta dentro de 24h hábiles',
       'Acceso a mis skills y plantillas de Claude probadas en Enzo y Arkhē',
       'Tres tiers: Light (sin dashboard) · Estándar · Plus',
     ],
@@ -117,7 +117,7 @@ const SERVICES: Service[] = [
 <section id="servicios" class="services scroll-mt-24" aria-labelledby="services-title">
   <div class="container-page services__grid">
     <div class="services__label">
-      <SectionLabel number="02" title="SERVICIOS" />
+      <SectionLabel number="03" title="SERVICIOS" />
     </div>
 
     <div class="services__content">
@@ -147,7 +147,7 @@ const SERVICES: Service[] = [
                   </li>
                 ))}
               </ul>
-              <CalEmbed text={s.ctaText} variant={s.accent} />
+              <CalEmbed text={s.ctaText} variant={s.accent} microcopy="20 min · gratuito · sin compromiso" />
               {s.footer && (
                 <p class="service-card__footer">{s.footer}</p>
               )}

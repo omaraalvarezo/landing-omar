@@ -1,10 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="o. — Omar Álvarez (dark)">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="o.a — Omar Álvarez (dark)">
   <title>omar.alvarez</title>
-  <desc>Favicon dark: lowercase "o" + punto azul brillante sobre fondo washi cálido, geometría pura sin dependencia de fuente externa. Pensado para verse contra el chrome oscuro de macOS/Safari dark mode.</desc>
-  <!-- Caja washi cálida (invertida) — destaca en tabs oscuros -->
+  <desc>Favicon dark: avatar mark "o.a" en mono del sistema, letras ink sobre fondo washi cálido, punto azul brillante (variante dark del accent). Pensado para destacar contra el chrome oscuro del navegador.</desc>
   <rect width="64" height="64" rx="12" fill="#F5F5F4"/>
-  <!-- Anillo "o" en ink -->
-  <circle cx="24" cy="36" r="13" fill="none" stroke="#0A0A0A" stroke-width="6"/>
-  <!-- Punto azul brillante (variante dark del accent) -->
-  <rect x="44" y="42" width="10" height="10" fill="#5B9BE0"/>
+  <text x="32" y="34"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace"
+        font-weight="500"
+        font-size="30"
+        letter-spacing="-1.6"
+        text-anchor="middle"
+        dominant-baseline="central"
+        fill="#0A0A0A">
+    <tspan>o</tspan><tspan fill="#5B9BE0">.</tspan><tspan>a</tspan>
+  </text>
 </svg>

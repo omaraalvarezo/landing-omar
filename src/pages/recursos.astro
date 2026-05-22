@@ -4,13 +4,13 @@ import ResourcesHero from '../components/ResourcesHero.astro';
 import AreaHub from '../components/AreaHub.astro';
 import Footer from '../components/Footer.astro';
 import { getAreasWithCounts } from '../lib/resources';
-import { whatsappUrl } from '../lib/contact';
+import { calButtonAttrs } from '../lib/contact';
 
 const areas = getAreasWithCounts();
 
-const ctaUrl = whatsappUrl(
-  'Hola Omar, descargué un recurso de tu landing y quiero algo más a medida.'
-);
+const ctaAttrs = calButtonAttrs({
+  notes: 'Descargué un recurso de tu landing y quiero algo más a medida.',
+});
 ---
 
 <Layout
@@ -26,17 +26,16 @@ const ctaUrl = whatsappUrl(
       <h2 class="recursos__cta-headline">
         Si esto te sirvió, lo <span class="accent-italic">customizado</span> te multiplica.
       </h2>
-      <a
-        href={ctaUrl}
-        target="_blank"
-        rel="noopener"
+      <button
+        type="button"
+        {...ctaAttrs}
         class="recursos__cta-btn"
         data-magnetic
         data-magnetic-strength="0.2"
       >
-        agendar diagnóstico
+        agendar 20 min
         <span class="recursos__cta-arrow" aria-hidden="true">→</span>
-      </a>
+      </button>
     </aside>
   </section>
 
@@ -86,7 +85,10 @@ const ctaUrl = whatsappUrl(
     padding: 14px 24px;
     background-color: var(--accent);
     color: var(--bg);
+    border: 0;
+    cursor: pointer;
     border-radius: 9999px;
+    font-family: inherit;
     font-size: 15px;
     font-weight: 500;
     will-change: transform;

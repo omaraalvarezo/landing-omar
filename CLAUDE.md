@@ -3,7 +3,7 @@
 ## Contexto del proyecto
 
 **Dueño:** Omar Álvarez — CEO de Grupo Empresarial Enzo S.A.S. (Enzo Motorsport + Arkhē Coworking), Cúcuta, Colombia.
-**Objetivo:** Landing world-class para vender consultorías de IA aplicada a operación real de pymes LATAM. Conversión vía WhatsApp.
+**Objetivo:** Landing world-class para vender consultorías de IA aplicada a operación real de pymes LATAM. Conversión 100% vía Cal.com (`omaralvarezo/onboarding-20min`, 20 min gratis). Cero contacto directo público (sin WhatsApp ni email visible) desde 2026-05-18.
 **Brand:** sigue **omar-brand v2.1** (skill `omar-brand-SKILL-v2.1.md` del brand kit OAAO). Toda decisión visual debe consultar primero ese SKILL.
 
 **Benchmark visual obligatorio:** Stratechery, The Generalist, Linear, Vercel docs, Attio, Brittany Chiang. Si no se siente al nivel, no está terminada.
@@ -80,7 +80,7 @@ actualizado: YYYY-MM-DD
 - `diseño` — paleta, tipografía, espaciado, composición visual
 - `copy` — hooks, body, microcopy, CTAs, tono editorial
 - `seo` — meta tags, OG, sitemap, schema.org, keywords
-- `conversion` — flujo WhatsApp, posicionamiento de CTAs, A/B, friction
+- `conversion` — flujo Cal.com, posicionamiento de CTAs, A/B, friction
 - `brand` — identidad v2.1, voz, jerarquía 3 familias
 - `infra` — Astro, Tailwind, build, deploy, Vercel, dominios
 - `performance` — Lighthouse, LCP, fuentes, imágenes, bundle
@@ -212,7 +212,7 @@ SVGs canónicos en `public/brand/`. Favicon en `public/favicon.svg`. OG en `publ
 - Background grid del Hero (decorativo).
 - Lima glow blob del Hero (gradiente prohibido).
 - Box-shadow del pulse del dot.
-- Box-shadow del WhatsApp FAB.
+- Box-shadow del FAB de agendar.
 - Backdrop-filter blur del Nav.
 - Mix-blend-mode difference del cursor.
 - Foto duotono lima en About (B&N puro o sin filtro).
@@ -240,14 +240,16 @@ src/
 │   ├── Cases.astro          ← 04 · bento 3 casos (Enzo + Arkhē + O&P)
 │   ├── About.astro          ← 05 · placeholder o.a + bio v2.1
 │   ├── FAQ.astro            ← 06 · 6 details
-│   ├── ContactForm.astro    ← 07 · form → WhatsApp prellenado
+│   ├── ContactForm.astro    ← 07 · split editorial + embed Cal.com inline
 │   ├── Footer.astro         ← 4 cols + cierre con wordmark sobre --ink
 │   ├── Nav.astro            ← Sticky logo + links + CTA azul
 │   ├── SectionLabel.astro   ← Header recurrente [PILAR] + path/timestamp
 │   ├── Loader.astro         ← Preloader 1.2s
 │   ├── CustomCursor.astro   ← Dot + ring (desktop only)
 │   ├── ScrollProgress.astro ← Barra azul 2px top
-│   └── WhatsAppFloat.astro  ← FAB 56px aparece tras 25% scroll
+│   ├── BookFloat.astro      ← FAB 56px agendar Cal.com, aparece tras 25% scroll
+│   ├── CalEmbed.astro       ← CTA reutilizable que dispara modal Cal.com
+│   └── CalRuntime.astro     ← runtime global Cal.com (init + inline embeds)
 ├── scripts/
 │   ├── motion-utils.ts
 │   ├── lenis.ts
@@ -260,7 +262,7 @@ src/
 ├── styles/
 │   └── global.css           ← Tokens v2.1, typography, reveals
 └── lib/
-    ├── contact.ts           ← WHATSAPP_NUMBER, EMAIL, helpers
+    ├── contact.ts           ← CAL_LINK, CAL_NAMESPACE, calButtonAttrs, calBookUrl, SOCIALS
     └── utils.ts
 
 public/
@@ -279,9 +281,10 @@ public/
 
 ## Datos centralizados
 Todo en `src/lib/contact.ts`:
-- `WHATSAPP_NUMBER = "573202569486"`
-- `EMAIL = "omaraalvarezo@gmail.com"`
-- Helpers `whatsappUrl()` y `buildLeadMessage()`
+- `CAL_LINK = "omaralvarezo/onboarding-20min"` · `CAL_NAMESPACE = "onboarding-20min"`
+- Helpers `calButtonAttrs(opts?)` y `calBookUrl()`
+- `SOCIALS` (instagram, tiktok, linkedin) — sin email, sin WhatsApp públicos
+- `LOCATION`, `TIMEZONE`
 
 ---
 
@@ -293,7 +296,7 @@ Todo en `src/lib/contact.ts`:
 | Tailwind 3 (no v4) | v3 estable, ecosistema completo, integración oficial |
 | Motion One (no Framer Motion) | Más ligero, web-standards, Animations API nativa |
 | Lenis (no Locomotive) | Mantenido, vanilla JS, interopera con anchors nativos |
-| Sin backend | Form → WhatsApp directo. Cero latencia, cero costos. |
+| Sin backend | Embed Cal.com inline en sección 07 + modal en todos los CTAs. Cero latencia, cero costos. |
 | Sin Vercel KV/Postgres | Landing 100% estática |
 | **Geist Mono única familia mono** (sin Geist Sans) | Brandbook v2.1 manda mono dominante 95% |
 
@@ -322,6 +325,7 @@ Todo en `src/lib/contact.ts`:
 6. Continuar desde el último hito del README.md.
 
 ## Changelog
+- **2026.05.18** — Eliminación total de contacto directo (WhatsApp + email) de la landing pública. Conversión 100% por Cal.com: nuevo `CalRuntime.astro` (init global + soporte inline), variante `accent` en `CalEmbed.astro`, `BookFloat.astro` reemplaza `WhatsAppFloat.astro`, sección 07 reescrita como split editorial + calendario inline, FAQ P7/P8 subidas al inicio, trust-row debajo del CTA del Hero. `src/lib/contact.ts` migrado a API Cal (`CAL_LINK`, `calButtonAttrs`, `calBookUrl`). Schema.org Person limpio (sin email). Sweep limpio: 0 ocurrencias de `wa.me`, `573202569486`, `omaraalvarezo@gmail.com` en bundle.
 - **2026.05.11 (pm)** — Pase frontend-design: reescritura del hero (headline con tensión, badge con cupos, métricas FACT-XX, créditos académicos express), métricas + anotación −41% en Cases, strip de cierre del bento → CTA, selects de calificación opcionales + salida directa WhatsApp/email en ContactForm, statement editorial en footer finale. Decisión tipográfica 3-familias formalizada (`wiki/decisiones/tipografia-3-familias-landing.md`). Reconciliada la sección Tipografía del CLAUDE.md.
 - **2026.05** — Migración a omar-brand v2.1: paleta clara `#FAFAF9` + azul señal `#1E5FA8`, sistema 3-familias (serif + sans + mono), wordmark `omar.alvarez` en navbar/footer/OG/favicon, header recurrente con path/timestamp, eliminación de efectos prohibidos (box-shadow, gradientes decorativos, duotono lima, grain noise, backdrop-filter blur).
 - **2026.04** — Versión inicial dark + lima `#E8FF4F` (deprecada).

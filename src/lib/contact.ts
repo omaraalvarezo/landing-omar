@@ -1,7 +1,11 @@
-// Datos de contacto centralizados — cambiar aquí impacta toda la landing.
+// Datos públicos centralizados — cambiar aquí impacta toda la landing.
+//
+// Conversión 100% por Cal.com (modal + inline). Cero canal directo de contacto
+// (sin WhatsApp, sin email visible) en la landing pública.
 
-export const WHATSAPP_NUMBER = '573202569486';
-export const EMAIL = 'omaraalvarezo@gmail.com';
+export const CAL_LINK = 'omaralvarezo/onboarding-20min';
+export const CAL_NAMESPACE = 'onboarding-20min';
+export const CAL_BASE_URL = 'https://cal.com';
 export const LOCATION = 'Colombia';
 export const TIMEZONE = 'GMT-5';
 
@@ -11,28 +15,19 @@ export const SOCIALS = {
   linkedin: 'https://www.linkedin.com/in/omaraalvarezo',
 } as const;
 
-export function whatsappUrl(message?: string): string {
-  const base = `https://wa.me/${WHATSAPP_NUMBER}`;
-  if (!message) return base;
-  return `${base}?text=${encodeURIComponent(message)}`;
+// Atributos a desplegar en cualquier <button> que dispare el modal Cal.
+// Opcional: `notes` se pre-rellena en el formulario de Cal.com.
+export function calButtonAttrs(opts?: { notes?: string }) {
+  const config: Record<string, string> = { layout: 'month_view', theme: 'light' };
+  if (opts?.notes) config.notes = opts.notes;
+  return {
+    'data-cal-link': CAL_LINK,
+    'data-cal-namespace': CAL_NAMESPACE,
+    'data-cal-config': JSON.stringify(config),
+  } as const;
 }
 
-export function buildLeadMessage({
-  nombre,
-  negocio,
-  problema,
-  facturacion,
-  plazo,
-}: {
-  nombre: string;
-  negocio: string;
-  problema: string;
-  facturacion?: string;
-  plazo?: string;
-}): string {
-  const extras: string[] = [];
-  if (facturacion) extras.push(`Facturación mes: ${facturacion}`);
-  if (plazo) extras.push(`Plazo: ${plazo}`);
-  const tail = extras.length ? `\n${extras.join(' · ')}` : '';
-  return `Hola Omar, soy ${nombre} de ${negocio}.\nQuiero resolver: ${problema}.${tail}\nVi tu landing y quiero agendar una consultoría.`;
+// Fallback duro: link plano por si JS está deshabilitado o el modal no monta.
+export function calBookUrl(): string {
+  return `${CAL_BASE_URL}/${CAL_LINK}`;
 }

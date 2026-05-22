@@ -4,7 +4,8 @@ import Loader from '../components/Loader.astro';
 import Nav from '../components/Nav.astro';
 import CustomCursor from '../components/CustomCursor.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
-import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import BookFloat from '../components/BookFloat.astro';
+import CalRuntime from '../components/CalRuntime.astro';
 
 interface Props {
   title?: string;
@@ -78,7 +79,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           "jobTitle": "Operador",
           "description": "Documento IA aplicada y operación para emprendimientos pequeños y medianos en LATAM.",
           "url": canonicalURL.toString(),
-          "email": "omaraalvarezo@gmail.com",
           "address": {
             "@type": "PostalAddress",
             "addressCountry": "CO"
@@ -118,7 +118,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
 
-    <WhatsAppFloat />
+    <BookFloat />
+    <CalRuntime />
 
     <script>
       import { initLenis } from '../scripts/lenis';

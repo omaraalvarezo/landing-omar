@@ -1,7 +1,7 @@
 ---
 import ResourceCard from './ResourceCard.astro';
 import { ArrowLeft } from '@lucide/astro';
-import { whatsappUrl } from '../lib/contact';
+import { calButtonAttrs } from '../lib/contact';
 import type { Area, Resource } from '../lib/resources';
 
 interface Props {
@@ -13,12 +13,12 @@ const { area, resources } = Astro.props;
 const num = String(area.order).padStart(2, '0');
 const isEmpty = resources.length === 0;
 
-const ctaUrl = whatsappUrl(
-  `Hola Omar, estuve mirando los recursos de ${area.label} en tu landing y quiero hablar.`
-);
-const askUrl = whatsappUrl(
-  `Hola Omar, vi el área de ${area.label} en tu landing y me gustaría que publicaras un recurso sobre __.`
-);
+const ctaAttrs = calButtonAttrs({
+  notes: `Estuve mirando los recursos de ${area.label} en tu landing y quiero hablar de mi caso.`,
+});
+const askAttrs = calButtonAttrs({
+  notes: `Vi el área de ${area.label} y me gustaría que publicaras un recurso sobre __.`,
+});
 ---
 
 <section class="area-index container-page" aria-labelledby="area-index-title">
@@ -57,9 +57,9 @@ const askUrl = whatsappUrl(
       <p class="area-index__empty-body">
         Esta carpeta está creciendo. Cuando suba el primero te aviso por aquí — o pedime algo específico y lo armo.
       </p>
-      <a href={askUrl} target="_blank" rel="noopener" class="area-index__empty-cta">
-        pedir un recurso por whatsapp <span aria-hidden="true">→</span>
-      </a>
+      <button type="button" {...askAttrs} class="area-index__empty-cta">
+        agendar 20 min para pedirme uno <span aria-hidden="true">→</span>
+      </button>
     </aside>
   ) : (
     <ul class="area-index__grid" role="list">
@@ -77,17 +77,16 @@ const askUrl = whatsappUrl(
       <h2 class="area-index__cta-headline">
         Si esto te sirvió, lo <span class="accent-italic">customizado</span> te multiplica.
       </h2>
-      <a
-        href={ctaUrl}
-        target="_blank"
-        rel="noopener"
+      <button
+        type="button"
+        {...ctaAttrs}
         class="area-index__cta-btn"
         data-magnetic
         data-magnetic-strength="0.2"
       >
-        agendar diagnóstico
+        agendar 20 min
         <span class="area-index__cta-arrow" aria-hidden="true">→</span>
-      </a>
+      </button>
     </aside>
   )}
 </section>
@@ -213,6 +212,8 @@ const askUrl = whatsappUrl(
     padding: 10px 16px;
     border: 0.5px solid var(--accent);
     color: var(--accent);
+    background: transparent;
+    cursor: pointer;
     font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.04em;
@@ -257,7 +258,10 @@ const askUrl = whatsappUrl(
     padding: 14px 24px;
     background-color: var(--accent);
     color: var(--bg);
+    border: 0;
+    cursor: pointer;
     border-radius: 9999px;
+    font-family: inherit;
     font-size: 15px;
     font-weight: 500;
     will-change: transform;

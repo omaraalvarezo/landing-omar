@@ -1,27 +1,27 @@
 ---
-import { EMAIL, LOCATION, SOCIALS, whatsappUrl } from '../lib/contact';
+import { LOCATION, SOCIALS, calButtonAttrs } from '../lib/contact';
 import Logo from './Logo.astro';
 
 const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
 const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
 
 const NAV_LINKS = [
+  { href: anchor('#perfil'), label: 'perfil' },
   { href: anchor('#servicios'), label: 'servicios' },
   { href: anchor('#metodo'), label: 'método' },
   { href: anchor('#casos'), label: 'casos' },
-  { href: anchor('#sobre'), label: 'sobre' },
   { href: '/recursos', label: 'recursos' },
   { href: anchor('#faq'), label: 'faq' },
   { href: anchor('#contacto'), label: 'contacto' },
 ];
 
-const CONTACT_LINKS = [
-  { href: `mailto:${EMAIL}`, label: 'email' },
-  { href: whatsappUrl('Hola Omar'), label: 'whatsapp' },
+const SOCIAL_LINKS = [
   { href: SOCIALS.instagram, label: 'instagram' },
   { href: SOCIALS.tiktok, label: 'tiktok' },
   { href: SOCIALS.linkedin, label: 'linkedin' },
 ];
+
+const calAttrs = calButtonAttrs();
 
 const today = new Date();
 const year = today.getFullYear();
@@ -49,18 +49,17 @@ const buildStamp = `${year}.${String(today.getMonth() + 1).padStart(2, '0')}.${S
       </ul>
     </nav>
 
-    <nav class="footer__col" aria-label="Contacto">
-      <p class="footer__col-label">contacto</p>
+    <nav class="footer__col" aria-label="Agendar y sociales">
+      <p class="footer__col-label">agendar</p>
       <ul>
-        {CONTACT_LINKS.map((l) => (
+        <li>
+          <button type="button" {...calAttrs} class="footer__cta-link">
+            agendar 20 min →
+          </button>
+        </li>
+        {SOCIAL_LINKS.map((l) => (
           <li>
-            <a
-              href={l.href}
-              target={l.href.startsWith('mailto:') ? '_self' : '_blank'}
-              rel="noopener"
-            >
-              {l.label}
-            </a>
+            <a href={l.href} target="_blank" rel="noopener">{l.label}</a>
           </li>
         ))}
       </ul>
@@ -172,6 +171,21 @@ const buildStamp = `${year}.${String(today.getMonth() + 1).padStart(2, '0')}.${S
   }
   .footer__col a:hover {
     color: var(--accent);
+  }
+
+  .footer__cta-link {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    transition: opacity 0.2s ease;
+  }
+  .footer__cta-link:hover {
+    opacity: 0.75;
   }
 
   .footer__small {

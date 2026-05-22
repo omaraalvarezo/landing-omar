@@ -1,0 +1,122 @@
+---
+// FAB: agendar 20 min. Dispara el modal Cal.com vía data-cal-link
+// (requiere <CalRuntime /> montado en Layout.astro).
+//
+// Comportamiento: siempre visible en mobile; en desktop aparece tras 25% scroll.
+import { Calendar } from '@lucide/astro';
+import { calButtonAttrs } from '../lib/contact';
+
+const calAttrs = calButtonAttrs();
+---
+
+<button
+  id="book-float"
+  type="button"
+  {...calAttrs}
+  aria-label="Agendar llamada de 20 minutos"
+  data-state="hidden"
+>
+  <span class="book-float__tooltip" aria-hidden="true">agendar 20 min →</span>
+  <Calendar class="book-float__icon" size={22} stroke-width={1.5} aria-hidden="true" />
+</button>
+
+<style>
+  #book-float {
+    position: fixed;
+    bottom: clamp(16px, 3vw, 24px);
+    right: clamp(16px, 3vw, 24px);
+    z-index: 75;
+    width: 56px;
+    height: 56px;
+    border-radius: 9999px;
+    background-color: var(--ink);
+    color: var(--bg);
+    display: grid;
+    place-items: center;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition:
+      transform 0.4s var(--ease-out-expo),
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+    will-change: transform, opacity;
+  }
+
+  /* Hidden state: only on desktop until scrolled */
+  @media (min-width: 768px) {
+    #book-float[data-state='hidden'] {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(12px) scale(0.95);
+    }
+  }
+
+  #book-float:hover {
+    transform: scale(1.06);
+  }
+
+  .book-float__icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .book-float__tooltip {
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--bg);
+    color: var(--ink);
+    border: 0.5px solid var(--line);
+    padding: 6px 12px;
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.3s var(--ease-out-expo);
+  }
+  #book-float:hover .book-float__tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-4px);
+  }
+  @media (max-width: 767px) {
+    .book-float__tooltip { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #book-float {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Visible siempre en mobile; en desktop aparece tras 25% scroll.
+  const fab = document.getElementById('book-float');
+  if (fab) {
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    if (isMobile) {
+      fab.dataset.state = 'visible';
+    } else {
+      let last = 'hidden';
+      function check() {
+        const scroll = window.scrollY;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio = max > 0 ? scroll / max : 0;
+        const next = ratio > 0.25 ? 'visible' : 'hidden';
+        if (next !== last) {
+          last = next;
+          fab!.dataset.state = next;
+        }
+      }
+      window.addEventListener('scroll', check, { passive: true });
+      window.addEventListener('resize', check);
+      check();
+    }
+  }
+</script>
