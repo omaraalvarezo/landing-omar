@@ -31,3 +31,15 @@ export function calButtonAttrs(opts?: { notes?: string }) {
 export function calBookUrl(): string {
   return `${CAL_BASE_URL}/${CAL_LINK}`;
 }
+
+// Combina los campos del mini formulario de pre-llenado en una sola string
+// que pre-llena el campo "notes" de Cal.com. Si ambos vienen vacíos devuelve
+// string vacía (el caller decide si abrir modal con o sin prefill).
+export function combinePrefillNotes(business?: string, notes?: string): string {
+  return [
+    business ? `Negocio: ${business}` : '',
+    notes ? `Quiero resolver: ${notes}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+}

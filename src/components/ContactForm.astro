@@ -1,12 +1,14 @@
 ---
 // src/components/ContactForm.astro
-// Sección 07 · CONTACTO — split editorial + embed Cal.com inline.
+// Sección 07 · CONTACTO — split editorial + mini formulario de pre-llenado
+// + embed Cal.com inline.
 //
-// La columna izquierda condensa P7+P8 del FAQ (filtro de 20 min + Quick Win Brief)
-// para que el visitante no tenga que bajar a buscarlas. La columna derecha es
-// el calendario embebido directo: cero click extra al modal, cero email visible.
+// La columna izquierda es editorial: hook, timeline 3 pasos y badges de garantía.
+// La columna derecha trae el mini form encima del calendario embebido: el visitante
+// puede llenar 3 campos (nombre, negocio, qué resolver) y abrir Cal.com con esos
+// datos ya pre-rellenados, o agendar directo en el calendario sin llenar nada.
 import SectionLabel from './SectionLabel.astro';
-import { CAL_LINK, calBookUrl } from '../lib/contact';
+import { CAL_LINK, CAL_NAMESPACE, calBookUrl } from '../lib/contact';
 ---
 
 <section id="contacto" class="contact scroll-mt-24" aria-labelledby="contact-title">
@@ -17,13 +19,12 @@ import { CAL_LINK, calBookUrl } from '../lib/contact';
       <!-- Columna izquierda · editorial -->
       <div class="contact__editorial">
         <h2 id="contact-title" class="contact__headline" data-split-reveal style="--reveal-stagger: 35ms;">
-          ¿Listo para integrar <span class="accent-italic">IA</span> en tu operación?
+          Cuéntame qué te tiene <span class="accent-italic">pensando</span>.
         </h2>
 
         <p class="contact__lede body-lg" data-reveal>
-          20 minutos por video. Filtramos juntos si encajamos. Después te mando un
-          <em>Quick Win Brief</em> gratis con UNA oportunidad detectada — decidas
-          trabajar conmigo o no.
+          Una línea sobre tu negocio y otra sobre lo que quieres resolver. Te respondo
+          personalmente en menos de 24h — no hay equipo, soy yo.
         </p>
 
         <ol class="contact__tline" aria-label="Qué pasa cuando agendas">
@@ -38,14 +39,14 @@ import { CAL_LINK, calBookUrl } from '../lib/contact';
             <span class="contact__tline-num">02</span>
             <div>
               <p class="contact__tline-label">llamada</p>
-              <p class="contact__tline-sub">20 min por video · sin pitch · filtramos si encaja</p>
+              <p class="contact__tline-sub">20 min por video · te digo si encajamos · sin pitch</p>
             </div>
           </li>
           <li data-reveal>
             <span class="contact__tline-num">03</span>
             <div>
-              <p class="contact__tline-label">brief 24h</p>
-              <p class="contact__tline-sub">PDF de 1 página con tu Quick Win · sin compromiso</p>
+              <p class="contact__tline-label">siguiente paso</p>
+              <p class="contact__tline-sub">si encajamos, te explico el paso · si no, te ahorro la consultoría</p>
             </div>
           </li>
         </ol>
@@ -53,16 +54,67 @@ import { CAL_LINK, calBookUrl } from '../lib/contact';
         <ul class="contact__badges" aria-label="Garantías">
           <li>GRATUITO · SIN COMPROMISO</li>
           <li>SALIDA EN CUALQUIER MOMENTO</li>
-          <li>QUICK WIN BRIEF SIN OBLIGACIÓN</li>
+          <li>RESPONDO YO · NO HAY EQUIPO</li>
         </ul>
       </div>
 
-      <!-- Columna derecha · embed Cal inline -->
-      <div class="contact__embed">
+      <!-- Columna derecha · mini form + embed Cal inline -->
+      <div class="contact__embed-col">
+        <form
+          class="contact__prefill"
+          data-prefill-form
+          aria-label="Pre-llenar tu reserva"
+          novalidate
+        >
+          <p class="contact__prefill-title">PRE-LLENA TU RESERVA · OPCIONAL</p>
+          <p class="contact__prefill-help">
+            Si prefieres dejar algo escrito antes de abrir el calendario, llena estos
+            3 campos. Tu información va directo a la reserva de Cal.com — no me llega
+            por separado.
+          </p>
+
+          <label class="contact__prefill-field">
+            <span>Tu nombre</span>
+            <input
+              type="text"
+              name="name"
+              autocomplete="name"
+              data-prefill-name
+            />
+          </label>
+
+          <label class="contact__prefill-field">
+            <span>Tu negocio o sector</span>
+            <input
+              type="text"
+              name="business"
+              autocomplete="organization"
+              data-prefill-business
+            />
+          </label>
+
+          <label class="contact__prefill-field">
+            <span>Qué quieres resolver</span>
+            <textarea
+              name="notes"
+              rows="3"
+              data-prefill-notes
+            ></textarea>
+          </label>
+
+          <button type="button" class="contact__prefill-cta" data-prefill-submit>
+            continuar al calendario →
+          </button>
+
+          <p class="contact__prefill-foot">
+            o agenda directo abajo sin llenar nada
+          </p>
+        </form>
+
         <div
           class="contact__cal"
           data-cal-inline
-          data-cal-namespace="onboarding-20min"
+          data-cal-namespace={CAL_NAMESPACE}
           data-cal-link={CAL_LINK}
           aria-label="Calendario de agendamiento"
         ></div>
@@ -113,10 +165,6 @@ import { CAL_LINK, calBookUrl } from '../lib/contact';
     margin: 0;
     color: var(--ink-soft);
     max-width: 50ch;
-  }
-  .contact__lede em {
-    font-style: italic;
-    color: var(--ink);
   }
 
   /* Timeline */
@@ -177,11 +225,110 @@ import { CAL_LINK, calBookUrl } from '../lib/contact';
     font-weight: 500;
   }
 
-  /* Embed */
-  .contact__embed {
+  /* Columna derecha · mini form + embed */
+  .contact__embed-col {
     position: relative;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 4vw, 32px);
   }
+
+  /* Mini formulario de pre-llenado */
+  .contact__prefill {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: clamp(20px, 3vw, 28px);
+    border: 0.5px solid var(--line);
+    border-radius: 4px;
+    background-color: var(--bg);
+  }
+  .contact__prefill-title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--mute);
+    font-weight: 500;
+  }
+  .contact__prefill-help {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+
+  .contact__prefill-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .contact__prefill-field > span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    font-weight: 500;
+  }
+  .contact__prefill-field input,
+  .contact__prefill-field textarea {
+    width: 100%;
+    padding: 10px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 0.5px solid var(--line);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    transition: border-color 0.3s ease;
+    resize: vertical;
+  }
+  .contact__prefill-field input:focus,
+  .contact__prefill-field textarea:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+  }
+  .contact__prefill-field textarea {
+    min-height: 72px;
+    font-family: var(--font-sans);
+  }
+
+  .contact__prefill-cta {
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 10px 18px;
+    background-color: var(--accent);
+    color: var(--bg);
+    border: 0;
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  .contact__prefill-cta:hover {
+    opacity: 0.85;
+  }
+  .contact__prefill-cta:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .contact__prefill-foot {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    font-style: italic;
+  }
+
+  /* Embed */
   .contact__cal {
     width: 100%;
     min-height: 640px;
@@ -238,4 +385,55 @@ import { CAL_LINK, calBookUrl } from '../lib/contact';
       reveals.forEach((el) => io.observe(el));
     }
   }
+
+  // Mini form de pre-llenado: lee los 3 campos, abre el modal Cal.com con
+  // name + notes (combinados: "Negocio: X · Quiero resolver: Y") pre-rellenados.
+  // Si todos los campos vienen vacíos, hace scroll al calendario inline.
+  import { combinePrefillNotes } from '../lib/contact';
+
+  declare global {
+    interface Window {
+      Cal: any;
+    }
+  }
+
+  const form = document.querySelector<HTMLFormElement>('[data-prefill-form]');
+  const submitBtn = form?.querySelector<HTMLButtonElement>('[data-prefill-submit]');
+  const inlineEmbed = document.querySelector<HTMLElement>('[data-cal-inline]');
+
+  submitBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!form) return;
+
+    const name = (form.querySelector<HTMLInputElement>('[data-prefill-name]')?.value || '').trim();
+    const business = (form.querySelector<HTMLInputElement>('[data-prefill-business]')?.value || '').trim();
+    const notesRaw = (form.querySelector<HTMLTextAreaElement>('[data-prefill-notes]')?.value || '').trim();
+    const notes = combinePrefillNotes(business, notesRaw);
+
+    // Si no llenó nada, simplemente lleva al calendario inline.
+    if (!name && !notes) {
+      inlineEmbed?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    // Abre el modal Cal.com con prefill. Requiere que CalRuntime ya haya
+    // inicializado el namespace 'onboarding-20min'.
+    const cal = window.Cal?.ns?.['onboarding-20min'];
+    if (typeof cal === 'function') {
+      cal('modal', {
+        calLink: 'omaralvarezo/onboarding-20min',
+        config: {
+          layout: 'month_view',
+          theme: 'light',
+          prefill: {
+            ...(name ? { name } : {}),
+            ...(notes ? { notes } : {}),
+          },
+        },
+      });
+    } else {
+      // Fallback: si Cal no cargó, lleva al calendario inline sin pre-llenado.
+      inlineEmbed?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 </script>
