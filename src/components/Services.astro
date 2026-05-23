@@ -2,12 +2,14 @@
 import SectionLabel from './SectionLabel.astro';
 import CalEmbed from './CalEmbed.astro';
 
-type AccentVariant = 'bronce' | 'terracota' | 'indigo' | 'musgo';
+type AccentVariant = 'bronce' | 'terracota';
 
 interface Service {
   n: string;
+  label: string;
   title: string;
   meta: string;
+  investment: string;
   desc: string;
   bullets: string[];
   takeaway: { label: string; body: string }[];
@@ -20,96 +22,56 @@ interface Service {
 const ACCENT_HEX: Record<AccentVariant, string> = {
   bronce: '#8B6F47',
   terracota: '#C67B5C',
-  indigo: '#3D4E6B',
-  musgo: '#6B7F5C',
 };
 
 const SERVICES: Service[] = [
   {
     n: '01',
-    title: 'Claude a tu medida',
-    meta: '1 sesión 90 min · consultar inversión',
-    desc: 'Salimos de la sesión con Claude configurado para tu rol y tu negocio. Skills custom instaladas, prompts probados, archivos ordenados para que los lea bien, y un plan de uso semanal para que no se quede en la novedad de los primeros tres días.',
+    label: 'puntual',
+    title: 'Sesión 1:1',
+    meta: '90 min · Google Meet · GMT-5',
+    investment: 'consultar inversión',
+    desc: 'Salimos con la decisión tomada o el sistema andando — no con tarea para la casa.',
     bullets: [
-      'Claude configurado para tu rol específico (no genérico)',
-      'Skills custom instaladas en tu Claude Code o Claude Desktop',
-      'Prompts probados que reemplazan 5-10 herramientas sueltas',
-      'Tu cloud y archivos ordenados para que Claude los lea bien',
-      'Documento con plan de uso semanal y casos concretos',
-      'Follow-up async de 20 min dentro de 14 días para dudas de adopción',
+      '90 min enfocados en UN problema concreto que traes definido',
+      'Trabajo en vivo: configuro Claude con tus datos, escribimos prompts, probamos hasta que sirva',
+      'Documento de cierre con lo decidido y los próximos pasos (te llega en 48h)',
+      'WhatsApp abierto 7 días para dudas mientras lo ejecutas',
+      'Grabación de la sesión si la quieres',
     ],
     takeaway: [
-      { label: 'Claude listo y entrenado', body: 'Configurado para tu rol y tu negocio, no como sale de la caja.' },
-      { label: 'Plan de uso semanal', body: 'Casos concretos de cómo usarlo cada día sin pensarlo.' },
-      { label: 'Stack ordenado', body: 'Tu cloud, archivos y herramientas alineados para que Claude los aproveche.' },
+      { label: 'Decisión tomada o sistema andando', body: 'No teoría, no tarea para la casa.' },
+      { label: 'Razonamiento documentado', body: 'Para que lo repliques sin mí.' },
+      { label: 'Cero dependencia futura', body: 'No te ato a retainer ni a follow-up que no necesitas.' },
     ],
-    ctaText: 'agendar onboarding →',
+    ctaText: 'agendar llamada de 20 min →',
     accent: 'bronce',
+    footer: 'Ideal si tienes un problema puntual y quieres salirlo hoy.',
   },
   {
     n: '02',
-    title: 'Mapa de IA para tu negocio',
-    meta: '2 semanas · 3 sesiones · consultar inversión',
-    desc: 'Auditoría completa de tu operación para mapear dónde Claude y la IA pueden ahorrarte tiempo real y plata real. Salimos con un plan priorizado por ROI y la primera implementación bocetada lista para ejecutar.',
+    label: 'recurrente',
+    title: 'Pack de 5 sesiones',
+    meta: '5 × 90 min · a tu ritmo · GMT-5',
+    investment: 'consultar inversión · descuento vs sesión suelta',
+    desc: 'Continuidad real para los próximos meses. No reexplicas tu negocio cada vez.',
     bullets: [
-      'Auditoría de operación, finanzas, equipo y stack tecnológico actual',
-      'Mapa de 5-7 oportunidades donde la IA tiene retorno medible',
-      'Cálculo de ROI defendible para cada oportunidad (no promesas)',
-      'PDF ejecutivo 18-25 páginas + Notion vivo compartido',
-      'Brief técnico de la primera implementación recomendada',
-      'Plan de acción 90/180/365 días',
+      '5 sesiones de 90 min, agendadas según tu ritmo (recomiendo una cada dos semanas)',
+      'Cada sesión sobre un problema distinto o la continuación del anterior',
+      'Documento de cierre por cada sesión',
+      'WhatsApp async abierto durante toda la vigencia del pack',
+      'Vigencia: 6 meses desde la primera sesión',
+      'Grabación de cada sesión',
     ],
     takeaway: [
-      { label: 'Plan de IA priorizado', body: 'Sabes qué hacer primero y por qué. Sin moda, con criterio.' },
-      { label: 'ROI defendible', body: 'Cada oportunidad con números, no con promesas de gurú.' },
-      { label: 'Primer brief listo', body: 'La primera implementación bocetada y validada contigo.' },
+      { label: 'Continuidad', body: 'No reexplicas tu negocio cada vez.' },
+      { label: 'Avances acumulados', body: 'No decisiones sueltas — un hilo conductor.' },
+      { label: 'Mejor precio por sesión', body: 'Descuento vs comprarlas una por una.' },
     ],
-    ctaText: 'agendar onboarding →',
+    ctaText: 'agendar llamada de 20 min →',
     accent: 'terracota',
     flipped: true,
-  },
-  {
-    n: '03',
-    title: 'Implementación a tu medida',
-    meta: '4-6 semanas · solo post-Mapa · consultar inversión',
-    desc: 'Tomo la primera oportunidad del mapa y la construyo dentro de tu operación. Skills de Claude personalizadas, automatizaciones, dashboards. Tu equipo termina entrenado para sostenerlo sin depender de mí.',
-    bullets: [
-      'Construcción técnica (Claude skills, agentes, automatizaciones, dashboards)',
-      'Sesión de pruebas piloto + iteración con feedback real',
-      'Entrenamiento al equipo + documentación de uso y mantenimiento',
-      'Métricas antes/después acordadas y medidas',
-      'Tres rangos según complejidad: Esencial · Estándar · Avanzado',
-    ],
-    takeaway: [
-      { label: 'Sistema operando', body: 'Andando en tu negocio real, no en demos. Indicadores desde el día uno.' },
-      { label: 'Equipo entrenado', body: 'Tu gente sabe operarlo, mantenerlo y extenderlo sin atarte a mí.' },
-      { label: 'Documentación viva', body: 'Notion con arquitectura, prompts, casos excepcionales y troubleshooting.' },
-    ],
-    ctaText: 'agendar onboarding →',
-    accent: 'indigo',
-    footer: 'Acceso solo para clientes que pasaron por el Mapa de IA.',
-  },
-  {
-    n: '04',
-    title: 'Acompañamiento mensual',
-    meta: 'mes a mes · sin permanencia · consultar inversión',
-    desc: 'Tu CTO de IA fraccional. Cada mes ordenamos tu data en un dashboard ejecutivo, validamos tus decisiones técnicas y avanzamos en nuevas implementaciones de Claude dentro de tu operación.',
-    bullets: [
-      '2 sesiones mensuales (60 min cada una)',
-      'Dashboard ejecutivo mensual con tus archivos operativos y financieros',
-      'Validación continua de decisiones técnicas, herramientas e inversiones',
-      'Canal asíncrono privado con respuesta dentro de 24h hábiles',
-      'Acceso a mis skills y plantillas de Claude probadas en Enzo y Arkhē',
-      'Tres tiers: Light (sin dashboard) · Estándar · Plus',
-    ],
-    takeaway: [
-      { label: 'Dashboard mensual', body: 'Tu negocio ordenado con alertas y decisiones recomendadas cada mes.' },
-      { label: 'Decisiones validadas', body: 'Antes de comprar herramientas o contratar gente, lo discutimos.' },
-      { label: 'Continuidad', body: 'Conozco tu negocio mes a mes. Avanzamos sin reexplicar el contexto.' },
-    ],
-    ctaText: 'agendar onboarding →',
-    accent: 'musgo',
-    flipped: true,
+    footer: 'Ideal si ya sabes que la IA va a ser parte de tu operación los próximos meses.',
   },
 ];
 ---
@@ -122,8 +84,14 @@ const SERVICES: Service[] = [
 
     <div class="services__content">
       <h2 id="services-title" class="h2-section services__headline" data-split-reveal style="--reveal-stagger: 35ms;">
-        Cuatro formas de poner Claude a trabajar en tu <span class="accent-italic">operación</span>.
+        Una sesión, un problema, una <span class="accent-italic">decisión</span>.
       </h2>
+
+      <p class="services__lede" data-reveal>
+        90 minutos contigo, en vivo, sobre algo que ya te tiene pensando hace rato.
+        Salimos con la decisión tomada o el sistema andando — no con tarea para la casa.
+        Escoge el formato que te sirva.
+      </p>
 
       <ul class="services__list" role="list">
         {SERVICES.map((s) => (
@@ -133,10 +101,15 @@ const SERVICES: Service[] = [
             data-reveal
           >
             <div class="service-card__main">
-              <p class="service-card__num">{s.n}</p>
+              <div class="service-card__tag">
+                <span class="service-card__num">{s.n}</span>
+                <span class="service-card__tag-sep" aria-hidden="true">·</span>
+                <span class="service-card__label">{s.label}</span>
+              </div>
               <div class="service-card__head">
                 <h3 class="service-card__title">{s.title}</h3>
                 <p class="service-card__meta">{s.meta}</p>
+                <p class="service-card__investment">{s.investment}</p>
               </div>
               <p class="service-card__desc">{s.desc}</p>
               <ul class="service-card__bullets" role="list">
@@ -194,6 +167,16 @@ const SERVICES: Service[] = [
     max-width: 18ch;
   }
 
+  .services__lede {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 1.7vw, 18px);
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    letter-spacing: -0.005em;
+  }
+
   .services__list {
     list-style: none;
     margin: 0;
@@ -221,14 +204,28 @@ const SERVICES: Service[] = [
     gap: 20px;
   }
 
-  .service-card__num {
+  /* Tag (NN · label) en lugar del numero grande solo */
+  .service-card__tag {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0 0 4px;
     font-family: var(--font-mono);
-    font-size: clamp(56px, 8vw, 88px);
-    line-height: 0.9;
-    letter-spacing: -0.04em;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     color: var(--mute);
-    margin: 0;
+    font-weight: 500;
+  }
+  .service-card__num {
+    color: var(--service-accent, var(--accent));
     transition: color 0.4s var(--ease-out-expo);
+  }
+  .service-card__tag-sep {
+    color: var(--line-hi);
+  }
+  .service-card__label {
+    color: var(--mute);
   }
 
   .service-card__head {
@@ -240,7 +237,7 @@ const SERVICES: Service[] = [
   .service-card__title {
     margin: 0;
     font-family: var(--font-serif);
-    font-size: clamp(28px, 3.5vw, 40px);
+    font-size: clamp(32px, 4vw, 48px);
     line-height: 1.05;
     letter-spacing: -0.018em;
     font-weight: 400;
@@ -254,6 +251,15 @@ const SERVICES: Service[] = [
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--mute);
+  }
+
+  .service-card__investment {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--service-accent, var(--accent));
+    font-weight: 500;
   }
 
   .service-card__desc {
