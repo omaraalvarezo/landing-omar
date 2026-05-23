@@ -1,9 +1,10 @@
 ---
 // src/components/Profile.astro
-// Sección 01 · PERFIL — bio block estilo consultor pro.
+// Sección 01 · PERFIL — bio del operador, no del consultor.
 //
-// Grid split 5/7 en desktop: foto sticky a la izquierda + bio editorial a la derecha
-// (headline serif, 2 párrafos en primera persona, pull-quote ancla, credenciales mono).
+// Grid split 5/7 en desktop cuando hay foto; mientras no, el body ocupa una sola
+// columna con max-width natural. Headline serif + 2 párrafos en primera persona
+// que anclan en Enzo + Arkhē, pull-quote como statement, credenciales mono.
 //
 // La foto live en public/omar-portrait.jpg. Para cambiarla, basta reemplazar el archivo
 // con misma resolución/aspect — el componente no necesita cambios.
@@ -40,22 +41,20 @@ const CREDS = [
       <!-- Body editorial -->
       <div class="profile__body">
         <h2 id="profile-title" class="profile__headline" data-split-reveal style="--reveal-stagger: 35ms;">
-          Operario antes que <span class="accent-italic">consultor</span>.
+          Operador de dos negocios. Documento lo que <span class="accent-italic">construyo</span>.
         </h2>
 
         <p class="profile__para" data-reveal>
-          Ingeniero Electrónico de la <strong>UPB Medellín</strong> y MBA en curso en
-          <strong>EAFIT</strong>, con intercambio en <strong>La Salle Barcelona</strong>.
-          Desde Cúcuta opero dos negocios: Enzo Motorsport (detailing premium) y
-          Arkhē Coworking (240 m²).
+          Tengo dos negocios reales en Cúcuta: <strong>Enzo Motorsport</strong>, taller
+          premium de servicios automotrices, y <strong>Arkhē Coworking</strong>, un
+          café-coworking de 240 m². Ingeniero electrónico de UPB Medellín y MBA en
+          curso en EAFIT con intercambio en La Salle Barcelona.
         </p>
 
         <p class="profile__para" data-reveal>
-          Empecé a usar Claude para ordenar lo que estaba mal en mis propios libros —
-          márgenes de contribución mal calculados, puntos de equilibrio que nadie medía,
-          dueños que no se pagaban a sí mismos. Cuando vi cuánto cambiaba la operación
-          con los básicos resueltos más IA encima, empecé a ayudar a otras pymes con
-          lo mismo.
+          No soy consultor que también tiene negocios — soy operador que también
+          consulta. Todo lo que enseño lo uso primero conmigo mismo, con mi equipo,
+          con mi plata. Si algo no me funciona a mí, no te lo voy a vender.
         </p>
 
         <blockquote class="profile__pull" data-reveal>
