@@ -210,3 +210,58 @@ Queries ejecutadas vía `python3 ~/.claude/skills/ui-ux-pro-max/src/ui-ux-pro-ma
 - `npm run build` → 1.46s, 2 páginas, 0 warnings nuevos.
 - Operador debe verificar visualmente: "decide" italic con underline accent completo, "ya" italic con underline completo, todos los descenders (j, y, p, g) sin clip en headlines de Hero, ForWho, Services, Method, Cases, About, FAQ, ContactForm.
 - Probar form: submit con campos vacíos → mensaje rojo "falta · nombre · negocio · ..." + autofocus. Submit completo → "abriendo whatsapp…" → success o error según pop-up policy.
+
+
+---
+
+## 2026-05-22 · Pivot a consultoría 1:1 por sesión
+
+### Por qué
+
+La oferta anterior (4 servicios escalonados) sonaba a agencia y diluía el
+mensaje: el visitante no sabía cuál tomar primero, los precios estaban
+escondidos detrás de tiers internos (Esencial/Estándar/Avanzado, Light/Plus),
+y el copy decía "operadores" con voz de PowerPoint. Omar quiere posicionarse
+como operador-que-también-consulta, con una sola línea de servicio cobrada
+por sesión.
+
+### Cambios por sección
+
+| Sección | Archivo | Cambio |
+|---|---|---|
+| Hero | `Hero.astro` | Badge "AGENDA ABIERTA · SESIONES 1:1", bajo reescrito anclando Enzo + Arkhē, trust-row sin Quick Win |
+| 01 Perfil | `Profile.astro` | Headline "Operador de dos negocios. Documento lo que construyo", párrafos en primera persona, foto placeholder comentado se mantiene |
+| 02 Para quién | `ForWho.astro` | Título nuevo + 3 perfiles reescritos (incluye ejemplo concreto de Enzo en perfil 02) |
+| 03 Servicios | `Services.astro` | REFACTOR MAYOR: 4 → 2 tarjetas (Sesión 1:1 + Pack de 5), `label` y `investment` como campos nuevos, accents indigo/musgo eliminados |
+| 04 Método | `Method.astro` | 4 pasos: llamada 20min → preparación 24h → sesión 90min → cierre 48h+7d async |
+| 05 Casos | `Cases.astro` | Solo CTA final + notes pre-llenado del modal |
+| 06 FAQ | `FAQ.astro` | -3 (Quick Win, diferencia Claude/Mapa, pago 4 esquemas) +5 (decidir entre sesión/pack, pago nuevo, duración pack, garantía, upgrade) +5 reescritas. Total 11. |
+| 07 Contacto | `ContactForm.astro` | Headline "Cuéntame qué te tiene pensando", mini formulario opcional (3 campos) que abre modal Cal con name + notes pre-rellenados |
+| Meta | `Layout.astro` | Description + schema.org `jobTitle` y `description` alineados |
+| Helper | `contact.ts` | Nuevo `combinePrefillNotes(business, notes)` para formatear notas del Cal modal |
+| Default | `CalEmbed.astro` | Default text "agendar onboarding" → "agendar llamada" (no usado en práctica, solo limpieza) |
+| Docs | `CLAUDE.md`, `README.md` | Changelog 2026.05.22 + estructura corregida (Profile en lugar de About, 2 servicios, 11 FAQ) |
+
+### Sweep limpio
+
+```
+[ok] 'Claude a tu medida'        — 0 hits
+[ok] 'Mapa de IA'                — 0 hits
+[ok] 'Implementación a tu medida'— 0 hits
+[ok] 'Acompañamiento mensual'    — 0 hits
+[ok] 'Quick Win'                 — 0 hits
+[ok] '2 CUPOS' · 'Q2 2026'       — 0 hits
+[ok] 'Tres tiers' · 'Tres rangos'— 0 hits
+```
+
+(El hit residual de "facturación" estaba en un prompt de /recursos sobre
+migración de software contable, no relacionado con la oferta antigua.)
+
+### Build & verificación
+
+- `npm run build` → pasa limpio en cada commit (9 commits total).
+- Pendiente verificación visual: probar mini formulario de pre-llenado con
+  campos vacíos (debe llevar al inline embed por scroll) y con campos
+  llenos (debe abrir modal Cal.com con name + notes pre-rellenados).
+- FAQ ahora con 11 items: verificar que el accordion no rompa layout
+  cuando varios estén abiertos a la vez (cada `<details>` es independiente).

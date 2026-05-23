@@ -88,12 +88,12 @@ src/
 ├── components/
 │   ├── Hero.astro                ← 100vh + split-text + counters + magnetic
 │   ├── Marquee.astro             ← strip infinito 40s con hover-pause
-│   ├── ForWho.astro              ← sección 01 + 3 cards con íconos
-│   ├── Services.astro            ← sección 02 + 3 cards asimétricas
-│   ├── Method.astro              ← sección 03 + timeline 4 pasos con SVG line draw
-│   ├── Cases.astro               ← sección 04 + bento con mockups (WA bot, chart, timeline)
-│   ├── About.astro               ← sección 05 + foto duotono + bio + stats
-│   ├── FAQ.astro                 ← sección 06 + 6 preguntas en <details>
+│   ├── Profile.astro             ← sección 01 + bio editorial (operador, no consultor)
+│   ├── ForWho.astro              ← sección 02 + 3 cards con íconos
+│   ├── Services.astro            ← sección 03 + 2 cards (Sesión 1:1 + Pack 5)
+│   ├── Method.astro              ← sección 04 + timeline 4 pasos con SVG line draw
+│   ├── Cases.astro               ← sección 05 + bento con mockups (WA bot, chart, timeline)
+│   ├── FAQ.astro                 ← sección 06 + 11 preguntas en <details>
 │   ├── ContactForm.astro         ← sección 07 + split editorial + embed Cal.com inline
 │   ├── Footer.astro              ← 4 cols + bloque dramático "OMAR ÁLVAREZ"
 │   ├── Nav.astro                 ← fijo + shrink + mobile overlay
@@ -126,11 +126,11 @@ src/
 | Headline hero | `src/components/Hero.astro` línea 24 |
 | Métricas hero | `src/components/Hero.astro` (data-counter) |
 | 3 cards "para quién" | `src/components/ForWho.astro` const `CARDS` |
-| 3 servicios + bullets + takeaways | `src/components/Services.astro` const `SERVICES` |
+| 2 servicios + bullets + takeaways | `src/components/Services.astro` const `SERVICES` |
 | 4 pasos del método | `src/components/Method.astro` const `STEPS` |
 | 3 casos | `src/components/Cases.astro` (markup directo) |
-| Bio + stats | `src/components/About.astro` const `STATS` + texto |
-| 6 FAQ | `src/components/FAQ.astro` const `FAQS` |
+| Bio + credenciales | `src/components/Profile.astro` const `CREDS` + texto |
+| 11 FAQ | `src/components/FAQ.astro` const `FAQS` |
 | Texto del form | `src/components/ContactForm.astro` |
 | Cal.com link / redes | `src/lib/contact.ts` |
 | Color de marca | `src/styles/global.css` `--accent` |
