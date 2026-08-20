@@ -32,7 +32,7 @@
   }
 
   /* Lock scroll while loader is up */
-  :global(html:not(.loader-done):not(.loader-skipped)) {
+  :global(html.loader-enabled:not(.loader-done):not(.loader-skipped)) {
     overflow: hidden;
   }
 

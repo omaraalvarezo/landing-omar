@@ -31,7 +31,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="es">
+<html
+  lang="es"
+  class:list={{
+    'loader-enabled': !minimal,
+    'loader-skipped': minimal,
+  }}
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
