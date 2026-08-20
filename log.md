@@ -265,3 +265,137 @@ migración de software contable, no relacionado con la oferta antigua.)
   llenos (debe abrir modal Cal.com con name + notes pre-rellenados).
 - FAQ ahora con 11 items: verificar que el accordion no rompa layout
   cuando varios estén abiertos a la vez (cada `<details>` es independiente).
+
+
+---
+
+## 2026-05-23 (pm) · Corrección: bots son Telegram, no WhatsApp
+
+- ForWho perfil 02: quitada "sistematizar el WhatsApp"; ahora dice "sistematizar
+  los reportes diarios y los recordatorios de la operación".
+- Cases caso 1 Enzo: título "por WhatsApp" → "por Telegram".
+- Cases caso 4 cotizador: flow sublabel "whatsapp · con branding" → "PDF
+  compartible · con branding".
+- Recurso `/recursos/marketing/prompt-bot-whatsapp-reportes`: migrado a
+  `/recursos/marketing/prompt-bot-telegram-reportes` (slug, título,
+  longDescription, fileName + .md renombrado y contenido actualizado:
+  formato Telegram, Telegram Bot API).
+- Mantenidas las menciones a WhatsApp en Services + Method donde describen
+  el canal humano de chat con clientes 1:1 (no es bot, es Omar respondiendo
+  desde su número).
+
+**Riesgo:** URL vieja `/recursos/marketing/prompt-bot-whatsapp-reportes` ya
+no resuelve. Recurso reciente (2026-04-27), bajo riesgo de backlinks. Sin
+redirect; se evalúa caso por caso si aparecen 404.
+
+---
+
+## 2026-08-19 · v3.0 — oferta única de dos horas, Wompi y Cal.com
+
+- Reposicionada la marca: de "consultor de IA" a operador que convierte problemas de empresas de
+  servicios en decisiones, arquitectura y primeras piezas viables.
+- Única oferta pública: 120 minutos por `$2.400.000 COP`. Eliminados del home la llamada gratuita,
+  la sesión de 90 minutos y el pack de cinco.
+- Home reconstruido desde cero en `src/components/consulting/ConsultingLanding.astro`, con dirección
+  "expediente de trabajo": papel, grafito, azul señal, reglas y tablas editoriales. Sin bento grids,
+  gradientes, glows, loader, cursor personalizado ni scroll artificial.
+- Checkout en `POST /api/consultoria/checkout`: valida brief, fija precio server-side, genera referencia
+  y firma SHA-256 del Checkout Web de Wompi.
+- Verificación en `/api/consultoria/status` y `/consultoria/agendar`: la agenda solo se revela cuando
+  Wompi confirma `APPROVED` + referencia correcta + monto exacto + COP. `PENDING` hace polling; ningún
+  error asume éxito.
+- Cal.com recibe nombre, correo, negocio, problema y WhatsApp desde `sessionStorage`; no se agregó una
+  base de datos para leads.
+- Actualizados OG, schema.org, CSP, `.env.example`, README e índice wiki.
+- Saneado el typecheck preexistente: runtime Cal tipado correctamente y HMAC del admin migrado de
+  `node:crypto`/`Buffer` a Web Crypto. `astro check`: 0 errores.
+
+## 2026-08-19 · Evento de consultoría configurado en Cal.com
+
+- Creado el evento oculto `omaralvarezo/consultoria-2-horas` con 120 minutos de duración y Cal Video.
+- Descripción alineada con la oferta: preparación previa, documento de cierre, grabación y 7 días de
+  dudas puntuales.
+- Creada y asignada una disponibilidad exclusiva de lunes a viernes, 9:00–17:00 America/Bogota,
+  sujeta a conflictos del Google Calendar principal.
+- Configurados 48 horas de aviso mínimo y buffers de 30 minutos antes y después de cada sesión.
+- Ocultada la opción de añadir invitados en el formulario; nombre, correo y notas siguen disponibles
+  para recibir el brief prellenado desde la landing.
+- Verificado manualmente el enlace público: el calendario muestra bloques reservables de dos horas.
+- Activada la confirmación manual de todas las reservas: un enlace de Cal.com compartido no basta para
+  obtener una sesión; la referencia se contrasta con Wompi antes de aprobarla.
+
+## 2026-08-19 · Comercio Wompi personal conectado a producción
+
+- Omar confirmó que el comercio usado por Adjudika es su comercio personal y que liquida a su banco.
+- `landing-omar` quedó enlazado con el proyecto Vercel que sirve `omaralvarezo.co`.
+- Copiadas a Vercel Production la llave pública y el secreto de integridad como variables sensibles,
+  sin escribirlos en Git ni mostrarlos en la salida.
+- Configurados `WOMPI_ENVIRONMENT=production`, `PUBLIC_SITE_URL=https://omaralvarezo.co` y
+  `CAL_CONSULTING_LINK=omaralvarezo/consultoria-2-horas`.
+- Prueba local con credenciales reales, sin cobro: Checkout Web generado para `240000000` centavos,
+  `COP`, referencia `oa-consultoria-2h-*`, firma de integridad y retorno a `/consultoria/agendar`.
+
+## 2026-08-19 · v3.0 desplegada en producción
+
+- Despliegue Vercel `dpl_HG5iHjg6KqFWwt4XsKdq95Krspwm` construido correctamente y promovido al
+  dominio canónico `https://omaralvarezo.co`.
+- Verificado en producción: HTTP 200, cabeceras de seguridad, nueva propuesta única, precio visible y
+  cero menciones de la llamada gratuita, sesión de 90 minutos o pack de cinco.
+- Endpoint real `/api/consultoria/checkout` probado sin pago: genera Wompi por `$2.400.000 COP`, firma,
+  referencia esperada y retorno a `https://omaralvarezo.co/consultoria/agendar`.
+- Único paso operativo pendiente: ejecutar una compra real controlada de punta a punta y luego aprobar
+  manualmente la reserva de Cal.com.
+
+## 2026-08-19 · v3.1 — pricing conductual, TikTok y TRM dinámica
+
+- Investigados efectos de dígito izquierdo, precisión, redondeo, señal de descuento/calidad y valor
+  nominal en moneda extranjera. La evidencia y sus límites quedaron documentados en
+  `wiki/sintesis/precio-psicologico-trm-tiktok.md`.
+- Precio base cambiado a `USD 797`: queda por debajo del umbral 800 sin usar `799`, preserva el ticket
+  premium y evita presentar la consultoría como infoproducto barato.
+- Recorrido reordenado para tráfico de TikTok: continuidad con el contenido → problema → evidencia →
+  método → costo de equivocarse → encaje → FAQ → precio y formulario. El hero y la barra superior ya
+  no muestran precio ni llevan directo al checkout.
+- Añadida garantía operativa: si el brief no cabe o no hay encaje, la reserva no se aprueba y se devuelve
+  el 100%. Sin descuentos falsos, temporizadores, cupos inventados o anclas tachadas.
+- Nuevo `src/lib/trm.ts`: consulta el dataset oficial `32sa-8pi3`, selecciona la vigencia de Bogotá,
+  valida rango, cachea 15 minutos por fecha y usa `TRM_FALLBACK_COP` solo si falla la fuente.
+- Nuevo `GET /api/consultoria/quote`: expone USD, TRM, equivalente exacto COP, fecha y fuente. La landing
+  muestra ambos valores antes de pagar.
+- El checkout recalcula server-side, firma el monto COP y lo codifica en la referencia. La verificación
+  exige que el pago aprobado coincida con ese monto; las referencias antiguas por `$2.400.000 COP`
+  siguen siendo válidas.
+- Validación con credenciales reales, sin cobro: `USD 797 × TRM 3.098,79 = COP $2.469.736`; endpoint y
+  Wompi coinciden en monto, moneda, referencia y firma.
+- QA de producción detectó el beacon de Cloudflare bloqueado por CSP y un script de Vercel Analytics
+  en 404 detrás del proxy. CSP ampliada únicamente para Cloudflare Insights y retirada la segunda
+  integración rota de Vercel; se conserva una sola fuente de analítica de tráfico.
+- Despliegue final `dpl_35ogvHbGtYJSQdB2UyaKw9te2oLp` promovido a `https://omaralvarezo.co`.
+  QA posterior en escritorio y móvil: sin desbordamientos, sin errores de consola y con el precio
+  ubicado después de evidencia, método, encaje y preguntas frecuentes.
+- Verificación final de producción, sin ejecutar pago: cotización oficial por `USD 797`, TRM
+  `3.098,79`, total `COP $2.469.736`; el checkout devuelve el mismo monto, una referencia válida y
+  una URL firmada de Wompi para ese valor exacto.
+
+## 2026-08-20 · v3.2 — Marco 4C y tasa operativa diaria
+
+- Sintetizado el **Marco 4C para empresas de servicios** a partir de Enzo, Arkhē, Adjudika y el
+  cotizador/CRM de Enzo: `Captar → Convertir → Cumplir → Continuar`, con IA como capa transversal y
+  responsabilidad humana sobre las decisiones sensibles.
+- Reescrita la landing para dueños y socios: problemas de captación, CRM/seguimiento, dependencia del
+  dueño, entrega y postventa; el recorrido explica el sistema completo antes de revelar el precio y
+  abrir el brief.
+- El brief ahora exige escoger una etapa del Marco 4C. Esa selección viaja a las notas prellenadas de
+  Cal.com junto con negocio y problema.
+- Añadido spread explícito de `1,65%` sobre la TRM oficial, con redondeo hacia arriba al múltiplo de
+  `$10 COP`. Ejemplo contractual: TRM `$3.000` → tasa aplicada `$3.050`.
+- Eliminado el fallback manual de TRM. Solo se acepta una vigencia oficial que incluya la fecha actual
+  de Bogotá; una lectura verificada puede reutilizarse en memoria durante esa misma fecha. Si la fuente
+  oficial no responde y no existe esa lectura, el checkout se bloquea.
+- Creada la presentación entregable `public/resources/marco-4c-servicios-omar-alvarez.pptx`, con ocho
+  láminas, notas de fuentes y revisión visual/overflow completa.
+- QA local escritorio/móvil: sin errores de consola ni desbordamiento horizontal. Cotización del día:
+  `USD 797 × tasa aplicada $3.110 = COP $2.478.670`, derivada de TRM oficial `$3.053,48` vigente desde
+  `2026-08-20`.
+- Checkout validado sin pago: monto `247867000` centavos, moneda `COP`, referencia con monto/fecha y
+  firma de integridad presentes. `astro check` mantiene cero errores y el build de Astro completa.

@@ -1,0 +1,422 @@
+---
+import { CONSULTING, formatUsd } from '../../lib/consulting';
+import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
+
+const price = formatUsd(CONSULTING.priceUsd);
+---
+
+<form class="checkout" id="checkout-consultoria" novalidate>
+  <div class="checkout__heading">
+    <p class="checkout__kicker">EXPEDIENTE DE RESERVA</p>
+    <p class="checkout__folio">OA / 2H / {new Date().getFullYear()}</p>
+  </div>
+
+  <fieldset class="checkout__stage checkout__field--wide">
+    <legend>¿En qué parte del Marco 4C está el cuello de botella?</legend>
+    <div class="checkout__stage-grid">
+      {SERVICE_SYSTEM_STAGES.map((stage) => (
+        <label>
+          <input type="radio" name="frameworkStage" value={stage.id} required />
+          <span><strong>{stage.number} · {stage.name}</strong>{stage.promise}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <div class="checkout__field checkout__field--wide">
+    <label for="consulting-name">Nombre completo</label>
+    <input id="consulting-name" name="name" type="text" autocomplete="name" maxlength="100" required />
+  </div>
+
+  <div class="checkout__field">
+    <label for="consulting-email">Correo</label>
+    <input id="consulting-email" name="email" type="email" autocomplete="email" maxlength="254" required />
+  </div>
+
+  <div class="checkout__field">
+    <label for="consulting-phone">WhatsApp</label>
+    <input id="consulting-phone" name="phone" type="tel" autocomplete="tel" maxlength="24" required />
+  </div>
+
+  <div class="checkout__field checkout__field--wide">
+    <label for="consulting-business">Negocio y qué vende</label>
+    <input
+      id="consulting-business"
+      name="business"
+      type="text"
+      autocomplete="organization"
+      maxlength="120"
+      placeholder="Ej. firma contable para pymes"
+      required
+    />
+  </div>
+
+  <div class="checkout__field checkout__field--wide">
+    <label for="consulting-problem">El problema específico que quieres trabajar</label>
+    <textarea
+      id="consulting-problem"
+      name="problem"
+      rows="5"
+      minlength="20"
+      maxlength="1200"
+      placeholder="Qué ocurre hoy, qué ya intentaste y qué decisión necesitas tomar."
+      required
+    ></textarea>
+    <p class="checkout__hint">No necesito una presentación. Necesito contexto suficiente para preparar la mesa.</p>
+  </div>
+
+  <label class="checkout__accept">
+    <input name="accepted" type="checkbox" required />
+    <span>
+      Entiendo que esta es una sesión de trabajo de 120 minutos, que el pago se hace por anticipado
+      y que una reprogramación debe solicitarse con al menos 24 horas de anticipación.
+    </span>
+  </label>
+
+  <div class="checkout__total" aria-label={`Precio base ${price}`}>
+    <span>Precio base</span>
+    <strong>{price}</strong>
+    <p data-quote-cop aria-live="polite">Calculando el equivalente de hoy en COP…</p>
+  </div>
+
+  <button class="checkout__submit" type="submit">
+    <span>pagar y escoger horario</span>
+    <span aria-hidden="true">↗</span>
+  </button>
+
+  <p class="checkout__security">
+    La tasa operativa del día toma la TRM oficial vigente y suma un ajuste de 1,65%, visible antes de
+    pagar. Wompi procesa el total exacto en COP; la tarjeta nunca pasa por este sitio. Después del pago
+    se desbloquea Cal.com.
+  </p>
+
+  <p class="checkout__error" id="checkout-error" role="alert" aria-live="polite"></p>
+</form>
+
+<style>
+  .checkout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 18px;
+    padding: clamp(24px, 4vw, 48px);
+    color: #f2efe8;
+    background: #111820;
+    border: 1px solid #26313d;
+  }
+
+  .checkout__heading,
+  .checkout__total,
+  .checkout__accept,
+  .checkout__submit,
+  .checkout__security,
+  .checkout__error,
+  .checkout__field--wide {
+    grid-column: 1 / -1;
+  }
+
+  .checkout__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #33404d;
+  }
+
+  .checkout__kicker,
+  .checkout__folio,
+  .checkout__hint,
+  .checkout__security,
+  .checkout__error {
+    margin: 0;
+    font-family: var(--font-mono);
+  }
+
+  .checkout__kicker,
+  .checkout__folio {
+    font-size: 10px;
+    letter-spacing: .16em;
+  }
+
+  .checkout__folio { color: #7fa9d8; }
+
+  .checkout__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .checkout__stage {
+    min-width: 0;
+    margin: 0;
+    border: 0;
+    padding: 0;
+  }
+
+  .checkout__stage legend {
+    margin-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #aeb7c0;
+  }
+
+  .checkout__stage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid #465463;
+    border-left: 1px solid #465463;
+  }
+
+  .checkout__stage-grid label {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 10px;
+    min-height: 92px;
+    padding: 14px;
+    border-right: 1px solid #465463;
+    border-bottom: 1px solid #465463;
+    cursor: pointer;
+    color: #8d99a5;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .checkout__stage-grid input { margin: 3px 0 0; accent-color: #7fa9d8; }
+  .checkout__stage-grid strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #f2efe8;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+
+  .checkout__field label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #aeb7c0;
+  }
+
+  .checkout__field input,
+  .checkout__field textarea {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #465463;
+    border-radius: 0;
+    padding: 11px 0 12px;
+    color: #f8f6f1;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .checkout__field textarea { resize: vertical; min-height: 128px; }
+  .checkout__field input::placeholder,
+  .checkout__field textarea::placeholder { color: #727f8b; }
+  .checkout__field input:focus,
+  .checkout__field textarea:focus { outline: 0; border-bottom-color: #7fa9d8; }
+
+  .checkout__hint {
+    color: #8d99a5;
+    font-size: 10px;
+    line-height: 1.55;
+  }
+
+  .checkout__accept {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 12px;
+    align-items: start;
+    color: #aeb7c0;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .checkout__accept input {
+    width: 16px;
+    height: 16px;
+    margin: 2px 0 0;
+    accent-color: #7fa9d8;
+  }
+
+  .checkout__total {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 10px 20px;
+    padding-top: 22px;
+    border-top: 1px solid #33404d;
+  }
+
+  .checkout__total span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #aeb7c0;
+  }
+
+  .checkout__total strong {
+    font-family: var(--font-mono);
+    font-size: clamp(26px, 4vw, 40px);
+    line-height: 1;
+    font-weight: 450;
+    letter-spacing: -.05em;
+  }
+
+  .checkout__total p {
+    grid-column: 1 / -1;
+    margin: 0;
+    text-align: right;
+    font-size: 10px;
+    line-height: 1.5;
+    color: #7fa9d8;
+  }
+
+  .checkout__submit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 0;
+    padding: 18px 20px;
+    color: #f8f6f1;
+    background: #1e5fa8;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 550;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    transition: background-color .2s ease;
+  }
+
+  .checkout__submit:hover { background: #174d89; }
+  .checkout__submit:disabled { cursor: wait; opacity: .62; }
+
+  .checkout__security,
+  .checkout__error {
+    font-size: 10px;
+    line-height: 1.6;
+  }
+
+  .checkout__security { color: #8d99a5; }
+  .checkout__error { color: #ffb4a9; min-height: 1.6em; }
+
+  @media (max-width: 620px) {
+    .checkout { grid-template-columns: 1fr; }
+    .checkout__field { grid-column: 1 / -1; }
+    .checkout__stage-grid { grid-template-columns: 1fr; }
+    .checkout__heading,
+    .checkout__total { align-items: flex-start; flex-direction: column; }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#checkout-consultoria');
+  const errorNode = document.querySelector<HTMLElement>('#checkout-error');
+
+  interface QuotePayload {
+    priceUsd?: number;
+    trmCop?: number;
+    operationalRateCop?: number;
+    spreadPercent?: number;
+    amountCop?: number;
+    effectiveDate?: string;
+    source?: 'sfc';
+  }
+
+  function formatCop(value: number) {
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      maximumFractionDigits: 0,
+    }).format(value);
+  }
+
+  function formatTrm(value: number) {
+    return new Intl.NumberFormat('es-CO', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  }
+
+  async function loadQuote() {
+    const nodes = document.querySelectorAll<HTMLElement>('[data-quote-cop]');
+    if (!nodes.length) return;
+
+    try {
+      const response = await fetch('/api/consultoria/quote', {
+        headers: { Accept: 'application/json' },
+      });
+      const quote = await response.json() as QuotePayload;
+      if (!response.ok || !quote.amountCop || !quote.trmCop || !quote.operationalRateCop) {
+        throw new Error('QUOTE_UNAVAILABLE');
+      }
+
+      const copy = `Hoy pagas ${formatCop(quote.amountCop)} · TRM oficial ${formatTrm(quote.trmCop)} · tasa aplicada ${formatTrm(quote.operationalRateCop)} (+${formatTrm(quote.spreadPercent || 0)}%)`;
+      nodes.forEach((node) => { node.textContent = copy; });
+    } catch {
+      nodes.forEach((node) => {
+        node.textContent = 'El total exacto en COP se calcula antes de abrir Wompi.';
+      });
+    }
+  }
+
+  void loadQuote();
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    const button = form.querySelector<HTMLButtonElement>('.checkout__submit');
+    const data = new FormData(form);
+    const intake = {
+      name: String(data.get('name') || '').trim(),
+      email: String(data.get('email') || '').trim(),
+      phone: String(data.get('phone') || '').trim(),
+      business: String(data.get('business') || '').trim(),
+      frameworkStage: String(data.get('frameworkStage') || '').trim(),
+      problem: String(data.get('problem') || '').trim(),
+    };
+
+    if (intake.problem.length < 20) {
+      if (errorNode) errorNode.textContent = 'Cuéntame el problema con un poco más de contexto.';
+      return;
+    }
+
+    if (button) {
+      button.disabled = true;
+      button.firstElementChild!.textContent = 'abriendo pago seguro…';
+    }
+    if (errorNode) errorNode.textContent = '';
+
+    try {
+      sessionStorage.setItem('omar-consultoria-intake', JSON.stringify(intake));
+
+      const response = await fetch('/api/consultoria/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...intake, accepted: data.get('accepted') === 'on' }),
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.checkoutUrl) {
+        throw new Error(payload.error || 'No pudimos abrir el pago.');
+      }
+      window.location.assign(payload.checkoutUrl);
+    } catch (error) {
+      if (errorNode) {
+        errorNode.textContent = error instanceof Error ? error.message : 'No pudimos abrir el pago.';
+      }
+      if (button) {
+        button.disabled = false;
+        button.firstElementChild!.textContent = 'pagar y escoger horario';
+      }
+    }
+  });
+</script>

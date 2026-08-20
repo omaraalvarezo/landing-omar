@@ -1,0 +1,891 @@
+---
+import Logo from '../Logo.astro';
+import CheckoutForm from './CheckoutForm.astro';
+import { CONSULTING, formatUsd } from '../../lib/consulting';
+import { SOCIALS } from '../../lib/contact';
+import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
+
+const price = formatUsd(CONSULTING.priceUsd);
+const year = new Date().getFullYear();
+
+const PROOF = [
+  {
+    code: 'OP-01',
+    project: 'Grupo Enzo',
+    system: 'Centro de operaciones para dos negocios',
+    detail: 'Caja, cotización, taller, reservas, asistencia, documentos y reportes separados por negocio.',
+    evidence: 'C2 · C3 · C4',
+  },
+  {
+    code: 'OP-02',
+    project: 'Adjudika',
+    system: 'SaaS de inteligencia para SECOP II',
+    detail: 'Radar, análisis documental, pagos por créditos, multiempresa, seguridad por tenant y monitoreo.',
+    evidence: 'C1 · C2 · C3',
+  },
+  {
+    code: 'OP-03',
+    project: 'Arkhē',
+    system: 'Reservas y pagos conectados a la operación',
+    detail: 'Checkout con Wompi, verificación de pagos, reservas y análisis de 1.340 usos históricos.',
+    evidence: 'C1 · C2 · C3',
+  },
+  {
+    code: 'OP-04',
+    project: 'O&P',
+    system: 'Inteligencia de licitaciones e importación',
+    detail: 'Búsqueda SECOP, análisis de requisitos, proveedores, costos y logística internacional.',
+    evidence: 'C1 · C3',
+  },
+];
+
+const PROBLEMS = [
+  ['01', 'Las personas llegan por pauta, contenido, referidos o WhatsApp, pero no todas entran a un embudo que puedas medir.'],
+  ['02', 'Tienes un CRM, pero el seguimiento, la cotización o la siguiente acción todavía dependen de memoria humana.'],
+  ['03', 'La entrega del servicio depende demasiado del dueño, de chats sueltos o de que alguien recuerde el siguiente paso.'],
+  ['04', 'Después de entregar no existe un sistema consistente de postventa, garantías, mantenimiento, NPS o reactivación.'],
+];
+
+const AGENDA = [
+  ['00—20', 'Definir', 'Aislamos el problema y acordamos qué significa resolverlo.'],
+  ['20—55', 'Desarmar', 'Mapeamos datos, decisiones, personas, restricciones y puntos de falla.'],
+  ['55—105', 'Construir', 'Diseñamos el sistema y montamos la primera pieza viable cuando el alcance lo permite.'],
+  ['105—120', 'Cerrar', 'Tomamos decisiones, asignamos próximos pasos y dejamos el criterio documentado.'],
+];
+
+const WRONG_BUILD_COSTS = [
+  ['01', 'Semanas construyendo una herramienta antes de definir la decisión que debía mejorar.'],
+  ['02', 'Más dependencia del dueño porque el criterio nunca salió de su cabeza.'],
+  ['03', 'Automatizaciones que funcionan en una demo y estorban en la operación real.'],
+];
+
+const FAQ = [
+  ['¿Qué es el Marco 4C?', 'Es la forma de ubicar un cuello de botella dentro del ciclo real de una empresa de servicios: Captar demanda, Convertirla en una decisión comercial, Cumplir el servicio y Continuar la relación después de entregar. No intentamos construir las cuatro partes en dos horas; escogemos la que hoy limita al negocio.'],
+  ['¿Qué problema cabe en dos horas?', 'Uno que puedas ubicar en una de las 4C y que ya esté ocurriendo: entrada de leads, CRM, seguimiento, cotización, agenda, ejecución, reportes, postventa, garantías, NPS o reactivación. Si es demasiado amplio, la primera decisión será recortarlo.'],
+  ['¿Vas a construir una aplicación completa durante la sesión?', 'No prometo una aplicación completa en 120 minutos. Sí podemos dejar un prototipo, un flujo o la primera pieza funcionando. Lo importante es salir con una arquitectura que no te haga perder tres meses construyendo lo incorrecto.'],
+  ['¿Necesito saber programar?', 'No. Necesitas conocer tu operación y poder tomar decisiones. Yo traduzco entre negocio, datos, IA y software.'],
+  ['¿Puedo traer a alguien de mi equipo?', 'Sí. Puedes invitar hasta dos personas que conozcan el problema o vayan a ejecutar lo decidido. La sesión necesita un dueño de la decisión.'],
+  ['¿Por qué el precio está en dólares si Wompi cobra pesos?', `USD ${CONSULTING.priceUsd} es el precio base para trabajar con operadores de distintos países. Wompi procesa COP: antes de pagar verás la TRM oficial, la tasa operativa aplicada y el total exacto que quedará firmado en la transacción.`],
+  ['¿Cómo se calcula la tasa operativa?', 'Cada día se consulta la TRM oficial vigente, se aplica un ajuste de 1,65% y se redondea la tasa al siguiente múltiplo de $10 COP. Ese margen absorbe parte de la variación operativa y de los costos de recaudo. Nunca se conserva una tasa manual de un día anterior y siempre ves ambos valores antes de pagar.'],
+  ['¿Qué pasa después del pago?', 'Wompi confirma la transacción y la misma página desbloquea el calendario de Cal.com. Allí eliges el horario; luego contrasto la referencia del pago y apruebo la reserva.'],
+  ['¿Qué pasa si mi problema no cabe en la sesión?', 'Leo el brief antes de confirmar. Si considero que el problema no cabe en dos horas o que no soy la persona indicada, no apruebo la reserva y devuelvo el 100% del pago. No te vendo una llamada que no pueda defender.'],
+  ['¿Qué pasa si necesito reprogramar?', 'Puedes mover la sesión una vez, avisando con al menos 24 horas. Una cancelación tardía consume el espacio porque las dos horas y la preparación ya quedaron reservadas.'],
+];
+---
+
+<div class="consulting">
+  <header class="topbar">
+    <a class="topbar__brand" href="#inicio" aria-label="Omar Álvarez, inicio">
+      <Logo variant="horizontal" size={18} />
+    </a>
+    <nav class="topbar__nav" aria-label="Navegación principal">
+      <a href="#marco">marco 4C</a>
+      <a href="#evidencia">evidencia</a>
+      <a href="#sesion">la sesión</a>
+      <a class="topbar__cta" href="#problema">ver si encaja ↓</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero__index">
+        <span>DE TIKTOK A TU OPERACIÓN</span>
+        <span>NEGOCIO × SISTEMAS × IA</span>
+        <span>CÚCUTA / REMOTO</span>
+      </div>
+
+      <div class="hero__grid">
+        <div class="hero__copy">
+          <p class="hero__eyebrow">LO QUE VES QUE CONSTRUYO / APLICADO A TU NEGOCIO</p>
+          <h1>Tu negocio ya tiene el problema.<br />Démosle forma de <em>sistema.</em></h1>
+          <p class="hero__lead">
+            En TikTok te muestro cómo convierto mis empresas en módulos, datos y decisiones. En esta
+            sesión ubicamos un cuello de botella de captación, CRM, operación o postventa y diseñamos
+            el sistema que debería resolverlo.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="#problema">
+              <span>entender si es para mí</span><span aria-hidden="true">↓</span>
+            </a>
+            <a class="button button--text" href="#evidencia">ver lo que he construido</a>
+          </div>
+        </div>
+
+        <aside class="docket" aria-label="Ficha de la consultoría">
+          <div class="docket__head">
+            <span>FICHA / OA—001</span>
+            <span>VIGENTE {year}</span>
+          </div>
+          <dl>
+            <div><dt>Duración</dt><dd>120 min</dd></div>
+            <div><dt>Formato</dt><dd>Cal Video</dd></div>
+            <div><dt>Participan</dt><dd>1–3 personas</dd></div>
+            <div><dt>Resultado</dt><dd>mapa 4C + sistema</dd></div>
+          </dl>
+          <p class="docket__note">No vienes a ver mis sistemas.<br /><strong>Vienes a trabajar el tuyo.</strong></p>
+          <p class="docket__pay">PROBLEMA → DECISIÓN → PRIMERA PIEZA</p>
+        </aside>
+      </div>
+
+      <div class="hero__ticker" aria-hidden="true">
+        <span>NEGOCIOS REALES</span><span>DATOS REALES</span><span>RESTRICCIONES REALES</span><span>CÓDIGO REAL</span>
+      </div>
+    </section>
+
+    <section class="thesis" aria-labelledby="thesis-title">
+      <p class="section-code">00 / EL PUENTE</p>
+      <div class="thesis__body">
+        <h2 id="thesis-title">Ver cómo lo construyo puede darte ideas.</h2>
+        <p>Trabajarlo sobre tu negocio puede darte una <em>decisión.</em></p>
+      </div>
+    </section>
+
+    <section class="problems ruled" id="problema" aria-labelledby="problems-title">
+      <header class="section-head">
+        <p class="section-code">01 / EL PROBLEMA</p>
+        <h2 id="problems-title">Si algo de esto ocurre cada semana, podemos trabajarlo.</h2>
+      </header>
+      <ol class="problem-list">
+        {PROBLEMS.map(([number, body]) => (
+          <li>
+            <span>{number}</span>
+            <p>{body}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="problems__filter">
+        Trabajo directamente con dueños o socios de empresas de servicios que ya venden, ya atienden
+        clientes y pueden decidir qué proceso debe cambiar primero.
+      </p>
+    </section>
+
+    <section class="framework ruled" id="marco" aria-labelledby="framework-title">
+      <header class="section-head section-head--split">
+        <div>
+          <p class="section-code">02 / MARCO 4C</p>
+          <h2 id="framework-title">La IA sirve cuando entra al ciclo completo del servicio.</h2>
+        </div>
+        <p class="section-intro">
+          No empezamos escogiendo una herramienta. Primero ubicamos dónde se pierde una oportunidad,
+          una hora de trabajo, una decisión o una relación con el cliente.
+        </p>
+      </header>
+
+      <ol class="framework__flow">
+        {SERVICE_SYSTEM_STAGES.map((stage) => (
+          <li>
+            <div class="framework__step">
+              <span>{stage.number}</span>
+              <h3>{stage.name}</h3>
+            </div>
+            <p class="framework__promise">{stage.promise}</p>
+            <p class="framework__question">{stage.question}</p>
+            <p class="framework__examples">{stage.examples}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="framework__ai">
+        <p>IA / CAPA TRANSVERSAL</p>
+        <strong>Extrae, clasifica, propone, redacta y alerta.</strong>
+        <span>Las decisiones sensibles siguen teniendo responsable humano.</span>
+      </div>
+      <p class="framework__closing">
+        En 120 minutos no intentamos automatizar toda la empresa. Elegimos una C, definimos la
+        decisión crítica y diseñamos la pieza más pequeña que pueda entrar a la operación real.
+      </p>
+    </section>
+
+    <section class="proof ruled" id="evidencia" aria-labelledby="proof-title">
+      <header class="section-head section-head--split">
+        <div>
+          <p class="section-code">03 / EVIDENCIA</p>
+          <h2 id="proof-title">No vengo de una agencia.<br />Vengo de operar y construir.</h2>
+        </div>
+        <p class="section-intro">
+          Estos son algunos de los módulos y decisiones que ves en mis videos. No son demos: fueron
+          construidos para cobrar, controlar, decidir, reservar, cotizar, alertar o vender.
+        </p>
+      </header>
+
+      <div class="proof-table" role="list">
+        {PROOF.map((item) => (
+          <article class="proof-row" role="listitem">
+            <p class="proof-row__code">{item.code}</p>
+            <div>
+              <p class="proof-row__project">{item.project}</p>
+              <h3>{item.system}</h3>
+            </div>
+            <p class="proof-row__detail">{item.detail}</p>
+            <p class="proof-row__evidence">{item.evidence}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="proof__closing">
+        <p>Ingeniero electrónico. MBA EAFIT en curso. Fundador de Enzo Motorsport y Arkhē.</p>
+        <strong>Pero la credencial que importa es que los sistemas están operando.</strong>
+      </div>
+    </section>
+
+    <section class="session ruled" id="sesion" aria-labelledby="session-title">
+      <header class="section-head section-head--split">
+        <div>
+          <p class="section-code">04 / 120 MINUTOS</p>
+          <h2 id="session-title">Una mesa de trabajo, no una llamada de inspiración.</h2>
+        </div>
+        <p class="section-intro">
+          Antes de vernos leo tu caso y preparo la mesa. Durante la sesión compartimos pantalla,
+          abrimos los datos, tomamos decisiones y construimos donde tenga sentido.
+        </p>
+      </header>
+
+      <ol class="agenda">
+        {AGENDA.map(([time, title, body]) => (
+          <li>
+            <p class="agenda__time">{time}</p>
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="deliverables">
+        <p class="deliverables__label">AL TERMINAR</p>
+        <ul>
+          <li><span>01</span>Una decisión central tomada</li>
+          <li><span>02</span>La arquitectura del sistema</li>
+          <li><span>03</span>La primera pieza viable, cuando aplique</li>
+          <li><span>04</span>Documento de cierre en 48 horas</li>
+          <li><span>05</span>Grabación y 7 días para dudas puntuales</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cost ruled" aria-labelledby="cost-title">
+      <header class="section-head section-head--split">
+        <div>
+          <p class="section-code">05 / EL COSTO REAL</p>
+          <h2 id="cost-title">Lo caro rara vez son las dos horas.</h2>
+        </div>
+        <p class="section-intro">
+          Lo caro es pasar el siguiente trimestre construyendo algo que no resuelve la decisión,
+          depende otra vez de ti o nunca entra a la rutina del equipo.
+        </p>
+      </header>
+      <ol class="cost-list">
+        {WRONG_BUILD_COSTS.map(([number, body]) => (
+          <li><span>{number}</span><p>{body}</p></li>
+        ))}
+      </ol>
+      <p class="cost__closing">
+        Esta sesión no compra tiempo en mi calendario. Compra una <em>mala ruta menos</em> y una
+        primera versión que puedas defender frente a tu operación.
+      </p>
+    </section>
+
+    <section class="fit ruled" aria-labelledby="fit-title">
+      <p class="section-code">06 / ENCAJE</p>
+      <h2 id="fit-title">La sesión funciona cuando el dueño del problema también puede decidir.</h2>
+      <div class="fit__grid">
+        <article>
+          <p class="fit__signal">SÍ</p>
+          <h3>Vale la pena reservar si…</h3>
+          <ul>
+            <li>eres dueño o socio de una empresa que ya presta servicios;</li>
+            <li>el problema cuesta tiempo, dinero o control;</li>
+            <li>puedes compartir el contexto necesario;</li>
+            <li>quieres participar en la construcción, no delegarla a ciegas.</li>
+          </ul>
+        </article>
+        <article>
+          <p class="fit__signal fit__signal--no">NO</p>
+          <h3>No la reserves todavía si…</h3>
+          <ul>
+            <li>buscas una lista de herramientas o prompts;</li>
+            <li>todavía estás decidiendo qué negocio empezar;</li>
+            <li>esperas una aplicación completa en dos horas;</li>
+            <li>nadie en la sesión puede tomar decisiones.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="faq ruled" aria-labelledby="faq-title">
+      <header class="section-head">
+        <p class="section-code">07 / SIN LETRA PEQUEÑA</p>
+        <h2 id="faq-title">Preguntas que sí conviene resolver.</h2>
+      </header>
+      <div class="faq__list">
+        {FAQ.map(([question, answer], index) => (
+          <details open={index === 0}>
+            <summary><span>{String(index + 1).padStart(2, '0')}</span>{question}<i aria-hidden="true">+</i></summary>
+            <p>{answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="reserve" id="reservar" aria-labelledby="reserve-title">
+      <div class="reserve__intro">
+        <p class="section-code">08 / LA DECISIÓN</p>
+        <h2 id="reserve-title">Si reconociste el problema, trabajémoslo.</h2>
+        <p>
+          Una sola sesión para ubicar tu cuello dentro de las 4C, tomar una decisión y diseñar la
+          primera pieza. Sin llamada comercial previa ni paquete escondido.
+        </p>
+        <div class="reserve__price">
+          <span>PRECIO BASE</span>
+          <strong>{price}</strong>
+          <p data-quote-cop>Calculando el equivalente de hoy en COP…</p>
+        </div>
+        <dl>
+          <div><dt>Sesión</dt><dd>120 minutos</dd></div>
+          <div><dt>Cobro</dt><dd>COP · tasa diaria visible</dd></div>
+          <div><dt>Pago</dt><dd>100% anticipado</dd></div>
+          <div><dt>Si no encaja</dt><dd>devolución del 100%</dd></div>
+          <div><dt>Agenda</dt><dd>Cal.com tras aprobación</dd></div>
+        </dl>
+      </div>
+      <CheckoutForm />
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <Logo variant="horizontal" size={20} />
+      <p>Negocios reales. Sistemas que sí operan.</p>
+    </div>
+    <nav aria-label="Redes sociales">
+      <a href={SOCIALS.tiktok} target="_blank" rel="noopener">TikTok ↗</a>
+      <a href={SOCIALS.instagram} target="_blank" rel="noopener">Instagram ↗</a>
+      <a href={SOCIALS.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+    </nav>
+    <p>© {year} · Cúcuta, Colombia</p>
+  </footer>
+</div>
+
+<style>
+  :global(html) { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  :global(body) { background: #f2efe8; }
+
+  .consulting {
+    --paper: #f2efe8;
+    --paper-2: #e8e3d8;
+    --navy: #111820;
+    --navy-2: #1d2731;
+    --blue: #1e5fa8;
+    --blue-light: #7fa9d8;
+    --line-local: #c7c0b3;
+    --muted-local: #60666b;
+    min-height: 100vh;
+    color: var(--navy);
+    background: var(--paper);
+    font-family: var(--font-sans);
+  }
+
+  .consulting :global(.logo) { color: currentColor; }
+  .consulting :global(.logo .dot) { color: var(--blue); }
+  .consulting h1,
+  .consulting h2,
+  .consulting h3,
+  .consulting p { margin-top: 0; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 68px;
+    padding: 0 clamp(20px, 4vw, 56px);
+    color: var(--navy);
+    background: var(--paper);
+    border-bottom: 1px solid var(--navy);
+  }
+
+  .topbar__brand { display: inline-flex; }
+  .topbar__nav { display: flex; align-items: center; gap: clamp(16px, 2.5vw, 32px); }
+  .topbar__nav a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .05em;
+  }
+  .topbar__nav a:not(.topbar__cta):hover { color: var(--blue); }
+  .topbar__cta { padding: 10px 14px; color: #f8f6f1; background: var(--navy); }
+  .topbar__cta:hover { background: var(--blue); }
+
+  .hero,
+  .ruled,
+  .thesis,
+  .reserve,
+  .site-footer {
+    padding-inline: clamp(20px, 4vw, 56px);
+  }
+
+  .hero { padding-top: 24px; }
+  .hero__index {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    padding: 10px 0;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .14em;
+    color: var(--muted-local);
+    border-bottom: 1px solid var(--line-local);
+  }
+  .hero__index span:last-child { text-align: right; }
+
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(280px, 4fr);
+    min-height: calc(100svh - 130px);
+    border-bottom: 1px solid var(--navy);
+  }
+
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(64px, 10vw, 144px) clamp(24px, 6vw, 88px) clamp(64px, 8vw, 112px) 0;
+    border-right: 1px solid var(--navy);
+  }
+
+  .hero__eyebrow,
+  .section-code {
+    margin-bottom: 28px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 550;
+    letter-spacing: .16em;
+    color: var(--blue);
+  }
+
+  .hero h1 {
+    max-width: 11ch;
+    margin-bottom: 36px;
+    font-family: var(--font-serif);
+    font-size: clamp(56px, 8.25vw, 124px);
+    font-weight: 400;
+    line-height: .91;
+    letter-spacing: -.035em;
+  }
+  .hero h1 em { font-weight: 400; color: var(--blue); }
+
+  .hero__lead {
+    max-width: 58ch;
+    margin-bottom: 36px;
+    font-size: clamp(17px, 1.5vw, 21px);
+    line-height: 1.55;
+    color: #343b41;
+  }
+
+  .hero__actions { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+  }
+  .button--primary { min-width: 250px; padding: 17px 18px; color: #f8f6f1; background: var(--blue); }
+  .button--primary:hover { background: var(--navy); }
+  .button--text { padding-block: 8px; border-bottom: 1px solid var(--navy); }
+
+  .docket {
+    align-self: center;
+    margin: 36px 0 36px clamp(24px, 4vw, 56px);
+    border-top: 5px solid var(--navy);
+    border-bottom: 1px solid var(--navy);
+  }
+  .docket__head,
+  .docket__pay {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+  }
+  .docket__head { padding: 12px 0 18px; }
+  .docket dl { margin: 0; }
+  .docket dl div {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    padding: 13px 0;
+    border-top: 1px solid var(--line-local);
+  }
+  .docket dt { color: var(--muted-local); font-size: 13px; }
+  .docket dd { margin: 0; font-family: var(--font-mono); font-size: 12px; }
+  .docket__note {
+    margin: 0;
+    padding: 42px 0;
+    font-family: var(--font-serif);
+    font-size: clamp(26px, 3vw, 42px);
+    line-height: 1.05;
+    border-top: 1px solid var(--navy);
+  }
+  .docket__note strong { font-weight: 400; color: var(--blue); }
+  .docket__pay { margin: 0; padding: 12px 0; border-top: 1px solid var(--line-local); }
+
+  .hero__ticker {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    overflow: hidden;
+    padding: 13px 0;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .16em;
+    white-space: nowrap;
+  }
+  .hero__ticker span::before { content: '■'; margin-right: 10px; color: var(--blue); }
+
+  .thesis {
+    display: grid;
+    grid-template-columns: 3fr 9fr;
+    gap: clamp(30px, 6vw, 96px);
+    padding-top: clamp(100px, 14vw, 190px);
+    padding-bottom: clamp(100px, 14vw, 190px);
+    color: #f5f2ea;
+    background: var(--navy);
+  }
+  .thesis .section-code { color: var(--blue-light); }
+  .thesis__body h2,
+  .thesis__body p {
+    max-width: 19ch;
+    font-family: var(--font-serif);
+    font-size: clamp(42px, 6.1vw, 90px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -.025em;
+  }
+  .thesis__body h2 { margin-bottom: 1em; color: #8f9ba6; }
+  .thesis__body p { margin-bottom: 0; }
+  .thesis__body em { color: var(--blue-light); }
+
+  .ruled { padding-top: clamp(90px, 12vw, 160px); padding-bottom: clamp(90px, 12vw, 160px); border-bottom: 1px solid var(--navy); }
+  .section-head { display: grid; grid-template-columns: 3fr 9fr; gap: clamp(30px, 6vw, 96px); margin-bottom: clamp(52px, 8vw, 100px); }
+  .section-head--split { grid-template-columns: minmax(0, 7fr) minmax(260px, 4fr); }
+  .section-head h2,
+  .fit > h2,
+  .reserve__intro h2 {
+    max-width: 16ch;
+    margin-bottom: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(42px, 6vw, 84px);
+    font-weight: 400;
+    line-height: .98;
+    letter-spacing: -.025em;
+  }
+  .section-intro {
+    align-self: end;
+    max-width: 48ch;
+    margin: 0 0 4px;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--muted-local);
+  }
+
+  .problem-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--navy); }
+  .problem-list li {
+    display: grid;
+    grid-template-columns: 3fr 9fr;
+    gap: clamp(30px, 6vw, 96px);
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line-local);
+  }
+  .problem-list span { font-family: var(--font-mono); font-size: 11px; color: var(--blue); }
+  .problem-list p { max-width: 55ch; margin: 0; font-size: clamp(18px, 2vw, 28px); line-height: 1.35; }
+  .problems__filter {
+    max-width: 55ch;
+    margin: 52px 0 0 25%;
+    padding-left: 22px;
+    font-family: var(--font-serif);
+    font-size: clamp(22px, 2.5vw, 34px);
+    line-height: 1.25;
+    border-left: 3px solid var(--blue);
+  }
+
+  .framework { background: var(--paper-2); }
+  .framework__flow {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--navy);
+    border-bottom: 1px solid var(--navy);
+  }
+  .framework__flow li {
+    min-height: 390px;
+    padding: 22px clamp(18px, 2.4vw, 34px) 28px;
+    border-right: 1px solid var(--line-local);
+  }
+  .framework__flow li:last-child { border-right: 0; }
+  .framework__step {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 74px;
+  }
+  .framework__step span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--blue);
+  }
+  .framework__step h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(30px, 3vw, 42px);
+    font-weight: 400;
+  }
+  .framework__promise {
+    min-height: 3.2em;
+    margin-bottom: 28px;
+    font-size: clamp(17px, 1.7vw, 22px);
+    font-weight: 550;
+    line-height: 1.35;
+  }
+  .framework__question,
+  .framework__examples {
+    margin-bottom: 14px;
+    color: var(--muted-local);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .framework__examples { margin-bottom: 0; font-family: var(--font-mono); font-size: 10px; }
+  .framework__ai {
+    display: grid;
+    grid-template-columns: 2fr 5fr 4fr;
+    gap: clamp(20px, 4vw, 64px);
+    align-items: baseline;
+    padding: 22px 0;
+    border-bottom: 5px solid var(--navy);
+  }
+  .framework__ai p,
+  .framework__ai strong,
+  .framework__ai span { margin: 0; }
+  .framework__ai p { font-family: var(--font-mono); font-size: 10px; color: var(--blue); }
+  .framework__ai strong { font-size: clamp(17px, 2vw, 24px); font-weight: 550; }
+  .framework__ai span { color: var(--muted-local); font-size: 13px; line-height: 1.5; }
+  .framework__closing {
+    max-width: 37ch;
+    margin: clamp(54px, 8vw, 96px) 0 0 auto;
+    font-family: var(--font-serif);
+    font-size: clamp(26px, 3.4vw, 46px);
+    line-height: 1.12;
+  }
+
+  .proof-table { border-top: 1px solid var(--navy); }
+  .proof-row {
+    display: grid;
+    grid-template-columns: .6fr 2.1fr 2.4fr 1fr;
+    gap: clamp(18px, 3vw, 48px);
+    align-items: start;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--line-local);
+  }
+  .proof-row p { margin-bottom: 0; }
+  .proof-row__code,
+  .proof-row__evidence,
+  .proof-row__project { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; }
+  .proof-row__code { color: var(--blue); }
+  .proof-row__project { margin-bottom: 10px !important; color: var(--muted-local); text-transform: uppercase; }
+  .proof-row h3 { margin: 0; font-size: clamp(19px, 2vw, 26px); font-weight: 500; line-height: 1.2; }
+  .proof-row__detail { color: var(--muted-local); font-size: 14px; line-height: 1.6; }
+  .proof-row__evidence { text-align: right; color: var(--blue); }
+  .proof__closing {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 5px solid var(--navy);
+  }
+  .proof__closing p,
+  .proof__closing strong { margin: 0; font-size: 15px; line-height: 1.55; font-weight: 400; }
+  .proof__closing strong { color: var(--blue); }
+
+  .agenda { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); margin: 0; padding: 0; border-top: 1px solid var(--navy); }
+  .agenda li { min-height: 300px; padding: 20px 22px 28px; border-right: 1px solid var(--line-local); }
+  .agenda li:last-child { border-right: 0; }
+  .agenda__time { font-family: var(--font-mono); font-size: 11px; color: var(--blue); }
+  .agenda h3 { margin-top: 72px; margin-bottom: 14px; font-family: var(--font-serif); font-size: 34px; font-weight: 400; }
+  .agenda li > p:last-child { margin: 0; color: var(--muted-local); font-size: 13px; line-height: 1.6; }
+  .deliverables {
+    display: grid;
+    grid-template-columns: 3fr 9fr;
+    gap: clamp(30px, 6vw, 96px);
+    padding-top: 48px;
+    border-top: 1px solid var(--navy);
+  }
+  .deliverables__label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; color: var(--blue); }
+  .deliverables ul { list-style: none; margin: 0; padding: 0; }
+  .deliverables li { display: flex; gap: 18px; padding: 13px 0; font-size: clamp(17px, 2vw, 24px); border-bottom: 1px solid var(--line-local); }
+  .deliverables li span { min-width: 30px; font-family: var(--font-mono); font-size: 10px; color: var(--blue); }
+
+  .cost { color: #f5f2ea; background: var(--navy); border-bottom-color: #465463; }
+  .cost .section-code { color: var(--blue-light); }
+  .cost .section-intro { color: #aeb7c0; }
+  .cost-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid #465463; }
+  .cost-list li {
+    display: grid;
+    grid-template-columns: 3fr 9fr;
+    gap: clamp(30px, 6vw, 96px);
+    padding: 24px 0;
+    border-bottom: 1px solid #33404d;
+  }
+  .cost-list span { font-family: var(--font-mono); font-size: 11px; color: var(--blue-light); }
+  .cost-list p { max-width: 58ch; margin: 0; font-size: clamp(18px, 2vw, 28px); line-height: 1.35; }
+  .cost__closing {
+    max-width: 27ch;
+    margin: clamp(60px, 9vw, 120px) 0 0 auto;
+    font-family: var(--font-serif);
+    font-size: clamp(32px, 4.6vw, 66px);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+  }
+  .cost__closing em { color: var(--blue-light); font-weight: 400; }
+
+  .fit > h2 { margin-bottom: clamp(52px, 8vw, 88px); }
+  .fit__grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--navy); }
+  .fit article { padding: clamp(24px, 4vw, 48px); }
+  .fit article + article { border-left: 1px solid var(--navy); }
+  .fit__signal { margin-bottom: 56px; font-family: var(--font-mono); font-size: 11px; color: var(--blue); }
+  .fit__signal--no { color: var(--muted-local); }
+  .fit h3 { margin-bottom: 24px; font-family: var(--font-serif); font-size: clamp(28px, 3vw, 42px); font-weight: 400; }
+  .fit ul { margin: 0; padding-left: 20px; color: var(--muted-local); }
+  .fit li { margin-bottom: 12px; padding-left: 5px; line-height: 1.55; }
+
+  .reserve {
+    display: grid;
+    grid-template-columns: minmax(280px, 4fr) minmax(0, 7fr);
+    gap: clamp(36px, 7vw, 112px);
+    padding-top: clamp(90px, 12vw, 160px);
+    padding-bottom: clamp(90px, 12vw, 160px);
+    color: #f4f1ea;
+    background: var(--navy);
+  }
+  .reserve__intro { align-self: start; position: sticky; top: 108px; }
+  .reserve__intro .section-code { color: var(--blue-light); }
+  .reserve__intro h2 { margin-bottom: 32px; }
+  .reserve__intro > p:not(.section-code) { max-width: 42ch; color: #aeb7c0; font-size: 15px; line-height: 1.65; }
+  .reserve__price { margin-top: 42px; padding: 22px 0; border-top: 5px solid #f4f1ea; border-bottom: 1px solid #465463; }
+  .reserve__price span { display: block; margin-bottom: 14px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; color: var(--blue-light); }
+  .reserve__price strong { display: block; font-family: var(--font-serif); font-size: clamp(54px, 6vw, 84px); font-weight: 400; line-height: .92; letter-spacing: -.035em; }
+  .reserve__price p { margin: 16px 0 0; font-family: var(--font-mono); font-size: 10px; line-height: 1.5; color: #aeb7c0; }
+  .reserve__intro dl { margin: 42px 0 0; border-top: 1px solid #465463; }
+  .reserve__intro dl div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid #33404d; }
+  .reserve__intro dt { color: #87939e; font-size: 12px; }
+  .reserve__intro dd { margin: 0; font-family: var(--font-mono); font-size: 11px; }
+
+  .faq__list { border-top: 1px solid var(--navy); }
+  .faq details { border-bottom: 1px solid var(--line-local); }
+  .faq summary {
+    display: grid;
+    grid-template-columns: 54px 1fr 20px;
+    gap: 18px;
+    align-items: center;
+    padding: 23px 0;
+    cursor: pointer;
+    list-style: none;
+    font-size: clamp(16px, 1.6vw, 20px);
+    font-weight: 500;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary span { font-family: var(--font-mono); font-size: 10px; color: var(--blue); }
+  .faq summary i { font-style: normal; font-size: 20px; transition: transform .2s ease; }
+  .faq details[open] summary i { transform: rotate(45deg); }
+  .faq details > p { max-width: 67ch; margin: 0 0 28px 72px; color: var(--muted-local); font-size: 15px; line-height: 1.7; }
+
+  .site-footer {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr auto;
+    gap: 32px;
+    align-items: end;
+    padding-top: 70px;
+    padding-bottom: 34px;
+    color: #f4f1ea;
+    background: var(--navy);
+    border-top: 1px solid #33404d;
+  }
+  .site-footer > div p,
+  .site-footer > p { margin: 14px 0 0; color: #87939e; font-size: 11px; }
+  .site-footer nav { display: flex; flex-wrap: wrap; gap: 18px; }
+  .site-footer nav a { font-family: var(--font-mono); font-size: 10px; color: #aeb7c0; }
+  .site-footer nav a:hover { color: var(--blue-light); }
+
+  @media (max-width: 900px) {
+    .topbar__nav a:not(.topbar__cta) { display: none; }
+    .hero__grid { grid-template-columns: 1fr; }
+    .hero__copy { border-right: 0; border-bottom: 1px solid var(--navy); padding-right: 0; }
+    .docket { margin-left: 0; }
+    .thesis,
+    .section-head,
+    .section-head--split,
+    .deliverables { grid-template-columns: 1fr; }
+    .problem-list li { grid-template-columns: 42px 1fr; gap: 18px; }
+    .cost-list li { grid-template-columns: 42px 1fr; gap: 18px; }
+    .problems__filter { margin-left: 0; }
+    .framework__flow { grid-template-columns: 1fr 1fr; }
+    .framework__flow li:nth-child(2) { border-right: 0; }
+    .framework__flow li:nth-child(-n+2) { border-bottom: 1px solid var(--line-local); }
+    .framework__ai { grid-template-columns: 1fr 2fr; }
+    .framework__ai span { grid-column: 2; }
+    .proof-row { grid-template-columns: 48px 1fr; }
+    .proof-row__detail { grid-column: 2; }
+    .proof-row__evidence { grid-column: 2; text-align: left; }
+    .agenda { grid-template-columns: 1fr 1fr; }
+    .agenda li:nth-child(2) { border-right: 0; }
+    .agenda li:nth-child(-n+2) { border-bottom: 1px solid var(--line-local); }
+    .reserve { grid-template-columns: 1fr; }
+    .reserve__intro { position: static; }
+    .site-footer { grid-template-columns: 1fr 1fr; }
+    .site-footer > p { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 620px) {
+    .topbar { min-height: 60px; }
+    .topbar__cta { font-size: 9px !important; }
+    .hero__index { grid-template-columns: 1fr 1fr; }
+    .hero__index span:nth-child(2) { display: none; }
+    .hero__grid { min-height: auto; }
+    .hero__copy { padding-top: 72px; padding-bottom: 72px; }
+    .hero h1 { font-size: clamp(52px, 17vw, 80px); }
+    .hero__ticker { justify-content: flex-start; }
+    .hero__ticker span:nth-child(n+3) { display: none; }
+    .thesis { padding-top: 100px; padding-bottom: 100px; }
+    .thesis__body h2,
+    .thesis__body p { font-size: 42px; }
+    .proof__closing,
+    .fit__grid,
+    .agenda,
+    .site-footer { grid-template-columns: 1fr; }
+    .framework__flow { grid-template-columns: 1fr; }
+    .framework__flow li,
+    .framework__flow li:nth-child(2) { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line-local); }
+    .framework__flow li:last-child { border-bottom: 0; }
+    .framework__step { margin-bottom: 42px; }
+    .framework__promise { min-height: 0; }
+    .framework__ai { grid-template-columns: 1fr; }
+    .framework__ai span { grid-column: auto; }
+    .fit article + article { border-left: 0; border-top: 1px solid var(--navy); }
+    .agenda li { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line-local); }
+    .agenda h3 { margin-top: 42px; }
+    .faq summary { grid-template-columns: 34px 1fr 18px; gap: 10px; }
+    .faq details > p { margin-left: 44px; }
+    .site-footer > p { grid-column: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html) { scroll-behavior: auto; }
+  }
+</style>

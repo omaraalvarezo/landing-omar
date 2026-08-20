@@ -1,0 +1,258 @@
+---
+interface Props {
+  transactionId: string;
+  initialStatus: string;
+  approved: boolean;
+  calLink?: string;
+}
+
+const { transactionId, initialStatus, approved, calLink = '' } = Astro.props;
+---
+
+<section
+  class="paid-calendar"
+  data-paid-calendar
+  data-transaction-id={transactionId}
+  data-initial-status={initialStatus}
+  data-approved={approved ? 'true' : 'false'}
+  data-cal-link={approved ? calLink : ''}
+>
+  <div class="paid-calendar__status" data-status-panel hidden={approved}>
+    <p class="paid-calendar__code" data-status-code>{initialStatus}</p>
+    <h1 data-status-title>
+      {initialStatus === 'PENDING' ? 'Wompi todavía está confirmando el pago.' : 'No pudimos confirmar este pago.'}
+    </h1>
+    <p data-status-copy>
+      {initialStatus === 'PENDING'
+        ? 'Esta página se actualizará automáticamente. No cierres la ventana.'
+        : 'Revisa el estado en Wompi o vuelve al inicio para intentarlo de nuevo.'}
+    </p>
+    <a href="/#reservar">volver a la consultoría →</a>
+  </div>
+
+  <div class="paid-calendar__approved" data-approved-panel hidden={!approved}>
+    <div class="paid-calendar__intro">
+      <p class="paid-calendar__code">PAGO APROBADO / PASO 02</p>
+      <h1>Ahora escoge las dos horas.</h1>
+      <p>
+        El pago quedó confirmado. Elige el horario en Cal.com y responde las preguntas de preparación.
+        La reserva solo queda completa cuando recibas el correo del calendario.
+      </p>
+      <dl>
+        <div><dt>Duración</dt><dd>120 min</dd></div>
+        <div><dt>Zona horaria</dt><dd>la detecta Cal.com</dd></div>
+        <div><dt>Formato</dt><dd>Cal Video</dd></div>
+      </dl>
+    </div>
+
+    <div class="paid-calendar__embed-wrap">
+      <div class="paid-calendar__embed" data-cal-target></div>
+      <div class="paid-calendar__missing" data-cal-missing hidden>
+        <p>Tu pago está confirmado, pero el calendario todavía no está disponible.</p>
+        <p>Conserva esta página: la referencia de Wompi es suficiente para validar tu sesión.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .paid-calendar {
+    min-height: 100svh;
+    padding: clamp(28px, 5vw, 72px);
+    color: #111820;
+    background: #f2efe8;
+  }
+
+  .paid-calendar__status {
+    max-width: 760px;
+    margin: 10vh auto 0;
+    padding-top: 24px;
+    border-top: 6px solid #111820;
+  }
+
+  .paid-calendar__code {
+    margin: 0 0 36px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .15em;
+    color: #1e5fa8;
+  }
+
+  .paid-calendar h1 {
+    max-width: 12ch;
+    margin: 0 0 28px;
+    font-family: var(--font-serif);
+    font-size: clamp(48px, 7vw, 90px);
+    line-height: .98;
+    letter-spacing: -.03em;
+    font-weight: 400;
+  }
+
+  .paid-calendar__status > p:not(.paid-calendar__code),
+  .paid-calendar__intro > p:not(.paid-calendar__code) {
+    max-width: 52ch;
+    color: #60666b;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .paid-calendar__status a {
+    display: inline-block;
+    margin-top: 28px;
+    padding-bottom: 3px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border-bottom: 1px solid #111820;
+  }
+
+  .paid-calendar__approved {
+    display: grid;
+    grid-template-columns: minmax(280px, 4fr) minmax(0, 7fr);
+    gap: clamp(36px, 7vw, 100px);
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+
+  .paid-calendar__intro { padding-top: 24px; border-top: 6px solid #111820; }
+  .paid-calendar__intro dl { margin: 42px 0 0; border-top: 1px solid #111820; }
+  .paid-calendar__intro dl div { display: flex; justify-content: space-between; gap: 20px; padding: 13px 0; border-bottom: 1px solid #c7c0b3; }
+  .paid-calendar__intro dt { color: #60666b; font-size: 13px; }
+  .paid-calendar__intro dd { margin: 0; font-family: var(--font-mono); font-size: 10px; }
+
+  .paid-calendar__embed-wrap { min-height: 700px; background: #faf8f3; border: 1px solid #c7c0b3; }
+  .paid-calendar__embed { min-height: 700px; overflow: auto; }
+  .paid-calendar__missing { padding: clamp(32px, 6vw, 72px); }
+  .paid-calendar__missing p { max-width: 48ch; line-height: 1.6; }
+
+  @media (max-width: 850px) {
+    .paid-calendar__approved { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import Cal from '@calcom/embed-snippet';
+
+  interface Intake {
+    name?: string;
+    email?: string;
+    phone?: string;
+    business?: string;
+    frameworkStage?: string;
+    problem?: string;
+  }
+
+  interface StatusPayload {
+    status?: string;
+    approved?: boolean;
+    calLink?: string;
+  }
+
+  const root = document.querySelector<HTMLElement>('[data-paid-calendar]');
+  const statusPanel = root?.querySelector<HTMLElement>('[data-status-panel]');
+  const approvedPanel = root?.querySelector<HTMLElement>('[data-approved-panel]');
+  const statusCode = root?.querySelector<HTMLElement>('[data-status-code]');
+  const statusTitle = root?.querySelector<HTMLElement>('[data-status-title]');
+  const statusCopy = root?.querySelector<HTMLElement>('[data-status-copy]');
+  const calTarget = root?.querySelector<HTMLElement>('[data-cal-target]');
+  const calMissing = root?.querySelector<HTMLElement>('[data-cal-missing]');
+
+  function intake(): Intake {
+    try {
+      return JSON.parse(sessionStorage.getItem('omar-consultoria-intake') || '{}') as Intake;
+    } catch {
+      return {};
+    }
+  }
+
+  function mountCalendar(calLink: string) {
+    if (!calTarget || calTarget.dataset.mounted === 'true') return;
+    if (!calLink) {
+      calMissing?.removeAttribute('hidden');
+      return;
+    }
+
+    const details = intake();
+    const transactionId = root?.dataset.transactionId || '';
+    const stageLabels: Record<string, string> = {
+      captar: 'C1 · Captar',
+      convertir: 'C2 · Convertir',
+      cumplir: 'C3 · Cumplir',
+      continuar: 'C4 · Continuar',
+    };
+    const notes = [
+      details.business ? `Negocio: ${details.business}` : '',
+      details.frameworkStage ? `Marco 4C: ${stageLabels[details.frameworkStage] || details.frameworkStage}` : '',
+      details.problem ? `Problema: ${details.problem}` : '',
+      details.phone ? `WhatsApp: ${details.phone}` : '',
+      transactionId ? `Transacción Wompi: ${transactionId}` : '',
+    ].filter(Boolean).join('\n');
+
+    const namespace = 'consultoria-2h';
+    const cal = Cal();
+    cal('init', namespace, { origin: 'https://cal.com' });
+    cal.ns[namespace]('ui', {
+      cssVarsPerTheme: {
+        light: { 'cal-brand': '#1E5FA8' },
+        dark: { 'cal-brand': '#7FA9D8' },
+      },
+      hideEventTypeDetails: false,
+      layout: 'month_view',
+    });
+    cal.ns[namespace]('inline', {
+      elementOrSelector: calTarget,
+      calLink,
+      config: {
+        layout: 'month_view',
+        theme: 'light',
+        name: details.name || '',
+        email: details.email || '',
+        notes,
+      },
+    });
+    calTarget.dataset.mounted = 'true';
+  }
+
+  function showApproved(calLink: string) {
+    statusPanel?.setAttribute('hidden', '');
+    approvedPanel?.removeAttribute('hidden');
+    mountCalendar(calLink);
+  }
+
+  async function pollStatus(transactionId: string) {
+    for (let attempt = 0; attempt < 12; attempt += 1) {
+      try {
+        const response = await fetch(`/api/consultoria/status?id=${encodeURIComponent(transactionId)}`, {
+          headers: { Accept: 'application/json' },
+          cache: 'no-store',
+        });
+        const payload = await response.json() as StatusPayload;
+        if (payload.approved) {
+          showApproved(payload.calLink || '');
+          return;
+        }
+        if (payload.status && payload.status !== 'PENDING' && payload.status !== 'UNKNOWN') {
+          if (statusCode) statusCode.textContent = payload.status;
+          if (statusTitle) statusTitle.textContent = 'El pago no fue aprobado.';
+          if (statusCopy) statusCopy.textContent = 'Puedes volver a Wompi, usar otro medio de pago o iniciar una reserva nueva.';
+          return;
+        }
+      } catch {
+        // La siguiente iteración vuelve a consultar; no asumimos éxito.
+      }
+      await new Promise((resolve) => window.setTimeout(resolve, 2_500));
+    }
+
+    if (statusCode) statusCode.textContent = 'VERIFICACIÓN DEMORADA';
+    if (statusTitle) statusTitle.textContent = 'Wompi está tardando más de lo normal.';
+    if (statusCopy) statusCopy.textContent = 'Recarga esta página en unos minutos. El pago no se perderá y nunca habilitamos la agenda sin confirmarlo.';
+  }
+
+  if (root) {
+    const transactionId = root.dataset.transactionId || '';
+    if (root.dataset.approved === 'true') {
+      showApproved(root.dataset.calLink || '');
+    } else if (transactionId) {
+      void pollStatus(transactionId);
+    }
+  }
+</script>

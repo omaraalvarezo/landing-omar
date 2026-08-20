@@ -1,39 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="omar.alvarez · Negocios reales, código real">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Consultoría 2H con Omar Álvarez">
   <title>omar.alvarez — Open Graph card</title>
-  <desc>Card editorial: wordmark omar.alvarez en Geist Mono Medium con punto en azul señal sobre fondo claro, tagline "Negocios reales, código real".</desc>
-  <rect width="1200" height="630" fill="#FAFAF9"/>
+  <desc>Marco 4C para convertir un cuello de botella de una empresa de servicios en sistema.</desc>
+  <rect width="1200" height="630" fill="#F2EFE8"/>
 
   <!-- Top header: pillar + path -->
   <text x="64" y="64"
         font-family="ui-monospace, 'Geist Mono', monospace"
         font-size="18" font-weight="500" fill="#525252"
-        letter-spacing="3.24">PERFIL · OPERADOR EDITORIAL</text>
+        letter-spacing="3.24">CONSULTORÍA PRIVADA · 120 MIN</text>
   <text x="1136" y="64" text-anchor="end"
         font-family="ui-monospace, 'Geist Mono', monospace"
         font-size="18" fill="#525252"
         letter-spacing="0.7">~/omar.alvarez</text>
   <line x1="64" y1="84" x2="1136" y2="84" stroke="#E5E5E2" stroke-width="0.5"/>
 
-  <!-- Wordmark -->
-  <text x="64" y="340"
-        font-family="ui-monospace, 'Geist Mono', monospace"
-        font-size="132" font-weight="500" fill="#0A0A0A"
-        letter-spacing="-3.3">
-    <tspan>omar</tspan><tspan fill="#1E5FA8">.</tspan><tspan>alvarez</tspan>
-  </text>
-
-  <!-- Tagline editorial -->
-  <text x="64" y="430"
+  <text x="64" y="260"
         font-family="'Instrument Serif', Georgia, serif"
-        font-size="44" fill="#262626"
-        letter-spacing="-0.66">Negocios reales, código real.</text>
+        font-size="76" fill="#111820"
+        letter-spacing="-1.4">Un cuello de botella real.</text>
+  <text x="64" y="340"
+        font-family="'Instrument Serif', Georgia, serif"
+        font-size="76" fill="#111820"
+        letter-spacing="-1.4">Dos horas para darle forma de <tspan fill="#1E5FA8" font-style="italic">sistema.</tspan></text>
+
+  <text x="64" y="444"
+        font-family="ui-monospace, 'Geist Mono', monospace"
+        font-size="24" fill="#111820"
+        letter-spacing="0.4">USD 797 · EQUIVALENTE COP VÍA WOMPI</text>
 
   <!-- Footer line -->
   <line x1="64" y1="552" x2="1136" y2="552" stroke="#E5E5E2" stroke-width="0.5"/>
   <text x="64" y="592"
         font-family="ui-monospace, 'Geist Mono', monospace"
         font-size="18" font-weight="500" fill="#525252"
-        letter-spacing="3.24">IA APLICADA · OPERACIÓN · CRITERIO</text>
+        letter-spacing="2.1">CAPTAR · CONVERTIR · CUMPLIR · CONTINUAR</text>
   <text x="1136" y="592" text-anchor="end"
         font-family="ui-monospace, 'Geist Mono', monospace"
         font-size="18" fill="#525252"

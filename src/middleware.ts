@@ -11,7 +11,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     const secret = import.meta.env.SESSION_SECRET;
 
     context.locals.adminUnlocked =
-      !!cookie?.value && !!secret && !!verify(cookie.value, secret);
+      !!cookie?.value && !!secret && !!(await verify(cookie.value, secret));
   }
   return next();
 });

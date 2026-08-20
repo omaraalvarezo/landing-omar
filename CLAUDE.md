@@ -1,12 +1,42 @@
-# PROYECTO: Landing Omar Álvarez — Marca Personal v2.1
+# PROYECTO: Landing Omar Álvarez — Consultoría 2H v3.2
 
 ## Contexto del proyecto
 
 **Dueño:** Omar Álvarez — CEO de Grupo Empresarial Enzo S.A.S. (Enzo Motorsport + Arkhē Coworking), Cúcuta, Colombia.
-**Objetivo:** Landing world-class para vender consultorías de IA aplicada a operación real de pymes LATAM. Conversión 100% vía Cal.com (`omaralvarezo/onboarding-20min`, 20 min gratis). Cero contacto directo público (sin WhatsApp ni email visible) desde 2026-05-18.
+**Objetivo:** Landing de conversión TikTok → convicción → una sola oferta: Sesión de arquitectura operativa con IA, 120 minutos, `USD 797` cobrados en COP con tasa operativa diaria. Público: dueños y socios de empresas de servicios que quieren mejorar captación, CRM, operación o postventa. Conversión: lectura → Marco 4C → brief → Wompi → verificación server-side → Cal.com. No hay llamada gratuita, pack, retainer ni contacto directo público.
 **Brand:** sigue **omar-brand v2.1** (skill `omar-brand-SKILL-v2.1.md` del brand kit OAAO). Toda decisión visual debe consultar primero ese SKILL.
 
 **Benchmark visual obligatorio:** Stratechery, The Generalist, Linear, Vercel docs, Attio, Brittany Chiang. Si no se siente al nivel, no está terminada.
+
+## Oferta vigente — v3.2 (reemplaza cualquier oferta descrita más abajo)
+
+| Campo | Valor |
+|---|---|
+| Producto | Sesión de arquitectura operativa con IA |
+| Duración | 120 minutos |
+| Precio base | `USD 797` |
+| Cobro | COP con tasa operativa diaria = TRM oficial + 1,65%, redondeada al siguiente múltiplo de $10 |
+| Pago | 100% anticipado por Wompi |
+| Agenda | Cal.com se desbloquea únicamente tras pago `APPROVED` |
+| Participantes | Dueño de la decisión + hasta 2 personas del equipo |
+| Incluye | Preparación, sesión, documento de cierre, grabación y 7 días de dudas puntuales |
+
+**Regla de conversión:** el servidor consulta la vigencia oficial para la fecha de Bogotá, aplica el
+spread de 1,65%, redondea la tasa operativa al siguiente múltiplo de `$10 COP`, fija y firma el monto
+en COP. La página muestra TRM, tasa aplicada y total. No existe fallback manual entre fechas: una
+lectura oficial ya validada puede reutilizarse solo durante su misma fecha de Bogotá; si no hay una
+vigente, el checkout falla cerrado. La referencia
+codifica el total cotizado para validarlo sin base de datos. El redirect de Wompi nunca se considera
+prueba de pago. Solo se muestra Cal.com cuando la API confirma estado `APPROVED`, referencia del
+producto, monto cotizado exacto y moneda COP. Las referencias antiguas de `$2.400.000 COP` siguen
+siendo verificables para no romper pagos emitidos antes de v3.1.
+
+**Código vigente del home:** `src/components/consulting/`. Los componentes v2 siguen en disco por
+historial y para preservar cambios locales, pero `src/pages/index.astro` no los publica.
+
+**Marco comercial vigente:** 4C — `Captar → Convertir → Cumplir → Continuar`. La IA es una capa
+transversal para extraer, clasificar, proponer, redactar y alertar; las decisiones sensibles conservan
+un responsable humano. El brief obliga a escoger una C antes de abrir el pago.
 
 ---
 
@@ -325,6 +355,8 @@ Todo en `src/lib/contact.ts`:
 6. Continuar desde el último hito del README.md.
 
 ## Changelog
+- **2026.08.19** — v3.1: recorrido reordenado para tráfico de TikTok; el precio desaparece del hero y solo aparece después de problema, evidencia, sesión, costo de equivocarse, encaje y FAQ. Precio base `USD 797`, conversión diaria con TRM oficial y cobro Wompi en COP. Referencia de pago con monto cotizado, compatibilidad con referencias v3.0 y garantía explícita de devolución si el brief no encaja.
+- **2026.08.19** — v3.0: reconstrucción completa alrededor de una sola consultoría de 120 minutos a `$2.400.000 COP`. Nueva dirección visual "expediente de trabajo" sin bento, gradientes, cursor custom ni loader. Flujo brief → Wompi Checkout Web → verificación estricta del pago → Cal.com privado. Se retiran del home la llamada gratuita de 20 minutos, la sesión de 90 minutos y el pack de 5.
 - **2026.05.22** — Pivot a consultoría 1:1 por sesión. Oferta colapsada de 4 servicios escalonados (Claude a tu medida / Mapa de IA / Implementación / Acompañamiento) a UNA línea con dos formatos: Sesión 1:1 (90 min) o Pack de 5 sesiones. Refactor de copy en Hero (badge "AGENDA ABIERTA · SESIONES 1:1", bajo en voz operador, trust-row sin Quick Win), Profile (headline "Operador de dos negocios"), ForWho (3 perfiles en voz Omar persona), Services (4→2 tarjetas, label puntual/recurrente, accents bronce + terracota), Method (llamada→preparación→sesión→cierre), FAQ (elimino 3, reescribo 5, agrego 5 — total 11), Cases (CTA "agendar llamada de 20 min"), ContactForm (headline "Cuéntame qué te tiene pensando", mini formulario opcional de pre-llenado encima del Cal embed con 3 campos que abren modal Cal con name + notes pre-rellenados). Meta description + schema.org alineados. Eliminadas todas las referencias a Quick Win Brief, tiers Light/Estándar/Plus, Esencial/Avanzado, "2 CUPOS Q2 2026", "agendar onboarding". Helper nuevo `combinePrefillNotes()` en `contact.ts`.
 - **2026.05.18** — Eliminación total de contacto directo (WhatsApp + email) de la landing pública. Conversión 100% por Cal.com: nuevo `CalRuntime.astro` (init global + soporte inline), variante `accent` en `CalEmbed.astro`, `BookFloat.astro` reemplaza `WhatsAppFloat.astro`, sección 07 reescrita como split editorial + calendario inline, FAQ P7/P8 subidas al inicio, trust-row debajo del CTA del Hero. `src/lib/contact.ts` migrado a API Cal (`CAL_LINK`, `calButtonAttrs`, `calBookUrl`). Schema.org Person limpio (sin email). Sweep limpio: 0 ocurrencias de `wa.me`, `573202569486`, `omaraalvarezo@gmail.com` en bundle.
 - **2026.05.11 (pm)** — Pase frontend-design: reescritura del hero (headline con tensión, badge con cupos, métricas FACT-XX, créditos académicos express), métricas + anotación −41% en Cases, strip de cierre del bento → CTA, selects de calificación opcionales + salida directa WhatsApp/email en ContactForm, statement editorial en footer finale. Decisión tipográfica 3-familias formalizada (`wiki/decisiones/tipografia-3-familias-landing.md`). Reconciliada la sección Tipografía del CLAUDE.md.

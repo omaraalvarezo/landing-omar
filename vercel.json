@@ -11,7 +11,7 @@
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), interest-cohort=()" },
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
         { "key": "X-DNS-Prefetch-Control", "value": "on" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://app.cal.com https://cal.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://app.cal.com https://cal.com https://*.vercel-insights.com https://va.vercel-scripts.com; frame-src https://app.cal.com https://cal.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests" }
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://app.cal.com https://cal.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://app.cal.com https://cal.com https://cloudflareinsights.com https://*.cloudflareinsights.com; frame-src https://app.cal.com https://cal.com; object-src 'none'; base-uri 'self'; form-action 'self' https://checkout.wompi.co; frame-ancestors 'none'; upgrade-insecure-requests" }
       ]
     },
     {
@@ -26,6 +26,13 @@
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
         { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/consultoria/agendar",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, max-age=0" }
       ]
     },
     {

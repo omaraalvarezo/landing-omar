@@ -9,9 +9,9 @@ export default defineConfig({
   // con `export const prerender = false` (corren serverless).
   // El modo 'hybrid' fue eliminado en Astro 5.
   output: 'static',
-  adapter: vercel({
-    webAnalytics: { enabled: true },
-  }),
+  // La analítica de tráfico vive en Cloudflare. El script de Vercel Analytics devolvía 404
+  // detrás del dominio proxied y generaba ruido de consola sin aportar una segunda medición útil.
+  adapter: vercel(),
   integrations: [
     tailwind({ applyBaseStyles: false }),
   ],

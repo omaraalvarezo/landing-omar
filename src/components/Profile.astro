@@ -1,6 +1,6 @@
 ---
 // src/components/Profile.astro
-// Sección 01 · PERFIL — bio del operador, no del consultor.
+// Sección 01 · PERFIL — bio del CEO que gestiona dos negocios y construye sistemas.
 //
 // Grid split 5/7 en desktop cuando hay foto; mientras no, el body ocupa una sola
 // columna con max-width natural. Headline serif + 2 párrafos en primera persona
@@ -11,10 +11,10 @@
 import SectionLabel from './SectionLabel.astro';
 
 const CREDS = [
-  { label: 'MBA',   value: 'EAFIT (intercambio La Salle Barcelona)' },
-  { label: 'ING.',  value: 'UPB Medellín' },
-  { label: 'OPERA', value: 'Enzo Motorsport · Arkhē Coworking · Importación O&P' },
-  { label: 'BASE',  value: 'Cúcuta, Colombia' },
+  { label: 'MBA',         value: 'EAFIT (intercambio La Salle Barcelona)' },
+  { label: 'ING.',        value: 'UPB Medellín' },
+  { label: 'FUNDADOR DE', value: 'Enzo Motorsport · Arkhē Coworking' },
+  { label: 'BASE',        value: 'Cúcuta, Colombia' },
 ];
 ---
 
@@ -28,7 +28,7 @@ const CREDS = [
       <figure class="profile__photo">
         <img
           src="/omar-portrait.jpg"
-          alt="Omar Álvarez, operador y consultor de IA aplicada para pymes"
+          alt="Omar Álvarez, consultor de negocios e implementación de IA para pymes"
           width="1080"
           height="1440"
           loading="lazy"
@@ -41,20 +41,21 @@ const CREDS = [
       <!-- Body editorial -->
       <div class="profile__body">
         <h2 id="profile-title" class="profile__headline" data-split-reveal style="--reveal-stagger: 35ms;">
-          Operador de dos negocios. Documento lo que <span class="accent-italic">construyo</span>.
+          Documento lo que <span class="accent-italic">construyo</span>.
         </h2>
 
         <p class="profile__para" data-reveal>
-          Tengo dos negocios reales en Cúcuta: <strong>Enzo Motorsport</strong>, taller
-          premium de servicios automotrices, y <strong>Arkhē Coworking</strong>, un
-          café-coworking de 240 m². Ingeniero electrónico de UPB Medellín y MBA en
-          curso en EAFIT con intercambio en La Salle Barcelona.
+          Tengo dos negocios en Cúcuta: <strong>Enzo Motorsport</strong>, taller de
+          servicios automotrices, y <strong>Arkhē Coworking</strong>, un café-coworking.
         </p>
 
         <p class="profile__para" data-reveal>
-          No soy consultor que también tiene negocios — soy operador que también
-          consulta. Todo lo que enseño lo uso primero conmigo mismo, con mi equipo,
-          con mi plata. Si algo no me funciona a mí, no te lo voy a vender.
+          Ya solté la operación del día a día — el trabajo ahora es construir sistemas
+          para que los negocios funcionen sin mí en cada decisión: contratar bien,
+          definir qué medir, ver qué le falta a la operación para crecer. Años operando
+          Enzo y Arkhē me enseñaron qué se rompe en la práctica; el MBA me dio el marco
+          para aplicar lo mismo a cualquier negocio. Esa mezcla es la que aporto cuando
+          trabajamos el tuyo.
         </p>
 
         <blockquote class="profile__pull" data-reveal>

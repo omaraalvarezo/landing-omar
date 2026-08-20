@@ -16,7 +16,9 @@ _(vacío)_
 
 ### Síntesis
 
-_(vacío)_
+- [[wiki/sintesis/precio-psicologico-trm-tiktok]] — 2026-08-19 — evidencia de pricing, USD 797, TRM y secuencia TikTok.
+- [[wiki/sintesis/posicionamiento-consultoria-dos-horas]] — 2026-08-19 — oferta única, ticket, cliente y flujo Wompi → Cal.com.
+- [[wiki/sintesis/framework-4c-empresas-servicios]] — 2026-08-20 — Captar, Convertir, Cumplir y Continuar para dueños y socios de empresas de servicios.
 
 ---
 
@@ -40,5 +42,5 @@ _(vacío)_
 
 ---
 
-> **Última revisión:** 2026-05-11
+> **Última revisión:** 2026-08-19
 > **Convención de actualización:** cada vez que se agrega una página a `wiki/` o un archivo a `raw/`, sumar una línea aquí con `[[ruta]]` y una descripción de ≤ 80 caracteres.

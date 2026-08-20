@@ -391,12 +391,6 @@ import { CAL_LINK, CAL_NAMESPACE, calBookUrl } from '../lib/contact';
   // Si todos los campos vienen vacíos, hace scroll al calendario inline.
   import { combinePrefillNotes } from '../lib/contact';
 
-  declare global {
-    interface Window {
-      Cal: any;
-    }
-  }
-
   const form = document.querySelector<HTMLFormElement>('[data-prefill-form]');
   const submitBtn = form?.querySelector<HTMLButtonElement>('[data-prefill-submit]');
   const inlineEmbed = document.querySelector<HTMLElement>('[data-cal-inline]');

@@ -1,26 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import Marquee from '../components/Marquee.astro';
-import Profile from '../components/Profile.astro';
-import ForWho from '../components/ForWho.astro';
-import Services from '../components/Services.astro';
-import Method from '../components/Method.astro';
-import Cases from '../components/Cases.astro';
-import FAQ from '../components/FAQ.astro';
-import ContactForm from '../components/ContactForm.astro';
-import Footer from '../components/Footer.astro';
+import ConsultingLanding from '../components/consulting/ConsultingLanding.astro';
 ---
 
-<Layout>
-  <Hero />
-  <Marquee />
-  <Profile />
-  <ForWho />
-  <Services />
-  <Method />
-  <Cases />
-  <FAQ />
-  <ContactForm />
-  <Footer />
+<Layout
+  title="Marco 4C para empresas de servicios — Consultoría 2H con Omar Álvarez"
+  description="Una sesión para dueños y socios que quieren mejorar captación, CRM, operación o postventa con sistemas e inteligencia artificial aplicados al negocio real."
+  showNav={false}
+  minimal
+>
+  <ConsultingLanding />
 </Layout>

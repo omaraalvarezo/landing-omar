@@ -1,0 +1,39 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import PaidCalendar from '../../components/consulting/PaidCalendar.astro';
+import { fetchTransaction, isApprovedConsultingPayment } from '../../lib/wompi-consulting';
+
+const rawTransactionId = Astro.url.searchParams.get('id') || '';
+const transactionId = /^[A-Za-z0-9_-]{8,100}$/.test(rawTransactionId) ? rawTransactionId : '';
+let initialStatus = transactionId ? 'UNKNOWN' : 'INVALID';
+let approved = false;
+let calLink = '';
+
+if (transactionId) {
+  try {
+    const transaction = await fetchTransaction(transactionId);
+    initialStatus = transaction?.status || 'NOT_FOUND';
+    approved = isApprovedConsultingPayment(transaction);
+    if (approved) calLink = String(import.meta.env.CAL_CONSULTING_LINK || '').trim();
+  } catch {
+    initialStatus = 'UNKNOWN';
+  }
+}
+---
+
+<Layout
+  title="Escoge tu horario — Consultoría con Omar Álvarez"
+  description="Agenda privada posterior al pago de la consultoría de arquitectura operativa con IA."
+  showNav={false}
+  minimal
+  noIndex
+>
+  <PaidCalendar
+    transactionId={transactionId}
+    initialStatus={initialStatus}
+    approved={approved}
+    calLink={calLink}
+  />
+</Layout>

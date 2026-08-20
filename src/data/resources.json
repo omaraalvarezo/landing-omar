@@ -1,9 +1,9 @@
 [
   {
-    "slug": "prompt-bot-whatsapp-reportes",
-    "title": "Prompt — Bot de WhatsApp para reportes diarios",
+    "slug": "prompt-bot-telegram-reportes",
+    "title": "Prompt — Bot de Telegram para reportes diarios",
     "description": "El prompt completo que opera el reporte automático de Enzo Motorsport. Llega un mensaje cada 8pm con ventas, porcentaje de insumos, márgenes y alertas operativas. Adaptable a cualquier pyme con POS.",
-    "longDescription": "Esto es el system prompt que opera mi reporte nocturno de Enzo Motorsport. Cada noche a las 8pm me llega un WhatsApp con las ventas del día, el porcentaje de insumos sobre venta, el margen estimado y alertas si algo se sale del rango que yo definí.\n\nNo abro POS, no abro Excel — leo el chat. Lo armé porque me cansé de cerrar el día a ciegas y enterarme al fin de mes que algo venía mal hace 3 semanas. Funciona con cualquier negocio que tenga POS y un script que mande los datos al modelo. Adáptalo a tu vertical, cambia los umbrales por los que a ti te importan.",
+    "longDescription": "Esto es el system prompt que opera mi reporte nocturno de Enzo Motorsport. Cada noche a las 8pm me llega un mensaje de Telegram con las ventas del día, el porcentaje de insumos sobre venta, el margen estimado y alertas si algo se sale del rango que yo definí.\n\nNo abro POS, no abro Excel — leo el chat. Lo armé porque me cansé de cerrar el día a ciegas y enterarme al fin de mes que algo venía mal hace 3 semanas. Funciona con cualquier negocio que tenga POS y un script que mande los datos al modelo. Adáptalo a tu vertical, cambia los umbrales por los que a ti te importan.",
     "usefulFor": [
       "Saber cómo te fue el día sin abrir POS ni preguntarle a nadie del equipo.",
       "Recibir alertas automáticas cuando los insumos se disparan, antes de que sea problema de fin de mes.",
@@ -23,7 +23,7 @@
     ],
     "area": "marketing",
     "tipo": "prompt",
-    "fileName": "prompt-bot-whatsapp-reportes.md",
+    "fileName": "prompt-bot-telegram-reportes.md",
     "sizeBytes": 1419,
     "updatedAt": "2026-04-27",
     "featured": true,

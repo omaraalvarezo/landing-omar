@@ -1,6 +1,6 @@
 ---
 import SectionLabel from './SectionLabel.astro';
-import { LineChart, ChartColumn, Ship } from '@lucide/astro';
+import { LineChart, ChartColumn, Ship, FileText } from '@lucide/astro';
 import { calButtonAttrs } from '../lib/contact';
 
 const calAttrs = calButtonAttrs({ notes: 'Vi los casos y quiero agendar mi llamada de 20 min.' });
@@ -14,18 +14,18 @@ const calAttrs = calButtonAttrs({ notes: 'Vi los casos y quiero agendar mi llama
 
     <div class="cases__content">
       <h2 id="cases-title" class="h2-section cases__headline" data-split-reveal style="--reveal-stagger: 35ms;">
-        Tres negocios. Tres formas de <span class="accent-italic">apalancar</span> con IA.
+        Cuatro proyectos. Cuatro formas de <span class="accent-italic">apalancar</span> con IA.
       </h2>
 
       <div class="cases__bento">
-        <!-- Caso 1: Enzo (grande) -->
-        <article class="case case--lg" data-reveal>
+        <!-- Caso 1: Enzo -->
+        <article class="case" data-reveal>
           <div class="case__head">
             <div class="case__meta">
               <LineChart class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
               <span>enzo motorsport · sector automotriz</span>
             </div>
-            <h3 class="case__title">Tablero financiero + reporte diario por WhatsApp</h3>
+            <h3 class="case__title">Tablero financiero + reporte diario por Telegram</h3>
             <p class="case__desc">
               Reporte automático cada 8pm con ventas del día, porcentaje de insumos y márgenes por servicio. Asistente que responde preguntas sobre el negocio.
             </p>
@@ -125,15 +125,43 @@ const calAttrs = calButtonAttrs({ notes: 'Vi los casos y quiero agendar mi llama
             </ol>
           </div>
         </article>
+
+        <!-- Caso 4: Cotizador multimarca (Enzo + Arkhē) -->
+        <article class="case" data-reveal>
+          <div class="case__head">
+            <div class="case__meta">
+              <FileText class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
+              <span>cotizador · enzo + arkhē</span>
+            </div>
+            <h3 class="case__title">Cotizaciones brandeadas en 2 minutos</h3>
+            <p class="case__desc">
+              Una herramienta crea cotizaciones para Enzo, Arkhē Café y Arkhē Coworking con la identidad visual de cada marca. El admin la arma desde el celular; el cliente recibe el PDF con ítems detallados y precios redondeados.
+            </p>
+            <ul class="case__metrics case__metrics--sm">
+              <li><strong>15→2</strong><span>min por cotización</span></li>
+              <li><strong>3</strong><span>marcas, 1 herramienta</span></li>
+              <li><strong>auto</strong><span>IVA + margen calculados</span></li>
+            </ul>
+          </div>
+
+          <!-- Mockup visual: flow de 3 estados (reutiliza .tline) -->
+          <div class="case__visual case__visual--quoter" aria-hidden="true">
+            <ol class="tline">
+              <li><span class="tline__dot tline__dot--done"></span><div><p class="tline__label">admin crea</p><p class="tline__sub">desde el celular · 2 min</p></div></li>
+              <li><span class="tline__dot tline__dot--done"></span><div><p class="tline__label">envía link</p><p class="tline__sub">PDF compartible · con branding</p></div></li>
+              <li><span class="tline__dot tline__dot--active"></span><div><p class="tline__label">cliente abre</p><p class="tline__sub">ítems detallados · sin ambigüedad</p></div></li>
+            </ol>
+          </div>
+        </article>
       </div>
 
       <!-- Strip de cierre: puente editorial → CTA -->
       <button type="button" {...calAttrs} class="cases__closer" data-reveal data-magnetic data-magnetic-strength="0.12">
         <span class="cases__closer-text">
-          ¿Tu negocio es el <span class="cases__closer-italic">cuarto</span> caso?
+          ¿Tu negocio es el <span class="cases__closer-italic">quinto</span> caso?
         </span>
         <span class="cases__closer-cta">
-          <span class="cases__closer-key">CTA-04</span>
+          <span class="cases__closer-key">CTA-05</span>
           <span class="cases__closer-label">agendar llamada de 20 min</span>
           <span class="cases__closer-arrow" aria-hidden="true">→</span>
         </span>
@@ -551,21 +579,12 @@ const calAttrs = calButtonAttrs({ notes: 'Vi los casos y quiero agendar mi llama
     font-family: var(--font-mono);
   }
 
-  /* Bento layout — desktop */
+  /* Bento layout — desktop · grid 2x2 uniforme */
   @media (min-width: 900px) {
     .cases__bento {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-template-rows: auto auto;
       gap: 16px;
-    }
-    .case--lg {
-      grid-column: 1 / -1;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      grid-template-rows: 1fr;
-    }
-    .case--lg .case__visual {
-      border-top: 0;
-      border-left: 0.5px solid var(--line);
     }
     .case__head { padding: 32px; }
     .case__visual { padding: 32px; }

@@ -1,4 +1,4 @@
-# Prompt — Bot de WhatsApp para reportes diarios
+# Prompt — Bot de Telegram para reportes diarios
 
 > ⚠️ PLACEHOLDER — Este archivo será reemplazado por el contenido real.
 
@@ -15,7 +15,7 @@ recibes los datos del día desde [FUENTE: Notion/Sheets/POS] y debes:
 2. Identificar el servicio/producto más rentable del día.
 3. Detectar anomalías (ventas <50% del promedio, margen <60%, etc.).
 4. Listar citas/reservas pendientes de confirmación para mañana.
-5. Devolver el reporte en máximo 8 líneas, formato WhatsApp.
+5. Devolver el reporte en máximo 8 líneas, formato Telegram (corto, sin markdown pesado).
 
 Tono: directo, sin emojis decorativos (solo 🔴🟡🟢 para alertas).
 Idioma: español, COP en formato $1.250.000.
@@ -33,7 +33,7 @@ Idioma: español, COP en formato $1.250.000.
 1. Cron diario (GitHub Actions, Vercel Cron, o Make.com)
 2. Pull de datos desde tu fuente
 3. POST a la API de Anthropic con este prompt + datos
-4. Send via WhatsApp Business API o Twilio
+4. Send via Telegram Bot API (`sendMessage` con `chat_id` privado o de grupo)
 
 ---
 

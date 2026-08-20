@@ -9,7 +9,7 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
   <div class="hero__inner container-page">
     <!-- Header recurrente: pilar + path/timestamp -->
     <div class="hero__top">
-      <p class="hero__pillar">PERFIL · CONSULTOR DE IA APLICADA</p>
+      <p class="hero__pillar">PERFIL · CONSULTOR DE NEGOCIOS + IMPLEMENTACIÓN IA</p>
       <p class="hero__path">~/omar.alvarez · {stamp}</p>
     </div>
 
@@ -29,16 +29,7 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
 
     <!-- Subheadline en mono -->
     <p class="hero__sub body-lg" data-reveal style="--reveal-delay: 700ms;">
-      Trabajo 1:1 con operadores de pymes que ya facturan y quieren usar IA en serio. Lo que te muestro lo opero todos los días en Enzo y en Arkhē — no es teoría, es lo que hago para que mi propio negocio funcione.
-    </p>
-
-    <!-- Credenciales académicas express (mono, inline) -->
-    <p class="hero__creds" data-reveal style="--reveal-delay: 800ms;" aria-label="Formación académica">
-      <span>EAFIT</span>
-      <span aria-hidden="true">·</span>
-      <span>UPB MEDELLÍN</span>
-      <span aria-hidden="true">·</span>
-      <span>LA SALLE BARCELONA</span>
+      Trabajo uno a uno con dueños de pymes que ya facturan y quieren meter IA en serio. Gestiono Enzo Motorsport y Arkhē Coworking desde Cúcuta — el sistema que uso ahí es el que después montamos en el tuyo.
     </p>
 
     <!-- CTAs -->
@@ -61,11 +52,11 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
 
     <!-- Trust-row: resuelve la fricción de "qué pasa después" sin esperar al FAQ -->
     <p class="hero__trust" data-reveal style="--reveal-delay: 950ms;" aria-label="Garantías de la llamada">
-      <span>20 min · gratis</span>
-      <span aria-hidden="true">·</span>
       <span>te digo si no encajamos</span>
       <span aria-hidden="true">·</span>
       <span>sin pitch</span>
+      <span aria-hidden="true">·</span>
+      <span>salida en cualquier momento</span>
     </p>
 
     <!-- Scroll indicator (esquina inferior derecha en desktop) -->
@@ -180,24 +171,6 @@ const stamp = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2,
     font-size: clamp(17px, 2vw, 20px);
     line-height: 1.5;
     letter-spacing: -0.01em;
-  }
-
-  /* Credenciales académicas express */
-  .hero__creds {
-    margin: 0;
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--mute);
-  }
-  .hero__creds span[aria-hidden='true'] {
-    color: var(--line-hi);
   }
 
   /* CTAs */

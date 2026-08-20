@@ -69,7 +69,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }
 
   // Firma session token (1h)
-  const token = sign({ sub: 'admin', exp: Date.now() + 3600_000 }, secret);
+  const token = await sign({ sub: 'admin', exp: Date.now() + 3600_000 }, secret);
 
   return jsonResponse(
     200,

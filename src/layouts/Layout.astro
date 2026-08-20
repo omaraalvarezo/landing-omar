@@ -12,13 +12,17 @@ interface Props {
   description?: string;
   image?: string;
   showNav?: boolean;
+  minimal?: boolean;
+  noIndex?: boolean;
 }
 
 const {
   title = 'omar.alvarez — Negocios reales, código real',
-  description = 'Trabajo 1:1 con operadores de pymes en LATAM que quieren usar IA en serio. Sesiones de 90 min con Claude aplicado a tu operación real. Sin teoría, sin gurús.',
+  description = 'Trabajo 1:1 con dueños y socios de empresas de servicios para mejorar captación, CRM, operación y postventa con sistemas e inteligencia artificial.',
   image = '/og-image.svg',
   showNav = true,
+  minimal = false,
+  noIndex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -52,6 +56,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noIndex && <meta name="robots" content="noindex, nofollow, noarchive" />}
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph -->
@@ -76,8 +81,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         {
           "@type": "Person",
           "name": "Omar Álvarez",
-          "jobTitle": "Operador y consultor 1:1 de IA aplicada",
-          "description": "Trabajo 1:1 con operadores de pymes en LATAM. Sesiones de 90 min con Claude aplicado a operación real.",
+          "jobTitle": "Operador y consultor de sistemas para empresas de servicios",
+          "description": "Sesiones privadas de 120 minutos para dueños y socios que quieren mejorar captación, CRM, operación o postventa con sistemas e inteligencia artificial.",
           "url": canonicalURL.toString(),
           "address": {
             "@type": "PostalAddress",
@@ -91,10 +96,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         },
         {
           "@type": "ProfessionalService",
-          "name": "omar.alvarez · IA aplicada a operación",
+          "name": "Omar Álvarez · Sistemas e IA para empresas de servicios",
           "url": canonicalURL.toString(),
           "areaServed": ["CO", "MX", "PE", "CL", "ES"],
-          "priceRange": "$$"
+          "priceRange": "USD 797",
+          "offers": {
+            "@type": "Offer",
+            "name": "Sesión Marco 4C para empresas de servicios · 120 minutos",
+            "price": "797",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": `${canonicalURL.toString()}#reservar`
+          }
         }
       ]
     })}></script>
@@ -108,9 +121,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       Saltar al contenido
     </a>
 
-    <Loader />
-    <ScrollProgress />
-    <CustomCursor />
+    {!minimal && <Loader />}
+    {!minimal && <ScrollProgress />}
+    {!minimal && <CustomCursor />}
     {showNav && <Nav />}
 
     <main id="main">
@@ -118,13 +131,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
 
-    <BookFloat />
-    <CalRuntime />
+    {!minimal && <BookFloat />}
+    {!minimal && <CalRuntime />}
 
-    <script>
-      import { initLenis } from '../scripts/lenis';
-      initLenis();
-    </script>
+    {!minimal && (
+      <script>
+        import { initLenis } from '../scripts/lenis';
+        initLenis();
+      </script>
+    )}
 
     <!-- Theme toggle: sincroniza estado del botón con [data-theme] y persiste en localStorage.
          Vive aquí (no en Nav.astro) para evitar duplicación si la nav re-renderiza. -->

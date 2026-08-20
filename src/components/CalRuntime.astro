@@ -13,17 +13,18 @@
 
   declare global {
     interface Window {
-      Cal: any;
       __calOnboardingReady?: boolean;
     }
   }
 
+  const cal = Cal();
+
   if (!window.__calOnboardingReady) {
-    Cal();
-    window.Cal('init', 'onboarding-20min', { origin: 'https://cal.com' });
-    window.Cal.ns['onboarding-20min']('ui', {
+    cal('init', 'onboarding-20min', { origin: 'https://cal.com' });
+    cal.ns['onboarding-20min']('ui', {
       cssVarsPerTheme: {
         light: { 'cal-brand': '#1E5FA8' },
+        dark: { 'cal-brand': '#5B9BE0' },
       },
       hideEventTypeDetails: false,
       layout: 'month_view',
@@ -38,7 +39,7 @@
     nodes.forEach((el) => {
       if (el.dataset.calInlineMounted === 'true') return;
       const calLink = el.dataset.calLink || 'omaralvarezo/onboarding-20min';
-      window.Cal.ns['onboarding-20min']('inline', {
+      cal.ns['onboarding-20min']('inline', {
         elementOrSelector: el,
         calLink,
         config: { layout: 'month_view', theme: 'light' },
