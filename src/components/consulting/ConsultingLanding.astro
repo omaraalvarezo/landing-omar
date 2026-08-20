@@ -5,6 +5,7 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/600.css';
 
 import CheckoutForm from './CheckoutForm.astro';
+import ConversionCTA from './ConversionCTA.astro';
 import SystemIgnition from './SystemIgnition.astro';
 import { CONSULTING, formatUsd } from '../../lib/consulting';
 import { SOCIALS } from '../../lib/contact';
@@ -157,7 +158,17 @@ const FAQ = [
       <a href="#sistemas">lo que construí</a>
       <a href="#marco">las 4C</a>
       <a href="#sesion">la sesión</a>
-      <a class="nav-shell__action" href="#taller" data-nav-action><span data-nav-label>empezar el recorrido</span><span aria-hidden="true">↓</span></a>
+      <a
+        class="nav-shell__action"
+        href="#checkout-consultoria"
+        data-checkout-link
+        data-cta-placement="nav"
+        aria-label={`Reservar consultoría de dos horas por ${price}; ir al checkout`}
+      >
+        <span class="nav-shell__action-full">reservar consultoría · {price}</span>
+        <span class="nav-shell__action-short">reservar · {price}</span>
+        <span aria-hidden="true">↘</span>
+      </a>
     </nav>
   </header>
 
@@ -191,7 +202,17 @@ const FAQ = [
           <p class="hero__cue">CAPTAR → CONVERTIR → CUMPLIR → CONTINUAR</p>
           <h1>Tu negocio no necesita otra herramienta de IA.<br /><span>Necesita que las partes se hablen.</span></h1>
           <p class="hero__lead">Trae un cuello de botella. En dos horas aterrizamos el sistema que tu empresa de servicios necesita construir primero.</p>
-          <a class="hero__button" href="#taller">ver por qué puedo ayudarte <span aria-hidden="true">↘</span></a>
+          <div class="hero__actions">
+            <a
+              class="hero__button"
+              href="#checkout-consultoria"
+              data-checkout-link
+              data-cta-placement="hero"
+            >
+              reservar consultoría · {price} <span aria-hidden="true">↘</span>
+            </a>
+            <a class="hero__secondary" href="#taller">ver cómo trabajo <span aria-hidden="true">↓</span></a>
+          </div>
         </div>
       </div>
 
@@ -358,6 +379,13 @@ const FAQ = [
       ))}
     </div>
     <p class="systems__scroll"><span aria-hidden="true">←</span> ARRASTRA / DESLIZA <span aria-hidden="true">→</span></p>
+    <ConversionCTA
+      kicker="YA VISTE QUE ESTO NO ES UNA DEMO"
+      title="¿Reconociste un problema parecido al tuyo?"
+      body="Lleva el cuello de botella real. En dos horas definimos qué pieza vale la pena construir primero y cuál no."
+      placement="systems"
+      tone="purple"
+    />
   </section>
 
   <section class="session" id="sesion" aria-labelledby="session-title">
@@ -386,6 +414,15 @@ const FAQ = [
         <li>grabación + 7 días para dudas puntuales</li>
       </ul>
     </div>
+
+    <ConversionCTA
+      kicker="YA SABES QUÉ PASA EN LOS 120 MINUTOS"
+      title="Trae el problema. Sal con la ruta."
+      body="Una sesión privada para 1–3 personas, con grabación, documento de cierre y siete días para dudas puntuales."
+      placement="session"
+      tone="ink"
+      embedded
+    />
   </section>
 
   <section class="fit" aria-labelledby="fit-title">
@@ -403,6 +440,15 @@ const FAQ = [
           <li>puedes abrir el contexto real y tomar decisiones;</li>
           <li>quieres construir criterio, no coleccionar prompts.</li>
         </ul>
+        <a
+          class="fit__cta"
+          href="#checkout-consultoria"
+          data-checkout-link
+          data-cta-placement="fit"
+        >
+          <span><small>SÍ, ESTE ES MI CASO</small><strong>ir a reservar · {price}</strong></span>
+          <i aria-hidden="true">↘</i>
+        </a>
       </article>
       <article class="fit__no">
         <span>TODAVÍA NO</span>
@@ -547,15 +593,13 @@ const FAQ = [
     box-shadow: 0 16px 56px rgba(0, 0, 0, .17);
     backdrop-filter: blur(18px);
     transform: translateX(-50%);
-    transition: min-height .35s ease, background-color .35s ease, transform .45s cubic-bezier(.16, 1, .3, 1);
+    transition: min-height .35s ease, background-color .35s ease;
   }
 
   .nav-shell[data-condensed='true'] {
     min-height: 50px;
     background: rgba(19, 17, 24, .94);
   }
-
-  .nav-shell[data-hidden='true'] { transform: translate(-50%, -145%); }
 
   .wordmark {
     display: inline-flex;
@@ -583,15 +627,36 @@ const FAQ = [
   }
   .nav-shell nav a:hover { color: var(--lime); }
   .nav-shell__action {
+    position: relative;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     gap: 20px;
+    min-height: 44px;
     padding: 13px 16px;
+    overflow: hidden;
     color: var(--ink) !important;
     background: var(--lime);
     border-radius: 999px;
+    box-shadow: 0 0 0 rgba(200, 255, 61, 0);
+    transition: color .25s ease, background-color .25s ease, transform .25s cubic-bezier(.16, 1, .3, 1), box-shadow .25s ease !important;
   }
-  .nav-shell__action:hover { background: var(--bone); }
+  .nav-shell__action > span { position: relative; z-index: 1; }
+  .nav-shell__action::after {
+    content: '';
+    position: absolute;
+    inset: -70% auto -70% -25%;
+    width: 18%;
+    background: rgba(255,255,255,.78);
+    filter: blur(8px);
+    opacity: 0;
+    transform: skewX(-18deg);
+    animation: nav-cta-sheen 1.15s .7s cubic-bezier(.16, 1, .3, 1) both;
+  }
+  .nav-shell__action:hover { background: var(--bone); box-shadow: 0 8px 30px rgba(200, 255, 61, .18); transform: translateY(-2px); }
+  .nav-shell__action:active { transform: scale(.98); }
+  .nav-shell__action:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
+  .nav-shell__action-short { display: none; }
 
   .hero {
     --hero-progress: 0;
@@ -694,23 +759,46 @@ const FAQ = [
   .hero__aside,
   .hero__lead { max-width: 52ch; margin-bottom: 0; color: rgba(255, 248, 234, .67); font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; }
   .hero__lead { max-width: 46ch; margin-bottom: 28px; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; }
   .hero__button {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
     gap: 40px;
     min-width: 280px;
+    min-height: 52px;
     padding: 15px 17px;
     color: var(--ink) !important;
-    background: var(--coral);
+    background: var(--lime);
+    border: 1px solid var(--lime);
+    box-shadow: 6px 6px 0 var(--coral);
     font-family: var(--data);
     font-size: 10px;
     font-weight: 600;
     letter-spacing: .04em;
     text-transform: uppercase;
-    transition: transform .25s ease, background-color .25s ease;
+    transition: transform .25s ease, background-color .25s ease, box-shadow .25s ease;
   }
-  .hero__button:hover { background: var(--bone); transform: translateY(-3px); }
+  .hero__button:hover { background: var(--bone); box-shadow: 9px 9px 0 var(--purple); transform: translate(-2px, -3px); }
+  .hero__button:active { transform: scale(.985); }
+  .hero__button:focus-visible { outline: 3px solid var(--bone); outline-offset: 5px; }
+  .hero__secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 48px;
+    padding: 12px 4px;
+    color: rgba(255, 248, 234, .68) !important;
+    border-bottom: 1px solid rgba(255, 248, 234, .28);
+    font-family: var(--data);
+    font-size: 9px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    transition: color .25s ease, border-color .25s ease, transform .25s ease;
+  }
+  .hero__secondary:hover { color: var(--bone) !important; border-color: var(--lime); transform: translateX(4px); }
+  .hero__secondary:focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; }
 
   .hero__machine { position: relative; z-index: 2; align-self: center; justify-self: end; }
   .hero__machine::before {
@@ -1047,6 +1135,29 @@ const FAQ = [
   .fit__panels ul { list-style: none; margin: 0; padding: 0; }
   .fit__panels li { position: relative; padding: 16px 0 16px 30px; border-top: 1px solid rgba(19,17,24,.4); line-height: 1.45; }
   .fit__panels li::before { content: '↳'; position: absolute; left: 0; font-family: var(--data); }
+  .fit__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    min-height: 76px;
+    margin-top: 42px;
+    padding: 14px 14px 14px 18px;
+    color: var(--ink) !important;
+    background: var(--lime);
+    border: 2px solid var(--ink);
+    border-radius: 16px 16px 16px 3px;
+    box-shadow: 6px 6px 0 var(--purple);
+    transition: transform .26s cubic-bezier(.16, 1, .3, 1), box-shadow .26s ease, background-color .26s ease;
+  }
+  .fit__cta > span { display: grid; gap: 7px; }
+  .fit__cta small { font-family: var(--data); font-size: 9px; letter-spacing: .1em; }
+  .fit__cta strong { font-family: var(--display); font-size: clamp(19px, 2.3vw, 28px); line-height: 1; letter-spacing: -.035em; }
+  .fit__cta i { display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px; color: var(--bone); background: var(--ink); border-radius: 50%; font-style: normal; transition: transform .26s cubic-bezier(.16, 1, .3, 1); }
+  .fit__cta:hover { background: var(--bone); box-shadow: 9px 9px 0 var(--lime); transform: translate(-2px, -2px); }
+  .fit__cta:hover i { transform: translate(3px, 3px) rotate(8deg); }
+  .fit__cta:active { transform: scale(.985); }
+  .fit__cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 5px; }
 
   .cost { position: relative; overflow: hidden; padding: clamp(110px, 14vw, 200px) clamp(20px, 6vw, 96px); color: var(--bone); background: var(--ink); }
   .cost .overline { color: var(--purple); }
@@ -1084,6 +1195,12 @@ const FAQ = [
   .reserve dl div { display: flex; justify-content: space-between; gap: 24px; padding: 11px 0; border-bottom: 1px solid rgba(19,17,24,.3); }
   .reserve dt { opacity: .68; }
   .reserve dd { margin: 0; font-family: var(--data); font-size: 10px; text-align: right; }
+
+  @keyframes nav-cta-sheen {
+    0% { opacity: 0; transform: skewX(-18deg) translateX(0); }
+    25% { opacity: .8; }
+    100% { opacity: 0; transform: skewX(-18deg) translateX(850%); }
+  }
 
   .footer { display: grid; grid-template-columns: 1fr auto auto; gap: 50px; align-items: end; padding: 80px clamp(20px, 5vw, 80px) 30px; color: var(--bone); background: var(--ink); border-top: 1px solid rgba(255,248,234,.14); }
   .wordmark--footer { font-size: clamp(34px, 4vw, 58px); }
@@ -1142,7 +1259,9 @@ const FAQ = [
   @media (max-width: 560px) {
     .nav-shell { top: 10px; width: calc(100% - 20px); min-height: 52px; padding-left: 14px; }
     .wordmark { font-size: 16px; }
-    .nav-shell__action { gap: 9px; padding: 12px; font-size: 8px !important; }
+    .nav-shell__action { gap: 9px; padding: 12px; font-size: 9px !important; }
+    .nav-shell__action-full { display: none; }
+    .nav-shell__action-short { display: inline; }
     .hero {
       height: 340vh;
       height: 340svh;
@@ -1156,7 +1275,9 @@ const FAQ = [
     .hero__display--medium { font-size: clamp(54px, 16vw, 78px); }
     .hero h1 { font-size: clamp(48px, 14.6vw, 70px); }
     .hero__lead { font-size: 15px; }
+    .hero__actions { align-items: stretch; }
     .hero__button { min-width: 0; width: 100%; }
+    .hero__secondary { margin-inline: auto; }
     .hero__machine { right: -28vw; bottom: 5vh; opacity: .58; }
     .hero__progress { left: 18px; right: 18px; }
     .workshop h2,
@@ -1202,7 +1323,13 @@ const FAQ = [
 
   @media (prefers-reduced-motion: reduce) {
     :global(html) { scroll-behavior: auto; }
-    .nav-shell { transition: none; }
+    .nav-shell,
+    .nav-shell__action,
+    .hero__button,
+    .hero__secondary,
+    .fit__cta,
+    .fit__cta i { transition: none; }
+    .nav-shell__action::after { animation: none; }
     .hero { height: auto; }
     .hero__sticky { position: relative; min-height: 100svh; }
     .hero__moment { display: none; transition: none; }
@@ -1223,9 +1350,9 @@ const FAQ = [
   const systemTelemetry = document.querySelector<HTMLElement>('[data-system-telemetry]');
   const phaseLabel = document.querySelector<HTMLElement>('[data-phase-label]');
   const siteHeader = document.querySelector<HTMLElement>('[data-site-header]');
-  const navAction = document.querySelector<HTMLAnchorElement>('[data-nav-action]');
-  const navLabel = document.querySelector<HTMLElement>('[data-nav-label]');
-  const systemsSection = document.querySelector<HTMLElement>('#sistemas');
+  const checkout = document.querySelector<HTMLFormElement>('#checkout-consultoria');
+  const checkoutLinks = document.querySelectorAll<HTMLAnchorElement>('[data-checkout-link]');
+  const conversionPanels = document.querySelectorAll<HTMLElement>('[data-conversion-panel]');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const phaseContent = [
@@ -1238,7 +1365,6 @@ const FAQ = [
   let currentPhase = -1;
   let frame = 0;
   let heroVisible = true;
-  let previousScrollY = window.scrollY;
 
   const setPhase = (next: number) => {
     if (!hero || next === currentPhase) return;
@@ -1271,17 +1397,6 @@ const FAQ = [
   const requestHeroUpdate = () => {
     if (!frame) frame = window.requestAnimationFrame(updateHero);
     if (siteHeader) siteHeader.dataset.condensed = String(window.scrollY > 44);
-    const scrollDelta = window.scrollY - previousScrollY;
-    if (siteHeader && !siteHeader.matches(':focus-within')) {
-      if (window.scrollY < 90 || scrollDelta < -6) siteHeader.dataset.hidden = 'false';
-      else if (scrollDelta > 6) siteHeader.dataset.hidden = 'true';
-    }
-    previousScrollY = window.scrollY;
-    const canReserve = systemsSection
-      ? window.scrollY > systemsSection.offsetTop - window.innerHeight * .55
-      : false;
-    if (navAction) navAction.href = canReserve ? '#reservar' : '#taller';
-    if (navLabel) navLabel.textContent = canReserve ? 'reservar 2 horas' : 'empezar el recorrido';
   };
 
   if (hero) {
@@ -1294,6 +1409,47 @@ const FAQ = [
     window.addEventListener('resize', requestHeroUpdate, { passive: true });
     reducedMotion.addEventListener?.('change', requestHeroUpdate);
     requestHeroUpdate();
+  }
+
+  if (conversionPanels.length && !reducedMotion.matches && 'IntersectionObserver' in window) {
+    conversionPanels.forEach((panel) => panel.classList.add('is-motion-ready'));
+    const panelObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-revealed');
+        panelObserver.unobserve(entry.target);
+      });
+    }, { threshold: .22 });
+    conversionPanels.forEach((panel) => panelObserver.observe(panel));
+  }
+
+  if (checkout && checkoutLinks.length) {
+    let arrivalPending = false;
+
+    const revealCheckout = () => {
+      arrivalPending = false;
+      checkout.classList.remove('is-arriving');
+      void checkout.offsetWidth;
+      checkout.classList.add('is-arriving');
+      checkout.focus({ preventScroll: true });
+      window.setTimeout(() => checkout.classList.remove('is-arriving'), 1300);
+    };
+
+    const checkoutObserver = new IntersectionObserver(([entry]) => {
+      if (arrivalPending && entry.isIntersecting) revealCheckout();
+    }, { threshold: .02, rootMargin: '-72px 0px -28% 0px' });
+    checkoutObserver.observe(checkout);
+
+    checkoutLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        arrivalPending = true;
+        checkout.dataset.arrivalFrom = link.dataset.ctaPlacement || 'unknown';
+        const rect = checkout.getBoundingClientRect();
+        if (rect.top < window.innerHeight * .72 && rect.bottom > 90) {
+          window.setTimeout(revealCheckout, reducedMotion.matches ? 0 : 80);
+        }
+      });
+    });
   }
 
   if (ignition && window.matchMedia('(pointer: fine)').matches && !reducedMotion.matches) {

@@ -5,7 +5,7 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
 const price = formatUsd(CONSULTING.priceUsd);
 ---
 
-<form class="checkout" id="checkout-consultoria" novalidate>
+<form class="checkout" id="checkout-consultoria" tabindex="-1" novalidate>
   <div class="checkout__spectrum" aria-hidden="true">
     <span></span><span></span><span></span><span></span>
   </div>
@@ -100,14 +100,14 @@ const price = formatUsd(CONSULTING.priceUsd);
   </div>
 
   <button class="checkout__submit" type="submit">
-    <span>pagar en Wompi y elegir horario</span>
+    <span data-checkout-submit-label>pagar en Wompi y elegir horario</span>
     <span class="checkout__submit-arrow" aria-hidden="true">↗</span>
   </button>
 
   <p class="checkout__security">
     <span aria-hidden="true">◎</span>
     <span>Vas a ver el número completo antes de pagar: TRM oficial del día + 1,65% de ajuste.
-    Wompi procesa el total exacto en COP y, cuando confirma el pago, se abre Cal.com.</span>
+    Wompi procesa el total exacto en COP y puede mostrar ADJUDIKA como comercio procesador. El pago corresponde a esta consultoría y, cuando se confirma, se abre Cal.com.</span>
   </p>
 
   <p class="checkout__error" id="checkout-error" role="alert" aria-live="polite"></p>
@@ -126,6 +126,7 @@ const price = formatUsd(CONSULTING.priceUsd);
     --checkout-lime: #c8ff3d;
     position: relative;
     isolation: isolate;
+    scroll-margin-top: 12px;
     overflow: hidden;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -141,6 +142,10 @@ const price = formatUsd(CONSULTING.priceUsd);
     box-shadow: 12px 12px 0 rgba(199, 240, 76, .16);
     font-family: 'IBM Plex Sans Variable', 'IBM Plex Sans', var(--font-sans), sans-serif;
   }
+
+  .checkout:focus:not(:focus-visible) { outline: none; }
+  .checkout:focus-visible { outline: 3px solid var(--checkout-lime); outline-offset: 8px; }
+  .checkout.is-arriving { animation: checkout-arrival 1.15s cubic-bezier(.16, 1, .3, 1); }
 
   .checkout::after {
     content: '';
@@ -597,6 +602,12 @@ const price = formatUsd(CONSULTING.priceUsd);
     transform: none;
   }
 
+  @keyframes checkout-arrival {
+    0% { box-shadow: 0 0 0 0 rgba(200, 255, 61, .82), 12px 12px 0 rgba(199, 240, 76, .16); }
+    48% { box-shadow: 0 0 0 13px rgba(200, 255, 61, .18), 15px 15px 0 rgba(255, 107, 69, .38); }
+    100% { box-shadow: 0 0 0 0 rgba(200, 255, 61, 0), 12px 12px 0 rgba(199, 240, 76, .16); }
+  }
+
   .checkout__security,
   .checkout__error {
     font-size: 11px;
@@ -653,6 +664,7 @@ const price = formatUsd(CONSULTING.priceUsd);
     .checkout__submit-arrow {
       transition: none;
     }
+    .checkout.is-arriving { animation: none; }
   }
 </style>
 
@@ -687,7 +699,9 @@ const price = formatUsd(CONSULTING.priceUsd);
 
   async function loadQuote() {
     const nodes = document.querySelectorAll<HTMLElement>('[data-quote-cop]');
-    if (!nodes.length) return;
+    const totalNodes = document.querySelectorAll<HTMLElement>('[data-quote-total]');
+    const submitLabel = form?.querySelector<HTMLElement>('[data-checkout-submit-label]');
+    if (!nodes.length && !totalNodes.length && !submitLabel) return;
 
     try {
       const response = await fetch('/api/consultoria/quote', {
@@ -698,11 +712,21 @@ const price = formatUsd(CONSULTING.priceUsd);
         throw new Error('QUOTE_UNAVAILABLE');
       }
 
-      const copy = `Hoy pagas ${formatCop(quote.amountCop)} · TRM oficial ${formatTrm(quote.trmCop)} · tasa aplicada ${formatTrm(quote.operationalRateCop)} (+${formatTrm(quote.spreadPercent || 0)}%)`;
+      const amountCop = quote.amountCop;
+      const copy = `Hoy pagas ${formatCop(amountCop)} · TRM oficial ${formatTrm(quote.trmCop)} · tasa aplicada ${formatTrm(quote.operationalRateCop)} (+${formatTrm(quote.spreadPercent || 0)}%)`;
       nodes.forEach((node) => { node.textContent = copy; });
+      totalNodes.forEach((node) => { node.textContent = `Hoy en COP: ${formatCop(amountCop)}`; });
+      if (submitLabel) {
+        const readyLabel = `pagar en Wompi · ${formatCop(amountCop)}`;
+        submitLabel.textContent = readyLabel;
+        submitLabel.dataset.readyLabel = readyLabel;
+      }
     } catch {
       nodes.forEach((node) => {
         node.textContent = 'El total exacto en COP se calcula antes de abrir Wompi.';
+      });
+      totalNodes.forEach((node) => {
+        node.textContent = 'El total exacto en COP aparece antes de abrir Wompi';
       });
     }
   }
@@ -731,7 +755,8 @@ const price = formatUsd(CONSULTING.priceUsd);
 
     if (button) {
       button.disabled = true;
-      button.firstElementChild!.textContent = 'conectando con Wompi…';
+      const label = button.querySelector<HTMLElement>('[data-checkout-submit-label]');
+      if (label) label.textContent = 'preparando pago seguro…';
     }
     if (errorNode) errorNode.textContent = '';
 
@@ -754,7 +779,8 @@ const price = formatUsd(CONSULTING.priceUsd);
       }
       if (button) {
         button.disabled = false;
-        button.firstElementChild!.textContent = 'pagar en Wompi y elegir horario';
+        const label = button.querySelector<HTMLElement>('[data-checkout-submit-label]');
+        if (label) label.textContent = label.dataset.readyLabel || 'pagar en Wompi y elegir horario';
       }
     }
   });

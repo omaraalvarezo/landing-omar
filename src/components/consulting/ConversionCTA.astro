@@ -1,0 +1,293 @@
+---
+import { CONSULTING, formatUsd } from '../../lib/consulting';
+
+interface Props {
+  kicker: string;
+  title: string;
+  body: string;
+  placement: 'systems' | 'session';
+  tone?: 'purple' | 'ink';
+  embedded?: boolean;
+}
+
+const {
+  kicker,
+  title,
+  body,
+  placement,
+  tone = 'purple',
+  embedded = false,
+} = Astro.props;
+
+const price = formatUsd(CONSULTING.priceUsd);
+---
+
+<aside
+  class:list={[
+    'conversion-cta',
+    `conversion-cta--${tone}`,
+    embedded && 'conversion-cta--embedded',
+  ]}
+  data-conversion-panel
+  aria-label="Reservar consultoría privada"
+>
+  <div class="conversion-cta__spectrum" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="conversion-cta__copy">
+    <p>{kicker}</p>
+    <h3>{title}</h3>
+    <p>{body}</p>
+  </div>
+
+  <div class="conversion-cta__action">
+    <a
+      class="conversion-cta__button"
+      href="#checkout-consultoria"
+      data-checkout-link
+      data-cta-placement={placement}
+      aria-label={`Reservar consultoría de 120 minutos por ${price}; ir al checkout`}
+    >
+      <span>
+        <small>CONSULTORÍA PRIVADA · 120 MIN</small>
+        <strong>reservar esta sesión</strong>
+      </span>
+      <em>{price}</em>
+      <i aria-hidden="true">↘</i>
+    </a>
+    <p>
+      <span data-quote-total>Wompi calcula el equivalente de hoy en COP</span>
+      <span aria-hidden="true"> · </span>
+      eliges horario en Cal.com después del pago
+    </p>
+  </div>
+</aside>
+
+<style>
+  .conversion-cta {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(390px, .92fr);
+    gap: clamp(38px, 7vw, 110px);
+    align-items: end;
+    max-width: 1440px;
+    margin: clamp(72px, 9vw, 130px) clamp(20px, 5vw, 80px) 0;
+    padding: clamp(30px, 5vw, 72px);
+    color: #131118;
+    background: #c79aff;
+    border: 2px solid #fff8ea;
+    border-radius: 4px 42px 4px 42px;
+    box-shadow: 12px 12px 0 rgba(200, 255, 61, .24);
+    overflow: hidden;
+    transition: opacity .7s ease, transform .8s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .conversion-cta--embedded {
+    margin-inline: 0;
+  }
+
+  .conversion-cta--ink {
+    color: #fff8ea;
+    background: #131118;
+    border-color: #131118;
+    box-shadow: 12px 12px 0 #ff6b45;
+  }
+
+  .conversion-cta::after {
+    content: '↘';
+    position: absolute;
+    z-index: -1;
+    top: -8%;
+    right: 2%;
+    color: rgba(19, 17, 24, .07);
+    font-family: 'Bricolage Grotesque Variable', sans-serif;
+    font-size: clamp(180px, 24vw, 360px);
+    font-weight: 800;
+    line-height: .75;
+    transform: rotate(-7deg);
+  }
+
+  .conversion-cta--ink::after { color: rgba(255, 248, 234, .055); }
+
+  .conversion-cta__spectrum {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 8px;
+  }
+
+  .conversion-cta__spectrum span:nth-child(1) { background: #ff6b45; }
+  .conversion-cta__spectrum span:nth-child(2) { background: #c79aff; }
+  .conversion-cta__spectrum span:nth-child(3) { background: #5d72ff; }
+  .conversion-cta__spectrum span:nth-child(4) { background: #c8ff3d; }
+
+  .conversion-cta__copy { position: relative; z-index: 1; }
+  .conversion-cta__copy > p:first-child {
+    margin: 0 0 22px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .14em;
+  }
+
+  .conversion-cta__copy h3 {
+    max-width: 12ch;
+    margin: 0;
+    font-family: 'Bricolage Grotesque Variable', sans-serif;
+    font-size: clamp(42px, 5.3vw, 78px);
+    font-stretch: 78%;
+    font-weight: 760;
+    line-height: .88;
+    letter-spacing: -.065em;
+  }
+
+  .conversion-cta__copy > p:last-child {
+    max-width: 48ch;
+    margin: 26px 0 0;
+    color: rgba(19, 17, 24, .7);
+    font-size: clamp(15px, 1.35vw, 18px);
+    line-height: 1.5;
+  }
+
+  .conversion-cta--ink .conversion-cta__copy > p:last-child {
+    color: rgba(255, 248, 234, .68);
+  }
+
+  .conversion-cta__action { position: relative; z-index: 1; }
+
+  .conversion-cta__button {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 18px;
+    align-items: center;
+    min-height: 94px;
+    padding: 17px 18px 17px 22px;
+    overflow: hidden;
+    color: #131118 !important;
+    background: #c8ff3d;
+    border: 2px solid #131118;
+    border-radius: 18px 18px 18px 4px;
+    box-shadow: 7px 7px 0 #ff6b45;
+    text-decoration: none;
+    transition: transform .28s cubic-bezier(.16, 1, .3, 1), box-shadow .28s ease, background-color .28s ease;
+  }
+
+  .conversion-cta__button::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -60% auto -60% -36%;
+    width: 24%;
+    background: rgba(255, 255, 255, .68);
+    filter: blur(12px);
+    transform: skewX(-18deg) translateX(0);
+    opacity: 0;
+  }
+
+  .conversion-cta.is-revealed .conversion-cta__button::after {
+    animation: conversion-sheen 1.15s .32s cubic-bezier(.16, 1, .3, 1) both;
+  }
+
+  .conversion-cta__button > span { display: grid; gap: 6px; }
+  .conversion-cta__button small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .1em;
+  }
+
+  .conversion-cta__button strong {
+    font-family: 'Bricolage Grotesque Variable', sans-serif;
+    font-size: clamp(18px, 2vw, 24px);
+    line-height: 1;
+    letter-spacing: -.03em;
+  }
+
+  .conversion-cta__button em {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .conversion-cta__button i {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    color: #fff8ea;
+    background: #131118;
+    border-radius: 50%;
+    font-size: 20px;
+    font-style: normal;
+    transition: transform .28s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .conversion-cta__button:hover {
+    background: #d8ff66;
+    box-shadow: 10px 10px 0 #c79aff;
+    transform: translate(-3px, -3px);
+  }
+
+  .conversion-cta__button:hover i { transform: translate(4px, 4px) rotate(8deg); }
+  .conversion-cta__button:active { transform: scale(.985); }
+  .conversion-cta__button:focus-visible { outline: 3px solid currentColor; outline-offset: 5px; }
+
+  .conversion-cta__action > p {
+    margin: 20px 0 0;
+    color: rgba(19, 17, 24, .65);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    line-height: 1.55;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .conversion-cta--ink .conversion-cta__action > p { color: rgba(255, 248, 234, .56); }
+  .conversion-cta.is-motion-ready:not(.is-revealed) { opacity: 0; transform: translateY(34px) rotate(.35deg); }
+
+  @keyframes conversion-sheen {
+    0% { opacity: 0; transform: skewX(-18deg) translateX(0); }
+    22% { opacity: .75; }
+    100% { opacity: 0; transform: skewX(-18deg) translateX(650%); }
+  }
+
+  @media (max-width: 900px) {
+    .conversion-cta { grid-template-columns: 1fr; align-items: start; }
+    .conversion-cta__copy h3 { max-width: 14ch; }
+  }
+
+  @media (max-width: 560px) {
+    .conversion-cta {
+      margin-inline: 18px;
+      padding: 32px 20px 28px;
+      border-radius: 3px 28px 3px 28px;
+      box-shadow: 7px 7px 0 rgba(200, 255, 61, .25);
+    }
+    .conversion-cta--embedded { margin-inline: 0; }
+    .conversion-cta__button {
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      min-height: 104px;
+      padding: 16px;
+    }
+    .conversion-cta__button em { grid-column: 1; font-size: 10px; }
+    .conversion-cta__button i { grid-column: 2; grid-row: 1 / 3; }
+    .conversion-cta__action > p { font-size: 9px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .conversion-cta,
+    .conversion-cta__button,
+    .conversion-cta__button i { transition: none; }
+    .conversion-cta__button::after { animation: none !important; }
+  }
+</style>
