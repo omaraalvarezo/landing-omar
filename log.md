@@ -399,3 +399,30 @@ redirect; se evalúa caso por caso si aparecen 404.
   `2026-08-20`.
 - Checkout validado sin pago: monto `247867000` centavos, moneda `COP`, referencia con monto/fecha y
   firma de integridad presentes. `astro check` mantiene cero errores y el build de Astro completa.
+
+## 2026-08-20 · v3.3 — “Sistema vivo / taller abierto”
+
+- Auditadas la landing anterior, la implementación y secuencia de scroll de Enzo Motorsport, el home,
+  reservas, Planeador y brandbook original de Arkhē, la voz pública de TikTok y el inventario de casos
+  reales. La conclusión: la capa editorial beige/serif convertía a Omar en “consultor de revista” y no
+  representaba el lenguaje de sistemas, color, operación y experimentación de sus proyectos.
+- Dirección reemplazada por un híbrido propio: hero nocturno “Sistema vivo” + cuerpo colorido “Taller
+  abierto”. El protagonista no es un carro, robot u objeto 3D: son señales de TikTok, WhatsApp, CRM,
+  operación y postventa que se conectan en las 4C.
+- Creado `SystemIgnition.astro`, mapa SVG code-native con cuatro fases ligadas a scroll nativo. Usa
+  `requestAnimationFrame` solo mientras el hero está visible, pointer fino opcional y una versión
+  estática equivalente para `prefers-reduced-motion`.
+- `ConsultingLanding.astro` reconstruida de punta a punta: origen operativo, cuatro métricas reales,
+  principio problema→herramienta, stack sticky 4C, rail de Enzo/Arkhē/Adjudika/Grupo Enzo, ruta de la
+  sesión, encaje, costo de equivocarse, FAQ y precio únicamente al final.
+- Sistema visual nuevo: Bricolage Grotesque Variable + IBM Plex Sans Variable + IBM Plex Mono;
+  ink `#131118`, bone `#FFF8EA`, C1 coral `#FF6B45`, C2 púrpura `#C79AFF`, C3 cobalto profundo
+  `#4B5FE3` y C4 lima `#C8FF3D`. El cobalto se profundizó para conservar contraste AA con texto bone.
+- Checkout y handoff pago→Cal.com rediseñados con la misma semántica 4C. Se conservaron los campos,
+  validaciones, cotización diaria, spread, `sessionStorage`, firma Wompi, polling y montaje de Cal.com.
+- Nuevo OG 1200×630, meta/título actualizados y `theme-color` oscuro configurable desde `Layout`.
+- QA Playwright a 1440×1000 y 390×844: fases de hero, tipografía, orden 4C, rail, formulario completo,
+  overflow, consola, reduced motion y handoff inválido. Cotización real sin pago: `USD 797`,
+  `spreadBps=165`, tasa operativa mayor o igual a TRM. `astro check` sin errores nuevos y build exitoso.
+- Se preservó sin tocar ni versionar el temporal de PowerPoint
+  `public/resources/~$marco-4c-servicios-omar-alvarez.pptx`.

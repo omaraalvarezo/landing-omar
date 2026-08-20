@@ -1,41 +1,85 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Consultoría 2H con Omar Álvarez">
-  <title>omar.alvarez — Open Graph card</title>
-  <desc>Marco 4C para convertir un cuello de botella de una empresa de servicios en sistema.</desc>
-  <rect width="1200" height="630" fill="#F2EFE8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="ogTitle ogDesc">
+  <title id="ogTitle">Omar Álvarez — Consultoría privada para construir un sistema vivo</title>
+  <desc id="ogDesc">Consultoría de dos horas para conectar ventas, operación y postventa mediante el Marco 4C: Captar, Convertir, Cumplir y Continuar.</desc>
 
-  <!-- Top header: pillar + path -->
-  <text x="64" y="64"
-        font-family="ui-monospace, 'Geist Mono', monospace"
-        font-size="18" font-weight="500" fill="#525252"
-        letter-spacing="3.24">CONSULTORÍA PRIVADA · 120 MIN</text>
-  <text x="1136" y="64" text-anchor="end"
-        font-family="ui-monospace, 'Geist Mono', monospace"
-        font-size="18" fill="#525252"
-        letter-spacing="0.7">~/omar.alvarez</text>
-  <line x1="64" y1="84" x2="1136" y2="84" stroke="#E5E5E2" stroke-width="0.5"/>
+  <defs>
+    <radialGradient id="coralGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#FF6B4A" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#FF6B4A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="violetGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#A66CFF" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#A66CFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cobaltGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#377DFF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#377DFF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="microGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#F7F0E6" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L8 4L0 8Z" fill="#F7F0E6"/>
+    </marker>
+  </defs>
 
-  <text x="64" y="260"
-        font-family="'Instrument Serif', Georgia, serif"
-        font-size="76" fill="#111820"
-        letter-spacing="-1.4">Un cuello de botella real.</text>
-  <text x="64" y="340"
-        font-family="'Instrument Serif', Georgia, serif"
-        font-size="76" fill="#111820"
-        letter-spacing="-1.4">Dos horas para darle forma de <tspan fill="#1E5FA8" font-style="italic">sistema.</tspan></text>
+  <!-- Warm ink canvas -->
+  <rect width="1200" height="630" fill="#141014"/>
+  <rect width="1200" height="630" fill="url(#microGrid)"/>
+  <circle cx="1040" cy="134" r="290" fill="url(#violetGlow)"/>
+  <circle cx="1125" cy="480" r="260" fill="url(#cobaltGlow)"/>
+  <circle cx="760" cy="620" r="300" fill="url(#coralGlow)"/>
 
-  <text x="64" y="444"
-        font-family="ui-monospace, 'Geist Mono', monospace"
-        font-size="24" fill="#111820"
-        letter-spacing="0.4">USD 797 · EQUIVALENTE COP VÍA WOMPI</text>
+  <!-- Identity rail -->
+  <text x="58" y="58" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="800" fill="#F7F0E6" letter-spacing="1.8">OMAR ÁLVAREZ</text>
+  <circle cx="249" cy="51" r="5" fill="#B9F227"/>
+  <text x="267" y="58" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#A9A1A8" letter-spacing="2.1">NEGOCIO × SISTEMAS × IA</text>
+  <text x="1142" y="58" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#A9A1A8" letter-spacing="1.7">CONSULTORÍA PRIVADA · 120 MIN</text>
+  <line x1="58" y1="84" x2="1142" y2="84" stroke="#F7F0E6" stroke-opacity="0.14"/>
 
-  <!-- Footer line -->
-  <line x1="64" y1="552" x2="1136" y2="552" stroke="#E5E5E2" stroke-width="0.5"/>
-  <text x="64" y="592"
-        font-family="ui-monospace, 'Geist Mono', monospace"
-        font-size="18" font-weight="500" fill="#525252"
-        letter-spacing="2.1">CAPTAR · CONVERTIR · CUMPLIR · CONTINUAR</text>
-  <text x="1136" y="592" text-anchor="end"
-        font-family="ui-monospace, 'Geist Mono', monospace"
-        font-size="18" fill="#525252"
-        letter-spacing="0.7">cúcuta · co</text>
+  <!-- Core promise -->
+  <text x="58" y="174" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="65" font-weight="900" fill="#F7F0E6" letter-spacing="-2.8">HAGAMOS QUE</text>
+  <text x="58" y="241" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="65" font-weight="900" fill="#F7F0E6" letter-spacing="-2.8">TU NEGOCIO</text>
+  <text x="58" y="308" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="65" font-weight="900" fill="#F7F0E6" letter-spacing="-2.8">FUNCIONE COMO</text>
+  <text x="58" y="375" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="65" font-weight="900" fill="#B9F227" letter-spacing="-2.8">UN SISTEMA.</text>
+
+  <rect x="58" y="414" width="616" height="1" fill="#F7F0E6" fill-opacity="0.18"/>
+  <text x="58" y="451" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="600" fill="#D9D1D8">Ventas, operación y postventa conectadas.</text>
+  <text x="58" y="482" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="600" fill="#D9D1D8">IA donde sí mueve el negocio. Tú decides.</text>
+
+  <!-- Marco 4C: a live operating loop -->
+  <g aria-label="Marco 4C: Captar, Convertir, Cumplir y Continuar">
+    <text x="768" y="128" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" fill="#F7F0E6" letter-spacing="2.4">MARCO 4C · SISTEMA VIVO</text>
+
+    <path d="M901 174C982 172 1040 187 1061 225" fill="none" stroke="#F7F0E6" stroke-opacity="0.48" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M1080 274V337" fill="none" stroke="#F7F0E6" stroke-opacity="0.48" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M1022 387C972 425 929 447 890 454" fill="none" stroke="#F7F0E6" stroke-opacity="0.48" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M790 433C748 365 747 246 792 199" fill="none" stroke="#F7F0E6" stroke-opacity="0.48" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="768" y="148" width="154" height="54" rx="27" fill="#FF6B4A"/>
+    <text x="845" y="182" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="900" fill="#141014" letter-spacing="0.6">01 · CAPTAR</text>
+
+    <rect x="1000" y="222" width="164" height="54" rx="27" fill="#A66CFF"/>
+    <text x="1082" y="256" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="900" fill="#141014" letter-spacing="0.3">02 · CONVERTIR</text>
+
+    <rect x="999" y="338" width="165" height="54" rx="27" fill="#377DFF"/>
+    <text x="1081.5" y="372" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="900" fill="#F7F0E6" letter-spacing="0.3">03 · CUMPLIR</text>
+
+    <rect x="744" y="432" width="180" height="54" rx="27" fill="#B9F227"/>
+    <text x="834" y="466" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="900" fill="#141014" letter-spacing="0.2">04 · CONTINUAR</text>
+
+    <circle cx="923" cy="314" r="79" fill="#1D181E" stroke="#F7F0E6" stroke-opacity="0.18"/>
+    <circle cx="923" cy="314" r="65" fill="none" stroke="#F7F0E6" stroke-opacity="0.08" stroke-dasharray="3 8"/>
+    <text x="923" y="304" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="23" font-weight="900" fill="#F7F0E6">IA QUE</text>
+    <text x="923" y="334" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="23" font-weight="900" fill="#F7F0E6">SÍ OPERA</text>
+  </g>
+
+  <!-- Conversion rail -->
+  <line x1="58" y1="542" x2="1142" y2="542" stroke="#F7F0E6" stroke-opacity="0.14"/>
+  <g transform="translate(58 569)">
+    <rect width="186" height="38" rx="19" fill="#F7F0E6"/>
+    <text x="93" y="25" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="900" fill="#141014" letter-spacing="0.8">SESIÓN DE 2 HORAS</text>
+  </g>
+  <text x="264" y="594" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#A9A1A8" letter-spacing="1.2">PARA DUEÑOS Y SOCIOS DE EMPRESAS DE SERVICIOS</text>
+  <text x="1142" y="594" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800" fill="#F7F0E6">omaralvarezo.co →</text>
 </svg>

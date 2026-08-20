@@ -1,4 +1,10 @@
 ---
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/ibm-plex-sans';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/ibm-plex-mono/600.css';
+
 interface Props {
   transactionId: string;
   initialStatus: string;
@@ -17,115 +23,674 @@ const { transactionId, initialStatus, approved, calLink = '' } = Astro.props;
   data-approved={approved ? 'true' : 'false'}
   data-cal-link={approved ? calLink : ''}
 >
+  <div class="paid-calendar__field" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <header class="paid-calendar__bar">
+    <a class="paid-calendar__brand" href="/" aria-label="Omar Álvarez, volver al inicio">
+      <span class="paid-calendar__monogram" aria-hidden="true">OA</span>
+      <span>OMAR ÁLVAREZ<br /><small>CONSULTORÍA / 120 MIN</small></span>
+    </a>
+    <p><span aria-hidden="true"></span> HANDOFF SEGURO · WOMPI × CAL.COM</p>
+  </header>
+
   <div class="paid-calendar__status" data-status-panel hidden={approved}>
-    <p class="paid-calendar__code" data-status-code>{initialStatus}</p>
-    <h1 data-status-title>
-      {initialStatus === 'PENDING' ? 'Wompi todavía está confirmando el pago.' : 'No pudimos confirmar este pago.'}
-    </h1>
-    <p data-status-copy>
-      {initialStatus === 'PENDING'
-        ? 'Esta página se actualizará automáticamente. No cierres la ventana.'
-        : 'Revisa el estado en Wompi o vuelve al inicio para intentarlo de nuevo.'}
-    </p>
-    <a href="/#reservar">volver a la consultoría →</a>
+    <ol class="paid-calendar__route" aria-label="Progreso de la reserva">
+      <li><span>01</span><strong>Pago</strong></li>
+      <li class="is-active" aria-current="step"><span>02</span><strong>Verificación</strong></li>
+      <li><span>03</span><strong>Agenda</strong></li>
+    </ol>
+
+    <div class="paid-calendar__status-grid">
+      <aside class="paid-calendar__signal" aria-hidden="true">
+        <div class="paid-calendar__orbit paid-calendar__orbit--outer"></div>
+        <div class="paid-calendar__orbit paid-calendar__orbit--inner"></div>
+        <span class="paid-calendar__node paid-calendar__node--one">C1</span>
+        <span class="paid-calendar__node paid-calendar__node--two">C2</span>
+        <span class="paid-calendar__node paid-calendar__node--three">C3</span>
+        <span class="paid-calendar__node paid-calendar__node--four">C4</span>
+        <div class="paid-calendar__signal-core">
+          <i></i>
+          <span>WOMPI</span>
+          <strong>verificando</strong>
+        </div>
+      </aside>
+
+      <article class="paid-calendar__state" aria-live="polite" aria-atomic="true">
+        <p class="paid-calendar__code"><span></span> ESTADO / <b data-status-code>{initialStatus}</b></p>
+        <h1 data-status-title>
+          {initialStatus === 'PENDING' ? 'Wompi todavía está confirmando el pago.' : 'No pudimos confirmar este pago.'}
+        </h1>
+        <p class="paid-calendar__state-copy" data-status-copy>
+          {initialStatus === 'PENDING'
+            ? 'Esta página se actualizará automáticamente. No cierres la ventana.'
+            : 'Revisa el estado en Wompi o vuelve al inicio para intentarlo de nuevo.'}
+        </p>
+
+        <div class="paid-calendar__reference">
+          <span>REFERENCIA DE TRANSACCIÓN</span>
+          <code>{transactionId || 'SIN REFERENCIA'}</code>
+        </div>
+
+        <p class="paid-calendar__safety">
+          <span aria-hidden="true">↳</span>
+          La agenda solo se habilita cuando Wompi confirma la firma del pago.
+        </p>
+
+        <a class="paid-calendar__back" href="/#reservar"><span>Volver a la consultoría</span><span aria-hidden="true">↗</span></a>
+      </article>
+    </div>
   </div>
 
   <div class="paid-calendar__approved" data-approved-panel hidden={!approved}>
-    <div class="paid-calendar__intro">
-      <p class="paid-calendar__code">PAGO APROBADO / PASO 02</p>
-      <h1>Ahora escoge las dos horas.</h1>
-      <p>
-        El pago quedó confirmado. Elige el horario en Cal.com y responde las preguntas de preparación.
-        La reserva solo queda completa cuando recibas el correo del calendario.
-      </p>
-      <dl>
-        <div><dt>Duración</dt><dd>120 min</dd></div>
-        <div><dt>Zona horaria</dt><dd>la detecta Cal.com</dd></div>
-        <div><dt>Formato</dt><dd>Cal Video</dd></div>
-      </dl>
-    </div>
+    <ol class="paid-calendar__route paid-calendar__route--approved" aria-label="Progreso de la reserva">
+      <li class="is-complete"><span>01</span><strong>Pago</strong><i aria-hidden="true">✓</i></li>
+      <li class="is-complete"><span>02</span><strong>Verificación</strong><i aria-hidden="true">✓</i></li>
+      <li class="is-active" aria-current="step"><span>03</span><strong>Agenda</strong></li>
+    </ol>
 
-    <div class="paid-calendar__embed-wrap">
-      <div class="paid-calendar__embed" data-cal-target></div>
-      <div class="paid-calendar__missing" data-cal-missing hidden>
-        <p>Tu pago está confirmado, pero el calendario todavía no está disponible.</p>
-        <p>Conserva esta página: la referencia de Wompi es suficiente para validar tu sesión.</p>
+    <div class="paid-calendar__approved-grid">
+      <div class="paid-calendar__intro">
+        <p class="paid-calendar__code paid-calendar__code--success"><span></span> PAGO CONFIRMADO / AGENDA ABIERTA</p>
+        <h1>Tu pago ya abrió la agenda.</h1>
+        <p class="paid-calendar__intro-copy">
+          Escoge un bloque de dos horas y responde el brief de preparación. La reserva queda completa
+          cuando Cal.com envía el correo de confirmación.
+        </p>
+
+        <div class="paid-calendar__reference paid-calendar__reference--approved">
+          <span>REFERENCIA WOMPI</span>
+          <code>{transactionId || 'CONFIRMADA'}</code>
+        </div>
+
+        <dl>
+          <div><dt>Duración</dt><dd>120 min</dd></div>
+          <div><dt>Zona horaria</dt><dd>Automática</dd></div>
+          <div><dt>Formato</dt><dd>Cal Video</dd></div>
+        </dl>
+
+        <p class="paid-calendar__next"><span>03</span> Selecciona fecha y hora en el panel.</p>
+      </div>
+
+      <div class="paid-calendar__embed-shell">
+        <div class="paid-calendar__embed-head">
+          <div aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+          <p>CAL.COM / DISPONIBILIDAD EN VIVO</p>
+          <span>120 MIN</span>
+        </div>
+        <div class="paid-calendar__embed-wrap">
+          <div class="paid-calendar__embed" data-cal-target></div>
+          <div class="paid-calendar__missing" data-cal-missing hidden role="status">
+            <p class="paid-calendar__code"><span></span> CALENDARIO / SIN SEÑAL</p>
+            <h2>El pago sí quedó confirmado.</h2>
+            <p>El calendario todavía no está disponible. Conserva esta página: la referencia de Wompi es suficiente para validar tu sesión.</p>
+          </div>
+        </div>
+        <p class="paid-calendar__embed-note">La zona horaria se ajusta en Cal.com antes de confirmar.</p>
       </div>
     </div>
   </div>
 </section>
 
 <style>
+  .paid-calendar,
+  .paid-calendar *,
+  .paid-calendar *::before,
+  .paid-calendar *::after { box-sizing: border-box; }
+
   .paid-calendar {
+    --night: #131118;
+    --night-deep: #0b0a0e;
+    --panel: #1a1720;
+    --cream: #fff8ea;
+    --cream-2: #eee6d8;
+    --soft: rgba(255, 248, 234, .62);
+    --faint: rgba(255, 248, 234, .08);
+    --line: rgba(255, 248, 234, .18);
+    --c1: #ff6b45;
+    --c2: #c79aff;
+    --c3: #5d72ff;
+    --c4: #c8ff3d;
+    --font-display: 'Bricolage Grotesque Variable', 'Arial Narrow', sans-serif;
+    --font-body: 'IBM Plex Sans Variable', Arial, sans-serif;
+    --font-code: 'IBM Plex Mono', ui-monospace, monospace;
+    position: relative;
+    isolation: isolate;
     min-height: 100svh;
-    padding: clamp(28px, 5vw, 72px);
-    color: #111820;
-    background: #f2efe8;
+    overflow: hidden;
+    padding: 0 clamp(18px, 3.4vw, 54px) clamp(32px, 5vw, 76px);
+    color: var(--cream);
+    background:
+      radial-gradient(circle at 86% 6%, rgba(199, 154, 255, .1), transparent 28rem),
+      radial-gradient(circle at 5% 100%, rgba(255, 107, 69, .08), transparent 32rem),
+      var(--night);
+    font-family: var(--font-body);
   }
 
-  .paid-calendar__status {
-    max-width: 760px;
-    margin: 10vh auto 0;
-    padding-top: 24px;
-    border-top: 6px solid #111820;
+  .paid-calendar [hidden] { display: none !important; }
+
+  .paid-calendar__field {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    overflow: hidden;
+    background-image:
+      linear-gradient(rgba(255, 248, 234, .035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 248, 234, .035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+    pointer-events: none;
   }
 
-  .paid-calendar__code {
-    margin: 0 0 36px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: .15em;
-    color: #1e5fa8;
+  .paid-calendar__field span {
+    position: absolute;
+    width: clamp(180px, 26vw, 420px);
+    aspect-ratio: 1;
+    border: 1px solid currentColor;
+    border-radius: 43% 57% 31% 69% / 59% 38% 62% 41%;
+    opacity: .09;
+    animation: field-turn 28s linear infinite;
   }
 
-  .paid-calendar h1 {
-    max-width: 12ch;
-    margin: 0 0 28px;
-    font-family: var(--font-serif);
-    font-size: clamp(48px, 7vw, 90px);
-    line-height: .98;
-    letter-spacing: -.03em;
-    font-weight: 400;
+  .paid-calendar__field span:nth-child(1) { top: 10%; left: -10%; color: var(--c1); }
+  .paid-calendar__field span:nth-child(2) { top: -17%; right: 5%; color: var(--c2); animation-direction: reverse; }
+  .paid-calendar__field span:nth-child(3) { right: -12%; bottom: 2%; color: var(--c3); animation-duration: 34s; }
+  .paid-calendar__field span:nth-child(4) { left: 22%; bottom: -28%; color: var(--c4); animation-direction: reverse; animation-duration: 38s; }
+
+  .paid-calendar__bar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 86px;
+    max-width: 1540px;
+    margin-inline: auto;
+    border-bottom: 1px solid var(--line);
   }
 
-  .paid-calendar__status > p:not(.paid-calendar__code),
-  .paid-calendar__intro > p:not(.paid-calendar__code) {
-    max-width: 52ch;
-    color: #60666b;
-    font-size: 16px;
-    line-height: 1.65;
+  .paid-calendar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--cream);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -.01em;
+    text-decoration: none;
   }
 
-  .paid-calendar__status a {
-    display: inline-block;
-    margin-top: 28px;
-    padding-bottom: 3px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    border-bottom: 1px solid #111820;
+  .paid-calendar__brand small {
+    color: var(--soft);
+    font-family: var(--font-code);
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: .11em;
   }
 
-  .paid-calendar__approved {
+  .paid-calendar__monogram {
     display: grid;
-    grid-template-columns: minmax(280px, 4fr) minmax(0, 7fr);
-    gap: clamp(36px, 7vw, 100px);
-    max-width: 1440px;
+    place-items: center;
+    width: 38px;
+    aspect-ratio: 1;
+    color: var(--night);
+    background: var(--cream);
+    border-radius: 50% 50% 43% 57% / 47% 39% 61% 53%;
+    font-family: var(--font-code);
+    font-size: 11px;
+    letter-spacing: -.06em;
+    transform: rotate(-4deg);
+  }
+
+  .paid-calendar__bar > p {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    color: var(--soft);
+    font-family: var(--font-code);
+    font-size: 9px;
+    letter-spacing: .09em;
+  }
+
+  .paid-calendar__bar > p span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--c4);
+    box-shadow: 0 0 0 5px rgba(200, 255, 61, .09);
+    animation: live-pulse 2.2s ease-out infinite;
+  }
+
+  .paid-calendar__status,
+  .paid-calendar__approved {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1540px;
+    margin-inline: auto;
+    padding-top: clamp(28px, 5vw, 72px);
+  }
+
+  .paid-calendar__route {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    max-width: 720px;
+    margin: 0 0 clamp(36px, 6vw, 84px) auto;
+    padding: 0;
+    list-style: none;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .paid-calendar__route li {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 54px;
+    padding: 10px 14px;
+    color: rgba(255, 248, 234, .36);
+    background: var(--night);
+    font-family: var(--font-code);
+  }
+
+  .paid-calendar__route li::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+    height: 3px;
+    background: transparent;
+  }
+
+  .paid-calendar__route li:nth-child(1)::after { background: var(--c1); }
+  .paid-calendar__route li:nth-child(2)::after { background: var(--c2); }
+  .paid-calendar__route li:nth-child(3)::after { background: var(--c4); }
+  .paid-calendar__route li:not(.is-active, .is-complete)::after { opacity: .15; }
+  .paid-calendar__route li.is-active { color: var(--cream); background: var(--panel); }
+  .paid-calendar__route li.is-complete { color: var(--soft); }
+  .paid-calendar__route li > span { font-size: 9px; }
+  .paid-calendar__route li strong { font-size: 9px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; }
+  .paid-calendar__route li i { color: var(--c4); font-style: normal; font-size: 12px; }
+
+  .paid-calendar__status-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, .9fr) minmax(340px, 1.1fr);
+    align-items: center;
+    gap: clamp(48px, 9vw, 150px);
+    max-width: 1260px;
     margin-inline: auto;
   }
 
-  .paid-calendar__intro { padding-top: 24px; border-top: 6px solid #111820; }
-  .paid-calendar__intro dl { margin: 42px 0 0; border-top: 1px solid #111820; }
-  .paid-calendar__intro dl div { display: flex; justify-content: space-between; gap: 20px; padding: 13px 0; border-bottom: 1px solid #c7c0b3; }
-  .paid-calendar__intro dt { color: #60666b; font-size: 13px; }
-  .paid-calendar__intro dd { margin: 0; font-family: var(--font-mono); font-size: 10px; }
+  .paid-calendar__signal {
+    position: relative;
+    width: min(100%, 520px);
+    aspect-ratio: 1;
+    justify-self: center;
+    border: 1px solid var(--line);
+    border-radius: 43% 57% 49% 51% / 52% 44% 56% 48%;
+    background:
+      linear-gradient(rgba(255, 248, 234, .04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 248, 234, .04) 1px, transparent 1px),
+      rgba(11, 10, 14, .72);
+    background-size: 34px 34px;
+    box-shadow: inset 0 0 80px rgba(0, 0, 0, .38), 0 42px 110px rgba(0, 0, 0, .28);
+    transform: rotate(-2deg);
+  }
 
-  .paid-calendar__embed-wrap { min-height: 700px; background: #faf8f3; border: 1px solid #c7c0b3; }
-  .paid-calendar__embed { min-height: 700px; overflow: auto; }
-  .paid-calendar__missing { padding: clamp(32px, 6vw, 72px); }
-  .paid-calendar__missing p { max-width: 48ch; line-height: 1.6; }
+  .paid-calendar__orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px dashed rgba(255, 248, 234, .16);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-  @media (max-width: 850px) {
-    .paid-calendar__approved { grid-template-columns: 1fr; }
+  .paid-calendar__orbit--outer { width: 72%; aspect-ratio: 1; animation: orbit-turn 24s linear infinite; }
+  .paid-calendar__orbit--inner { width: 42%; aspect-ratio: 1; animation: orbit-turn-reverse 17s linear infinite; }
+
+  .paid-calendar__node {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    color: var(--night);
+    background: var(--node-color);
+    font-family: var(--font-code);
+    font-size: 10px;
+    font-weight: 600;
+    box-shadow: 0 0 0 9px color-mix(in srgb, var(--node-color) 14%, transparent);
+  }
+
+  .paid-calendar__node--one { --node-color: var(--c1); top: 18%; left: 17%; }
+  .paid-calendar__node--two { --node-color: var(--c2); top: 17%; right: 16%; }
+  .paid-calendar__node--three { --node-color: var(--c3); bottom: 18%; left: 17%; color: var(--cream); }
+  .paid-calendar__node--four { --node-color: var(--c4); right: 16%; bottom: 17%; }
+
+  .paid-calendar__signal-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    width: 29%;
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 248, 234, .28);
+    border-radius: 50%;
+    background: rgba(19, 17, 24, .92);
+    transform: translate(-50%, -50%);
+  }
+
+  .paid-calendar__signal-core i {
+    width: 8px;
+    height: 8px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background: var(--c2);
+    box-shadow: 0 0 20px var(--c2);
+    animation: core-pulse 1.8s ease-in-out infinite;
+  }
+
+  .paid-calendar__signal-core span,
+  .paid-calendar__signal-core strong { font-family: var(--font-code); text-align: center; }
+  .paid-calendar__signal-core span { font-size: clamp(7px, .7vw, 10px); letter-spacing: .13em; }
+  .paid-calendar__signal-core strong { margin-top: 4px; color: var(--soft); font-size: clamp(7px, .75vw, 11px); font-weight: 400; }
+
+  .paid-calendar__state { max-width: 650px; }
+
+  .paid-calendar__code {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 24px;
+    color: var(--c2);
+    font-family: var(--font-code);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .paid-calendar__code > span {
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .paid-calendar__code b { font-weight: 600; }
+  .paid-calendar__code--success { color: var(--c4); }
+
+  .paid-calendar h1,
+  .paid-calendar h2,
+  .paid-calendar p { margin-top: 0; }
+
+  .paid-calendar h1 {
+    max-width: 13ch;
+    margin-bottom: clamp(24px, 3vw, 38px);
+    font-family: var(--font-display);
+    font-size: clamp(46px, 6.4vw, 100px);
+    font-variation-settings: 'wdth' 88, 'opsz' 72;
+    font-weight: 650;
+    line-height: .9;
+    letter-spacing: -.055em;
+  }
+
+  .paid-calendar__state-copy,
+  .paid-calendar__intro-copy {
+    max-width: 52ch;
+    margin-bottom: 36px;
+    color: var(--soft);
+    font-size: clamp(15px, 1.4vw, 18px);
+    line-height: 1.62;
+  }
+
+  .paid-calendar__reference {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    max-width: 620px;
+    padding: 15px 0;
+    border-block: 1px solid var(--line);
+  }
+
+  .paid-calendar__reference span,
+  .paid-calendar__reference code {
+    font-family: var(--font-code);
+    font-size: 9px;
+    letter-spacing: .07em;
+  }
+
+  .paid-calendar__reference span { color: rgba(255, 248, 234, .42); }
+  .paid-calendar__reference code { overflow-wrap: anywhere; color: var(--cream); }
+
+  .paid-calendar__safety {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    max-width: 54ch;
+    margin: 24px 0 0;
+    color: rgba(255, 248, 234, .48);
+    font-family: var(--font-code);
+    font-size: 10px;
+    line-height: 1.6;
+  }
+
+  .paid-calendar__safety span { color: var(--c1); }
+
+  .paid-calendar__back {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    width: min(100%, 310px);
+    margin-top: 36px;
+    padding: 16px 18px;
+    color: var(--night);
+    background: var(--cream);
+    font-family: var(--font-code);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-decoration: none;
+    transition: background-color .25s ease, transform .25s ease;
+  }
+
+  .paid-calendar__back:hover { background: var(--c2); transform: translateY(-2px); }
+  .paid-calendar__back:focus-visible { outline: 2px solid var(--c4); outline-offset: 4px; }
+
+  .paid-calendar__approved-grid {
+    display: grid;
+    grid-template-columns: minmax(270px, .64fr) minmax(540px, 1.36fr);
+    align-items: start;
+    gap: clamp(36px, 6vw, 96px);
+  }
+
+  .paid-calendar__intro { position: sticky; top: 28px; padding-top: 28px; border-top: 4px solid var(--c4); }
+
+  .paid-calendar__intro h1 {
+    max-width: 10ch;
+    font-size: clamp(50px, 6vw, 94px);
+  }
+
+  .paid-calendar__reference--approved { margin-bottom: 30px; }
+
+  .paid-calendar__intro dl {
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .paid-calendar__intro dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .paid-calendar__intro dt { color: rgba(255, 248, 234, .45); font-size: 12px; }
+  .paid-calendar__intro dd { margin: 0; font-family: var(--font-code); font-size: 10px; text-align: right; }
+
+  .paid-calendar__next {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 0;
+    color: var(--soft);
+    font-family: var(--font-code);
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .paid-calendar__next span {
+    display: grid;
+    place-items: center;
+    width: 31px;
+    aspect-ratio: 1;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    color: var(--night);
+    background: var(--c4);
+    font-weight: 600;
+  }
+
+  .paid-calendar__embed-shell {
+    min-width: 0;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    box-shadow: 0 44px 110px rgba(0, 0, 0, .35);
+  }
+
+  .paid-calendar__embed-head {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 14px;
+    min-height: 52px;
+    padding: 10px 16px;
+    color: var(--cream);
+    background: var(--night-deep);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-code);
+  }
+
+  .paid-calendar__embed-head > div { display: flex; gap: 5px; }
+  .paid-calendar__embed-head > div span { width: 6px; height: 6px; border-radius: 50%; }
+  .paid-calendar__embed-head > div span:nth-child(1) { background: var(--c1); }
+  .paid-calendar__embed-head > div span:nth-child(2) { background: var(--c2); }
+  .paid-calendar__embed-head > div span:nth-child(3) { background: var(--c3); }
+  .paid-calendar__embed-head > div span:nth-child(4) { background: var(--c4); }
+  .paid-calendar__embed-head p { margin: 0; font-size: 8px; letter-spacing: .1em; text-align: center; }
+  .paid-calendar__embed-head > span { justify-self: end; color: var(--c4); font-size: 8px; letter-spacing: .08em; }
+
+  .paid-calendar__embed-wrap { position: relative; min-height: 720px; color: var(--night); background: var(--cream); }
+  .paid-calendar__embed { min-height: 720px; overflow: auto; }
+
+  .paid-calendar__missing {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    padding: clamp(32px, 7vw, 88px);
+    color: var(--cream);
+    background:
+      linear-gradient(rgba(255, 248, 234, .04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 248, 234, .04) 1px, transparent 1px),
+      var(--panel);
+    background-size: 36px 36px;
+  }
+
+  .paid-calendar__missing h2 {
+    max-width: 12ch;
+    margin-bottom: 20px;
+    font-family: var(--font-display);
+    font-size: clamp(34px, 4vw, 64px);
+    line-height: .95;
+    letter-spacing: -.045em;
+  }
+
+  .paid-calendar__missing > p:last-child { max-width: 48ch; margin-bottom: 0; color: var(--soft); line-height: 1.65; }
+
+  .paid-calendar__embed-note {
+    margin: 0;
+    padding: 13px 16px;
+    color: #5a554d;
+    background: var(--cream-2);
+    border-top: 1px solid rgba(19, 17, 24, .13);
+    font-family: var(--font-code);
+    font-size: 8px;
+    letter-spacing: .07em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  @keyframes live-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(200, 255, 61, .3); }
+    70%, 100% { box-shadow: 0 0 0 9px rgba(200, 255, 61, 0); }
+  }
+
+  @keyframes core-pulse {
+    0%, 100% { opacity: .45; transform: scale(.75); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes orbit-turn { to { transform: translate(-50%, -50%) rotate(360deg); } }
+  @keyframes orbit-turn-reverse { to { transform: translate(-50%, -50%) rotate(-360deg); } }
+  @keyframes field-turn { to { transform: rotate(360deg); } }
+
+  @media (max-width: 1050px) {
+    .paid-calendar__approved-grid { grid-template-columns: minmax(240px, .55fr) minmax(500px, 1.45fr); gap: 36px; }
+    .paid-calendar__intro h1 { font-size: clamp(46px, 6vw, 72px); }
+  }
+
+  @media (max-width: 900px) {
+    .paid-calendar__status-grid,
+    .paid-calendar__approved-grid { grid-template-columns: 1fr; }
+    .paid-calendar__signal { width: min(78vw, 470px); }
+    .paid-calendar__state { max-width: 720px; }
+    .paid-calendar__intro { position: static; max-width: 720px; }
+    .paid-calendar__intro h1 { max-width: 12ch; }
+  }
+
+  @media (max-width: 620px) {
+    .paid-calendar { padding-inline: 16px; }
+    .paid-calendar__bar { min-height: 74px; }
+    .paid-calendar__bar > p { display: none; }
+    .paid-calendar__route { margin-left: 0; }
+    .paid-calendar__route li { grid-template-columns: 1fr; gap: 4px; min-height: 58px; }
+    .paid-calendar__route li i { position: absolute; top: 10px; right: 10px; }
+    .paid-calendar__signal { width: min(92vw, 430px); }
+    .paid-calendar__node { width: 32px; font-size: 8px; }
+    .paid-calendar__reference { grid-template-columns: 1fr; gap: 7px; }
+    .paid-calendar__embed-head { grid-template-columns: auto 1fr; }
+    .paid-calendar__embed-head p { text-align: right; }
+    .paid-calendar__embed-head > span { display: none; }
+    .paid-calendar__embed-wrap,
+    .paid-calendar__embed { min-height: 680px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .paid-calendar *,
+    .paid-calendar *::before,
+    .paid-calendar *::after {
+      scroll-behavior: auto !important;
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+    }
   }
 </style>
 

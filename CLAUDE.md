@@ -1,364 +1,292 @@
-# PROYECTO: Landing Omar Álvarez — Consultoría 2H v3.2
+# PROYECTO: omaralvarezo.co — Consultoría 2H v3.3
 
-## Contexto del proyecto
+## Contexto
 
-**Dueño:** Omar Álvarez — CEO de Grupo Empresarial Enzo S.A.S. (Enzo Motorsport + Arkhē Coworking), Cúcuta, Colombia.
-**Objetivo:** Landing de conversión TikTok → convicción → una sola oferta: Sesión de arquitectura operativa con IA, 120 minutos, `USD 797` cobrados en COP con tasa operativa diaria. Público: dueños y socios de empresas de servicios que quieren mejorar captación, CRM, operación o postventa. Conversión: lectura → Marco 4C → brief → Wompi → verificación server-side → Cal.com. No hay llamada gratuita, pack, retainer ni contacto directo público.
-**Brand:** sigue **omar-brand v2.1** (skill `omar-brand-SKILL-v2.1.md` del brand kit OAAO). Toda decisión visual debe consultar primero ese SKILL.
+**Dueño:** Omar Álvarez — fundador y operador de Enzo Motorsport y Arkhē, Cúcuta, Colombia.
 
-**Benchmark visual obligatorio:** Stratechery, The Generalist, Linear, Vercel docs, Attio, Brittany Chiang. Si no se siente al nivel, no está terminada.
+**Objetivo:** convertir tráfico de TikTok en una única sesión privada de 120 minutos para dueños o
+socios de empresas de servicios. El visitante debe entender primero cómo piensa y qué ha construido
+Omar; el precio y el brief aparecen después de la prueba.
 
-## Oferta vigente — v3.2 (reemplaza cualquier oferta descrita más abajo)
+**Posicionamiento:** Omar no vende “IA” en abstracto ni se presenta como coach. Opera negocios
+físicos, construye sus sistemas y ayuda a otra empresa a decidir qué pieza vale la pena construir
+primero.
+
+**Recorrido:** TikTok → sistema vivo → evidencia operativa → Marco 4C → proyectos → sesión → encaje →
+FAQ → brief → Wompi → verificación server-side → Cal.com.
+
+No hay llamada gratuita, paquetes, retainer, contacto directo público, descuento inventado,
+temporizador ni escasez fabricada.
+
+---
+
+## Oferta vigente
 
 | Campo | Valor |
 |---|---|
-| Producto | Sesión de arquitectura operativa con IA |
+| Producto | Sesión privada para diseñar un sistema operativo con IA |
 | Duración | 120 minutos |
 | Precio base | `USD 797` |
-| Cobro | COP con tasa operativa diaria = TRM oficial + 1,65%, redondeada al siguiente múltiplo de $10 |
+| Cobro | COP con tasa operativa diaria |
+| Tasa | TRM oficial + 1,65%, redondeada hacia arriba al múltiplo de `$10 COP` |
 | Pago | 100% anticipado por Wompi |
-| Agenda | Cal.com se desbloquea únicamente tras pago `APPROVED` |
+| Agenda | Cal.com solo después de un pago `APPROVED` |
 | Participantes | Dueño de la decisión + hasta 2 personas del equipo |
-| Incluye | Preparación, sesión, documento de cierre, grabación y 7 días de dudas puntuales |
+| Incluye | Preparación, sesión, mapa del sistema, documento, grabación y 7 días de dudas puntuales |
 
-**Regla de conversión:** el servidor consulta la vigencia oficial para la fecha de Bogotá, aplica el
-spread de 1,65%, redondea la tasa operativa al siguiente múltiplo de `$10 COP`, fija y firma el monto
-en COP. La página muestra TRM, tasa aplicada y total. No existe fallback manual entre fechas: una
-lectura oficial ya validada puede reutilizarse solo durante su misma fecha de Bogotá; si no hay una
-vigente, el checkout falla cerrado. La referencia
-codifica el total cotizado para validarlo sin base de datos. El redirect de Wompi nunca se considera
-prueba de pago. Solo se muestra Cal.com cuando la API confirma estado `APPROVED`, referencia del
-producto, monto cotizado exacto y moneda COP. Las referencias antiguas de `$2.400.000 COP` siguen
-siendo verificables para no romper pagos emitidos antes de v3.1.
-
-**Código vigente del home:** `src/components/consulting/`. Los componentes v2 siguen en disco por
-historial y para preservar cambios locales, pero `src/pages/index.astro` no los publica.
-
-**Marco comercial vigente:** 4C — `Captar → Convertir → Cumplir → Continuar`. La IA es una capa
-transversal para extraer, clasificar, proponer, redactar y alertar; las decisiones sensibles conservan
-un responsable humano. El brief obliga a escoger una C antes de abrir el pago.
+Si el brief no cabe en dos horas o no existe encaje, la reserva no se aprueba y se devuelve el 100%.
+Se puede reprogramar una vez con mínimo 24 horas de aviso.
 
 ---
 
-## Arquitectura — tres capas (patrón Karpathy LLM Wiki)
+## Marco comercial
 
-```
-raw/      → fuentes inmutables. LLM lee, NUNCA modifica ni borra.
-wiki/     → conocimiento sintetizado. LLM crea y mantiene. Omar lee.
-src/      → código Astro de producción (componentes, layouts, páginas).
-CLAUDE.md → este archivo. Schema del proyecto. Co-evoluciona con Omar.
-index.md  → catálogo de páginas wiki y fuentes raw relevantes.
-log.md    → bitácora append-only (ingests, decisiones, migraciones).
-```
+El **Marco 4C** ubica el problema dentro del ciclo de una empresa de servicios:
 
-**Heurística de delineación:**
+| Etapa | Pregunta | Color |
+|---|---|---|
+| C1 · Captar | ¿De dónde llega la atención y dónde queda el dato? | Coral `#FF6B45` |
+| C2 · Convertir | ¿Quién da criterio y mueve la siguiente acción? | Púrpura `#C79AFF` |
+| C3 · Cumplir | ¿Cómo se entrega sin depender de memoria? | Cobalto profundo `#4B5FE3` |
+| C4 · Continuar | ¿Qué ocurre después de entregar? | Lima `#C8FF3D` |
 
-| Pregunta | Si SÍ → |
+La IA es una capa transversal para extraer, clasificar, proponer, redactar y alertar. Las decisiones
+sensibles siguen teniendo responsable humano. En 120 minutos se elige una C; no se promete
+automatizar toda la empresa.
+
+La definición canónica y la validación del brief viven en `src/lib/framework.ts`.
+
+---
+
+## Dirección de arte vigente — “Sistema vivo / taller abierto”
+
+La v3.3 reemplaza por completo la antigua dirección editorial beige + serif + azul.
+
+### Concepto
+
+La página debe sentirse como los sistemas que Omar construye: algo pasa del caos al control delante
+del visitante. La primera escena es precisa, oscura y cinemática; el cuerpo abre un taller humano,
+colorido, asimétrico y lleno de evidencia.
+
+No se copia el carro de Enzo ni la identidad de Arkhē. Se traducen sus principios:
+
+- **Enzo:** oscuridad cálida, una transformación visible, movimiento ligado al contenido y precisión.
+- **Arkhē:** color con función, geometría, escala tipográfica, juego y composiciones menos perfectas.
+- **Omar:** números reales, herramientas reales, voz directa y criterio de operador.
+
+### Paleta
+
+| Token | HEX | Uso |
+|---|---|---|
+| `--ink` | `#131118` | Base nocturna cálida, texto sobre campos claros |
+| `--bone` | `#FFF8EA` | Campo claro, texto sobre ink |
+| `--coral` | `#FF6B45` | C1, señal, CTA de avance |
+| `--purple` | `#C79AFF` | C2, decisión, bloque de reserva |
+| `--cobalt` | `#4B5FE3` | C3, control y ejecución; oscuro para contraste AA con bone |
+| `--lime` | `#C8FF3D` | C4, sistema conectado, confirmación y acción principal |
+| `--sky` | `#BDD9D8` | Puentes y pausas de lectura |
+
+Reglas:
+
+1. El color representa estado o capítulo; no se usa como confeti.
+2. Máximo dos acentos dominantes a la vez salvo en el mapa 4C.
+3. Los fondos sólidos y los bordes físicos tienen prioridad sobre gradientes genéricos.
+4. Un glow o radial tenue solo puede explicar activación/señal dentro del sistema.
+5. No hacer “sopa de cards”. Cada bloque debe tener una composición y un propósito propios.
+
+### Tipografía
+
+| Familia | Rol |
 |---|---|
-| ¿Es un brief original, screenshot de competencia, mensaje WhatsApp con feedback, captura de Stratechery? | `raw/` |
-| ¿Es una decisión de diseño / copy / SEO con su porqué? | `wiki/decisiones/` |
-| ¿Es un framework, métrica, principio editorial? | `wiki/conceptos/` |
-| ¿Es un análisis cruzado entre fuentes? | `wiki/sintesis/` |
-| ¿Es código de producción (componente, layout, página)? | `src/` |
+| **Bricolage Grotesque Variable** | Titulares pesados, compactos y expresivos |
+| **IBM Plex Sans Variable** | Cuerpo, formularios y lectura larga |
+| **IBM Plex Mono** | Estados, tiempos, códigos, etiquetas y telemetría |
+
+- No usar serif en la experiencia de consultoría.
+- Mono es interfaz, no cuerpo largo.
+- Los títulos pueden usar `font-stretch: 75–84%`, peso `700–800` y tracking negativo.
+- El wordmark personal es tipográfico: `omar • álvarez`; no reutiliza el logo corporativo anterior.
+- Geist e Instrument Serif permanecen instaladas para páginas heredadas de `/recursos`; no son la
+  identidad del home actual.
+
+### Motion
+
+1. Scroll nativo, nunca scrolljacking.
+2. El hero usa `215svh` desktop / `175svh` móvil con una escena sticky. El progreso activa cuatro
+   fases del SVG 4C mediante `requestAnimationFrame` solo mientras el hero es visible.
+3. Animar `transform`, `opacity`, stroke y color. Evitar layout thrashing.
+4. Sin loader artificial, cursor reemplazado, audio automático ni navegación-juego.
+5. `prefers-reduced-motion: reduce` muestra directamente el mensaje final y elimina la duración
+   sticky, pulsos y transformaciones decorativas.
+6. Una interacción memorable por capítulo: encendido, stack 4C, rail de proyectos. El resto descansa.
+
+### Voz
+
+**Sí:** “Mira esto”, “La vaina es así”, “Esto ya lo opero”, “No escribas bonito”, “Trae un cuello de
+botella”, “Compras una mala ruta menos”.
+
+**No:** “potencia”, “revoluciona”, “transforma tu negocio”, “lleva al siguiente nivel”, “ecosistema de
+soluciones”, “desbloquea”, “resultados tangibles”, “implementación estratégica” ni voz de guru.
+
+Datos antes que adjetivos. Primera persona. Frases cortas. No inventar métricas, clientes o urgencia.
 
 ---
 
-## Convenciones de nombres
+## Arquitectura visual del home
 
-```
-DIRECTORIOS:
-  kebab-case, sin tildes, sin mayúsculas, sin espacios.
+1. **Hero / el sistema se enciende.** Señales sueltas → venta aislada → operación aislada → 4C
+   conectadas. El precio no aparece aquí.
+2. **Taller abierto.** Origen operativo de Omar + cuatro recibos con resultados reales.
+3. **Principio.** Problema primero, herramienta después.
+4. **Marco 4C.** Cuatro escenas sticky a color, no cuatro tarjetas iguales.
+5. **Sistemas.** Rail horizontal de Enzo, Arkhē, Adjudika y Grupo Enzo con interfaces code-native.
+6. **Sesión.** Ruta continua 00–120 y entregables.
+7. **Encaje y costo.** Filtro explícito + costo de construir la pieza equivocada.
+8. **FAQ.** Condiciones, TRM, alcance, pago y agenda sin letra pequeña.
+9. **Reserva.** Precio, conversión diaria, brief 4C, Wompi y handoff a Cal.com.
 
-RAW (fechado siempre):
-  raw/{tipo}/YYYY-MM-DD-{descriptor-kebab}.{md|png|jpg|pdf}
-  Ejemplos:
-    raw/briefs/2026-05-11-objetivo-conversion-whatsapp.md
-    raw/benchmarks/2026-05-11-stratechery-hero.png
-    raw/capturas/2026-05-11-feedback-cliente.png
-    raw/notas/2026-05-11-conversacion-positioning.md
-
-WIKI (sin fecha en nombre, frontmatter lleva las fechas):
-  Decisiones: wiki/decisiones/{slug}.md
-  Conceptos:  wiki/conceptos/{slug}.md
-  Síntesis:   wiki/sintesis/{slug}.md
-```
+La navegación cambia su CTA de “empezar el recorrido” a “reservar 2 horas” después de que el usuario
+llega a los sistemas.
 
 ---
 
-## Frontmatter obligatorio (wiki)
+## Invariantes de pago y agenda
 
-Todo archivo `.md` en `wiki/` lleva frontmatter YAML:
+Estas reglas no se modifican por razones visuales:
+
+1. El servidor consulta la TRM oficial cuya vigencia cubre la fecha de Bogotá.
+2. Aplica `1,65%` y redondea la tasa operativa hacia arriba al siguiente múltiplo de `$10 COP`.
+3. La página muestra precio USD, TRM oficial, tasa aplicada y total exacto antes de pagar.
+4. No existe fallback manual entre fechas. Una lectura oficial ya verificada solo puede reutilizarse
+   durante la misma fecha de Bogotá; si no hay tasa vigente, el checkout falla cerrado.
+5. El servidor recalcula el monto. Nunca confía en un total enviado por el navegador.
+6. La referencia codifica monto y fecha; la firma de integridad protege el Checkout Web.
+7. Un redirect no prueba el pago. Cal.com solo se revela cuando Wompi confirma `APPROVED`, referencia
+   correcta, monto exacto y moneda `COP`.
+8. Las referencias heredadas por `$2.400.000 COP` siguen verificándose para no romper pagos emitidos.
+9. El brief temporal vive en `sessionStorage`; no se creó otra base de datos.
+
+---
+
+## Archivos vigentes
+
+```text
+src/
+├── pages/
+│   ├── index.astro
+│   ├── consultoria/agendar.astro
+│   └── api/consultoria/
+│       ├── checkout.ts
+│       ├── quote.ts
+│       └── status.ts
+├── layouts/
+│   └── Layout.astro
+├── components/consulting/
+│   ├── ConsultingLanding.astro  ← relato, escenas y motion
+│   ├── SystemIgnition.astro     ← mapa SVG 4C code-native
+│   ├── CheckoutForm.astro       ← brief + cotización + Wompi
+│   └── PaidCalendar.astro       ← verificación + Cal.com
+└── lib/
+    ├── consulting.ts            ← precio y reglas comerciales
+    ├── framework.ts             ← 4C canónicas
+    ├── trm.ts                   ← fuente oficial, spread y cotización
+    └── wompi-consulting.ts      ← firma y verificación
+
+public/
+├── og-image.svg                 ← OG “Sistema vivo” 1200×630
+└── resources/
+    └── marco-4c-servicios-omar-alvarez.pptx
+```
+
+Los componentes históricos fuera de `components/consulting/` siguen alimentando `/recursos` u otras
+rutas. No borrarlos durante cambios del home sin revisar sus importaciones.
+
+---
+
+## Base de conocimiento
+
+```text
+raw/      → fuentes inmutables; leer, nunca modificar ni borrar.
+wiki/     → decisiones y síntesis mantenidas por el agente.
+src/      → producto de producción.
+CLAUDE.md → contrato vivo del proyecto.
+index.md  → catálogo de wiki y raw relevante.
+log.md    → bitácora append-only.
+```
+
+Todo `.md` dentro de `wiki/` usa frontmatter:
 
 ```yaml
 ---
-titulo: "Nombre legible de la página"
+titulo: "Nombre legible"
 tipo: decision | concepto | sintesis
 dominio: [diseño, copy, seo, conversion, brand, infra, performance]
 tags: [tag1, tag2]
 fuentes:
-  - "[[raw/briefs/2026-05-11-objetivo-conversion-whatsapp]]"
-  - "[[wiki/conceptos/jerarquia-editorial]]"
+  - "[[ruta/a/fuente]]"
 creado: YYYY-MM-DD
 actualizado: YYYY-MM-DD
 ---
 ```
 
-**Obligatorios:** `titulo, tipo, dominio, creado, actualizado`.
-**Opcionales:** `tags, fuentes` (pero `fuentes` debería estar casi siempre).
+Fuentes locales clave para decisiones del home:
 
-**Dominios fijos** (no inventar nuevos sin preguntar):
-- `diseño` — paleta, tipografía, espaciado, composición visual
-- `copy` — hooks, body, microcopy, CTAs, tono editorial
-- `seo` — meta tags, OG, sitemap, schema.org, keywords
-- `conversion` — flujo Cal.com, posicionamiento de CTAs, A/B, friction
-- `brand` — identidad v2.1, voz, jerarquía 3 familias
-- `infra` — Astro, Tailwind, build, deploy, Vercel, dominios
-- `performance` — Lighthouse, LCP, fuentes, imágenes, bundle
+- Enzo: `../grupo-enzo/enzo-motorsport/site/index.html`
+- Arkhē web: `../grupo-enzo/arkhe/components/ArkheSpaceWebsite.jsx`
+- Arkhē brandbook: `../sara-wrapped/raw/media/00026246-Brandbook_Arkhé.pdf`
+- Voz TikTok: `../second-brain/projects/marca-personal-tiktok/serie-90-dias/01-reglas-de-voz.md`
+- Casos reales: `../second-brain/projects/marca-personal-tiktok/serie-90-dias/07-inventario-casos.md`
 
 ---
 
-## Sistema de diseño (resumen ejecutivo)
+## Stack
 
-### Concepto
+- Astro 5 + TypeScript strict.
+- Adapter de Vercel para rutas server-side.
+- Wompi Checkout Web en COP.
+- TRM de Superfinanciera vía Datos Abiertos Colombia.
+- Cal.com inline después del pago aprobado.
+- Bricolage Grotesque Variable + IBM Plex Sans Variable + IBM Plex Mono, self-hosted con Fontsource.
+- Sin WebGL, imágenes remotas, loader o dependencia visual externa en el home.
 
-Marca personal **operador editorial**. Terminal de builder con alma de editorial de negocios. No japandi, no startup tech bro, no coach de LinkedIn.
+## Comandos
 
-**Tagline:** Negocios reales, código real.
-
-### Paleta — un solo acento, fondo claro
-
-| Token | HEX | Uso |
-|-------|-----|-----|
-| `--bg` | `#FAFAF9` | Lienzo (frío, no blanco puro) |
-| `--bg-soft` | `#F4F4F2` | Cards, secciones, separación sutil |
-| `--ink` | `#0A0A0A` | Texto principal, titulares, números |
-| `--ink-soft` | `#262626` | Cuerpo largo |
-| `--mute` | `#525252` | Metadatos, captions, etiquetas |
-| `--line` | `#E5E5E2` | Bordes, divisores |
-| `--line-hi` | `#D4D4D0` | Hover borders |
-| `--accent` | `#1E5FA8` | **Único acento.** Datos clave, links, CTAs, punto del logo |
-| `--accent-soft` | `#E8F0FA` | Tags, highlights, badges |
-| `--positive` | `#15803D` | Delta financiero positivo (uso restringido) |
-| `--negative` | `#B91C1C` | Delta financiero negativo (uso restringido) |
-
-### Reglas críticas de color
-
-1. **NUNCA `#000000`.** Siempre `--ink` (`#0A0A0A`).
-2. **NUNCA `#FFFFFF`.** Siempre `--bg` (`#FAFAF9`).
-3. **Un solo acento.** El azul. Si la pieza necesita un segundo color, no lo necesita.
-4. **Sin gradientes, sombras, glows, blur, neón.** Plano, plano, plano. (Excepción: `mask-image` con gradient para fade-out funcional, no visible.)
-5. **El azul nunca decora.** Solo carga sentido: número clave, link, CTA, palabra que el lector debe recordar, punto del logo.
-6. **Acento <8% por viewport.** Excepción: el punto del logo.
-
-### Tipografía — sistema 3-familias (landing)
-
-> La landing **no aplica** la regla "Mono 95%" del SKILL OAAO v2.1 puro (ese aplica a decks y social). Aquí rige el sistema 3-familias documentado en `wiki/decisiones/tipografia-3-familias-landing.md`.
-
-| Familia | Rol | Aprox. % |
-|---------|-----|---------|
-| **Instrument Serif Regular** | Headlines editoriales (`display-1`, `display-2`, `h2-section`), hooks, palabra protagonista (`accent-italic`), tagline + statement del footer | ~15% |
-| **Geist Sans Variable** | Cuerpos largos (`body-lg`, `body`), descripciones de card, H3 de card (`h3-card`), preguntas FAQ | ~55% |
-| **Geist Mono Variable** | Toda meta-info: paths, timestamps, etiquetas CAPS, números grandes (`number-display`), CTAs, badges, marquee, footer cols, captions del chart, FACT-XX, copy de mocks, logo wordmark | ~30% |
-
-**Tracking:**
-- `-0.04em` en displays de número grande
-- `-0.025em` en logo
-- `-0.02em` en H2/H3 sans
-- `-0.018em` en serif (display-1, display-2, h2-section)
-- `-0.005em` body sans
-- `+0.18em` en etiquetas CAPS mono, `+0.04em` en path/meta mono
-
-**Reglas:**
-- Instrument Serif Regular para headlines y máximo **1 hook por sección** (palabra subrayada en azul via `.accent-italic`).
-- Sans para body largo. Mono para body solo cuando es textura ambiente (mocks).
-- Nunca bold pesado (>500). Sans 400/500. Mono 400/500.
-- Etiquetas CAPS solo en mono.
-- Números grandes y deltas siempre en mono.
-- Acento azul `#1E5FA8` único, <8% por viewport, carga señal nunca decora.
-
-### Sistema de tamaños
-
-- Display 1 (Instrument Serif): `clamp(48px, 8vw, 112px)` lh 1.0
-- Display 2 (Instrument Serif): `clamp(36px, 5vw, 72px)` lh 1.05
-- H2 sección (Geist Mono Medium): `clamp(28px, 3.5vw, 56px)` lh 1.05
-- Body: 15px lh 1.6
-- Caption: 13px lh 1.5
-- Mono label: 11px CAPS tracking 0.18em
-- Path/meta: 11px tracking 0.04em
-- Número grande (mono): `clamp(28px, 4vw, 40px)+` tracking -0.04em
-
-### Spacing
-
-- Container: `max-w 1280px`, padding lateral `clamp(20px, 4vw, 48px)`
-- Vertical entre secciones: `clamp(80px, 12vw, 200px)`
-- Grid de 12 columnas
-
-### Logo / wordmark
-
-| Variante | Composición | Uso |
-|----------|-------------|-----|
-| Principal | `omar.alvarez` Geist Mono Medium 500, punto en `--accent` | Header de landing, footer, OG image, firma |
-| Avatar | `o.a` mismo tratamiento | Foto de perfil de redes (cuadrado) |
-| Favicon | `o.` mismo tratamiento | Tab del navegador, app icon |
-
-**Reglas duras:** nunca rotar, estirar, deformar. Nunca añadir sombra/outline/glow. Nunca cambiar el color del punto. Nunca usar sobre fondo de acento sólido.
-
-Componente: `src/components/Logo.astro` con props `variant` (`horizontal | avatar | mark`), `size`, `inverse`.
-SVGs canónicos en `public/brand/`. Favicon en `public/favicon.svg`. OG en `public/og-image.svg`.
-
-### Voz y tono
-
-**Operador documentando.** Presente sobre pasado. Datos antes que adjetivos. Frases cortas. Cero emojis decorativos. Sin urgencia fabricada. Inglés solo en términos técnicos reales (prompt, API, P&L, MRR).
-
-**SÍ:** margen, flujo de caja, P&L, runway, palanca, tracción, criterio, oficio, prompt, flujo, KPI, throughput, CAC, ratio, delta, dependencia, cuello de botella.
-
-**NO:** hackear, mindset, libertad financiera, 10x, sinergia, disrupción, unlock, game-changer, mover la aguja, escalar al infinito.
-
----
-
-## Sistema de motion
-
-### Reglas globales
-- **Easing default:** `cubic-bezier(0.16, 1, 0.3, 1)` (out-expo, premium)
-- **Duraciones:** 0.3s micro · 0.6s entrada · 1.2s revelación grande
-- **Triggers:** IntersectionObserver siempre. Nunca scroll listeners.
-- **`prefers-reduced-motion: reduce`:** desactiva loader, cursor, splits, reveals, marquee, pulse.
-
-### Microinteracciones implementadas
-
-1. **Cursor custom (desktop only):** dot 6px ink + ring 32px border ink. Hover sobre links/botones → ring 48px se llena de azul. Magnetic effect en CTAs (data-magnetic). Sin mix-blend-mode.
-2. **Hover en cards/links:** `translateY(-2px)` + cambio de `border-color` `--line` → `--line-hi`. Sin shadows.
-3. **Botones primarios:** background `--accent` sólido, hover baja opacity a 0.85. CTAs con `border-radius: 0` (no pills) para look editorial.
-4. **Text reveal en scroll:** split por palabras, stagger 40ms, `translateY(115% → 0)` + opacity 0→1. CSS-driven con clase `.is-revealed`.
-5. **Marquee infinito:** 40s loop, pause on hover. Separadores en `--line-hi` (no azul). Mask-image lateral para fade.
-6. **Counters animados:** count-up out-expo 1.5s al entrar en viewport.
-7. **Scroll progress:** barra `--accent` 2px arriba.
-8. **Pulse del dot del badge:** scale + opacity, sin box-shadow.
-9. **Form border-bottom:** pseudo-elemento `::after` con width 0→100% en focus, sin gradient hack.
-10. **Section header recurrente:** `[NN · PILAR]` izq + `~/omar.alvarez · YYYY.MM.DD` der, con border-bottom 0.5px `--line`. Componente `SectionLabel.astro`.
-
-### Animaciones eliminadas (v2.1)
-
-- Background grid del Hero (decorativo).
-- Lima glow blob del Hero (gradiente prohibido).
-- Box-shadow del pulse del dot.
-- Box-shadow del FAB de agendar.
-- Backdrop-filter blur del Nav.
-- Mix-blend-mode difference del cursor.
-- Foto duotono lima en About (B&N puro o sin filtro).
-- Grain noise SVG sobre `<body>` (era anti-banding de negros, no aplica en claro).
-- Italic decorativo en Instrument Serif (brandbook v2.1 manda Regular).
-
----
-
-## Estructura del proyecto
-
-```
-src/
-├── pages/
-│   ├── index.astro          ← Hero → Footer
-│   └── recursos.astro
-├── layouts/
-│   └── Layout.astro         ← Head, OG, schema.org Person
-├── components/
-│   ├── Logo.astro           ← Wordmark omar.alvarez (3 variantes)
-│   ├── Hero.astro           ← Header + badge + headline serif + CTAs + métricas
-│   ├── Marquee.astro        ← Strip infinito 40s
-│   ├── ForWho.astro         ← 01 · 3 cards buyer personas
-│   ├── Services.astro       ← 02 · 3 servicios asimétricos
-│   ├── Method.astro         ← 03 · timeline 4 pasos
-│   ├── Cases.astro          ← 04 · bento 3 casos (Enzo + Arkhē + O&P)
-│   ├── About.astro          ← 05 · placeholder o.a + bio v2.1
-│   ├── FAQ.astro            ← 06 · 6 details
-│   ├── ContactForm.astro    ← 07 · split editorial + embed Cal.com inline
-│   ├── Footer.astro         ← 4 cols + cierre con wordmark sobre --ink
-│   ├── Nav.astro            ← Sticky logo + links + CTA azul
-│   ├── SectionLabel.astro   ← Header recurrente [PILAR] + path/timestamp
-│   ├── Loader.astro         ← Preloader 1.2s
-│   ├── CustomCursor.astro   ← Dot + ring (desktop only)
-│   ├── ScrollProgress.astro ← Barra azul 2px top
-│   ├── BookFloat.astro      ← FAB 56px agendar Cal.com, aparece tras 25% scroll
-│   ├── CalEmbed.astro       ← CTA reutilizable que dispara modal Cal.com
-│   └── CalRuntime.astro     ← runtime global Cal.com (init + inline embeds)
-├── scripts/
-│   ├── motion-utils.ts
-│   ├── lenis.ts
-│   ├── cursor.ts
-│   ├── scrollProgress.ts
-│   ├── loader.ts
-│   ├── splitText.ts
-│   ├── counter.ts
-│   └── magnetic.ts
-├── styles/
-│   └── global.css           ← Tokens v2.1, typography, reveals
-└── lib/
-    ├── contact.ts           ← CAL_LINK, CAL_NAMESPACE, calButtonAttrs, calBookUrl, SOCIALS
-    └── utils.ts
-
-public/
-├── favicon.svg              ← favicon-o.svg del brand kit
-├── og-image.svg             ← OG card claro con wordmark
-├── logo-mark.svg            ← legacy (no usado)
-└── brand/                   ← Brand kit oficial OAAO
-    ├── favicon-o.svg
-    ├── avatar-o-a-claro.svg
-    ├── avatar-o-a-oscuro.svg
-    ├── logo-omar-alvarez-claro.svg
-    └── logo-omar-alvarez-oscuro.svg
+```bash
+npm install
+npm run dev
+npm run astro -- check
+npm run build
+npm run preview
 ```
 
----
+## Checklist antes de publicar
 
-## Datos centralizados
-Todo en `src/lib/contact.ts`:
-- `CAL_LINK = "omaralvarezo/onboarding-20min"` · `CAL_NAMESPACE = "onboarding-20min"`
-- Helpers `calButtonAttrs(opts?)` y `calBookUrl()`
-- `SOCIALS` (instagram, tiktok, linkedin) — sin email, sin WhatsApp públicos
-- `LOCATION`, `TIMEZONE`
+- [ ] `astro check` sin errores nuevos.
+- [ ] `npm run build` exitoso.
+- [ ] Hero llega a `data-phase="3"` con scroll y muestra el estado final con reduced motion.
+- [ ] Sin overflow horizontal a 390 px y 1440 px.
+- [ ] C1/C2/C3/C4 conservan coral/púrpura/cobalto/lima en landing, brief y agenda.
+- [ ] Precio ausente del hero y presente en reserva.
+- [ ] `/api/consultoria/quote` devuelve `priceUsd=797`, `spreadBps=165` y una tasa operativa ≥ TRM.
+- [ ] Formulario conserva required, límites y selección 4C.
+- [ ] Ningún error de consola en home ni handoff.
+- [ ] No se ejecuta un pago real durante QA automático.
+- [ ] El archivo temporal `public/resources/~$marco-4c-servicios-omar-alvarez.pptx` es del usuario: no
+  borrar, modificar ni versionar.
 
----
+## Para retomar
 
-## Decisiones de arquitectura
+1. Leer este archivo completo.
+2. Revisar `log.md` y `git status` antes de editar.
+3. Leer la decisión `wiki/decisiones/sistema-vivo-control-room.md`.
+4. Mantener los invariantes de TRM/Wompi/Cal.com.
+5. Validar visualmente desktop, móvil y reduced motion antes de publicar.
 
-| Decisión | Razón |
-|----------|-------|
-| Astro 4 (no Next) | Cero JS por defecto, islands, perfect Lighthouse |
-| Tailwind 3 (no v4) | v3 estable, ecosistema completo, integración oficial |
-| Motion One (no Framer Motion) | Más ligero, web-standards, Animations API nativa |
-| Lenis (no Locomotive) | Mantenido, vanilla JS, interopera con anchors nativos |
-| Sin backend | Embed Cal.com inline en sección 07 + modal en todos los CTAs. Cero latencia, cero costos. |
-| Sin Vercel KV/Postgres | Landing 100% estática |
-| **Geist Mono única familia mono** (sin Geist Sans) | Brandbook v2.1 manda mono dominante 95% |
+## Changelog breve
 
----
-
-## Checklist antes de deploy (v2.1)
-
-- ☐ ¿Geist Mono manda 95% / Instrument Serif aparece máx 1 vez por sección?
-- ☐ ¿Acento azul ocupa <8% del viewport? (excepción: punto del logo)
-- ☐ ¿Logo `omar.alvarez` con punto azul visible en navbar y footer?
-- ☐ ¿Header `[NN · PILAR] · ~/omar.alvarez · fecha` en cada sección?
-- ☐ ¿Cero gradientes (excepto mask), cero sombras, cero glows?
-- ☐ ¿Sin `#000` ni `#FFF` puros en ningún archivo?
-- ☐ ¿Iconos Lucide stroke 1.5, sin fill?
-- ☐ Build limpia (`npm run build`).
-- ☐ Sweep grep de hex/efectos/vocabulario prohibido en 0.
-
----
-
-## Para retomar después
-1. Leer este CLAUDE.md de cabo a rabo.
-2. Consultar el SKILL `omar-brand-SKILL-v2.1.md` para cualquier decisión visual.
-3. Revisar `src/styles/global.css` para tokens y typography.
-4. Revisar `src/lib/contact.ts` para datos operativos.
-5. Revisar `public/brand/` para logos canónicos.
-6. Continuar desde el último hito del README.md.
-
-## Changelog
-- **2026.08.19** — v3.1: recorrido reordenado para tráfico de TikTok; el precio desaparece del hero y solo aparece después de problema, evidencia, sesión, costo de equivocarse, encaje y FAQ. Precio base `USD 797`, conversión diaria con TRM oficial y cobro Wompi en COP. Referencia de pago con monto cotizado, compatibilidad con referencias v3.0 y garantía explícita de devolución si el brief no encaja.
-- **2026.08.19** — v3.0: reconstrucción completa alrededor de una sola consultoría de 120 minutos a `$2.400.000 COP`. Nueva dirección visual "expediente de trabajo" sin bento, gradientes, cursor custom ni loader. Flujo brief → Wompi Checkout Web → verificación estricta del pago → Cal.com privado. Se retiran del home la llamada gratuita de 20 minutos, la sesión de 90 minutos y el pack de 5.
-- **2026.05.22** — Pivot a consultoría 1:1 por sesión. Oferta colapsada de 4 servicios escalonados (Claude a tu medida / Mapa de IA / Implementación / Acompañamiento) a UNA línea con dos formatos: Sesión 1:1 (90 min) o Pack de 5 sesiones. Refactor de copy en Hero (badge "AGENDA ABIERTA · SESIONES 1:1", bajo en voz operador, trust-row sin Quick Win), Profile (headline "Operador de dos negocios"), ForWho (3 perfiles en voz Omar persona), Services (4→2 tarjetas, label puntual/recurrente, accents bronce + terracota), Method (llamada→preparación→sesión→cierre), FAQ (elimino 3, reescribo 5, agrego 5 — total 11), Cases (CTA "agendar llamada de 20 min"), ContactForm (headline "Cuéntame qué te tiene pensando", mini formulario opcional de pre-llenado encima del Cal embed con 3 campos que abren modal Cal con name + notes pre-rellenados). Meta description + schema.org alineados. Eliminadas todas las referencias a Quick Win Brief, tiers Light/Estándar/Plus, Esencial/Avanzado, "2 CUPOS Q2 2026", "agendar onboarding". Helper nuevo `combinePrefillNotes()` en `contact.ts`.
-- **2026.05.18** — Eliminación total de contacto directo (WhatsApp + email) de la landing pública. Conversión 100% por Cal.com: nuevo `CalRuntime.astro` (init global + soporte inline), variante `accent` en `CalEmbed.astro`, `BookFloat.astro` reemplaza `WhatsAppFloat.astro`, sección 07 reescrita como split editorial + calendario inline, FAQ P7/P8 subidas al inicio, trust-row debajo del CTA del Hero. `src/lib/contact.ts` migrado a API Cal (`CAL_LINK`, `calButtonAttrs`, `calBookUrl`). Schema.org Person limpio (sin email). Sweep limpio: 0 ocurrencias de `wa.me`, `573202569486`, `omaraalvarezo@gmail.com` en bundle.
-- **2026.05.11 (pm)** — Pase frontend-design: reescritura del hero (headline con tensión, badge con cupos, métricas FACT-XX, créditos académicos express), métricas + anotación −41% en Cases, strip de cierre del bento → CTA, selects de calificación opcionales + salida directa WhatsApp/email en ContactForm, statement editorial en footer finale. Decisión tipográfica 3-familias formalizada (`wiki/decisiones/tipografia-3-familias-landing.md`). Reconciliada la sección Tipografía del CLAUDE.md.
-- **2026.05** — Migración a omar-brand v2.1: paleta clara `#FAFAF9` + azul señal `#1E5FA8`, sistema 3-familias (serif + sans + mono), wordmark `omar.alvarez` en navbar/footer/OG/favicon, header recurrente con path/timestamp, eliminación de efectos prohibidos (box-shadow, gradientes decorativos, duotono lima, grain noise, backdrop-filter blur).
-- **2026.04** — Versión inicial dark + lima `#E8FF4F` (deprecada).
+- **2026.08.20 · v3.3:** reemplazo total de “expediente editorial” por “Sistema vivo / taller
+  abierto”; hero 4C code-native, nueva tipografía, paleta funcional, proyectos interactivos, checkout y
+  agenda congruentes.
+- **2026.08.20 · v3.2:** Marco 4C y tasa operativa diaria con spread explícito de 1,65%.
+- **2026.08.19 · v3.1:** precio base `USD 797`, secuencia TikTok y TRM dinámica.
+- **2026.08.19 · v3.0:** oferta única de 120 minutos con Wompi y Cal.com.

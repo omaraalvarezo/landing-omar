@@ -4,6 +4,10 @@ Landing de conversión para una sola oferta: **Sesión de arquitectura operativa
 120 minutos, `USD 797`, pagada por anticipado en COP con una tasa operativa diaria derivada de la
 TRM oficial vigente.
 
+La experiencia visual vigente es **“Sistema vivo / taller abierto”**: un hero code-native conecta
+señales de venta, operación y postventa en las 4C; después abre métricas y sistemas reales con un
+lenguaje colorido, directo y sin clichés visuales de IA.
+
 La oferta usa el **Marco 4C para empresas de servicios**:
 
 1. Captar demanda.
@@ -45,7 +49,8 @@ transacción directamente en Wompi y exige simultáneamente:
 - Sin fallback manual: si no existe TRM oficial vigente ni una lectura oficial verificada ese mismo
   día, Wompi no se abre.
 - Cal.com inline, visible solo después del pago aprobado.
-- Geist Sans + Geist Mono + Instrument Serif.
+- Bricolage Grotesque Variable + IBM Plex Sans Variable + IBM Plex Mono, self-hosted.
+- Hero SVG/CSS sin WebGL, video remoto ni loader; alternativa completa para reduced motion.
 - Sin base de datos nueva: el brief temporal queda en `sessionStorage` y se prellena en Cal.com.
 
 ## Archivos principales
@@ -61,6 +66,7 @@ src/
 │       └── status.ts
 ├── components/consulting/
 │   ├── ConsultingLanding.astro
+│   ├── SystemIgnition.astro
 │   ├── CheckoutForm.astro
 │   └── PaidCalendar.astro
 └── lib/

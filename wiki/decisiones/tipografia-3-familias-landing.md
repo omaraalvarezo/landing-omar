@@ -12,6 +12,11 @@ actualizado: 2026-05-11
 
 # Tipografía 3-familias en landing (no mono 95%)
 
+> **Decisión superada para el home desde 2026-08-20.** La experiencia de consultoría usa Bricolage
+> Grotesque + IBM Plex Sans + IBM Plex Mono según
+> `[[wiki/decisiones/sistema-vivo-control-room]]`. Este documento se conserva como historial y puede
+> seguir describiendo rutas heredadas de recursos.
+
 ## Decisión
 
 La landing **no aplica** la regla "Geist Mono dominante 95%" del brandbook OAAO v2.1 SKILL puro. En su lugar usa un sistema de **3 familias** con rol fijo:

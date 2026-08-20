@@ -6,88 +6,108 @@ const price = formatUsd(CONSULTING.priceUsd);
 ---
 
 <form class="checkout" id="checkout-consultoria" novalidate>
+  <div class="checkout__spectrum" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
   <div class="checkout__heading">
-    <p class="checkout__kicker">EXPEDIENTE DE RESERVA</p>
-    <p class="checkout__folio">OA / 2H / {new Date().getFullYear()}</p>
+    <div>
+      <p class="checkout__kicker">SESIÓN PRIVADA · 120 MIN · CON OMAR</p>
+      <h3>Trae un cuello de botella.<br /><span>Sal con un plan.</span></h3>
+    </div>
+    <p class="checkout__folio">OA—2H / {new Date().getFullYear()}</p>
   </div>
 
   <fieldset class="checkout__stage checkout__field--wide">
-    <legend>¿En qué parte del Marco 4C está el cuello de botella?</legend>
+    <legend><span>01</span> ¿Dónde se está trabando el sistema?</legend>
+    <p class="checkout__stage-intro">Elige el frente que más te está costando hoy. Ese será nuestro punto de entrada.</p>
     <div class="checkout__stage-grid">
       {SERVICE_SYSTEM_STAGES.map((stage) => (
-        <label>
+        <label class={`checkout__stage-option checkout__stage-option--${stage.id}`}>
           <input type="radio" name="frameworkStage" value={stage.id} required />
-          <span><strong>{stage.number} · {stage.name}</strong>{stage.promise}</span>
+          <span class="checkout__stage-copy">
+            <small>{stage.number}</small>
+            <strong>{stage.name}</strong>
+            <span>{stage.promise}</span>
+          </span>
+          <span class="checkout__stage-arrow" aria-hidden="true">↗</span>
         </label>
       ))}
     </div>
   </fieldset>
 
-  <div class="checkout__field checkout__field--wide">
-    <label for="consulting-name">Nombre completo</label>
-    <input id="consulting-name" name="name" type="text" autocomplete="name" maxlength="100" required />
-  </div>
+  <section class="checkout__details" aria-labelledby="checkout-details-title">
+    <div class="checkout__section-heading">
+      <span>02</span>
+      <p id="checkout-details-title">Ponme dentro del negocio</p>
+    </div>
 
-  <div class="checkout__field">
-    <label for="consulting-email">Correo</label>
-    <input id="consulting-email" name="email" type="email" autocomplete="email" maxlength="254" required />
-  </div>
+    <div class="checkout__field checkout__field--wide">
+      <label for="consulting-name">Cómo te llamas</label>
+      <input id="consulting-name" name="name" type="text" autocomplete="name" maxlength="100" required />
+    </div>
 
-  <div class="checkout__field">
-    <label for="consulting-phone">WhatsApp</label>
-    <input id="consulting-phone" name="phone" type="tel" autocomplete="tel" maxlength="24" required />
-  </div>
+    <div class="checkout__field">
+      <label for="consulting-email">Tu correo</label>
+      <input id="consulting-email" name="email" type="email" autocomplete="email" maxlength="254" required />
+    </div>
 
-  <div class="checkout__field checkout__field--wide">
-    <label for="consulting-business">Negocio y qué vende</label>
-    <input
-      id="consulting-business"
-      name="business"
-      type="text"
-      autocomplete="organization"
-      maxlength="120"
-      placeholder="Ej. firma contable para pymes"
-      required
-    />
-  </div>
+    <div class="checkout__field">
+      <label for="consulting-phone">Tu WhatsApp</label>
+      <input id="consulting-phone" name="phone" type="tel" autocomplete="tel" maxlength="24" required />
+    </div>
 
-  <div class="checkout__field checkout__field--wide">
-    <label for="consulting-problem">El problema específico que quieres trabajar</label>
-    <textarea
-      id="consulting-problem"
-      name="problem"
-      rows="5"
-      minlength="20"
-      maxlength="1200"
-      placeholder="Qué ocurre hoy, qué ya intentaste y qué decisión necesitas tomar."
-      required
-    ></textarea>
-    <p class="checkout__hint">No necesito una presentación. Necesito contexto suficiente para preparar la mesa.</p>
-  </div>
+    <div class="checkout__field checkout__field--wide">
+      <label for="consulting-business">Qué negocio operas y qué vende</label>
+      <input
+        id="consulting-business"
+        name="business"
+        type="text"
+        autocomplete="organization"
+        maxlength="120"
+        placeholder="Ej. firma contable que atiende pymes"
+        required
+      />
+    </div>
+
+    <div class="checkout__field checkout__field--wide">
+      <label for="consulting-problem">Qué está pasando de verdad</label>
+      <textarea
+        id="consulting-problem"
+        name="problem"
+        rows="5"
+        minlength="20"
+        maxlength="1200"
+        placeholder="Dónde se pierde tiempo o dinero, qué ya intentaste y qué necesitas decidir."
+        required
+      ></textarea>
+      <p class="checkout__hint">No escribas bonito. Dame contexto suficiente para llegar preparado a la sesión.</p>
+    </div>
+  </section>
 
   <label class="checkout__accept">
     <input name="accepted" type="checkbox" required />
     <span>
-      Entiendo que esta es una sesión de trabajo de 120 minutos, que el pago se hace por anticipado
-      y que una reprogramación debe solicitarse con al menos 24 horas de anticipación.
+      Entiendo que reservo 120 minutos de trabajo con Omar, que pago antes de elegir horario y que,
+      si necesito mover la sesión, debo avisar con mínimo 24 horas.
     </span>
   </label>
 
   <div class="checkout__total" aria-label={`Precio base ${price}`}>
-    <span>Precio base</span>
+    <span>Inversión por la sesión</span>
     <strong>{price}</strong>
     <p data-quote-cop aria-live="polite">Calculando el equivalente de hoy en COP…</p>
   </div>
 
   <button class="checkout__submit" type="submit">
-    <span>pagar y escoger horario</span>
-    <span aria-hidden="true">↗</span>
+    <span>pagar en Wompi y elegir horario</span>
+    <span class="checkout__submit-arrow" aria-hidden="true">↗</span>
   </button>
 
   <p class="checkout__security">
-    La tasa operativa del día toma la TRM oficial vigente y suma un ajuste de 1,65%, visible antes de
-    pagar. Wompi procesa el total exacto en COP; la tarjeta nunca pasa por este sitio. Después del pago
-    se desbloquea Cal.com.
+    <span aria-hidden="true">◎</span>
+    <span>Vas a ver el número completo antes de pagar: TRM oficial del día + 1,65% de ajuste.
+    Wompi procesa el total exacto en COP y, cuando confirma el pago, se abre Cal.com.</span>
   </p>
 
   <p class="checkout__error" id="checkout-error" role="alert" aria-live="polite"></p>
@@ -95,16 +115,65 @@ const price = formatUsd(CONSULTING.priceUsd);
 
 <style>
   .checkout {
+    --checkout-ink: #151610;
+    --checkout-ink-2: #20221a;
+    --checkout-bone: #f3efe4;
+    --checkout-bone-dim: #c8c5ba;
+    --checkout-line: rgba(243, 239, 228, .16);
+    --checkout-coral: #ff6b45;
+    --checkout-purple: #c79aff;
+    --checkout-cobalt: #5d72ff;
+    --checkout-lime: #c8ff3d;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 18px;
-    padding: clamp(24px, 4vw, 48px);
-    color: #f2efe8;
-    background: #111820;
-    border: 1px solid #26313d;
+    gap: clamp(24px, 3vw, 36px) 18px;
+    padding: clamp(24px, 4.6vw, 56px);
+    color: var(--checkout-bone);
+    background:
+      radial-gradient(circle at 98% 2%, rgba(176, 120, 255, .14), transparent 26%),
+      radial-gradient(circle at 0% 58%, rgba(90, 114, 255, .09), transparent 27%),
+      var(--checkout-ink);
+    border: 1px solid rgba(243, 239, 228, .2);
+    border-radius: 28px 28px 28px 6px;
+    box-shadow: 12px 12px 0 rgba(199, 240, 76, .16);
+    font-family: 'IBM Plex Sans Variable', 'IBM Plex Sans', var(--font-sans), sans-serif;
   }
 
+  .checkout::after {
+    content: '';
+    position: absolute;
+    right: -86px;
+    top: 90px;
+    z-index: -1;
+    width: 210px;
+    height: 210px;
+    border: 1px solid rgba(255, 113, 84, .22);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 34px rgba(255, 113, 84, .035),
+      0 0 0 68px rgba(255, 113, 84, .02);
+    pointer-events: none;
+  }
+
+  .checkout__spectrum {
+    position: absolute;
+    inset: 0 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 7px;
+  }
+
+  .checkout__spectrum span:nth-child(1) { background: var(--checkout-coral); }
+  .checkout__spectrum span:nth-child(2) { background: var(--checkout-purple); }
+  .checkout__spectrum span:nth-child(3) { background: var(--checkout-cobalt); }
+  .checkout__spectrum span:nth-child(4) { background: var(--checkout-lime); }
+
   .checkout__heading,
+  .checkout__stage,
+  .checkout__details,
   .checkout__total,
   .checkout__accept,
   .checkout__submit,
@@ -115,13 +184,27 @@ const price = formatUsd(CONSULTING.priceUsd);
   }
 
   .checkout__heading {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
     justify-content: space-between;
-    gap: 16px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #33404d;
+    gap: 28px;
+    padding: 12px 0 clamp(24px, 4vw, 42px);
+    border-bottom: 1px solid var(--checkout-line);
   }
+
+  .checkout__heading h3 {
+    max-width: 15ch;
+    margin: 14px 0 0;
+    color: var(--checkout-bone);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(34px, 5.2vw, 62px);
+    font-weight: 720;
+    letter-spacing: -.045em;
+    line-height: .96;
+  }
+
+  .checkout__heading h3 span { color: var(--checkout-lime); }
 
   .checkout__kicker,
   .checkout__folio,
@@ -129,16 +212,25 @@ const price = formatUsd(CONSULTING.priceUsd);
   .checkout__security,
   .checkout__error {
     margin: 0;
-    font-family: var(--font-mono);
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
   }
 
   .checkout__kicker,
   .checkout__folio {
     font-size: 10px;
-    letter-spacing: .16em;
+    font-weight: 500;
+    letter-spacing: .12em;
   }
 
-  .checkout__folio { color: #7fa9d8; }
+  .checkout__kicker { color: var(--checkout-coral); }
+
+  .checkout__folio {
+    padding: 7px 10px;
+    color: var(--checkout-purple);
+    border: 1px solid rgba(176, 120, 255, .34);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
 
   .checkout__field {
     display: flex;
@@ -154,129 +246,309 @@ const price = formatUsd(CONSULTING.priceUsd);
   }
 
   .checkout__stage legend {
-    margin-bottom: 10px;
-    font-family: var(--font-mono);
+    margin: 0;
+    color: var(--checkout-bone);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 650;
+    letter-spacing: -.025em;
+    line-height: 1.1;
+  }
+
+  .checkout__stage legend span,
+  .checkout__section-heading > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin-right: 8px;
+    color: var(--checkout-ink);
+    background: var(--checkout-coral);
+    border-radius: 50%;
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
     font-size: 10px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: #aeb7c0;
+    font-weight: 600;
+    letter-spacing: 0;
+    vertical-align: 4px;
+  }
+
+  .checkout__stage-intro {
+    max-width: 58ch;
+    margin: 13px 0 20px;
+    color: var(--checkout-bone-dim);
+    font-size: 14px;
+    line-height: 1.55;
   }
 
   .checkout__stage-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    border-top: 1px solid #465463;
-    border-left: 1px solid #465463;
+    gap: 12px;
   }
 
-  .checkout__stage-grid label {
+  .checkout__stage-option {
+    --stage-color: var(--checkout-coral);
+    --stage-wash: rgba(255, 113, 84, .12);
+    position: relative;
+    overflow: hidden;
     display: grid;
-    grid-template-columns: 18px 1fr;
-    gap: 10px;
-    min-height: 92px;
-    padding: 14px;
-    border-right: 1px solid #465463;
-    border-bottom: 1px solid #465463;
+    grid-template-columns: 22px 1fr auto;
+    gap: 13px;
+    min-height: 138px;
+    padding: 18px;
+    color: var(--checkout-bone-dim);
+    background: rgba(243, 239, 228, .045);
+    border: 1px solid var(--checkout-line);
+    border-radius: 17px 17px 17px 4px;
     cursor: pointer;
-    color: #8d99a5;
-    font-size: 11px;
+    transition:
+      transform .28s cubic-bezier(.16, 1, .3, 1),
+      color .28s ease,
+      background-color .28s ease,
+      border-color .28s ease;
+  }
+
+  .checkout__stage-option::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: var(--stage-color);
+    transform: scaleY(.28);
+    transform-origin: bottom;
+    transition: transform .28s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .checkout__stage-option--captar {
+    --stage-color: var(--checkout-coral);
+    --stage-wash: rgba(255, 113, 84, .12);
+  }
+
+  .checkout__stage-option--convertir {
+    --stage-color: var(--checkout-purple);
+    --stage-wash: rgba(199, 154, 255, .13);
+  }
+
+  .checkout__stage-option--cumplir {
+    --stage-color: var(--checkout-cobalt);
+    --stage-wash: rgba(93, 114, 255, .13);
+  }
+
+  .checkout__stage-option--continuar {
+    --stage-color: var(--checkout-lime);
+    --stage-wash: rgba(200, 255, 61, .10);
+  }
+
+  .checkout__stage-option:hover { transform: translateY(-3px); }
+
+  .checkout__stage-option:has(input:checked) {
+    color: var(--checkout-bone);
+    background: var(--stage-wash);
+    border-color: var(--stage-color);
+  }
+
+  .checkout__stage-option:has(input:checked)::before { transform: scaleY(1); }
+
+  .checkout__stage-option:has(input:focus-visible) {
+    outline: 2px solid var(--stage-color);
+    outline-offset: 3px;
+  }
+
+  .checkout__stage-option input {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    margin: 2px 0 0;
+    border: 1px solid rgba(243, 239, 228, .5);
+    border-radius: 50%;
+    background: transparent;
+    transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+
+  .checkout__stage-option input:checked {
+    background: var(--stage-color);
+    border-color: var(--stage-color);
+    box-shadow: inset 0 0 0 5px var(--checkout-ink);
+  }
+
+  .checkout__stage-copy { display: flex; flex-direction: column; align-items: flex-start; }
+
+  .checkout__stage-copy small {
+    margin-bottom: 10px;
+    color: var(--stage-color);
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .12em;
+  }
+
+  .checkout__stage-copy strong {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--checkout-bone);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(21px, 2.5vw, 28px);
+    font-weight: 680;
+    letter-spacing: -.03em;
+    line-height: 1;
+  }
+
+  .checkout__stage-copy > span {
+    font-size: 12px;
     line-height: 1.45;
   }
 
-  .checkout__stage-grid input { margin: 3px 0 0; accent-color: #7fa9d8; }
-  .checkout__stage-grid strong {
-    display: block;
-    margin-bottom: 4px;
-    color: #f2efe8;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: .05em;
-    text-transform: uppercase;
+  .checkout__stage-arrow {
+    color: var(--stage-color);
+    font-size: 16px;
+    line-height: 1;
+    transition: transform .28s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .checkout__stage-option:hover .checkout__stage-arrow,
+  .checkout__stage-option:has(input:checked) .checkout__stage-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .checkout__details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 19px 16px;
+    padding-top: 4px;
+  }
+
+  .checkout__details .checkout__field--wide,
+  .checkout__section-heading { grid-column: 1 / -1; }
+
+  .checkout__section-heading {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding-top: 30px;
+    border-top: 1px solid var(--checkout-line);
+  }
+
+  .checkout__section-heading > span {
+    flex: 0 0 34px;
+    margin-right: 8px;
+    background: var(--checkout-cobalt);
+  }
+
+  .checkout__section-heading p {
+    margin: 0;
+    color: var(--checkout-bone);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 650;
+    letter-spacing: -.025em;
+    line-height: 1.1;
   }
 
   .checkout__field label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: .1em;
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .11em;
     text-transform: uppercase;
-    color: #aeb7c0;
+    color: var(--checkout-bone-dim);
   }
 
   .checkout__field input,
   .checkout__field textarea {
     width: 100%;
-    border: 0;
-    border-bottom: 1px solid #465463;
-    border-radius: 0;
-    padding: 11px 0 12px;
-    color: #f8f6f1;
-    background: transparent;
-    font-family: var(--font-sans);
+    border: 1px solid var(--checkout-line);
+    border-radius: 12px 12px 12px 3px;
+    padding: 14px 15px;
+    color: var(--checkout-bone);
+    background: rgba(243, 239, 228, .055);
+    font-family: 'IBM Plex Sans Variable', 'IBM Plex Sans', var(--font-sans), sans-serif;
     font-size: 16px;
     line-height: 1.45;
+    transition: border-color .22s ease, background-color .22s ease, box-shadow .22s ease;
   }
 
-  .checkout__field textarea { resize: vertical; min-height: 128px; }
+  .checkout__field textarea { min-height: 138px; resize: vertical; }
+
   .checkout__field input::placeholder,
-  .checkout__field textarea::placeholder { color: #727f8b; }
+  .checkout__field textarea::placeholder { color: #77796f; }
+
   .checkout__field input:focus,
-  .checkout__field textarea:focus { outline: 0; border-bottom-color: #7fa9d8; }
+  .checkout__field textarea:focus {
+    outline: 0;
+    background: rgba(90, 114, 255, .08);
+    border-color: var(--checkout-cobalt);
+    box-shadow: 0 0 0 3px rgba(90, 114, 255, .16);
+  }
 
   .checkout__hint {
-    color: #8d99a5;
-    font-size: 10px;
+    color: #96988d;
+    font-size: 11px;
     line-height: 1.55;
   }
 
   .checkout__accept {
     display: grid;
-    grid-template-columns: 18px 1fr;
-    gap: 12px;
+    grid-template-columns: 20px 1fr;
+    gap: 13px;
     align-items: start;
-    color: #aeb7c0;
+    padding: 16px 18px;
+    color: var(--checkout-bone-dim);
+    background: rgba(176, 120, 255, .075);
+    border-left: 4px solid var(--checkout-purple);
+    border-radius: 3px 12px 12px 3px;
     font-size: 13px;
     line-height: 1.55;
+    cursor: pointer;
   }
 
   .checkout__accept input {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     margin: 2px 0 0;
-    accent-color: #7fa9d8;
+    accent-color: var(--checkout-purple);
   }
 
   .checkout__total {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: end;
-    gap: 10px 20px;
-    padding-top: 22px;
-    border-top: 1px solid #33404d;
+    gap: 12px 24px;
+    padding: clamp(20px, 3.5vw, 34px);
+    color: var(--checkout-ink);
+    background:
+      radial-gradient(circle at 92% 12%, rgba(255, 113, 84, .22), transparent 29%),
+      var(--checkout-bone);
+    border-radius: 20px 20px 5px 20px;
   }
 
   .checkout__total span {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: .08em;
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
     text-transform: uppercase;
-    color: #aeb7c0;
+    color: #53564c;
   }
 
   .checkout__total strong {
-    font-family: var(--font-mono);
-    font-size: clamp(26px, 4vw, 40px);
-    line-height: 1;
-    font-weight: 450;
-    letter-spacing: -.05em;
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(38px, 6vw, 64px);
+    line-height: .86;
+    font-weight: 760;
+    letter-spacing: -.055em;
   }
 
   .checkout__total p {
     grid-column: 1 / -1;
     margin: 0;
-    text-align: right;
+    padding-top: 14px;
+    color: #3d43aa;
+    border-top: 1px solid rgba(21, 22, 16, .18);
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
     font-size: 10px;
+    font-weight: 500;
     line-height: 1.5;
-    color: #7fa9d8;
   }
 
   .checkout__submit {
@@ -284,36 +556,103 @@ const price = formatUsd(CONSULTING.priceUsd);
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    border: 0;
-    padding: 18px 20px;
-    color: #f8f6f1;
-    background: #1e5fa8;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 550;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    transition: background-color .2s ease;
+    border: 1px solid var(--checkout-lime);
+    border-radius: 14px 14px 14px 3px;
+    padding: 13px 14px 13px 20px;
+    color: var(--checkout-ink);
+    background: var(--checkout-lime);
+    box-shadow: 6px 6px 0 var(--checkout-coral);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(15px, 2vw, 18px);
+    font-weight: 700;
+    letter-spacing: -.015em;
+    transition: transform .25s cubic-bezier(.16, 1, .3, 1), box-shadow .25s ease, background-color .25s ease;
   }
 
-  .checkout__submit:hover { background: #174d89; }
-  .checkout__submit:disabled { cursor: wait; opacity: .62; }
+  .checkout__submit-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--checkout-bone);
+    background: var(--checkout-ink);
+    border-radius: 50%;
+    font-size: 17px;
+    transition: transform .25s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .checkout__submit:hover {
+    background: #d7ff57;
+    box-shadow: 9px 9px 0 var(--checkout-purple);
+    transform: translate(-2px, -2px);
+  }
+
+  .checkout__submit:hover .checkout__submit-arrow { transform: rotate(9deg); }
+
+  .checkout__submit:disabled {
+    cursor: wait;
+    filter: saturate(.45);
+    opacity: .7;
+    transform: none;
+  }
 
   .checkout__security,
   .checkout__error {
-    font-size: 10px;
+    font-size: 11px;
     line-height: 1.6;
   }
 
-  .checkout__security { color: #8d99a5; }
-  .checkout__error { color: #ffb4a9; min-height: 1.6em; }
+  .checkout__security {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+    align-items: start;
+    color: #96988d;
+  }
+
+  .checkout__security > span:first-child {
+    color: var(--checkout-cobalt);
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
+    font-size: 16px;
+  }
+
+  .checkout__error {
+    min-height: 1.6em;
+    color: #ff9c88;
+  }
+
+  @media (max-width: 760px) {
+    .checkout__heading { grid-template-columns: 1fr; }
+    .checkout__folio { justify-self: start; }
+    .checkout__details { grid-template-columns: 1fr; }
+    .checkout__details .checkout__field { grid-column: 1 / -1; }
+  }
 
   @media (max-width: 620px) {
-    .checkout { grid-template-columns: 1fr; }
+    .checkout {
+      grid-template-columns: 1fr;
+      border-radius: 20px 20px 20px 5px;
+      box-shadow: 7px 7px 0 rgba(199, 240, 76, .16);
+    }
+
     .checkout__field { grid-column: 1 / -1; }
     .checkout__stage-grid { grid-template-columns: 1fr; }
-    .checkout__heading,
-    .checkout__total { align-items: flex-start; flex-direction: column; }
+    .checkout__stage-option { min-height: 122px; }
+    .checkout__total { grid-template-columns: 1fr; align-items: start; }
+    .checkout__total strong { margin-top: 2px; }
+    .checkout__submit { padding-left: 16px; }
+    .checkout::after { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .checkout__stage-option,
+    .checkout__stage-option::before,
+    .checkout__stage-arrow,
+    .checkout__submit,
+    .checkout__submit-arrow {
+      transition: none;
+    }
   }
 </style>
 
@@ -392,7 +731,7 @@ const price = formatUsd(CONSULTING.priceUsd);
 
     if (button) {
       button.disabled = true;
-      button.firstElementChild!.textContent = 'abriendo pago seguro…';
+      button.firstElementChild!.textContent = 'conectando con Wompi…';
     }
     if (errorNode) errorNode.textContent = '';
 
@@ -415,7 +754,7 @@ const price = formatUsd(CONSULTING.priceUsd);
       }
       if (button) {
         button.disabled = false;
-        button.firstElementChild!.textContent = 'pagar y escoger horario';
+        button.firstElementChild!.textContent = 'pagar en Wompi y elegir horario';
       }
     }
   });

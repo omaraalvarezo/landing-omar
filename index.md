@@ -8,7 +8,8 @@ Catálogo plano del conocimiento del proyecto. Una línea por página `wiki/` y 
 
 ### Decisiones
 
-- [[wiki/decisiones/tipografia-3-familias-landing]] — 2026-05-11 — formaliza serif+sans+mono y reconcilia el CLAUDE.md (deja sin efecto "mono 95%" en landing).
+- [[wiki/decisiones/sistema-vivo-control-room]] — 2026-08-20 — dirección de arte, voz, color y motion vigentes del home.
+- [[wiki/decisiones/tipografia-3-familias-landing]] — 2026-05-11 — sistema editorial histórico; superado para el home en v3.3.
 
 ### Conceptos
 
@@ -42,5 +43,5 @@ _(vacío)_
 
 ---
 
-> **Última revisión:** 2026-08-19
+> **Última revisión:** 2026-08-20
 > **Convención de actualización:** cada vez que se agrega una página a `wiki/` o un archivo a `raw/`, sumar una línea aquí con `[[ruta]]` y una descripción de ≤ 80 caracteres.

@@ -14,6 +14,7 @@ interface Props {
   showNav?: boolean;
   minimal?: boolean;
   noIndex?: boolean;
+  themeColor?: string;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
   showNav = true,
   minimal = false,
   noIndex = false,
+  themeColor = '#FAFAF9',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -72,7 +74,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(image, Astro.site)} />
 
-    <meta name="theme-color" content="#FAFAF9" />
+    <meta name="theme-color" content={themeColor} />
 
     <!-- Schema.org Person + ProfessionalService -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
