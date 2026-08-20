@@ -595,7 +595,8 @@ const FAQ = [
 
   .hero {
     --hero-progress: 0;
-    height: 215svh;
+    height: 320vh;
+    height: 320svh;
     color: var(--bone);
     background: var(--ink);
   }
@@ -1104,7 +1105,10 @@ const FAQ = [
 
   @media (max-width: 820px) {
     .nav-shell nav a:not(.nav-shell__action) { display: none; }
-    .hero { height: 190svh; }
+    .hero {
+      height: 330vh;
+      height: 330svh;
+    }
     .hero__sticky { display: block; padding-top: 118px; }
     .hero__meta { top: 92px; }
     .hero__meta span:nth-child(2) { display: none; }
@@ -1139,7 +1143,10 @@ const FAQ = [
     .nav-shell { top: 10px; width: calc(100% - 20px); min-height: 52px; padding-left: 14px; }
     .wordmark { font-size: 16px; }
     .nav-shell__action { gap: 9px; padding: 12px; font-size: 8px !important; }
-    .hero { height: 175svh; }
+    .hero {
+      height: 340vh;
+      height: 340svh;
+    }
     .hero__sticky { padding: 100px 18px 24px; }
     .hero__meta { top: 74px; left: 18px; right: 18px; }
     .hero__meta span:last-child { display: none; }
@@ -1256,7 +1263,7 @@ const FAQ = [
     const rect = hero.getBoundingClientRect();
     const distance = Math.max(1, hero.offsetHeight - window.innerHeight);
     const progress = Math.min(1, Math.max(0, -rect.top / distance));
-    const phase = progress < .22 ? 0 : progress < .46 ? 1 : progress < .7 ? 2 : 3;
+    const phase = progress < .25 ? 0 : progress < .5 ? 1 : progress < .75 ? 2 : 3;
     hero.style.setProperty('--hero-progress', progress.toFixed(3));
     setPhase(phase);
   };

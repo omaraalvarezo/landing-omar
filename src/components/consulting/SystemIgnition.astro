@@ -226,11 +226,18 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ignition { transform: none; border-radius: 32%; }
+    .ignition[data-phase] {
+      transform: none;
+      border-radius: 32%;
+      transition: none;
+    }
     .ignition__orbit--outer,
     .ignition__scanner,
     .ignition__pulse { animation: none !important; }
     .ignition__trace,
-    .ignition__loop { transition: none; }
+    .ignition__loop,
+    .ignition__core,
+    .ignition__node,
+    .ignition__label { transition: none; }
   }
 </style>
