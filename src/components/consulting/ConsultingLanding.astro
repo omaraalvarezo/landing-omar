@@ -549,13 +549,15 @@ const FAQ = [
     box-shadow: 0 16px 56px rgba(0, 0, 0, .17);
     backdrop-filter: blur(18px);
     transform: translateX(-50%);
-    transition: min-height .35s ease, background-color .35s ease;
+    transition: min-height .35s ease, background-color .35s ease, transform .45s cubic-bezier(.16, 1, .3, 1);
   }
 
   .nav-shell[data-condensed='true'] {
     min-height: 50px;
     background: rgba(19, 17, 24, .94);
   }
+
+  .nav-shell[data-hidden='true'] { transform: translate(-50%, -145%); }
 
   .wordmark {
     display: inline-flex;
@@ -1195,6 +1197,7 @@ const FAQ = [
 
   @media (prefers-reduced-motion: reduce) {
     :global(html) { scroll-behavior: auto; }
+    .nav-shell { transition: none; }
     .hero { height: auto; }
     .hero__sticky { position: relative; min-height: 100svh; }
     .hero__moment { display: none; transition: none; }
@@ -1230,6 +1233,7 @@ const FAQ = [
   let currentPhase = -1;
   let frame = 0;
   let heroVisible = true;
+  let previousScrollY = window.scrollY;
 
   const setPhase = (next: number) => {
     if (!hero || next === currentPhase) return;
@@ -1262,6 +1266,12 @@ const FAQ = [
   const requestHeroUpdate = () => {
     if (!frame) frame = window.requestAnimationFrame(updateHero);
     if (siteHeader) siteHeader.dataset.condensed = String(window.scrollY > 44);
+    const scrollDelta = window.scrollY - previousScrollY;
+    if (siteHeader && !siteHeader.matches(':focus-within')) {
+      if (window.scrollY < 90 || scrollDelta < -6) siteHeader.dataset.hidden = 'false';
+      else if (scrollDelta > 6) siteHeader.dataset.hidden = 'true';
+    }
+    previousScrollY = window.scrollY;
     const canReserve = systemsSection
       ? window.scrollY > systemsSection.offsetTop - window.innerHeight * .55
       : false;

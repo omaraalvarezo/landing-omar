@@ -146,7 +146,8 @@ Datos antes que adjetivos. Primera persona. Frases cortas. No inventar métricas
 9. **Reserva.** Precio, conversión diaria, brief 4C, Wompi y handoff a Cal.com.
 
 La navegación cambia su CTA de “empezar el recorrido” a “reservar 2 horas” después de que el usuario
-llega a los sistemas.
+llega a los sistemas. También se retira al avanzar hacia abajo y reaparece al subir, para no tapar
+copy ni campos en móvil; si contiene foco de teclado permanece visible.
 
 ---
 
