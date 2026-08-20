@@ -426,3 +426,19 @@ redirect; se evalúa caso por caso si aparecen 404.
   `spreadBps=165`, tasa operativa mayor o igual a TRM. `astro check` sin errores nuevos y build exitoso.
 - Se preservó sin tocar ni versionar el temporal de PowerPoint
   `public/resources/~$marco-4c-servicios-omar-alvarez.pptx`.
+
+## 2026-08-20 · v3.3 publicada y verificada en producción
+
+- Commit principal `fa39629` y pulido móvil `4be5ba3` enviados a `main`.
+- Build precompilado promovido al dominio canónico mediante Vercel:
+  `dpl_3y5d81ob18mAx6xPRyKLKhfpyBog` → `https://omaralvarezo.co`.
+- QA final contra el dominio real en desktop, móvil y reduced motion: HTTP 200, CSP/HSTS/nosniff,
+  una sola H1 del producto, Bricolage cargada, cero overflow horizontal y cero errores de consola.
+- El hero llega a fase conectada; la navegación se retira al bajar y vuelve al subir; el precio sigue
+  ausente del hero y aparece únicamente en la reserva.
+- `/api/consultoria/quote` devolvió TRM oficial `$3.053,48`, tasa operativa `$3.110`, total
+  `COP $2.478.670` y spread `1,65%` para `USD 797`.
+- `POST /api/consultoria/checkout` probado sin efectuar pago: referencia con monto/fecha, firma de
+  integridad, moneda COP, retorno canónico a `/consultoria/agendar` y URL de Wompi válidos.
+- `/consultoria/agendar` sin referencia permanece bloqueada en verificación; Cal.com no se revela por
+  asumir éxito. El pago real controlado sigue siendo la única prueba manual pendiente.
