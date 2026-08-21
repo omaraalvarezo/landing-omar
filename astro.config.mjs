@@ -11,7 +11,9 @@ export default defineConfig({
   output: 'static',
   // La analítica de tráfico vive en Cloudflare. El script de Vercel Analytics devolvía 404
   // detrás del dominio proxied y generaba ruido de consola sin aportar una segunda medición útil.
-  adapter: vercel(),
+  // El regreso de pago consulta Wompi y el almacén durable de Adjudika. El
+  // límite explícito evita cortar una verificación válida a mitad.
+  adapter: vercel({ maxDuration: 30 }),
   integrations: [
     tailwind({ applyBaseStyles: false }),
   ],

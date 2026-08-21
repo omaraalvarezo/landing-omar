@@ -29,13 +29,21 @@ function env(name: keyof ImportMetaEnv): string {
 }
 
 export function getWompiConfig(): WompiConfig | null {
-  const production = env('WOMPI_ENVIRONMENT') === 'production';
+  const environment = env('WOMPI_ENVIRONMENT');
+  if (environment !== 'production' && environment !== 'test') return null;
+
+  const production = environment === 'production';
   const publicKey = production ? env('WOMPI_PUBLIC_KEY') : env('WOMPI_TEST_PUBLIC_KEY');
   const integritySecret = production
     ? env('WOMPI_INTEGRITY_SECRET')
     : env('WOMPI_TEST_INTEGRITY_SECRET');
 
   if (!publicKey || !integritySecret) return null;
+  const expectedPublicPrefix = production ? 'pub_prod_' : 'pub_test_';
+  const expectedIntegrityPrefix = production ? 'prod_integrity_' : 'test_integrity_';
+  if (!publicKey.startsWith(expectedPublicPrefix) || !integritySecret.startsWith(expectedIntegrityPrefix)) {
+    throw new Error('WOMPI_ENVIRONMENT_MISMATCH');
+  }
 
   return {
     environment: production ? 'production' : 'test',
@@ -88,6 +96,7 @@ export async function fetchTransaction(id: string): Promise<WompiTransaction | n
   const response = await fetch(`${config.apiBaseUrl}/transactions/${encodeURIComponent(id)}`, {
     headers: { Authorization: `Bearer ${config.publicKey}` },
     cache: 'no-store',
+    signal: AbortSignal.timeout(7_000),
   });
 
   if (response.status === 404) return null;

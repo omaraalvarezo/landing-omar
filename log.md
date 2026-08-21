@@ -442,3 +442,20 @@ redirect; se evalúa caso por caso si aparecen 404.
   integridad, moneda COP, retorno canónico a `/consultoria/agendar` y URL de Wompi válidos.
 - `/consultoria/agendar` sin referencia permanece bloqueada en verificación; Cal.com no se revela por
   asumir éxito. El pago real controlado sigue siendo la única prueba manual pendiente.
+
+## 2026-08-20 · v3.4 — Recuperación durable de pagos Wompi
+
+- El checkout de Wompi aceptaba monto, firma y métodos correctamente; la falla estaba después del
+  pago. El flujo dependía del redirect del navegador y de aproximadamente 30 segundos de polling,
+  sin una orden durable ni webhook propio para la consultoría.
+- El checkout ahora persiste primero una orden con cotización, brief, referencia y monto exacto en
+  el almacén interno de Adjudika. Si la escritura falla, no se devuelve una URL que permita pagar.
+- Cada compra recibe un UUID público y una cookie aleatoria `HttpOnly; Secure; SameSite=Lax`; el
+  secreto no viaja a Wompi, no aparece en la URL y no se expone a JavaScript.
+- El regreso vive en `/consultoria/agenda/<orderId>`. Puede resolver el pago por el `id` devuelto por
+  Wompi o por el estado persistido desde el webhook, de modo que cerrar la pestaña o una confirmación
+  tardía ya no obliga a pagar otra vez.
+- La verificación del navegador se extendió a 150 segundos y recarga el render privado al aprobarse;
+  el brief guardado se prellena en Cal.com solo después de autorizar orden y cookie.
+- Las rutas privadas llevan `no-store`, `noindex` y `Referrer-Policy: no-referrer`; las rutas antiguas
+  por transaction ID siguen disponibles solo para cobros emitidos antes de esta versión.

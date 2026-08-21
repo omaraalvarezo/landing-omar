@@ -1,7 +1,15 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { fetchTransaction, isApprovedConsultingPayment } from '../../../lib/wompi-consulting';
+import {
+  consultingAccessCookieName,
+  isConsultingAccessToken,
+  isConsultingOrderId,
+} from '../../../lib/consulting-orders';
+import {
+  resolveConsultingOrder,
+  resolveConsultingPayment,
+} from '../../../lib/consulting-payment';
 
 const ID = /^[A-Za-z0-9_-]{8,100}$/;
 
@@ -15,21 +23,34 @@ function json(status: number, body: object): Response {
   });
 }
 
-export const GET: APIRoute = async ({ request }) => {
-  const id = new URL(request.url).searchParams.get('id') || '';
-  if (!ID.test(id)) return json(400, { status: 'INVALID', approved: false });
+export const GET: APIRoute = async ({ request, cookies }) => {
+  const url = new URL(request.url);
+  const id = url.searchParams.get('id') || '';
+  const orderId = url.searchParams.get('order') || '';
+  if (id && !ID.test(id)) return json(400, { status: 'INVALID', approved: false });
+  if (orderId && !isConsultingOrderId(orderId)) {
+    return json(400, { status: 'INVALID', approved: false });
+  }
+  if (!id && !orderId) return json(400, { status: 'INVALID', approved: false });
 
   try {
-    const transaction = await fetchTransaction(id);
-    if (!transaction) return json(404, { status: 'NOT_FOUND', approved: false });
+    let result;
+    if (orderId) {
+      const rawAccessToken = cookies.get(consultingAccessCookieName(orderId))?.value || '';
+      const accessToken = isConsultingAccessToken(rawAccessToken) ? rawAccessToken : '';
+      result = await resolveConsultingOrder(orderId, accessToken, id);
+    } else {
+      result = await resolveConsultingPayment(id);
+    }
+    if (result.kind === 'NOT_FOUND') return json(404, result);
+    if (result.kind === 'UNAUTHORIZED') return json(403, result);
 
-    const approved = isApprovedConsultingPayment(transaction);
     const payload: Record<string, unknown> = {
-      status: transaction.status,
-      approved,
+      status: result.status,
+      approved: result.approved,
     };
 
-    if (approved) {
+    if (result.approved) {
       const calLink = String(import.meta.env.CAL_CONSULTING_LINK || '').trim();
       if (calLink) payload.calLink = calLink;
     }

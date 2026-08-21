@@ -165,7 +165,15 @@ Estas reglas no se modifican por razones visuales:
 7. Un redirect no prueba el pago. Cal.com solo se revela cuando Wompi confirma `APPROVED`, referencia
    correcta, monto exacto y moneda `COP`.
 8. Las referencias heredadas por `$2.400.000 COP` siguen verificándose para no romper pagos emitidos.
-9. El brief temporal vive en `sessionStorage`; no se creó otra base de datos.
+9. La orden, cotización y brief se escriben como eventos append-only en la bitácora Supabase de
+   Adjudika **antes** de devolver la URL de Wompi. La landing solo accede al endpoint interno con HMAC;
+   nunca recibe la `service_role`. Si esa escritura falla, el checkout falla cerrado.
+10. El acceso a cada orden usa una cookie aleatoria `HttpOnly; Secure; SameSite=Lax`; Wompi recibe
+    solo un ID público de orden. El ID de transacción puede llegar por redirect o por webhook.
+11. La cuenta personal conserva su único webhook en Adjudika. Ese endpoint verifica la firma original,
+    guarda un inbox durable, reconsulta la API y procesa directamente solo `oa-consultoria-2h-*`.
+    La landing nunca decide el estado desde el navegador; lee la orden por el canal HMAC. `APPROVED`
+    es idempotente, una anulación de la misma transacción revoca el acceso y un doble cobro alerta.
 
 ---
 
@@ -176,6 +184,7 @@ src/
 ├── pages/
 │   ├── index.astro
 │   ├── consultoria/agendar.astro
+│   ├── consultoria/agenda/[orderId].astro
 │   └── api/consultoria/
 │       ├── checkout.ts
 │       ├── quote.ts
@@ -191,6 +200,8 @@ src/
     ├── consulting.ts            ← precio y reglas comerciales
     ├── framework.ts             ← 4C canónicas
     ├── trm.ts                   ← fuente oficial, spread y cotización
+    ├── consulting-orders.ts     ← cliente HMAC del event store durable de Adjudika
+    ├── consulting-payment.ts    ← resolución nueva/legacy y acceso privado
     └── wompi-consulting.ts      ← firma y verificación
 
 public/

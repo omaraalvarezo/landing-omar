@@ -1,0 +1,65 @@
+---
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro';
+import PaidCalendar from '../../../components/consulting/PaidCalendar.astro';
+import {
+  consultingAccessCookieName,
+  isConsultingAccessToken,
+  isConsultingOrderId,
+} from '../../../lib/consulting-orders';
+import { resolveConsultingOrder } from '../../../lib/consulting-payment';
+
+const rawOrderId = Astro.params.orderId || '';
+const orderId = isConsultingOrderId(rawOrderId) ? rawOrderId : '';
+const rawTransactionId = Astro.url.searchParams.get('id') || '';
+const transactionId = /^[A-Za-z0-9_-]{8,100}$/.test(rawTransactionId) ? rawTransactionId : '';
+let resolvedTransactionId = transactionId;
+const rawAccessToken = orderId ? Astro.cookies.get(consultingAccessCookieName(orderId))?.value || '' : '';
+const accessToken = isConsultingAccessToken(rawAccessToken) ? rawAccessToken : '';
+let initialStatus = orderId && accessToken ? 'PENDING' : 'INVALID';
+let approved = false;
+let calLink = '';
+let intake;
+
+Astro.response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate');
+Astro.response.headers.set('Referrer-Policy', 'no-referrer');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+
+if (orderId && accessToken) {
+  try {
+    const result = await resolveConsultingOrder(orderId, accessToken, transactionId);
+    initialStatus = result.status;
+    approved = result.kind === 'FOUND' && result.approved;
+    if (approved) {
+      calLink = String(import.meta.env.CAL_CONSULTING_LINK || '').trim();
+      intake = result.kind === 'FOUND' ? result.order?.intake : undefined;
+      resolvedTransactionId = result.kind === 'FOUND'
+        ? result.order?.transactionId || transactionId
+        : transactionId;
+    }
+  } catch (error) {
+    console.error('[consultoria] no se pudo resolver el regreso de Wompi', error);
+    initialStatus = 'UNKNOWN';
+  }
+}
+---
+
+<Layout
+  title="Escoge tu horario — Consultoría con Omar Álvarez"
+  description="Agenda privada posterior al pago de la consultoría de arquitectura operativa con IA."
+  showNav={false}
+  minimal
+  noIndex
+  privatePage
+  themeColor="#131118"
+>
+  <PaidCalendar
+    transactionId={resolvedTransactionId}
+    orderId={orderId}
+    initialStatus={initialStatus}
+    approved={approved}
+    calLink={calLink}
+    intake={intake}
+  />
+</Layout>

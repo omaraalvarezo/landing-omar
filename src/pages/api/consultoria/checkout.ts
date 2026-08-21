@@ -2,6 +2,12 @@ export const prerender = false;
 
 import type { APIRoute } from 'astro';
 import { createConsultingReference } from '../../../lib/consulting';
+import {
+  consultingAccessCookieName,
+  createConsultingAccessToken,
+  createConsultingOrder,
+  createConsultingOrderId,
+} from '../../../lib/consulting-orders';
 import { isServiceSystemStage } from '../../../lib/framework';
 import { getConsultingQuote } from '../../../lib/trm';
 import { createCheckoutUrl } from '../../../lib/wompi-consulting';
@@ -14,12 +20,13 @@ function clean(value: unknown, max: number): string {
     : '';
 }
 
-function json(status: number, body: object): Response {
+function json(status: number, body: object, extraHeaders: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store',
+      ...extraHeaders,
     },
   });
 }
@@ -43,6 +50,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const name = clean(input.name, 100);
   const email = clean(input.email, 254).toLowerCase();
+  const phone = clean(input.phone, 24);
   const business = clean(input.business, 120);
   const frameworkStage = clean(input.frameworkStage, 20);
   const problem = clean(input.problem, 1_200);
@@ -51,22 +59,25 @@ export const POST: APIRoute = async ({ request }) => {
   if (
     name.length < 3 ||
     !EMAIL.test(email) ||
+    phone.replace(/\D/g, '').length < 7 ||
+    phone.replace(/\D/g, '').length > 15 ||
     business.length < 2 ||
     !isServiceSystemStage(frameworkStage) ||
     problem.length < 20
   ) {
     return json(400, {
-      error: 'Completa nombre, correo, negocio, etapa del Marco 4C y un problema concreto.',
+      error: 'Completa nombre, correo, WhatsApp, negocio, etapa del Marco 4C y un problema concreto.',
     });
   }
   if (!accepted) return json(400, { error: 'Debes aceptar las condiciones de la sesión.' });
 
   const siteUrl = configuredSite || requestOrigin;
-  const redirectUrl = new URL('/consultoria/agendar', siteUrl).toString();
-
   try {
     const quote = await getConsultingQuote();
     const reference = createConsultingReference(quote.amountInCents, quote.effectiveDate);
+    const accessToken = createConsultingAccessToken();
+    const orderId = createConsultingOrderId();
+    const redirectUrl = new URL(`/consultoria/agenda/${orderId}`, siteUrl).toString();
     const checkoutUrl = await createCheckoutUrl({
       reference,
       amountInCents: quote.amountInCents,
@@ -75,7 +86,31 @@ export const POST: APIRoute = async ({ request }) => {
       customerEmail: email,
     });
 
-    return json(200, { checkoutUrl, reference, quote });
+    // La orden debe existir antes de exponer la URL de Wompi. Si la persistencia
+    // falla, nadie paga una sesión que luego no podamos verificar o agendar.
+    await createConsultingOrder({
+      id: orderId,
+      reference,
+      quote,
+      accessToken,
+      intake: {
+        name,
+        email,
+        phone,
+        business,
+        frameworkStage,
+        problem,
+      },
+    });
+
+    const secure = new URL(siteUrl).protocol === 'https:' ? '; Secure' : '';
+    return json(
+      200,
+      { checkoutUrl, reference, quote },
+      {
+        'Set-Cookie': `${consultingAccessCookieName(orderId)}=${accessToken}; HttpOnly${secure}; SameSite=Lax; Path=/; Max-Age=15552000`,
+      },
+    );
   } catch (error) {
     console.error('[consultoria] no se pudo crear el checkout', error);
     return json(503, {

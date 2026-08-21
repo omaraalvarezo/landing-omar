@@ -14,6 +14,7 @@ interface Props {
   showNav?: boolean;
   minimal?: boolean;
   noIndex?: boolean;
+  privatePage?: boolean;
   themeColor?: string;
 }
 
@@ -24,6 +25,7 @@ const {
   showNav = true,
   minimal = false,
   noIndex = false,
+  privatePage = false,
   themeColor = '#FAFAF9',
 } = Astro.props;
 
@@ -65,25 +67,33 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     {noIndex && <meta name="robots" content="noindex, nofollow, noarchive" />}
-    <link rel="canonical" href={canonicalURL} />
+    {!privatePage && <link rel="canonical" href={canonicalURL} />}
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.site)} />
+    {!privatePage && (
+      <>
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={new URL(image, Astro.site)} />
+      </>
+    )}
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(image, Astro.site)} />
+    {!privatePage && (
+      <>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={new URL(image, Astro.site)} />
+      </>
+    )}
 
     <meta name="theme-color" content={themeColor} />
 
     <!-- Schema.org Person + ProfessionalService -->
-    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    {!privatePage && <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
         {
@@ -118,7 +128,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           }
         }
       ]
-    })}></script>
+    })}></script>}
   </head>
   <body>
     <a

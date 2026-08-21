@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   readonly WOMPI_ENVIRONMENT: 'test' | 'production';
   readonly WOMPI_PUBLIC_KEY: string;
   readonly WOMPI_INTEGRITY_SECRET: string;
+  readonly WOMPI_RELAY_SECRET: string;
+  readonly CONSULTING_ORDER_STORE_URL: string;
   readonly WOMPI_TEST_PUBLIC_KEY: string;
   readonly WOMPI_TEST_INTEGRITY_SECRET: string;
 }

@@ -3,7 +3,7 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import PaidCalendar from '../../components/consulting/PaidCalendar.astro';
-import { fetchTransaction, isApprovedConsultingPayment } from '../../lib/wompi-consulting';
+import { resolveConsultingPayment } from '../../lib/consulting-payment';
 
 const rawTransactionId = Astro.url.searchParams.get('id') || '';
 const transactionId = /^[A-Za-z0-9_-]{8,100}$/.test(rawTransactionId) ? rawTransactionId : '';
@@ -13,9 +13,9 @@ let calLink = '';
 
 if (transactionId) {
   try {
-    const transaction = await fetchTransaction(transactionId);
-    initialStatus = transaction?.status || 'NOT_FOUND';
-    approved = isApprovedConsultingPayment(transaction);
+    const result = await resolveConsultingPayment(transactionId);
+    initialStatus = result.status;
+    approved = result.kind === 'FOUND' && result.legacy && result.approved;
     if (approved) calLink = String(import.meta.env.CAL_CONSULTING_LINK || '').trim();
   } catch {
     initialStatus = 'UNKNOWN';
@@ -29,6 +29,7 @@ if (transactionId) {
   showNav={false}
   minimal
   noIndex
+  privatePage
   themeColor="#131118"
 >
   <PaidCalendar

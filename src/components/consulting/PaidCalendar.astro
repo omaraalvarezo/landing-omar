@@ -7,21 +7,32 @@ import '@fontsource/ibm-plex-mono/600.css';
 
 interface Props {
   transactionId: string;
+  orderId?: string;
   initialStatus: string;
   approved: boolean;
   calLink?: string;
+  intake?: {
+    name: string;
+    email: string;
+    phone: string;
+    business: string;
+    frameworkStage: string;
+    problem: string;
+  };
 }
 
-const { transactionId, initialStatus, approved, calLink = '' } = Astro.props;
+const { transactionId, orderId = '', initialStatus, approved, calLink = '', intake } = Astro.props;
 ---
 
 <section
   class="paid-calendar"
   data-paid-calendar
   data-transaction-id={transactionId}
+  data-order-id={orderId}
   data-initial-status={initialStatus}
   data-approved={approved ? 'true' : 'false'}
   data-cal-link={approved ? calLink : ''}
+  data-intake={approved && intake ? JSON.stringify(intake) : ''}
 >
   <div class="paid-calendar__field" aria-hidden="true">
     <span></span><span></span><span></span><span></span>
@@ -722,6 +733,14 @@ const { transactionId, initialStatus, approved, calLink = '' } = Astro.props;
   const calMissing = root?.querySelector<HTMLElement>('[data-cal-missing]');
 
   function intake(): Intake {
+    const persisted = root?.dataset.intake || '';
+    if (persisted) {
+      try {
+        return JSON.parse(persisted) as Intake;
+      } catch {
+        // El respaldo de esta misma pestaña sigue disponible abajo.
+      }
+    }
     try {
       return JSON.parse(sessionStorage.getItem('omar-consultoria-intake') || '{}') as Intake;
     } catch {
@@ -738,6 +757,7 @@ const { transactionId, initialStatus, approved, calLink = '' } = Astro.props;
 
     const details = intake();
     const transactionId = root?.dataset.transactionId || '';
+    const orderId = root?.dataset.orderId || '';
     const stageLabels: Record<string, string> = {
       captar: 'C1 · Captar',
       convertir: 'C2 · Convertir',
@@ -749,6 +769,7 @@ const { transactionId, initialStatus, approved, calLink = '' } = Astro.props;
       details.frameworkStage ? `Marco 4C: ${stageLabels[details.frameworkStage] || details.frameworkStage}` : '',
       details.problem ? `Problema: ${details.problem}` : '',
       details.phone ? `WhatsApp: ${details.phone}` : '',
+      orderId ? `Orden consultoría: ${orderId}` : '',
       transactionId ? `Transacción Wompi: ${transactionId}` : '',
     ].filter(Boolean).join('\n');
 
@@ -783,15 +804,24 @@ const { transactionId, initialStatus, approved, calLink = '' } = Astro.props;
     mountCalendar(calLink);
   }
 
-  async function pollStatus(transactionId: string) {
-    for (let attempt = 0; attempt < 12; attempt += 1) {
+  async function pollStatus(transactionId: string, orderId: string) {
+    for (let attempt = 0; attempt < 60; attempt += 1) {
       try {
-        const response = await fetch(`/api/consultoria/status?id=${encodeURIComponent(transactionId)}`, {
+        const query = new URLSearchParams();
+        if (transactionId) query.set('id', transactionId);
+        if (orderId) query.set('order', orderId);
+        const response = await fetch(`/api/consultoria/status?${query.toString()}`, {
           headers: { Accept: 'application/json' },
           cache: 'no-store',
         });
         const payload = await response.json() as StatusPayload;
         if (payload.approved) {
+          if (orderId) {
+            // El render del servidor entrega el brief persistido al calendario
+            // únicamente después de comprobar la cookie y el pago.
+            window.location.reload();
+            return;
+          }
           showApproved(payload.calLink || '');
           return;
         }
@@ -809,15 +839,16 @@ const { transactionId, initialStatus, approved, calLink = '' } = Astro.props;
 
     if (statusCode) statusCode.textContent = 'VERIFICACIÓN DEMORADA';
     if (statusTitle) statusTitle.textContent = 'Wompi está tardando más de lo normal.';
-    if (statusCopy) statusCopy.textContent = 'Recarga esta página en unos minutos. El pago no se perderá y nunca habilitamos la agenda sin confirmarlo.';
+    if (statusCopy) statusCopy.textContent = 'Tu orden quedó guardada. Puedes recargar esta página: seguiremos verificando el pago sin pedirte pagar de nuevo.';
   }
 
   if (root) {
     const transactionId = root.dataset.transactionId || '';
+    const orderId = root.dataset.orderId || '';
     if (root.dataset.approved === 'true') {
       showApproved(root.dataset.calLink || '');
-    } else if (transactionId) {
-      void pollStatus(transactionId);
+    } else if (transactionId || orderId) {
+      void pollStatus(transactionId, orderId);
     }
   }
 </script>
