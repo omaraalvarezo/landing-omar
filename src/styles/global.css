@@ -138,6 +138,13 @@
     border-radius: 2px;
   }
 
+  /* Home (Sistema vivo): fondos ink, bone, lima, coral y púrpura. El azul --accent no llega
+     a 3:1 sobre ink ni púrpura, así que el anillo toma el color del texto, que ya contrasta
+     con su fondo. Los componentes con anillo propio (más específicos) lo conservan. */
+  .experience :focus-visible {
+    outline-color: currentColor;
+  }
+
   /* CTAs sobre fondo --accent: ring en --ink para no fundirse con el botón.
      Light: 8.0:1 sobre azul. Dark: 3.4:1 → AA UI. */
   .hero__cta--primary:focus-visible,

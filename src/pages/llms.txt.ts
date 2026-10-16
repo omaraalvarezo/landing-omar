@@ -72,7 +72,7 @@ ${trends.map((entry) => line(entry.data.title, trendPath(entry.id), entry.data.d
 ## Opcional
 
 - [RSS](${SITE}/herramientas-ia/rss.xml): novedades de las guías.
-- [Consultoría](${SITE}/#reservar): sesión privada de 120 minutos, aparte del directorio.
+- [Consultoría](${SITE}/#contacto): sesión privada de 120 minutos, aparte del directorio.
 `;
 
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

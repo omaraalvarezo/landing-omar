@@ -6,7 +6,7 @@ import { settleDirectoryPayment } from '../../../lib/directory-payment';
 import { parseKitReference } from '../../../lib/kit';
 import { settleKitPayment } from '../../../lib/kit-payment';
 import { verifyWompiEvent } from '../../../lib/wompi-events';
-import { fetchTransaction } from '../../../lib/wompi-consulting';
+import { fetchTransaction } from '../../../lib/wompi';
 
 function json(status: number, body: object): Response {
   return new Response(JSON.stringify(body), {
@@ -30,7 +30,9 @@ export const POST: APIRoute = async ({ request }) => {
 
   let payload: unknown;
   try {
-    payload = await request.json();
+    const raw = await request.text();
+    if (raw.length > 100_000) return json(413, { error: 'payload' });
+    payload = JSON.parse(raw);
   } catch {
     return json(400, { error: 'json' });
   }

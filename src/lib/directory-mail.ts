@@ -1,5 +1,5 @@
 import { getSecret } from 'astro:env/server';
-import { formatCop } from './consulting';
+import { formatCop } from './money';
 import {
   addCalendarDays,
   bogotaToday,

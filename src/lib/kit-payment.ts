@@ -10,7 +10,7 @@ import {
   type KitOrder,
   type KitPaymentStatus,
 } from './kit-orders';
-import type { WompiTransaction } from './wompi-consulting';
+import type { WompiTransaction } from './wompi';
 
 export type KitSettlement =
   | { ok: true; order: KitOrder; email: KitMailResult | 'skipped' }

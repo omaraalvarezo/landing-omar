@@ -57,7 +57,7 @@ Este skill hace preguntas sobre tu cliente: qué intenta lograr cuando contrata 
 ### LADO OFERTA (qué le das tú)
 
 4. **PRODUCTO/SERVICIO PRINCIPAL** — ¿qué le entregas exactamente?
-   - Pregunta: "Describí en una frase qué le entregas a tu cliente. NO la categoría ('servicios contables') — el entregable específico ('un cierre mensual claro antes del día 5')."
+   - Pregunta: "Describe en una frase qué le entregas a tu cliente. NO la categoría ('servicios contables') — el entregable específico ('un cierre mensual claro antes del día 5')."
 
 5. **ALIVIADORES DE FRUSTRACIÓN** — ¿qué de tu oferta directamente le quita las frustraciones que mencionaste arriba?
    - Pregunta: "De las frustraciones que me dijiste, ¿qué cosa específica de tu producto/servicio se las quita? Empareja una por una."
@@ -68,7 +68,7 @@ Este skill hace preguntas sobre tu cliente: qué intenta lograr cuando contrata 
 ### SÍNTESIS
 
 7. **MOMENTO DE LA VERDAD** — ¿qué te diferencia de la competencia?
-   - Pregunta: "Si tu cliente está comparándote con 2 competidores, ¿por qué te elige a ti? Si la respuesta es 'precio', tenemos problema. Buscá otra razón real."
+   - Pregunta: "Si tu cliente está comparándote con 2 competidores, ¿por qué te elige a ti? Si la respuesta es 'precio', tenemos problema. Busca otra razón real."
 
 **Después de las 7 preguntas, devuelve:**
 

@@ -11,6 +11,8 @@ import Layout from '../layouts/Layout.astro';
 import { AREAS, RESOURCES, formatSize } from '../lib/resources';
 
 const unlocked = Astro.locals.adminUnlocked === true;
+// Sin sesión la página se presenta como un 404 real: el estado HTTP tampoco revela el panel.
+if (!unlocked) Astro.response.status = 404;
 
 // Construcción de filas (solo se evalúan si unlocked, pero la lectura es local — barata)
 const resourceRows = RESOURCES.slice()
@@ -170,7 +172,7 @@ const githubEditAreasUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/m
       <section class="admin-section admin-section--commands" aria-labelledby="admin-commands-title">
         <h2 id="admin-commands-title" class="admin-section__title">comandos</h2>
         <p class="admin-commands__intro">
-          Corré estos en la terminal dentro de <code class="admin-code">~/proyectos-vibe-coding/landing-omar</code>. Después de cualquier cambio: <code class="admin-code">git add . && git commit && git push</code>.
+          Corre estos en la terminal dentro de <code class="admin-code">~/proyectos-vibe-coding/landing-omar</code>. Después de cualquier cambio: <code class="admin-code">git add . && git commit && git push</code>.
         </p>
         <ul class="admin-commands">
           <li><code class="admin-code">npm run resource:add</code> — flujo interactivo para subir un .md</li>
@@ -491,12 +493,14 @@ const githubEditAreasUrl = 'https://github.com/omaraalvarezo/landing-omar/edit/m
         }
 
         if (res.status === 429) {
-          if (errorEl) errorEl.textContent = 'Demasiados intentos. Esperá 15 minutos.';
+          if (errorEl) errorEl.textContent = 'Demasiados intentos. Espera 15 minutos.';
+        } else if (res.status >= 500) {
+          if (errorEl) errorEl.textContent = 'El acceso no está disponible ahora. Intenta más tarde.';
         } else {
           if (errorEl) errorEl.textContent = 'Credenciales inválidas.';
         }
       } catch {
-        if (errorEl) errorEl.textContent = 'Error de red. Intentá de nuevo.';
+        if (errorEl) errorEl.textContent = 'Error de red. Intenta de nuevo.';
       } finally {
         if (btn) btn.disabled = false;
         pwInput.value = '';

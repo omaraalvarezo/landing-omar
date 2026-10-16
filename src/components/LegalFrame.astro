@@ -1,0 +1,121 @@
+---
+// Marco común de /privacidad, /terminos y /sobre-mi. Usa el chrome claro del directorio
+// (Bricolage + Plex, bone/ink) para no revivir la identidad heredada de /recursos.
+import Layout from '../layouts/Layout.astro';
+import DirectoryChrome from './directory/DirectoryChrome.astro';
+import JsonLd from './directory/JsonLd.astro';
+import { formatDirectoryDate } from '../lib/directory';
+import { LEGAL } from '../lib/legal';
+
+interface Props {
+  title: string;
+  description: string;
+  kicker: string;
+  heading: string;
+  /** Las páginas legales son borrador hasta que Omar las apruebe (LEGAL.draft). */
+  legal?: boolean;
+  jsonLd?: unknown;
+}
+
+const { title, description, kicker, heading, legal = false, jsonLd } = Astro.props;
+const isDraft = legal && LEGAL.draft;
+---
+
+<Layout title={title} description={description} showNav={false} minimal noIndex={isDraft} themeColor="#FFF8EA">
+  <DirectoryChrome consultCta={false}>
+    <nav class="crumb" aria-label="Miga de pan">
+      <a href="/">Inicio</a>
+      <span aria-hidden="true">/</span>
+      <span>{heading}</span>
+    </nav>
+    <p class="dir-kicker">{kicker}</p>
+    <h1 class="dir-title">{heading}</h1>
+    {legal && <p class="dir-meta">Última actualización: {formatDirectoryDate(LEGAL.updated)}</p>}
+    {isDraft && (
+      <p class="legal-draft" role="note">
+        <strong>Borrador.</strong> Este texto todavía no está aprobado.
+      </p>
+    )}
+    <div class="prose legal">
+      <slot />
+    </div>
+    {jsonLd && <JsonLd data={jsonLd} />}
+  </DirectoryChrome>
+</Layout>
+
+<style>
+  .legal-draft {
+    max-width: 68ch;
+    margin: 24px 0 0;
+    padding: 14px 18px;
+    border: 2px solid var(--ink);
+    background: var(--lime);
+    color: var(--ink);
+    font-family: var(--data);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .legal :global(h2) {
+    margin-top: 44px;
+  }
+
+  .legal :global(h3) {
+    margin: 26px 0 8px;
+    font-family: var(--display);
+    font-size: 19px;
+    line-height: 1.2;
+  }
+
+  .legal :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+
+  .legal :global(table) {
+    width: 100%;
+    margin: 12px 0 18px;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .legal :global(th),
+  .legal :global(td) {
+    padding: 10px 8px;
+    border-top: 1px solid rgba(19, 17, 24, 0.18);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .legal :global(th) {
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 640px) {
+    .legal :global(table),
+    .legal :global(tbody),
+    .legal :global(tr),
+    .legal :global(td) {
+      display: block;
+    }
+    .legal :global(thead) {
+      display: none;
+    }
+    .legal :global(tr) {
+      padding: 10px 0;
+      border-top: 1px solid rgba(19, 17, 24, 0.18);
+    }
+    .legal :global(td) {
+      padding: 4px 0;
+      border: 0;
+    }
+    .legal :global(td:first-child) {
+      font-weight: 600;
+    }
+  }
+</style>
