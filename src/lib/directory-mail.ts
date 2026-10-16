@@ -1,3 +1,4 @@
+import { getSecret } from 'astro:env/server';
 import { formatCop } from './consulting';
 import {
   addCalendarDays,
@@ -14,7 +15,7 @@ export type DirectoryMailResult = 'sent' | 'unconfigured' | 'failed';
 const DEFAULT_NOTIFY_EMAIL = 'omaraalvarezo@gmail.com';
 
 function env(name: keyof ImportMetaEnv): string {
-  return String(import.meta.env[name] || '').trim();
+  return String(getSecret(String(name)) || '').trim();
 }
 
 function shellArg(value: string): string {

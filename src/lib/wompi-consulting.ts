@@ -1,3 +1,4 @@
+import { getSecret } from 'astro:env/server';
 import { CONSULTING, expectedAmountForConsultingReference } from './consulting';
 
 type WompiEnvironment = 'production' | 'test';
@@ -25,7 +26,7 @@ export interface WompiTransaction {
 }
 
 function env(name: keyof ImportMetaEnv): string {
-  return String(import.meta.env[name] || '').trim();
+  return String(getSecret(String(name)) || '').trim();
 }
 
 export function getWompiConfig(): WompiConfig | null {

@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 
+import { getSecret } from 'astro:env/server';
 import Layout from '../../layouts/Layout.astro';
 import PaidCalendar from '../../components/consulting/PaidCalendar.astro';
 import { resolveConsultingPayment } from '../../lib/consulting-payment';
@@ -16,7 +17,7 @@ if (transactionId) {
     const result = await resolveConsultingPayment(transactionId);
     initialStatus = result.status;
     approved = result.kind === 'FOUND' && result.legacy && result.approved;
-    if (approved) calLink = String(import.meta.env.CAL_CONSULTING_LINK || '').trim();
+    if (approved) calLink = String(getSecret('CAL_CONSULTING_LINK') || '').trim();
   } catch {
     initialStatus = 'UNKNOWN';
   }
