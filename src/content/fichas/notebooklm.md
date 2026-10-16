@@ -1,6 +1,6 @@
 ---
 checked: 2026-10-16
-task: "NotebookLM, que Google renombró Gemini Notebook el 16 jul 2026, sirve para preguntarle a tus propios documentos. Subes PDF, páginas web, videos de YouTube, audio o archivos de Google Docs y Slides, y las respuestas citan el pasaje de tu fuente. También arma resúmenes, guías de estudio y resúmenes en audio. La tarea en una pyme: que el equipo consulte el manual sin llamarte a ti."
+task: "Gemini Notebook, que se llamaba NotebookLM hasta el 16 jul 2026, sirve para preguntarle a tus propios documentos. Subes PDF, páginas web, videos de YouTube, audio o archivos de Google Docs y Slides, y las respuestas citan el pasaje de tu fuente. También arma resúmenes, guías de estudio y resúmenes en audio. La tarea en una pyme: que el equipo consulte el manual sin llamarte a ti."
 useCase:
   sector: coworking
   title: El reglamento del espacio que cualquiera del equipo puede consultar
@@ -26,7 +26,7 @@ beforePaying:
   - "Arma un cuaderno con tus documentos reales en la versión gratuita antes de mirar planes."
   - "Revisa cuántas fuentes y qué funciones trae tu plan; algunas funciones nuevas llegan primero a Google AI Pro y Ultra."
   - "Según su ayuda, tus datos no se usan para entrenar salvo que envíes comentarios. Tenlo presente antes de calificar respuestas que tengan datos de clientes."
-  - "Busca el producto con su nombre nuevo, Gemini Notebook, cuando leas precios y ayuda."
+  - "Busca el producto como Gemini Notebook cuando leas precios y ayuda; los artículos viejos usan el nombre anterior."
 sources:
   - name: la ayuda de Gemini Notebook
     url: https://support.google.com/gemininotebook/answer/16164461

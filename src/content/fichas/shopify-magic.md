@@ -1,6 +1,6 @@
 ---
 checked: 2026-10-16
-task: "Shopify Magic es el conjunto de funciones de IA dentro de Shopify, y su página hoy lleva a Sidekick, el asistente de comercio. Redacta descripciones de producto, blogs y correos dentro del editor, sugiere respuestas en la bandeja de mensajes, crea bloques del tema desde una instrucción y ayuda con alertas de inventario bajo y campañas. La tarea en una pyme: tener el catálogo descrito y al día sin escribir cada ficha a mano."
+task: "Sidekick es el asistente de IA dentro de Shopify. Lo que antes se presentaba como Shopify Magic quedó bajo su nombre: la página vieja hoy lleva a la de Sidekick. Redacta descripciones de producto, blogs y correos dentro del editor, sugiere respuestas en la bandeja de mensajes, crea bloques del tema desde una instrucción y ayuda con alertas de inventario bajo y campañas. La tarea en una pyme: tener el catálogo descrito y al día sin escribir cada ficha a mano."
 useCase:
   sector: taller
   title: Las fichas de los productos de cuidado que vende el taller
@@ -23,7 +23,7 @@ alternatives:
   - tool: manychat
     when: "si quieres responder preguntas de productos en Instagram o WhatsApp."
 beforePaying:
-  - "No hay que pagar Shopify Magic aparte: según Shopify, Sidekick viene incluido en el plan. Lo que pagas es Shopify."
+  - "No hay que pagar Sidekick aparte: según Shopify, viene incluido en el plan. Lo que pagas es Shopify."
   - "Revisa qué funciones trae tu plan; la página dice que funciones y límites varían por plan."
   - "Confirma que tu equipo usa el admin en computador o en la app, no en el navegador del celular."
   - "Haz cinco fichas con Sidekick y compáralas con las que escribirías tú en el mismo tiempo."

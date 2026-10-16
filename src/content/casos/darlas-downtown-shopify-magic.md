@@ -18,4 +18,4 @@ Bree cuenta que lo usó en las descripciones de producto, que le sirvió tenerlo
 
 El orden que sí se puede copiar, sin copiar el resultado, es corto. Hay un tono definido antes de abrir la herramienta. La herramienta está dentro del administrador, no en otra pestaña suelta. Alguien del equipo lee antes de publicar. El artículo no dice que el texto saliera sin esa lectura.
 
-La ficha de Shopify Magic está en el directorio. Si el problema no es una tienda sino una pieza para redes, la guía de contenido usa otras herramientas.
+Hoy esas funciones de Shopify viven en Sidekick, y su ficha está en el directorio. Si el problema no es una tienda sino una pieza para redes, la guía de contenido usa otras herramientas.
