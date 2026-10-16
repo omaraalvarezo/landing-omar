@@ -1,3 +1,4 @@
+import { getSecret } from 'astro:env/server';
 import { formatCop } from './money';
 import { KIT, kitDownloadPath } from './kit';
 import type { KitOrder } from './kit-orders';
@@ -8,7 +9,7 @@ export type KitMailResult = 'sent' | 'unconfigured' | 'failed';
 const DEFAULT_NOTIFY_EMAIL = 'omaraalvarezo@gmail.com';
 
 function env(name: keyof ImportMetaEnv): string {
-  return String(import.meta.env[name] || '').trim();
+  return String(getSecret(String(name)) || '').trim();
 }
 
 function siteOrigin(): string {

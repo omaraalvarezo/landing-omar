@@ -1,6 +1,6 @@
 ---
 import SectionLabel from './SectionLabel.astro';
-import { LineChart, ChartColumn, Ship, FileText } from '@lucide/astro';
+import { ChartLine, ChartColumn, Ship, FileText } from '@lucide/astro';
 import { calButtonAttrs } from '../lib/contact';
 
 const calAttrs = calButtonAttrs({ notes: 'Vi los casos y quiero agendar mi llamada de 20 min.' });
@@ -22,7 +22,7 @@ const calAttrs = calButtonAttrs({ notes: 'Vi los casos y quiero agendar mi llama
         <article class="case" data-reveal>
           <div class="case__head">
             <div class="case__meta">
-              <LineChart class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
+              <ChartLine class="case__icon" size={18} stroke-width={1.5} aria-hidden="true" />
               <span>enzo motorsport · sector automotriz</span>
             </div>
             <h3 class="case__title">Tablero financiero + reporte diario por Telegram</h3>

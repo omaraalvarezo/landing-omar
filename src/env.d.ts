@@ -1,6 +1,9 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
 
+// Inventario de variables del proyecto. Desde Astro 6, import.meta.env se congela en el
+// build: las privadas se leen en runtime con getSecret() de 'astro:env/server'; solo las
+// PUBLIC_* siguen usando import.meta.env.
 interface ImportMetaEnv {
   readonly ADMIN_PASSWORD_HASH: string;
   readonly SESSION_SECRET: string;

@@ -5,6 +5,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
+import { getSecret } from 'astro:env/server';
 import bcrypt from 'bcryptjs';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
@@ -12,10 +13,10 @@ import { sign } from '../../lib/admin-session';
 
 // Redis solo se inicializa si las env vars están seteadas.
 const redis =
-  import.meta.env.UPSTASH_REDIS_REST_URL && import.meta.env.UPSTASH_REDIS_REST_TOKEN
+  getSecret('UPSTASH_REDIS_REST_URL') && getSecret('UPSTASH_REDIS_REST_TOKEN')
     ? new Redis({
-        url: import.meta.env.UPSTASH_REDIS_REST_URL,
-        token: import.meta.env.UPSTASH_REDIS_REST_TOKEN,
+        url: getSecret('UPSTASH_REDIS_REST_URL'),
+        token: getSecret('UPSTASH_REDIS_REST_TOKEN'),
       })
     : null;
 
@@ -69,8 +70,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }
 
   // Server config
-  const hash = import.meta.env.ADMIN_PASSWORD_HASH;
-  const secret = import.meta.env.SESSION_SECRET;
+  const hash = getSecret('ADMIN_PASSWORD_HASH');
+  const secret = getSecret('SESSION_SECRET');
   if (!hash || !secret) {
     return jsonResponse(500, { error: 'Server not configured' });
   }

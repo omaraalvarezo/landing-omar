@@ -6,6 +6,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
+import { getSecret } from 'astro:env/server';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import {
@@ -18,10 +19,10 @@ import {
 import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
 
 const redis =
-  import.meta.env.UPSTASH_REDIS_REST_URL && import.meta.env.UPSTASH_REDIS_REST_TOKEN
+  getSecret('UPSTASH_REDIS_REST_URL') && getSecret('UPSTASH_REDIS_REST_TOKEN')
     ? new Redis({
-        url: import.meta.env.UPSTASH_REDIS_REST_URL,
-        token: import.meta.env.UPSTASH_REDIS_REST_TOKEN,
+        url: getSecret('UPSTASH_REDIS_REST_URL'),
+        token: getSecret('UPSTASH_REDIS_REST_TOKEN'),
       })
     : null;
 
@@ -161,15 +162,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
   }
 
-  const apiKey = import.meta.env.RESEND_API_KEY;
+  const apiKey = getSecret('RESEND_API_KEY');
   if (!apiKey) {
     return json(503, { error: 'EMAIL_NOT_CONFIGURED', fallbackEmail: CONTACT_EMAIL });
   }
 
-  const to = import.meta.env.CONTACT_TO_EMAIL || CONTACT_EMAIL;
+  const to = getSecret('CONTACT_TO_EMAIL') || CONTACT_EMAIL;
   const from =
-    import.meta.env.CONTACT_FROM_EMAIL ||
-    import.meta.env.DIRECTORY_NOTIFY_FROM ||
+    getSecret('CONTACT_FROM_EMAIL') ||
+    getSecret('DIRECTORY_NOTIFY_FROM') ||
     'Web omaralvarezo.co <onboarding@resend.dev>';
   const stageLabel = `${stage.number} · ${stage.name}`;
 
