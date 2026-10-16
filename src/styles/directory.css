@@ -542,6 +542,16 @@ body:has(.directory) {
 .prose a:hover,
 .source-link:hover { color: var(--ink); }
 
+.ficha { margin-top: 40px; }
+.ficha .dir-kicker { margin: 36px 0 -18px; color: var(--cobalt); }
+.ficha .ficha__sources {
+  margin-top: 28px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(19, 17, 24, 0.18);
+  color: #514b43;
+  font-size: 14px;
+}
+
 .entries { margin-top: 12px; }
 .entry {
   display: block;

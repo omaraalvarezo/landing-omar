@@ -499,3 +499,16 @@ redirect; se evalúa caso por caso si aparecen 404.
 - Calculadoras en `/herramientas-ia/recursos`: ahorro, reseñas por plantilla y cotizador de detailing.
   Los supuestos los escribe el visitante. Decisión: `wiki/decisiones/ofertas-directorio-herramientas-ia.md`.
 
+
+## 2026-10-16 — Fichas ampliadas del directorio
+
+- Las 32 fichas de `/herramientas-ia/[slug]` pasan de ~157 palabras a entre 459 y 663 en el
+  `<main>`: tarea, caso concreto (taller, coworking o servicios), límites, alternativas del
+  directorio y qué revisar antes de pagar. Es el riesgo de «contenido de poco valor» de AdSense.
+- Colección nueva `src/content/fichas/{slug}.md`; `tools.json` y el cobro `oa-directorio-*` no
+  cambian. La ficha es opcional: una herramienta nueva sin ficha se sigue publicando como antes.
+  `npm run content:check` exige 280 palabras, alternativas existentes y fuentes https.
+- Cada dato salió de una lectura del sitio oficial del 16 oct 2026, citada en `sources`. Sin
+  precios en cifras. Donde el sitio se contradecía (HeyGen, Fireflies) la ficha lo dice y no da el
+  número. Pendiente: NotebookLM ahora se llama Gemini Notebook y shopify.com/magic redirige a
+  Sidekick; el nombre en `tools.json` no se tocó.

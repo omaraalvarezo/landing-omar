@@ -1,4 +1,5 @@
 ---
+import { getEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import DirectoryChrome from '../../components/directory/DirectoryChrome.astro';
 import ToolList from '../../components/directory/ToolList.astro';
@@ -7,6 +8,7 @@ import {
   categoryPath,
   formatDirectoryDate,
   getTools,
+  getTool,
   getToolsByCategory,
   isLiveFeatured,
   isLiveSponsor,
@@ -26,6 +28,11 @@ const { tool } = Astro.props;
 const label = categoryLabel(tool.categoria);
 const related = getToolsByCategory(tool.categoria).filter((item) => item.slug !== tool.slug).slice(0, 4);
 const mentions = await piecesForTool(tool.slug);
+const ficha = await getEntry('fichas', tool.slug);
+if (ficha?.data.alternatives.some((item) => item.tool === tool.slug)) {
+  throw new Error(`La ficha de ${tool.slug} se cita a sí misma como alternativa`);
+}
+const sectorLabel = { taller: 'Caso: taller', coworking: 'Caso: coworking', servicios: 'Caso: empresa de servicios' };
 const sponsor = isLiveSponsor(tool);
 const featured = isLiveFeatured(tool);
 const site = 'https://omaralvarezo.co';
@@ -103,6 +110,42 @@ const jsonLd = {
         </dd>
       </div>
     </dl>
+    {ficha && (
+      <div class="prose ficha">
+        <h2>Para qué tarea sirve</h2>
+        <p>{ficha.data.task}</p>
+        <p class="dir-kicker">{sectorLabel[ficha.data.useCase.sector]}</p>
+        <h2>{ficha.data.useCase.title}</h2>
+        <ol>
+          {ficha.data.useCase.steps.map((step) => <li>{step}</li>)}
+        </ol>
+        <h2>Lo que no hace</h2>
+        <ul>
+          {ficha.data.limits.map((limit) => <li>{limit}</li>)}
+        </ul>
+        <h2>Alternativas en el directorio</h2>
+        <ul>
+          {ficha.data.alternatives.map((item) => {
+            const alt = getTool(item.tool);
+            return (
+              <li>
+                <a href={`/herramientas-ia/${item.tool}`}>{alt?.nombre ?? item.tool}</a>: {item.when}
+              </li>
+            );
+          })}
+        </ul>
+        <h2>Antes de pagar, revisa</h2>
+        <ul>
+          {ficha.data.beforePaying.map((check) => <li>{check}</li>)}
+        </ul>
+        <p class="ficha__sources">
+          Revisado el {formatDirectoryDate(ficha.data.checked)} en{' '}
+          {ficha.data.sources.map((source, index) => (
+            <>{index > 0 && (index === ficha.data.sources.length - 1 ? ' y ' : ', ')}<a href={source.url} target="_blank" rel="noopener noreferrer">{source.name}</a></>
+          ))}. Los planes y precios cambian: confirma en el sitio antes de pagar.
+        </p>
+      </div>
+    )}
     {mentions.length > 0 && (
       <section>
         <h2 class="tool-group">Guías y notas</h2>
