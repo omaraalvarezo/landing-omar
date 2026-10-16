@@ -574,3 +574,16 @@ indexables y en el sitemap. Correo de habeas data y de retracto: el de Omar.
   archivo ya descargado; devolución en máximo 30 días calendario.
 - Cédula, dirección y teléfono quedan opcionales (`null`, no se imprimen). El Decreto 1377 pide
   dirección y teléfono del responsable: llenarlos cuando Omar decida cuáles publicar.
+
+## 2026-10-16 — Fichas ampliadas del directorio
+
+- Las 32 fichas de `/herramientas-ia/[slug]` pasan de ~157 palabras a entre 459 y 663 en el
+  `<main>`: tarea, caso concreto (taller, coworking o servicios), límites, alternativas del
+  directorio y qué revisar antes de pagar. Es el riesgo de «contenido de poco valor» de AdSense.
+- Colección nueva `src/content/fichas/{slug}.md`; `tools.json` y el cobro `oa-directorio-*` no
+  cambian. La ficha es opcional: una herramienta nueva sin ficha se sigue publicando como antes.
+  `npm run content:check` exige 280 palabras, alternativas existentes y fuentes https.
+- Cada dato salió de una lectura del sitio oficial del 16 oct 2026, citada en `sources`. Sin
+  precios en cifras. Donde el sitio se contradecía (HeyGen, Fireflies) la ficha lo dice y no da el
+  número. Pendiente: NotebookLM ahora se llama Gemini Notebook y shopify.com/magic redirige a
+  Sidekick; el nombre en `tools.json` no se tocó.

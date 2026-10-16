@@ -100,6 +100,40 @@ for (const collection of collections) {
   }
 }
 
+// Fichas ampliadas: una por herramienta, sin frontmatter editorial.
+const fichasDir = path.join(contentRoot, 'fichas');
+const withFicha = new Set();
+const fichaWords = (data) =>
+  [data.task, data.useCase?.title, ...(data.useCase?.steps || []), ...(data.limits || []), ...(data.beforePaying || []), ...(data.alternatives || []).map((item) => item?.when)]
+    .join(' ')
+    .split(/\s+/)
+    .filter(Boolean).length;
+for (const name of existsSync(fichasDir) ? readdirSync(fichasDir).filter((item) => item.endsWith('.md')) : []) {
+  const slug = name.slice(0, -3);
+  const file = path.join(fichasDir, name);
+  const raw = readFileSync(file, 'utf8');
+  const end = raw.indexOf('\n---', 3);
+  let data;
+  try {
+    data = parse(raw.slice(4, end));
+  } catch (error) {
+    errors.push(`${rel(file)}: YAML inválido (${error.message})`);
+    continue;
+  }
+  if (!toolSlugs.has(slug)) errors.push(`${rel(file)}: no hay herramienta «${slug}» en tools.json`);
+  withFicha.add(slug);
+  const alternatives = (data.alternatives || []).map((item) => item?.tool);
+  checkTools(file, alternatives);
+  if (alternatives.includes(slug)) errors.push(`${rel(file)}: se cita a sí misma como alternativa`);
+  for (const source of data.sources || []) {
+    if (!String(source?.url).startsWith('https://')) errors.push(`${rel(file)}: una fuente no es https`);
+  }
+  const words = fichaWords(data);
+  if (words < 280) errors.push(`${rel(file)}: la ficha tiene ${words} palabras; el mínimo es 280`);
+}
+const withoutFicha = [...toolSlugs].filter((slug) => !withFicha.has(slug));
+if (withoutFicha.length) console.log(`Herramientas sin ficha ampliada:\n- ${withoutFicha.join('\n- ')}`);
+
 if (drafts.length) console.log(`Borradores (no se publican):\n- ${drafts.join('\n- ')}`);
 if (errors.length) {
   console.error(errors.join('\n'));

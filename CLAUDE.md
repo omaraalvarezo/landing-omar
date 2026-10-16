@@ -291,6 +291,7 @@ npm run preview
 
 ## Changelog breve
 
+- **2026.10.16 · fichas ampliadas:** colección `src/content/fichas/` con tarea, caso, límites, alternativas y checklist de pago para las 32 herramientas, con fuentes oficiales. No toca `tools.json` ni Wompi.
 - **2026.10.16 · dependencias:** Astro 7, adapter de Vercel 11 y Tailwind 4. `npm audit` queda en cero. Las variables privadas pasan a `getSecret()` para no congelarse en el build.
 - **2026.10.16 · v3.5:** se elimina el cobro de la consultoría (Wompi, TRM, órdenes en Adjudika y
   Cal.com tras pago). Entra el formulario de contacto que llega al correo de Omar. El directorio y

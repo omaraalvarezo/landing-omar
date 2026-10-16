@@ -193,7 +193,30 @@ const tendencias = defineCollection({
   }),
 });
 
+// Una ficha ampliada por herramienta: el archivo se llama como el slug de tools.json.
+// Solo lleva datos leídos en el sitio oficial; cada fuente queda en `sources`.
+const fichas = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/fichas' }),
+  schema: z.object({
+    checked: isoDate,
+    task: z.string().min(120),
+    useCase: z.object({
+      sector: z.enum(['taller', 'coworking', 'servicios']),
+      title: z.string().min(12).max(90),
+      steps: z.array(z.string().min(20)).min(3).max(5),
+    }),
+    limits: z.array(z.string().min(30)).min(3).max(5),
+    alternatives: z
+      .array(z.object({ tool: toolSlug, when: z.string().min(30) }))
+      .min(2)
+      .max(3),
+    beforePaying: z.array(z.string().min(30)).min(3).max(5),
+    sources: z.array(z.object({ name: z.string().min(2), url: httpsUrl })).min(1).max(5),
+  }),
+});
+
 export const collections = {
+  fichas,
   para,
   noticias,
   prompts,
