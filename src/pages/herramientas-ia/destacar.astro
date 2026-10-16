@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import DirectoryChrome from '../../components/directory/DirectoryChrome.astro';
-import { formatCop, formatUsd } from '../../lib/consulting';
+import { formatCop, formatUsd } from '../../lib/money';
 import { DIRECTORY_PRICE_BASIS, getCategories, getDirectoryPlans } from '../../lib/directory';
 
 const plans = getDirectoryPlans();
@@ -75,7 +75,7 @@ const jsonLd = {
       <p class="price-note">
         Equivalente redondeado al millar superior con la TRM del {DIRECTORY_PRICE_BASIS.trmDate}
         (${DIRECTORY_PRICE_BASIS.trmCop.toLocaleString('es-CO')}) más 1,65%. La tasa operativa de ese día fue
-        ${DIRECTORY_PRICE_BASIS.operationalRateCop.toLocaleString('es-CO')}. Estos montos quedan fijos: no usan la cotización diaria de la consultoría.
+        ${DIRECTORY_PRICE_BASIS.operationalRateCop.toLocaleString('es-CO')}. Estos montos quedan fijos.
       </p>
 
       <label>

@@ -42,7 +42,7 @@ El problema: cuando intentas llenarlo solo, te bloqueas en los bloques difícile
 **Flujo obligatorio (los 9 bloques, en este orden):**
 
 1. **SEGMENTOS DE CLIENTES** — ¿quién paga por lo que haces?
-   - Pregunta: "Describí en una frase a TU cliente ideal. ¿Quién es la persona que cuando te llama, dices 'esto es exactamente lo que quiero atender'?"
+   - Pregunta: "Describe en una frase a TU cliente ideal. ¿Quién es la persona que cuando te llama, dices 'esto es exactamente lo que quiero atender'?"
    - Sigue: "¿Hay más de un tipo de cliente? ¿O todos se parecen?"
 
 2. **PROPUESTA DE VALOR** — ¿qué les ofreces que sin ti no podrían tener?
@@ -50,7 +50,7 @@ El problema: cuando intentas llenarlo solo, te bloqueas en los bloques difícile
    - Si la respuesta es genérica ("buen servicio", "calidad"), repregunta: "todos dicen eso. ¿Qué de TU producto/servicio es específicamente diferente?"
 
 3. **CANALES** — ¿cómo te encuentra tu cliente?
-   - Pregunta: "Pensá en los últimos 5 clientes nuevos que entraron. ¿Cómo te encontraron? (referido, redes sociales, Google, pasaron por el local, recomendación de otro proveedor...)"
+   - Pregunta: "Piensa en los últimos 5 clientes nuevos que entraron. ¿Cómo te encontraron? (referido, redes sociales, Google, pasaron por el local, recomendación de otro proveedor...)"
 
 4. **RELACIÓN CON EL CLIENTE** — ¿qué tipo de relación tienes con cada cliente?
    - Pregunta: "Después de que un cliente te compra una vez, ¿qué pasa? ¿Vuelve? ¿Le hablas? ¿Sabes su nombre? ¿Le mandas algo?"
@@ -62,7 +62,7 @@ El problema: cuando intentas llenarlo solo, te bloqueas en los bloques difícile
    - Pregunta: "Si te quitaran UNA cosa de tu negocio hoy y se acabara, ¿qué sería? (puede ser una persona, una máquina, un permiso, un cliente, un proveedor)"
 
 7. **ACTIVIDADES CLAVE** — ¿qué tienes que hacer constantemente para entregar tu propuesta de valor?
-   - Pregunta: "¿En qué 3 actividades inviertes la mayor parte de tu semana? Pensá en las cosas que SOLO TÚ (o tu equipo más senior) puede hacer."
+   - Pregunta: "¿En qué 3 actividades inviertes la mayor parte de tu semana? Piensa en las cosas que SOLO TÚ (o tu equipo más senior) puede hacer."
 
 8. **SOCIOS CLAVE** — ¿de quién dependes para operar?
    - Pregunta: "Listame proveedores, aliados o personas externas sin los cuales tu negocio se frena. Incluye proveedores únicos."

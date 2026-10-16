@@ -1,5 +1,4 @@
 ---
-import { CONSULTING, formatUsd } from '../../lib/consulting';
 
 interface Props {
   kicker: string;
@@ -18,8 +17,6 @@ const {
   tone = 'purple',
   embedded = false,
 } = Astro.props;
-
-const price = formatUsd(CONSULTING.priceUsd);
 ---
 
 <aside
@@ -29,7 +26,7 @@ const price = formatUsd(CONSULTING.priceUsd);
     embedded && 'conversion-cta--embedded',
   ]}
   data-conversion-panel
-  aria-label="Reservar consultoría privada"
+  aria-labelledby={`conversion-cta-${placement}-title`}
 >
   <div class="conversion-cta__spectrum" aria-hidden="true">
     <span></span><span></span><span></span><span></span>
@@ -37,29 +34,26 @@ const price = formatUsd(CONSULTING.priceUsd);
 
   <div class="conversion-cta__copy">
     <p>{kicker}</p>
-    <h3>{title}</h3>
+    <h3 id={`conversion-cta-${placement}-title`}>{title}</h3>
     <p>{body}</p>
   </div>
 
   <div class="conversion-cta__action">
     <a
       class="conversion-cta__button"
-      href="#checkout-consultoria"
-      data-checkout-link
+      href="#contacto-consultoria"
+      data-contact-link
       data-cta-placement={placement}
-      aria-label={`Reservar consultoría de 120 minutos por ${price}; ir al checkout`}
+      aria-label="Cuéntame tu caso: consultoría privada de 120 minutos; ir al formulario"
     >
       <span>
         <small>CONSULTORÍA PRIVADA · 120 MIN</small>
-        <strong>reservar esta sesión</strong>
+        <strong>cuéntame tu caso</strong>
       </span>
-      <em>{price}</em>
       <i aria-hidden="true">↘</i>
     </a>
     <p>
-      <span data-quote-total>Wompi calcula el equivalente de hoy en COP</span>
-      <span aria-hidden="true"> · </span>
-      eliges horario en Cal.com después del pago
+      llega directo a mi correo <span aria-hidden="true"> · </span> te respondo yo
     </p>
   </div>
 </aside>
@@ -164,7 +158,7 @@ const price = formatUsd(CONSULTING.priceUsd);
     position: relative;
     isolation: isolate;
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr auto;
     gap: 18px;
     align-items: center;
     min-height: 94px;
@@ -210,13 +204,6 @@ const price = formatUsd(CONSULTING.priceUsd);
     letter-spacing: -.03em;
   }
 
-  .conversion-cta__button em {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 600;
-    white-space: nowrap;
-  }
 
   .conversion-cta__button i {
     display: grid;
@@ -243,7 +230,7 @@ const price = formatUsd(CONSULTING.priceUsd);
 
   .conversion-cta__action > p {
     margin: 20px 0 0;
-    color: rgba(19, 17, 24, .65);
+    color: rgba(19, 17, 24, .76);
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9px;
     line-height: 1.55;
@@ -279,8 +266,7 @@ const price = formatUsd(CONSULTING.priceUsd);
       min-height: 104px;
       padding: 16px;
     }
-    .conversion-cta__button em { grid-column: 1; font-size: 10px; }
-    .conversion-cta__button i { grid-column: 2; grid-row: 1 / 3; }
+    .conversion-cta__button i { grid-column: 2; }
     .conversion-cta__action > p { font-size: 9px; }
   }
 

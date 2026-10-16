@@ -32,6 +32,9 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// El JSON-LD de Persona/Servicio se imprime en todas las páginas: su URL y el punto de
+// contacto apuntan siempre al home, donde vive el formulario (#contacto).
+const homeURL = new URL('/', Astro.site).toString();
 ---
 
 <!doctype html>
@@ -111,7 +114,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           "name": "Omar Álvarez",
           "jobTitle": "Operador y consultor de sistemas para empresas de servicios",
           "description": "Sesiones privadas de 120 minutos para dueños y socios que quieren mejorar captación, CRM, operación o postventa con sistemas e inteligencia artificial.",
-          "url": canonicalURL.toString(),
+          "url": homeURL,
           "address": {
             "@type": "PostalAddress",
             "addressCountry": "CO"
@@ -125,16 +128,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         {
           "@type": "ProfessionalService",
           "name": "Omar Álvarez · Sistemas e IA para empresas de servicios",
-          "url": canonicalURL.toString(),
+          "url": homeURL,
           "areaServed": ["CO", "MX", "PE", "CL", "ES"],
-          "priceRange": "USD 797",
-          "offers": {
-            "@type": "Offer",
-            "name": "Sesión Marco 4C para empresas de servicios · 120 minutos",
-            "price": "797",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock",
-            "url": `${canonicalURL.toString()}#reservar`
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "consultoría",
+            "url": `${homeURL}#contacto`,
+            "availableLanguage": ["es"]
           }
         }
       ]

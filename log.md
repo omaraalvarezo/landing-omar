@@ -499,3 +499,22 @@ redirect; se evalúa caso por caso si aparecen 404.
 - Calculadoras en `/herramientas-ia/recursos`: ahorro, reseñas por plantilla y cotizador de detailing.
   Los supuestos los escribe el visitante. Decisión: `wiki/decisiones/ofertas-directorio-herramientas-ia.md`.
 
+
+## 2026-10-16 · v3.5 — La consultoría deja de cobrar en línea
+
+- Decisión de Omar: quitar el pago de la consultoría. Quien quiera la sesión escribe por un formulario
+  que llega a su correo.
+- Eliminados: `api/consultoria/{checkout,quote,status}`, `/consultoria/agendar`,
+  `/consultoria/agenda/[orderId]`, `PaidCalendar`, `trm.ts`, `consulting-orders.ts` y
+  `consulting-payment.ts`. Las rutas viejas redirigen a `/#contacto`.
+- Nuevo: `POST /api/contacto` (validación en servidor, honeypot, rate limit Upstash, envío por Resend,
+  respaldo `mailto:`) y `ConsultingContact.astro` (el antiguo brief sin precio ni aceptación de pago).
+- El directorio y el kit conservan Wompi: el cliente compartido pasó a `src/lib/wompi.ts` y los
+  formatos a `src/lib/money.ts`.
+- Pendiente de Omar: `RESEND_API_KEY` y un remitente verificado (`CONTACT_FROM_EMAIL` o
+  `DIRECTORY_NOTIFY_FROM`) en Vercel. Sin eso el formulario ofrece el `mailto:`.
+- QA con 3 agentes en paralelo (home, formulario/APIs/seguridad, contenido/directorio): 36 bugs
+  corregidos. Entre ellos: el mensaje de éxito visible siempre, CSRF por `text/plain` en
+  `/api/contacto`, cuerpos sin límite, `null` que tumbaba los checkouts del directorio, contraste
+  < AA en 9 textos, foco en CTAs invisibles, anclas viejas del nav/footer, CTAs de Cal.com en
+  `/recursos`, overflow a 390 px en guías y voseo. `astro check` 0 errores, build OK.

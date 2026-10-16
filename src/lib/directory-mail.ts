@@ -1,4 +1,4 @@
-import { formatCop } from './consulting';
+import { formatCop } from './money';
 import {
   addCalendarDays,
   bogotaToday,

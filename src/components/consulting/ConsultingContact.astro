@@ -1,0 +1,901 @@
+---
+import { CONTACT_LIMITS } from '../../lib/consulting';
+import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
+---
+
+<form class="contact-form" id="contacto-consultoria" tabindex="-1" novalidate>
+  <div class="contact-form__spectrum" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="contact-form__heading">
+    <div>
+      <p class="contact-form__kicker">CONSULTORÍA PRIVADA · CON OMAR</p>
+      <h3>Cuéntame el cuello de botella.<br /><span>Te respondo yo.</span></h3>
+    </div>
+    <p class="contact-form__folio">OA—2H / {new Date().getFullYear()}</p>
+  </div>
+
+  <fieldset class="contact-form__stage contact-form__field--wide">
+    <legend><span>01</span> ¿Dónde se está trabando tu negocio?</legend>
+    <p class="contact-form__stage-intro">Elige el frente que más te está costando hoy. Si dudas, escoge el más cercano.</p>
+    <div class="contact-form__stage-grid">
+      {SERVICE_SYSTEM_STAGES.map((stage) => (
+        <label class={`contact-form__stage-option contact-form__stage-option--${stage.id}`}>
+          <input type="radio" name="frameworkStage" value={stage.id} required />
+          <span class="contact-form__stage-copy">
+            <small>{stage.number}</small>
+            <strong>{stage.name}</strong>
+            <span>{stage.promise}</span>
+          </span>
+          <span class="contact-form__stage-arrow" aria-hidden="true">↗</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <section class="contact-form__details" aria-labelledby="contact-details-title">
+    <div class="contact-form__section-heading">
+      <span>02</span>
+      <p id="contact-details-title">Ponme dentro del negocio</p>
+    </div>
+
+    <div class="contact-form__field contact-form__field--wide">
+      <label for="contact-name">Cómo te llamas</label>
+      <input id="contact-name" name="name" type="text" autocomplete="name" maxlength={CONTACT_LIMITS.name} required />
+    </div>
+
+    <div class="contact-form__field">
+      <label for="contact-email">Tu correo</label>
+      <input id="contact-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength={CONTACT_LIMITS.email} required />
+    </div>
+
+    <div class="contact-form__field">
+      <label for="contact-phone">Tu WhatsApp <small>(opcional)</small></label>
+      <input id="contact-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength={CONTACT_LIMITS.phone} />
+    </div>
+
+    <div class="contact-form__field contact-form__field--wide">
+      <label for="contact-business">Qué negocio operas y qué vende</label>
+      <input
+        id="contact-business"
+        name="business"
+        type="text"
+        autocomplete="organization"
+        maxlength={CONTACT_LIMITS.business}
+        placeholder="Ej. firma contable que atiende pymes"
+        required
+      />
+    </div>
+
+    <div class="contact-form__field contact-form__field--wide">
+      <label for="contact-problem">Qué está pasando de verdad</label>
+      <textarea
+        id="contact-problem"
+        name="problem"
+        rows="5"
+        minlength={CONTACT_LIMITS.problemMin}
+        maxlength={CONTACT_LIMITS.problemMax}
+        placeholder="Dónde se pierde tiempo o dinero, qué ya intentaste y qué necesitas decidir."
+        aria-describedby="contact-problem-hint"
+        required
+      ></textarea>
+      <p class="contact-form__hint" id="contact-problem-hint">No escribas bonito. Con contexto suficiente te digo si la sesión tiene sentido para tu caso.</p>
+    </div>
+
+    <div class="contact-form__honeypot" aria-hidden="true">
+      <label for="contact-website">No llenes este campo</label>
+      <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+  </section>
+
+  <label class="contact-form__accept">
+    <input name="accepted" type="checkbox" required />
+    <span>
+      Autorizo a Omar Álvarez a usar estos datos solo para responder mi solicitud de consultoría.
+    </span>
+  </label>
+
+  <button class="contact-form__submit" type="submit">
+    <span data-contact-submit-label>enviar a Omar</span>
+    <span class="contact-form__submit-arrow" aria-hidden="true">↗</span>
+  </button>
+
+  <p class="contact-form__security">
+    <span aria-hidden="true">◎</span>
+    <span>Tu mensaje me llega directo al correo. Lo leo yo y te respondo con el siguiente paso: si la sesión
+    encaja, cómo la agendamos; si no, te lo digo sin rodeos.</span>
+  </p>
+
+  <p class="contact-form__error" id="contact-error" role="alert"></p>
+
+  <div class="contact-form__success" data-contact-success hidden tabindex="-1" aria-labelledby="contact-success-title">
+    <p class="contact-form__kicker">MENSAJE ENVIADO</p>
+    <h3 id="contact-success-title">Listo. Ya lo tengo.</h3>
+    <p>Te escribo al correo que dejaste. Si no ves mi respuesta, revisa la carpeta de spam.</p>
+  </div>
+</form>
+
+<style>
+  .contact-form {
+    --contact-form-ink: #151610;
+    --contact-form-ink-2: #20221a;
+    --contact-form-bone: #f3efe4;
+    --contact-form-bone-dim: #c8c5ba;
+    --contact-form-line: rgba(243, 239, 228, .16);
+    --contact-form-coral: #ff6b45;
+    --contact-form-purple: #c79aff;
+    --contact-form-cobalt: #4b5fe3;
+    --contact-form-lime: #c8ff3d;
+    position: relative;
+    isolation: isolate;
+    scroll-margin-top: 12px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 36px) 18px;
+    padding: clamp(24px, 4.6vw, 56px);
+    color: var(--contact-form-bone);
+    background:
+      radial-gradient(circle at 98% 2%, rgba(176, 120, 255, .14), transparent 26%),
+      radial-gradient(circle at 0% 58%, rgba(90, 114, 255, .09), transparent 27%),
+      var(--contact-form-ink);
+    border: 1px solid rgba(243, 239, 228, .2);
+    border-radius: 28px 28px 28px 6px;
+    box-shadow: 12px 12px 0 rgba(199, 240, 76, .16);
+    font-family: 'IBM Plex Sans Variable', 'IBM Plex Sans', var(--font-sans), sans-serif;
+  }
+
+  .contact-form:focus:not(:focus-visible) { outline: none; }
+  .contact-form:focus-visible { outline: 3px solid var(--contact-form-lime); outline-offset: 8px; }
+  .contact-form.is-arriving { animation: contact-form-arrival 1.15s cubic-bezier(.16, 1, .3, 1); }
+
+  .contact-form::after {
+    content: '';
+    position: absolute;
+    right: -86px;
+    top: 90px;
+    z-index: -1;
+    width: 210px;
+    height: 210px;
+    border: 1px solid rgba(255, 113, 84, .22);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 34px rgba(255, 113, 84, .035),
+      0 0 0 68px rgba(255, 113, 84, .02);
+    pointer-events: none;
+  }
+
+  .contact-form__spectrum {
+    position: absolute;
+    inset: 0 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 7px;
+  }
+
+  .contact-form__spectrum span:nth-child(1) { background: var(--contact-form-coral); }
+  .contact-form__spectrum span:nth-child(2) { background: var(--contact-form-purple); }
+  .contact-form__spectrum span:nth-child(3) { background: var(--contact-form-cobalt); }
+  .contact-form__spectrum span:nth-child(4) { background: var(--contact-form-lime); }
+
+  .contact-form__heading,
+  .contact-form__stage,
+  .contact-form__details,
+  .contact-form__accept,
+  .contact-form__submit,
+  .contact-form__security,
+  .contact-form__error,
+  .contact-form__field--wide {
+    grid-column: 1 / -1;
+  }
+
+  .contact-form__heading {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 12px 0 clamp(24px, 4vw, 42px);
+    border-bottom: 1px solid var(--contact-form-line);
+  }
+
+  .contact-form__heading h3 {
+    max-width: 15ch;
+    margin: 14px 0 0;
+    color: var(--contact-form-bone);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(34px, 5.2vw, 62px);
+    font-weight: 720;
+    letter-spacing: -.045em;
+    line-height: .96;
+  }
+
+  .contact-form__heading h3 span { color: var(--contact-form-lime); }
+
+  .contact-form__kicker,
+  .contact-form__folio,
+  .contact-form__hint,
+  .contact-form__security,
+  .contact-form__error {
+    margin: 0;
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
+  }
+
+  .contact-form__kicker,
+  .contact-form__folio {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .12em;
+  }
+
+  .contact-form__kicker { color: var(--contact-form-coral); }
+
+  .contact-form__folio {
+    padding: 7px 10px;
+    color: var(--contact-form-purple);
+    border: 1px solid rgba(176, 120, 255, .34);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .contact-form__stage {
+    min-width: 0;
+    margin: 0;
+    border: 0;
+    padding: 0;
+  }
+
+  .contact-form__stage legend {
+    margin: 0;
+    color: var(--contact-form-bone);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 650;
+    letter-spacing: -.025em;
+    line-height: 1.1;
+  }
+
+  .contact-form__stage legend span,
+  .contact-form__section-heading > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin-right: 8px;
+    color: var(--contact-form-ink);
+    background: var(--contact-form-coral);
+    border-radius: 50%;
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0;
+    vertical-align: 4px;
+  }
+
+  .contact-form__stage-intro {
+    max-width: 58ch;
+    margin: 13px 0 20px;
+    color: var(--contact-form-bone-dim);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .contact-form__stage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .contact-form__stage-option {
+    --stage-color: var(--contact-form-coral);
+    --stage-wash: rgba(255, 113, 84, .12);
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    gap: 13px;
+    min-height: 138px;
+    padding: 18px;
+    color: var(--contact-form-bone-dim);
+    background: rgba(243, 239, 228, .045);
+    border: 1px solid var(--contact-form-line);
+    border-radius: 17px 17px 17px 4px;
+    cursor: pointer;
+    transition:
+      transform .28s cubic-bezier(.16, 1, .3, 1),
+      color .28s ease,
+      background-color .28s ease,
+      border-color .28s ease;
+  }
+
+  .contact-form__stage-option::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: var(--stage-color);
+    transform: scaleY(.28);
+    transform-origin: bottom;
+    transition: transform .28s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .contact-form__stage-option--captar {
+    --stage-color: var(--contact-form-coral);
+    --stage-wash: rgba(255, 113, 84, .12);
+  }
+
+  .contact-form__stage-option--convertir {
+    --stage-color: var(--contact-form-purple);
+    --stage-wash: rgba(199, 154, 255, .13);
+  }
+
+  .contact-form__stage-option--cumplir {
+    --stage-color: var(--contact-form-cobalt);
+    --stage-wash: rgba(93, 114, 255, .13);
+  }
+
+  .contact-form__stage-option--continuar {
+    --stage-color: var(--contact-form-lime);
+    --stage-wash: rgba(200, 255, 61, .10);
+  }
+
+  .contact-form__stage-option:hover { transform: translateY(-3px); }
+
+  .contact-form__stage-option:has(input:checked) {
+    color: var(--contact-form-bone);
+    background: var(--stage-wash);
+    border-color: var(--stage-color);
+  }
+
+  .contact-form__stage-option:has(input:checked)::before { transform: scaleY(1); }
+
+  .contact-form__stage-option:has(input:focus-visible) {
+    outline: 2px solid var(--stage-color);
+    outline-offset: 3px;
+  }
+
+  .contact-form__stage-option input {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    margin: 2px 0 0;
+    border: 1px solid rgba(243, 239, 228, .5);
+    border-radius: 50%;
+    background: transparent;
+    transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+
+  .contact-form__stage-option input:checked {
+    background: var(--stage-color);
+    border-color: var(--stage-color);
+    box-shadow: inset 0 0 0 5px var(--contact-form-ink);
+  }
+
+  .contact-form__stage-copy { display: flex; flex-direction: column; align-items: flex-start; }
+
+  .contact-form__stage-copy small {
+    margin-bottom: 10px;
+    color: var(--stage-color);
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .12em;
+  }
+
+  .contact-form__stage-copy strong {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--contact-form-bone);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(21px, 2.5vw, 28px);
+    font-weight: 680;
+    letter-spacing: -.03em;
+    line-height: 1;
+  }
+
+  .contact-form__stage-copy > span {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .contact-form__stage-arrow {
+    color: var(--stage-color);
+    font-size: 16px;
+    line-height: 1;
+    transition: transform .28s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .contact-form__stage-option:hover .contact-form__stage-arrow,
+  .contact-form__stage-option:has(input:checked) .contact-form__stage-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .contact-form__details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 19px 16px;
+    padding-top: 4px;
+  }
+
+  .contact-form__details .contact-form__field--wide,
+  .contact-form__section-heading { grid-column: 1 / -1; }
+
+  .contact-form__section-heading {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding-top: 30px;
+    border-top: 1px solid var(--contact-form-line);
+  }
+
+  .contact-form__section-heading > span {
+    flex: 0 0 34px;
+    margin-right: 8px;
+    background: var(--contact-form-cobalt);
+  }
+
+  .contact-form__section-heading p {
+    margin: 0;
+    color: var(--contact-form-bone);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 650;
+    letter-spacing: -.025em;
+    line-height: 1.1;
+  }
+
+  .contact-form__field label {
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--contact-form-bone-dim);
+  }
+
+  .contact-form__field input,
+  .contact-form__field textarea {
+    width: 100%;
+    border: 1px solid var(--contact-form-line);
+    border-radius: 12px 12px 12px 3px;
+    padding: 14px 15px;
+    color: var(--contact-form-bone);
+    background: rgba(243, 239, 228, .055);
+    font-family: 'IBM Plex Sans Variable', 'IBM Plex Sans', var(--font-sans), sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+    transition: border-color .22s ease, background-color .22s ease, box-shadow .22s ease;
+  }
+
+  .contact-form__field textarea { min-height: 138px; resize: vertical; }
+
+  .contact-form__field input::placeholder,
+  .contact-form__field textarea::placeholder { color: #77796f; }
+
+  .contact-form__field input:focus,
+  .contact-form__field textarea:focus {
+    outline: 0;
+    background: rgba(90, 114, 255, .08);
+    border-color: var(--contact-form-cobalt);
+    box-shadow: 0 0 0 3px rgba(90, 114, 255, .16);
+  }
+
+  .contact-form__hint {
+    color: #96988d;
+    font-size: 11px;
+    line-height: 1.55;
+  }
+
+  .contact-form__accept {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 13px;
+    align-items: start;
+    padding: 16px 18px;
+    color: var(--contact-form-bone-dim);
+    background: rgba(176, 120, 255, .075);
+    border-left: 4px solid var(--contact-form-purple);
+    border-radius: 3px 12px 12px 3px;
+    font-size: 13px;
+    line-height: 1.55;
+    cursor: pointer;
+  }
+
+  .contact-form__accept input {
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 0;
+    accent-color: var(--contact-form-purple);
+  }
+
+
+  .contact-form__submit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 1px solid var(--contact-form-lime);
+    border-radius: 14px 14px 14px 3px;
+    padding: 13px 14px 13px 20px;
+    color: var(--contact-form-ink);
+    background: var(--contact-form-lime);
+    box-shadow: 6px 6px 0 var(--contact-form-coral);
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(15px, 2vw, 18px);
+    font-weight: 700;
+    letter-spacing: -.015em;
+    transition: transform .25s cubic-bezier(.16, 1, .3, 1), box-shadow .25s ease, background-color .25s ease;
+  }
+
+  .contact-form__submit-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--contact-form-bone);
+    background: var(--contact-form-ink);
+    border-radius: 50%;
+    font-size: 17px;
+    transition: transform .25s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .contact-form__submit:hover {
+    background: #d7ff57;
+    box-shadow: 9px 9px 0 var(--contact-form-purple);
+    transform: translate(-2px, -2px);
+  }
+
+  .contact-form__submit:hover .contact-form__submit-arrow { transform: rotate(9deg); }
+
+  .contact-form__submit:disabled {
+    cursor: wait;
+    filter: saturate(.45);
+    opacity: .7;
+    transform: none;
+  }
+
+  @keyframes contact-form-arrival {
+    0% { box-shadow: 0 0 0 0 rgba(200, 255, 61, .82), 12px 12px 0 rgba(199, 240, 76, .16); }
+    48% { box-shadow: 0 0 0 13px rgba(200, 255, 61, .18), 15px 15px 0 rgba(255, 107, 69, .38); }
+    100% { box-shadow: 0 0 0 0 rgba(200, 255, 61, 0), 12px 12px 0 rgba(199, 240, 76, .16); }
+  }
+
+  .contact-form__security,
+  .contact-form__error {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .contact-form__security {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+    align-items: start;
+    color: #96988d;
+  }
+
+  .contact-form__security > span:first-child {
+    color: var(--contact-form-cobalt);
+    font-family: 'IBM Plex Mono', var(--font-mono), monospace;
+    font-size: 16px;
+  }
+
+  .contact-form__error {
+    min-height: 1.6em;
+    color: #ff9c88;
+  }
+
+  @media (max-width: 760px) {
+    .contact-form__heading { grid-template-columns: 1fr; }
+    .contact-form__folio { justify-self: start; }
+    .contact-form__details { grid-template-columns: 1fr; }
+    .contact-form__details .contact-form__field { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 620px) {
+    .contact-form {
+      grid-template-columns: 1fr;
+      border-radius: 20px 20px 20px 5px;
+      box-shadow: 7px 7px 0 rgba(199, 240, 76, .16);
+    }
+
+    .contact-form__field { grid-column: 1 / -1; }
+    .contact-form__stage-grid { grid-template-columns: 1fr; }
+    .contact-form__stage-option { min-height: 122px; }
+    .contact-form__submit { padding-left: 16px; }
+    .contact-form::after { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-form__stage-option,
+    .contact-form__stage-option::before,
+    .contact-form__stage-arrow,
+    .contact-form__submit,
+    .contact-form__submit-arrow {
+      transition: none;
+    }
+    .contact-form.is-arriving { animation: none; }
+  }
+
+  .contact-form__honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .contact-form__field label small {
+    color: var(--contact-form-bone-dim);
+    font-weight: 400;
+  }
+
+  /* El enlace de respaldo se crea con JS: sin :global no recibe el atributo de scope de Astro. */
+  .contact-form__error :global(a) {
+    color: var(--contact-form-lime);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Varias piezas del formulario declaran display propio; sin esto `hidden` no las oculta
+     y el mensaje de éxito se vería antes de enviar. */
+  .contact-form [hidden] { display: none !important; }
+
+  .contact-form__success {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 12px;
+    padding: clamp(12px, 3vw, 28px) 0;
+  }
+
+  .contact-form__success:focus { outline: none; }
+
+  .contact-form__success h3 {
+    margin: 0;
+    font-family: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(30px, 5vw, 52px);
+    line-height: .95;
+    letter-spacing: -.035em;
+    color: var(--contact-form-lime);
+  }
+
+  .contact-form__success p:last-child {
+    margin: 0;
+    color: var(--contact-form-bone-dim);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  import {
+    CONTACT_EMAIL,
+    CONTACT_LIMITS,
+    isContactEmail,
+    isContactPhone,
+  } from '../../lib/consulting';
+  import { serviceSystemStageLabel } from '../../lib/framework';
+
+  const form = document.querySelector<HTMLFormElement>('#contacto-consultoria');
+  const errorNode = document.querySelector<HTMLElement>('#contact-error');
+  const successNode = form?.querySelector<HTMLElement>('[data-contact-success]');
+  const DEFAULT_LABEL = 'enviar a Omar';
+  const REQUEST_TIMEOUT_MS = 20_000;
+  // Algunos clientes de correo cortan los enlaces mailto largos; dejamos margen.
+  const MAILTO_MAX_LENGTH = 1_900;
+  const ERROR_ID = 'contact-error';
+  let inFlight = false;
+
+  interface Intake {
+    name: string;
+    email: string;
+    phone: string;
+    business: string;
+    frameworkStage: string;
+    problem: string;
+  }
+
+  type FieldName = keyof Intake | 'accepted';
+
+  function fieldControl(name: FieldName): HTMLInputElement | HTMLTextAreaElement | null {
+    return form?.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${name}"]`) ?? null;
+  }
+
+  function mailtoFor(intake: Intake) {
+    // Recortes por punto de código: partir un emoji deja un surrogate suelto y encodeURIComponent lanza.
+    const subject = Array.from(`Consultoría · ${intake.name} · ${intake.business}`).slice(0, 160).join('');
+    const head = [
+      `Nombre: ${intake.name}`,
+      `WhatsApp: ${intake.phone || '—'}`,
+      `Negocio: ${intake.business}`,
+      `Dónde se traba: ${serviceSystemStageLabel(intake.frameworkStage) || 'sin elegir'}`,
+      '',
+      '',
+    ].join('\n');
+    const base = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=`;
+    let problem = Array.from(intake.problem);
+    let href = base + encodeURIComponent(`${head}${problem.join('')}`);
+    // Recorta el texto libre hasta que el enlace quepa; el formulario conserva el original.
+    while (href.length > MAILTO_MAX_LENGTH && problem.length > 0) {
+      problem = problem.slice(0, Math.max(0, problem.length - 80));
+      href = base + encodeURIComponent(`${head}${problem.join('')}… (sigue en el formulario: pega el resto aquí)`);
+    }
+    return href;
+  }
+
+  function clearFieldErrors() {
+    form?.querySelectorAll<HTMLElement>('[aria-invalid="true"]').forEach((node) => {
+      node.removeAttribute('aria-invalid');
+      const describedBy = (node.getAttribute('aria-describedby') || '')
+        .split(/\s+/)
+        .filter((id) => id && id !== ERROR_ID);
+      if (describedBy.length) node.setAttribute('aria-describedby', describedBy.join(' '));
+      else node.removeAttribute('aria-describedby');
+    });
+  }
+
+  function showError(message: string, field?: FieldName) {
+    if (!errorNode) return;
+    errorNode.textContent = message;
+    const control = field ? fieldControl(field) : null;
+    if (control) {
+      control.setAttribute('aria-invalid', 'true');
+      const describedBy = new Set((control.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean));
+      describedBy.add(ERROR_ID);
+      control.setAttribute('aria-describedby', [...describedBy].join(' '));
+      control.focus();
+    }
+  }
+
+  function showFallback(intake: Intake, reason?: string) {
+    if (!errorNode) return;
+    errorNode.textContent = reason ? `${reason} ` : 'No pude enviar el formulario desde aquí. ';
+    const link = document.createElement('a');
+    link.href = mailtoFor(intake);
+    link.textContent = `Escríbeme directo a ${CONTACT_EMAIL}`;
+    errorNode.append(link, ' — tu mensaje ya va escrito y lo que pusiste aquí sigue en el formulario.');
+  }
+
+  function setBusy(busy: boolean) {
+    inFlight = busy;
+    const button = form?.querySelector<HTMLButtonElement>('.contact-form__submit');
+    const label = button?.querySelector<HTMLElement>('[data-contact-submit-label]');
+    if (form) form.setAttribute('aria-busy', busy ? 'true' : 'false');
+    if (button) button.disabled = busy;
+    if (label) label.textContent = busy ? 'enviando…' : DEFAULT_LABEL;
+  }
+
+  function readIntake(data: FormData): Intake {
+    return {
+      name: String(data.get('name') || '').trim(),
+      email: String(data.get('email') || '').trim(),
+      phone: String(data.get('phone') || '').trim(),
+      business: String(data.get('business') || '').trim(),
+      frameworkStage: String(data.get('frameworkStage') || '').trim(),
+      problem: String(data.get('problem') || '').trim(),
+    };
+  }
+
+  // Mismas reglas y mensajes que `/api/contacto`, en español y sin depender del idioma del navegador.
+  function validationMessage(field: FieldName, intake: Intake, accepted: boolean): string {
+    switch (field) {
+      case 'frameworkStage':
+        return intake.frameworkStage ? '' : 'Elige dónde se está trabando tu negocio.';
+      case 'name':
+        return intake.name ? '' : 'Escribe tu nombre.';
+      case 'email':
+        if (!intake.email) return 'Escribe tu correo para poder responderte.';
+        return isContactEmail(intake.email) ? '' : 'Revisa tu correo: no parece válido.';
+      case 'phone':
+        return !intake.phone || isContactPhone(intake.phone)
+          ? ''
+          : 'Revisa tu WhatsApp: usa solo números, espacios o guiones (7 a 15 dígitos).';
+      case 'business':
+        return intake.business ? '' : 'Cuéntame qué negocio operas.';
+      case 'problem':
+        return intake.problem.length >= CONTACT_LIMITS.problemMin
+          ? ''
+          : `Cuéntame el problema con un poco más de contexto (mínimo ${CONTACT_LIMITS.problemMin} caracteres).`;
+      case 'accepted':
+        return accepted ? '' : 'Necesito tu autorización para usar estos datos y responderte.';
+    }
+  }
+
+  const FIELD_ORDER: FieldName[] = ['frameworkStage', 'name', 'email', 'phone', 'business', 'problem', 'accepted'];
+
+  function applyValidity(intake: Intake, accepted: boolean): boolean {
+    let firstInvalid: HTMLInputElement | HTMLTextAreaElement | null = null;
+    for (const field of FIELD_ORDER) {
+      const control = fieldControl(field);
+      if (!control) continue;
+      const message = validationMessage(field, intake, accepted);
+      control.setCustomValidity(message);
+      if (message && !firstInvalid) firstInvalid = control;
+    }
+    if (firstInvalid) {
+      firstInvalid.reportValidity();
+      return false;
+    }
+    return true;
+  }
+
+  // Al corregir un campo se limpia su error para que el navegador no lo siga bloqueando.
+  form?.addEventListener('input', (event) => {
+    const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
+    if (!target || !('setCustomValidity' in target)) return;
+    if (target.type === 'radio') {
+      form.querySelectorAll<HTMLInputElement>('input[name="frameworkStage"]').forEach((radio) => radio.setCustomValidity(''));
+    } else {
+      target.setCustomValidity('');
+    }
+    if (target.getAttribute('aria-invalid') === 'true') clearFieldErrors();
+  });
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (inFlight) return;
+    if (errorNode) errorNode.textContent = '';
+    clearFieldErrors();
+
+    const data = new FormData(form);
+    const intake = readIntake(data);
+    const accepted = data.get('accepted') === 'on';
+    if (!applyValidity(intake, accepted)) return;
+
+    setBusy(true);
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+    try {
+      const response = await fetch('/api/contacto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          ...intake,
+          website: String(data.get('website') || ''),
+          accepted,
+        }),
+        signal: controller.signal,
+      });
+      const payload = (await response.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        field?: FieldName;
+        fallbackEmail?: string;
+      };
+
+      if (response.ok && payload.ok) {
+        form.querySelectorAll<HTMLElement>(':scope > :not([data-contact-success]):not(.contact-form__spectrum)')
+          .forEach((node) => { node.hidden = true; });
+        if (successNode) {
+          successNode.hidden = false;
+          successNode.focus();
+        }
+        return;
+      }
+
+      if (response.status === 400 && payload.field && payload.error) {
+        showError(payload.error, payload.field);
+      } else if (payload.fallbackEmail || response.status >= 500 || !payload.error) {
+        showFallback(intake);
+      } else {
+        // 403, 413, 415, 429: mensaje del servidor y el correo como salida para no perder el contacto.
+        showFallback(intake, payload.error);
+      }
+    } catch {
+      showFallback(intake);
+    } finally {
+      window.clearTimeout(timer);
+      if (!successNode || successNode.hidden) setBusy(false);
+    }
+  });
+</script>

@@ -25,7 +25,9 @@ const SITE = 'https://omaralvarezo.co';
 export const GET: APIRoute = async () => {
   const today = new Date().toISOString().slice(0, 10);
 
-  const visibleAreas = getVisibleAreas();
+  // Solo áreas con al menos un recurso visible: las vacías muestran "próximamente"
+  // y no deben indexarse.
+  const visibleAreas = getVisibleAreas().filter((a) => getResourcesByArea(a.slug).length > 0);
   const detailUrls = visibleAreas.flatMap((a) =>
     getResourcesByArea(a.slug).map((r) => ({
       loc: `${SITE}/recursos/${a.slug}/${r.slug}`,

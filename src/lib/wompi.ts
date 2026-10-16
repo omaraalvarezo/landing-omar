@@ -1,4 +1,6 @@
-import { CONSULTING, expectedAmountForConsultingReference } from './consulting';
+// Cliente Wompi compartido por el directorio (oa-directorio-*) y el kit (oa-kit-*).
+// La consultoría ya no cobra en línea desde 2026-10-16.
+const CHARGE_CURRENCY = 'COP';
 
 type WompiEnvironment = 'production' | 'test';
 
@@ -72,12 +74,12 @@ export async function createCheckoutUrl(args: {
   if (!config) throw new Error('WOMPI_NOT_CONFIGURED');
 
   const signature = await sha256(
-    `${args.reference}${args.amountInCents}${CONSULTING.chargeCurrency}${config.integritySecret}`,
+    `${args.reference}${args.amountInCents}${CHARGE_CURRENCY}${config.integritySecret}`,
   );
 
   const params = new URLSearchParams({
     'public-key': config.publicKey,
-    currency: CONSULTING.chargeCurrency,
+    currency: CHARGE_CURRENCY,
     'amount-in-cents': String(args.amountInCents),
     reference: args.reference,
     'signature:integrity': signature,
@@ -104,15 +106,4 @@ export async function fetchTransaction(id: string): Promise<WompiTransaction | n
 
   const payload = (await response.json()) as { data?: WompiTransaction };
   return payload.data || null;
-}
-
-export function isApprovedConsultingPayment(transaction: WompiTransaction | null): boolean {
-  const expectedAmount = expectedAmountForConsultingReference(transaction?.reference);
-  return Boolean(
-    transaction &&
-      transaction.status === 'APPROVED' &&
-      expectedAmount !== null &&
-      transaction.amount_in_cents === expectedAmount &&
-      transaction.currency === CONSULTING.chargeCurrency,
-  );
 }

@@ -1,66 +1,39 @@
+// Datos comerciales de la consultoría. Desde 2026-10-16 no hay pago en línea:
+// quien quiere la sesión escribe por el formulario y Omar responde por correo.
 export const CONSULTING = {
   name: 'Sesión de arquitectura operativa con IA',
   shortName: 'Consultoría 2H',
   durationMinutes: 120,
-  priceUsd: 797,
-  fxSpreadBps: 165,
-  fxRateRoundingCop: 10,
-  displayCurrency: 'USD',
-  chargeCurrency: 'COP',
-  referencePrefix: 'oa-consultoria-2h',
 } as const;
 
-// Mantiene válidos los redirects emitidos antes del cambio a precio base en USD.
-export const LEGACY_CONSULTING_AMOUNT_IN_CENTS = 240_000_000;
+// Límites compartidos entre el formulario y el endpoint `/api/contacto`.
+export const CONTACT_LIMITS = {
+  name: 100,
+  email: 254,
+  phone: 24,
+  business: 120,
+  problemMin: 20,
+  problemMax: 1200,
+} as const;
 
-const MIN_TRM_COP = 2_000;
-const MAX_TRM_COP = 7_000;
-const QUOTED_REFERENCE = new RegExp(
-  `^${CONSULTING.referencePrefix}-q(\\d{8,12})-d(\\d{8})-t(\\d{13})-[a-f0-9]{8}$`,
-);
-const LEGACY_REFERENCE = new RegExp(
-  `^${CONSULTING.referencePrefix}-(\\d{13})-[a-f0-9]{8}$`,
-);
+// Validación compartida: el navegador y `/api/contacto` aplican exactamente las mismas reglas.
+// El correo no admite espacios, comas, comillas ni `<>`: va como reply_to del aviso a Omar.
+export const CONTACT_EMAIL_PATTERN =
+  /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)*\.[A-Za-z]{2,}$/;
+export const CONTACT_PHONE_PATTERN = /^\+?[\d\s().-]{7,}$/;
 
-export function formatCop(value: number): string {
-  return `$${new Intl.NumberFormat('es-CO', {
-    maximumFractionDigits: 0,
-  }).format(value)}`;
+export function isContactEmail(value: string): boolean {
+  return value.length <= 254 && CONTACT_EMAIL_PATTERN.test(value);
 }
 
-export function formatUsd(value: number): string {
-  return `USD ${new Intl.NumberFormat('en-US', {
-    maximumFractionDigits: 0,
-  }).format(value)}`;
+// WhatsApp opcional: solo dígitos, espacios, paréntesis, puntos y guiones, con 7 a 15 dígitos.
+export function isContactPhone(value: string): boolean {
+  if (!CONTACT_PHONE_PATTERN.test(value)) return false;
+  const digits = value.replace(/\D/g, '').length;
+  return digits >= 7 && digits <= 15;
 }
 
-export function createConsultingReference(amountInCents: number, effectiveDate: string): string {
-  const min = CONSULTING.priceUsd * MIN_TRM_COP * 100;
-  const max = CONSULTING.priceUsd * MAX_TRM_COP * 100;
-  if (!Number.isSafeInteger(amountInCents) || amountInCents < min || amountInCents > max) {
-    throw new Error('CONSULTING_AMOUNT_OUT_OF_RANGE');
-  }
+export const CONTACT_BODY_MAX_BYTES = 16_000;
 
-  const date = effectiveDate.replace(/\D/g, '').slice(0, 8);
-  if (date.length !== 8) throw new Error('CONSULTING_QUOTE_DATE_INVALID');
-
-  return `${CONSULTING.referencePrefix}-q${amountInCents}-d${date}-t${Date.now()}-${crypto.randomUUID().slice(0, 8)}`;
-}
-
-export function expectedAmountForConsultingReference(reference: unknown): number | null {
-  if (typeof reference !== 'string' || reference.length > 120) return null;
-
-  const quoted = reference.match(QUOTED_REFERENCE);
-  if (quoted) {
-    const amount = Number(quoted[1]);
-    const min = CONSULTING.priceUsd * MIN_TRM_COP * 100;
-    const max = CONSULTING.priceUsd * MAX_TRM_COP * 100;
-    return Number.isSafeInteger(amount) && amount >= min && amount <= max ? amount : null;
-  }
-
-  return LEGACY_REFERENCE.test(reference) ? LEGACY_CONSULTING_AMOUNT_IN_CENTS : null;
-}
-
-export function isConsultingReference(reference: unknown): reference is string {
-  return expectedAmountForConsultingReference(reference) !== null;
-}
+// Fallback visible solo cuando el envío por servidor falla.
+export const CONTACT_EMAIL = 'omaraalvarezo@gmail.com';

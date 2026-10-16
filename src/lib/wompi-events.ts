@@ -1,4 +1,4 @@
-import { getWompiConfig } from './wompi-consulting';
+import { getWompiConfig } from './wompi';
 
 function env(name: keyof ImportMetaEnv): string {
   return String(import.meta.env[name] || '').trim();

@@ -3,7 +3,7 @@ export const prerender = false;
 
 import Layout from '../../../../layouts/Layout.astro';
 import DirectoryChrome from '../../../../components/directory/DirectoryChrome.astro';
-import { formatCop } from '../../../../lib/consulting';
+import { formatCop } from '../../../../lib/money';
 import { kitDownloadPath } from '../../../../lib/kit';
 import { settleKitPayment } from '../../../../lib/kit-payment';
 import { parseKitReference } from '../../../../lib/kit';
@@ -15,7 +15,7 @@ import {
   kitAccessCookieName,
   type KitOrder,
 } from '../../../../lib/kit-orders';
-import { fetchTransaction } from '../../../../lib/wompi-consulting';
+import { fetchTransaction } from '../../../../lib/wompi';
 
 const orderId = Astro.params.orderId || '';
 let order: KitOrder | null = null;
