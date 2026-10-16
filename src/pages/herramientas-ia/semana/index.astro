@@ -1,0 +1,38 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { collectionNode, publishedWeeks, SITE, toolsOf, weekPath } from '../../../lib/editorial';
+import { formatDirectoryDate } from '../../../lib/directory';
+
+const entries = await publishedWeeks();
+const description =
+  'Una herramienta del directorio por semana, con cinco pasos para probarla en una tarea real y un espacio para el patrocinador.';
+const title = 'Herramienta de la semana — IA para pymes';
+const jsonLd = collectionNode({
+  url: `${SITE}${weekPath()}`,
+  name: title,
+  description,
+  items: entries.map((entry) => ({ name: entry.data.title, url: `${SITE}${weekPath(entry.id)}` })),
+});
+---
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Semana"
+  heading="Herramienta de la semana."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Semana' }]}
+  jsonLd={jsonLd}
+  newsletter
+>
+  <nav class="entries" aria-label="Herramientas de la semana">
+    {entries.map((entry) => {
+      const tool = toolsOf([entry.data.tool])[0];
+      return (
+        <a class="entry" href={weekPath(entry.id)}>
+          <span>{formatDirectoryDate(entry.data.published)} · {tool.nombre}</span>
+          <strong>{entry.data.title}</strong>
+          <em>{entry.data.description}</em>
+        </a>
+      );
+    })}
+  </nav>
+</EditorialFrame>

@@ -20,6 +20,8 @@ interface ImportMetaEnv {
   readonly DIRECTORY_NOTIFY_EMAIL: string;
   readonly DIRECTORY_NOTIFY_FROM: string;
   readonly RESEND_API_KEY: string;
+  readonly NEWSLETTER_PROVIDER: string;
+  readonly NEWSLETTER_ACTION_URL: string;
 }
 
 interface ImportMeta {

@@ -8,6 +8,7 @@ Catálogo plano del conocimiento del proyecto. Una línea por página `wiki/` y 
 
 ### Decisiones
 
+- [[wiki/decisiones/rutina-editorial-herramientas-ia]] — 2026-10-16 — cómo el agente publica guías, noticias y prompts del directorio.
 - [[wiki/decisiones/directorio-herramientas-ia]] — 2026-10-16 — directorio, planes COP, Wompi y activación por datos.
 - [[wiki/decisiones/sistema-vivo-control-room]] — 2026-08-20 — dirección de arte, voz, color y motion vigentes del home.
 - [[wiki/decisiones/tipografia-3-familias-landing]] — 2026-05-11 — sistema editorial histórico; superado para el home en v3.3.

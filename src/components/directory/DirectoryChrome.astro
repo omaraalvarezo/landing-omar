@@ -7,7 +7,7 @@ import '../../styles/directory.css';
 import { SOCIALS } from '../../lib/contact';
 
 interface Props {
-  active?: 'directorio' | 'destacar';
+  active?: 'directorio' | 'destacar' | 'guias';
   consultCta?: boolean;
 }
 
@@ -22,7 +22,8 @@ const year = new Date().getFullYear();
     </a>
     <nav aria-label="Directorio">
       <a href="/herramientas-ia" aria-current={active === 'directorio' ? 'page' : undefined}>herramientas</a>
-      <a href="/herramientas-ia/destacar" aria-current={active === 'destacar' ? 'page' : undefined}>destacar</a>
+      <a href="/herramientas-ia/guias" aria-current={active === 'guias' ? 'page' : undefined}>guías</a>
+      <a href="/herramientas-ia/destacar" data-nav="destacar" aria-current={active === 'destacar' ? 'page' : undefined}>destacar</a>
       <a href="/#reservar">sesión 2h</a>
     </nav>
   </header>
@@ -41,6 +42,9 @@ const year = new Date().getFullYear();
     <a class="wordmark" href="/"><strong>omar</strong><i aria-hidden="true"></i><span>álvarez</span></a>
     <nav aria-label="Sitio">
       <a href="/herramientas-ia">Herramientas IA</a>
+      <a href="/herramientas-ia/guias">Guías</a>
+      <a href="/herramientas-ia/noticias">Noticias</a>
+      <a href="/herramientas-ia/rss.xml">RSS</a>
       <a href="/herramientas-ia/destacar">Destacar</a>
       <a href="/recursos">Recursos</a>
       <a href="/#reservar">Consultoría</a>
@@ -75,4 +79,31 @@ const year = new Date().getFullYear();
 
     input.addEventListener('input', apply);
   }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const card = button.closest('[data-prompt]');
+      const text = card?.querySelector('[data-prompt-text]')?.textContent?.trim() || '';
+      const status = card?.querySelector<HTMLElement>('[data-copy-status]');
+      if (!text) return;
+      const mark = (ok: boolean) => {
+        if (status) status.textContent = ok ? 'Copiado' : 'No se pudo copiar';
+      };
+      try {
+        await navigator.clipboard.writeText(text);
+        mark(true);
+      } catch {
+        const area = document.createElement('textarea');
+        area.value = text;
+        area.setAttribute('readonly', '');
+        area.style.position = 'fixed';
+        area.style.inset = '0 auto auto 0';
+        area.style.opacity = '0';
+        document.body.appendChild(area);
+        area.select();
+        mark(document.execCommand('copy'));
+        area.remove();
+      }
+    });
+  });
 </script>

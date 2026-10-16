@@ -1,0 +1,34 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { casePath, collectionNode, publishedCases, SITE } from '../../../lib/editorial';
+import { formatDirectoryDate } from '../../../lib/directory';
+
+const entries = await publishedCases();
+const description =
+  'Casos de uso reales de IA en un negocio, contados con palabras propias y con la fuente enlazada. Si una cifra no está en la fuente, no aparece.';
+const title = 'Casos de uso de IA en negocios';
+const jsonLd = collectionNode({
+  url: `${SITE}${casePath()}`,
+  name: title,
+  description,
+  items: entries.map((entry) => ({ name: entry.data.title, url: `${SITE}${casePath(entry.id)}` })),
+});
+---
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Casos"
+  heading="Casos con fuente."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Casos' }]}
+  jsonLd={jsonLd}
+>
+  <nav class="entries" aria-label="Casos">
+    {entries.map((entry) => (
+      <a class="entry" href={casePath(entry.id)}>
+        <span>{entry.data.sourceName} · {formatDirectoryDate(entry.data.sourceDate)}</span>
+        <strong>{entry.data.title}</strong>
+        <em>{entry.data.description}</em>
+      </a>
+    ))}
+  </nav>
+</EditorialFrame>

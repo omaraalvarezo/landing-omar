@@ -6,7 +6,21 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 
 export const TOOLS_PATH = path.join(root, 'src/data/tools.json');
 export const CATEGORIES_PATH = path.join(root, 'src/data/tool-categories.json');
-export const RESERVED_SLUGS = new Set(['destacar', 'categoria', 'pedido', 'api']);
+export const RESERVED_SLUGS = new Set([
+  'destacar',
+  'categoria',
+  'pedido',
+  'api',
+  'para',
+  'noticias',
+  'prompts',
+  'semana',
+  'comparar',
+  'alternativas',
+  'casos',
+  'tendencias',
+  'guias',
+]);
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;

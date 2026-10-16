@@ -1,0 +1,34 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { collectionNode, guideSections, SITE } from '../../../lib/editorial';
+
+const sections = await guideSections();
+const description =
+  'Guías en español para usar IA en una pyme: tareas, noticias con fuente, prompts, comparativas, casos y la herramienta de la semana. Cada pieza enlaza el directorio.';
+const title = 'Guías de IA para pymes — Omar Álvarez';
+const jsonLd = collectionNode({
+  url: `${SITE}/herramientas-ia/guias`,
+  name: title,
+  description,
+  items: sections.map((section) => ({ name: section.label, url: `${SITE}${section.href}` })),
+});
+---
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Guías"
+  heading="Guías para usar IA en la pyme."
+  crumbs={[{ label: 'Guías' }]}
+  jsonLd={jsonLd}
+  newsletter
+>
+  <nav class="entries" aria-label="Secciones">
+    {sections.map((section) => (
+      <a class="entry" href={section.href}>
+        <span>{section.count} {section.count === 1 ? 'pieza' : 'piezas'}</span>
+        <strong>{section.label}</strong>
+        <em>{section.text}</em>
+      </a>
+    ))}
+  </nav>
+</EditorialFrame>

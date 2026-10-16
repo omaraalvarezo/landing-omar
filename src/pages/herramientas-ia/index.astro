@@ -44,7 +44,7 @@ const jsonLd = {
 };
 ---
 
-<Layout title={title} description={description} showNav={false} minimal themeColor="#FFF8EA">
+<Layout title={title} description={description} showNav={false} minimal themeColor="#FFF8EA" rss>
   <DirectoryChrome active="directorio">
     <p class="dir-kicker">Directorio · {tools.length} herramientas · {categories.length} categorías</p>
     <h1>Herramientas de IA para una pyme.</h1>
@@ -62,6 +62,18 @@ const jsonLd = {
       <span>Buscar</span>
       <input type="search" data-tool-search placeholder="Nombre o tarea" autocomplete="off" />
     </label>
+
+    <nav class="dir-cats" aria-label="Guías">
+      <a href="/herramientas-ia/guias">Guías</a>
+      <a href="/herramientas-ia/para">Para una tarea</a>
+      <a href="/herramientas-ia/noticias">Noticias</a>
+      <a href="/herramientas-ia/prompts">Prompts</a>
+      <a href="/herramientas-ia/semana">Semana</a>
+      <a href="/herramientas-ia/comparar">Comparar</a>
+      <a href="/herramientas-ia/alternativas">Alternativas</a>
+      <a href="/herramientas-ia/casos">Casos</a>
+      <a href="/herramientas-ia/tendencias">Tendencias</a>
+    </nav>
 
     <nav class="dir-cats" aria-label="Filtrar por categoría">
       <a href="/herramientas-ia" aria-current="page">Todas</a>

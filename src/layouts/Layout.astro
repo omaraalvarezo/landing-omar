@@ -16,6 +16,7 @@ interface Props {
   noIndex?: boolean;
   privatePage?: boolean;
   themeColor?: string;
+  rss?: boolean;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   noIndex = false,
   privatePage = false,
   themeColor = '#FAFAF9',
+  rss = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -68,6 +70,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     {noIndex && <meta name="robots" content="noindex, nofollow, noarchive" />}
     {!privatePage && <link rel="canonical" href={canonicalURL} />}
+    {rss && (
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="Herramientas de IA"
+        href={new URL('/herramientas-ia/rss.xml', Astro.site)}
+      />
+    )}
 
     <!-- Open Graph -->
     {!privatePage && (

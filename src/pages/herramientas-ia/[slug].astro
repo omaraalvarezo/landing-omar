@@ -12,6 +12,7 @@ import {
   isLiveSponsor,
   type Tool,
 } from '../../lib/directory';
+import { piecesForTool } from '../../lib/editorial';
 
 export function getStaticPaths() {
   return getTools().map((tool) => ({ params: { slug: tool.slug }, props: { tool } }));
@@ -24,6 +25,7 @@ interface Props {
 const { tool } = Astro.props;
 const label = categoryLabel(tool.categoria);
 const related = getToolsByCategory(tool.categoria).filter((item) => item.slug !== tool.slug).slice(0, 4);
+const mentions = await piecesForTool(tool.slug);
 const sponsor = isLiveSponsor(tool);
 const featured = isLiveFeatured(tool);
 const site = 'https://omaralvarezo.co';
@@ -101,6 +103,16 @@ const jsonLd = {
         </dd>
       </div>
     </dl>
+    {mentions.length > 0 && (
+      <section>
+        <h2 class="tool-group">Guías y notas</h2>
+        <ul class="chips">
+          {mentions.map((mention) => (
+            <li><a href={mention.href}>{mention.kind}: {mention.title}</a></li>
+          ))}
+        </ul>
+      </section>
+    )}
     {related.length > 0 && (
       <section>
         <h2 class="tool-group">También en {label}</h2>

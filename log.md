@@ -469,3 +469,22 @@ redirect; se evalúa caso por caso si aparecen 404.
   ni cambia la referencia `oa-consultoria-2h-*`. La orden vive en Upstash y el aviso a Omar sale por
   Resend si está configurado. La publicación sigue siendo un edit de `src/data/tools.json`.
 - Decisión: `wiki/decisiones/directorio-herramientas-ia.md`.
+
+## 2026-10-16 — Guías del directorio /herramientas-ia
+
+- Colecciones Markdown para tareas, noticias, prompts, herramienta de la semana, comparativas,
+  alternativas, casos y tendencias. Cada sección tiene índice y ficha. Publicar es agregar un
+  archivo; `npm run content:new:*` deja un borrador y `npm run content:check` lo revisa.
+- Semilla del 16 oct 2026 con fuentes primarias: GPT-6, Haiku 5.5, Gemini 4 Argon, la FAQ de
+  WhatsApp Business, Notion 3.8 y el caso de Darla’s Downtown en Shopify. Las cifras quedan
+  atribuidas. No hay conteos de redes.
+- Sitemap, RSS, `llms.txt` y schema Article, FAQ y SoftwareApplication salen de esas piezas. La
+  lista de correo queda apagada hasta definir Beehiiv o Buttondown. Decisión:
+  `wiki/decisiones/rutina-editorial-herramientas-ia.md`.
+
+## 2026-10-16 — Guías de taller y detailing
+
+- Dos páginas prioritarias en `/herramientas-ia/para/talleres-de-carros` y
+  `/herramientas-ia/para/detailing`: problemas del negocio, seis herramientas del directorio con
+  pasos, prompts y preguntas. No se agregaron fichas nuevas: no entró un software de taller sin
+  verificación. El índice de tareas las enlaza primero.

@@ -1,0 +1,15 @@
+---
+interface Props {
+  title: string;
+  text: string;
+}
+const { title, text } = Astro.props;
+---
+<article class="prompt" data-prompt>
+  <header>
+    <h3>{title}</h3>
+    <button type="button" data-copy>Copiar</button>
+  </header>
+  <pre data-prompt-text>{text}</pre>
+  <p data-copy-status></p>
+</article>

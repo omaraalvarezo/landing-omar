@@ -6,7 +6,21 @@ export const DIRECTORY_REFERENCE_PREFIX = 'oa-directorio';
 
 export const DIRECTORY_PRICE_BASIS = plansData.basis;
 
-const RESERVED_SLUGS = new Set(['destacar', 'categoria', 'pedido', 'api']);
+const RESERVED_SLUGS = new Set([
+  'destacar',
+  'categoria',
+  'pedido',
+  'api',
+  'para',
+  'noticias',
+  'prompts',
+  'semana',
+  'comparar',
+  'alternativas',
+  'casos',
+  'tendencias',
+  'guias',
+]);
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DIRECTORY_REFERENCE =

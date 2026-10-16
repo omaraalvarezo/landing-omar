@@ -1,0 +1,37 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { collectionNode, comparePath, publishedComparisons, SITE, toolsOf } from '../../../lib/editorial';
+import { formatDirectoryDate } from '../../../lib/directory';
+
+const entries = await publishedComparisons();
+const description =
+  'Comparativas de dos herramientas del directorio. La tabla usa solo lo que dice la fuente oficial en la fecha marcada. Sin puntajes inventados.';
+const title = 'Comparar herramientas de IA';
+const jsonLd = collectionNode({
+  url: `${SITE}${comparePath()}`,
+  name: title,
+  description,
+  items: entries.map((entry) => ({ name: entry.data.title, url: `${SITE}${comparePath(entry.id)}` })),
+});
+---
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Comparar"
+  heading="Una frente a la otra."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Comparar' }]}
+  jsonLd={jsonLd}
+>
+  <nav class="entries" aria-label="Comparativas">
+    {entries.map((entry) => {
+      const [left, right] = toolsOf([entry.data.left, entry.data.right]);
+      return (
+        <a class="entry" href={comparePath(entry.id)}>
+          <span>Revisado {formatDirectoryDate(entry.data.checked)} · {left.nombre} / {right.nombre}</span>
+          <strong>{entry.data.title}</strong>
+          <em>{entry.data.description}</em>
+        </a>
+      );
+    })}
+  </nav>
+</EditorialFrame>

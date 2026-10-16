@@ -1,0 +1,38 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { collectionNode, paraPath, publishedPara, SITE } from '../../../lib/editorial';
+import { formatDirectoryDate } from '../../../lib/directory';
+
+const entries = await publishedPara();
+const description =
+  'Páginas de IA para una tarea concreta. Las de taller mecánico y detailing van primero: problemas del negocio, herramientas del directorio, pasos, prompts y preguntas frecuentes.';
+const title = 'IA para una tarea — guías para pymes';
+const jsonLd = collectionNode({
+  url: `${SITE}${paraPath()}`,
+  name: title,
+  description,
+  items: entries.map((entry) => ({ name: entry.data.title, url: `${SITE}${paraPath(entry.id)}` })),
+});
+---
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="IA para una tarea"
+  heading="IA para una tarea concreta."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Para una tarea' }]}
+  jsonLd={jsonLd}
+>
+  <nav class="chips" aria-label="Guías de taller y detailing">
+    <a href={paraPath('talleres-de-carros')}>Talleres de carros</a>
+    <a href={paraPath('detailing')}>Detailing</a>
+  </nav>
+  <nav class="entries" aria-label="Páginas por tarea">
+    {entries.map((entry) => (
+      <a class="entry" href={paraPath(entry.id)}>
+        <span>{entry.data.priority ? 'Empieza por aquí · ' : ''}{formatDirectoryDate(entry.data.published)} · {entry.data.tools.length} herramientas</span>
+        <strong>{entry.data.title}</strong>
+        <em>{entry.data.description}</em>
+      </a>
+    ))}
+  </nav>
+</EditorialFrame>

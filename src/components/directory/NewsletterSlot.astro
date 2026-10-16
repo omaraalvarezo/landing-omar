@@ -1,0 +1,32 @@
+---
+import { resolveNewsletter } from '../../lib/newsletter';
+
+const slot = resolveNewsletter({
+  provider: import.meta.env.NEWSLETTER_PROVIDER,
+  action: import.meta.env.NEWSLETTER_ACTION_URL,
+});
+const providerLabel = slot.ready ? (slot.provider === 'beehiiv' ? 'Beehiiv' : 'Buttondown') : '';
+---
+<aside class="newsletter" aria-labelledby="newsletter-title">
+  <h2 class="block-title" id="newsletter-title">Notas por correo</h2>
+  {slot.ready ? (
+    <>
+      <p>Una nota a la semana: la noticia, la herramienta y un prompt. Sale por {providerLabel}.</p>
+      <form method="post" action={slot.action}>
+        <label for="newsletter-email">Correo</label>
+        <input id="newsletter-email" type="email" name="email" required autocomplete="email" placeholder="tu@empresa.com" />
+        {slot.provider === 'buttondown' && <input type="hidden" name="embed" value="1" />}
+        <button type="submit">Apuntarme</button>
+      </form>
+    </>
+  ) : (
+    <>
+      <p>Espacio reservado. La lista todavía no está abierta y este formulario no guarda correos.</p>
+      <form>
+        <label for="newsletter-email-off">Correo</label>
+        <input id="newsletter-email-off" type="email" name="email" disabled placeholder="tu@empresa.com" />
+        <button type="button" disabled>Apuntarme</button>
+      </form>
+    </>
+  )}
+</aside>

@@ -119,6 +119,21 @@ npm run tool:pending
 `featuredUntil` y `sponsorUntil` son fechas inclusivas `YYYY-MM-DD`. Cuando vencen, el distintivo
 se apaga en el siguiente build. El pago no edita ese archivo.
 
+Las guías (tareas, noticias, prompts, semana, comparativas, alternativas, casos y tendencias)
+viven en `src/content/`. Un agente publica agregando un Markdown, no tocando el checkout:
+
+```bash
+npm run content:new:para -- --title "IA para cobrar"
+npm run content:new:noticias -- --title "Nota de la semana"
+npm run content:check
+```
+
+Hay un `content:new:*` por cada tipo. El archivo nace con `draft: true` y no entra al sitio hasta
+quitar el borrador. La rutina y las fuentes están en `wiki/decisiones/rutina-editorial-herramientas-ia.md`.
+
+La lista de correo queda apagada si no hay `NEWSLETTER_PROVIDER` (`beehiiv` o `buttondown`) y
+`NEWSLETTER_ACTION_URL`. El formulario no guarda correos en el sitio.
+
 La llave privada de Wompi no es necesaria para este flujo. La consulta individual de una
 transacción se autentica con la llave pública, según la API de Wompi.
 

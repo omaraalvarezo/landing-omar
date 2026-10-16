@@ -1,0 +1,81 @@
+---
+import { getCollection, render } from 'astro:content';
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import ToolChips from '../../../components/directory/ToolChips.astro';
+import {
+  articleNode,
+  breadcrumb,
+  paraPath,
+  publicEntries,
+  publishedPara,
+  requireRelated,
+  SITE,
+  softwareNodes,
+  toolsOf,
+  trendPath,
+  type TrendEntry,
+} from '../../../lib/editorial';
+
+export async function getStaticPaths() {
+  const entries = publicEntries(await getCollection('tendencias'));
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: TrendEntry;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const tools = toolsOf(entry.data.tools);
+const paras = requireRelated(entry.data.para, await publishedPara(), entry.id);
+const url = `${SITE}${trendPath(entry.id)}`;
+const documentTitle = `${entry.data.title} — tendencias`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    articleNode({
+      url,
+      title: entry.data.title,
+      description: entry.data.description,
+      published: entry.data.published,
+      updated: entry.data.updated,
+      section: 'Tendencias',
+    }),
+    ...softwareNodes(tools),
+    breadcrumb([
+      { name: 'Inicio', url: SITE },
+      { name: 'Herramientas de IA', url: `${SITE}/herramientas-ia` },
+      { name: 'Tendencias', url: `${SITE}${trendPath()}` },
+      { name: entry.data.title, url },
+    ]),
+  ],
+};
+---
+<EditorialFrame
+  documentTitle={documentTitle}
+  description={entry.data.description}
+  kicker={`Tendencias · ${entry.data.month}`}
+  heading={entry.data.title}
+  published={entry.data.published}
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { href: trendPath(), label: 'Tendencias' }, { label: entry.data.title }]}
+  jsonLd={jsonLd}
+>
+  <div class="prose"><Content /></div>
+  {entry.data.themes.map((theme) => (
+    <section>
+      <h2 class="block-title">{theme.title}</h2>
+      <p class="prose">{theme.detail}</p>
+      <p class="price-note">
+        Fuente: <a class="source-link" href={theme.sourceUrl} target="_blank" rel="noopener noreferrer">{theme.sourceName}</a>
+      </p>
+    </section>
+  ))}
+  <h2 class="block-title">En el directorio</h2>
+  <ToolChips tools={tools} />
+  {paras.length > 0 && (
+    <ul class="chips">
+      {paras.map((item) => <li><a href={paraPath(item.id)}>{item.data.title}</a></li>)}
+    </ul>
+  )}
+</EditorialFrame>

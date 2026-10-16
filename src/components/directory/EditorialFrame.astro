@@ -1,0 +1,51 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DirectoryChrome from './DirectoryChrome.astro';
+import JsonLd from './JsonLd.astro';
+import NewsletterSlot from './NewsletterSlot.astro';
+import { formatDirectoryDate } from '../../lib/directory';
+
+interface Crumb {
+  href?: string;
+  label: string;
+}
+
+interface Props {
+  documentTitle: string;
+  description: string;
+  kicker: string;
+  heading: string;
+  published?: string;
+  sourceDate?: string;
+  crumbs: Crumb[];
+  jsonLd: unknown;
+  newsletter?: boolean;
+}
+
+const { documentTitle, description, kicker, heading, published, sourceDate, crumbs, jsonLd, newsletter = false } = Astro.props;
+---
+<Layout title={documentTitle} description={description} showNav={false} minimal themeColor="#FFF8EA" rss>
+  <DirectoryChrome active="guias">
+    <nav class="crumb" aria-label="Miga de pan">
+      <a href="/herramientas-ia">Herramientas</a>
+      {crumbs.map((crumb) => (
+        <>
+          <span aria-hidden="true">/</span>
+          {crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span>{crumb.label}</span>}
+        </>
+      ))}
+    </nav>
+    <p class="dir-kicker">{kicker}</p>
+    <h1 class="dir-title">{heading}</h1>
+    {published && (
+      <p class="dir-meta">
+        Publicado {formatDirectoryDate(published)}
+        {sourceDate && <> · Fuente del {formatDirectoryDate(sourceDate)}</>}
+      </p>
+    )}
+    <p class="dir-lead">{description}</p>
+    <slot />
+    {newsletter && <NewsletterSlot />}
+    <JsonLd data={jsonLd} />
+  </DirectoryChrome>
+</Layout>
