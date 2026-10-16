@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
+Disallow: /herramientas-ia/pedido/
 
 Sitemap: https://omaralvarezo.co/sitemap.xml

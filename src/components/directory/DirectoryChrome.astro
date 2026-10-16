@@ -1,0 +1,109 @@
+---
+import '@fontsource-variable/bricolage-grotesque/wdth.css';
+import '@fontsource-variable/ibm-plex-sans/wdth.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
+import '../../styles/directory.css';
+import { SOCIALS } from '../../lib/contact';
+
+interface Props {
+  active?: 'directorio' | 'destacar' | 'guias';
+  consultCta?: boolean;
+}
+
+const { active, consultCta = true } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<div class="directory">
+  <header class="dir-nav">
+    <a class="wordmark" href="/" aria-label="Omar Álvarez, inicio">
+      <strong>omar</strong><i aria-hidden="true"></i><span>álvarez</span>
+    </a>
+    <nav aria-label="Directorio">
+      <a href="/herramientas-ia" aria-current={active === 'directorio' ? 'page' : undefined}>herramientas</a>
+      <a href="/herramientas-ia/guias" aria-current={active === 'guias' ? 'page' : undefined}>guías</a>
+      <a href="/herramientas-ia/destacar" data-nav="destacar" aria-current={active === 'destacar' ? 'page' : undefined}>destacar</a>
+      <a href="/#reservar">sesión 2h</a>
+    </nav>
+  </header>
+
+  <main class="dir-main">
+    <slot />
+    {consultCta && (
+      <aside class="dir-cta">
+        <p>Si ya viste la lista y el problema sigue siendo cuál pieza construir primero.</p>
+        <a href="/#reservar">Sesión privada de 120 minutos <span aria-hidden="true">↘</span></a>
+      </aside>
+    )}
+  </main>
+
+  <footer class="dir-footer">
+    <a class="wordmark" href="/"><strong>omar</strong><i aria-hidden="true"></i><span>álvarez</span></a>
+    <nav aria-label="Sitio">
+      <a href="/herramientas-ia">Herramientas IA</a>
+      <a href="/herramientas-ia/guias">Guías</a>
+      <a href="/herramientas-ia/noticias">Noticias</a>
+      <a href="/herramientas-ia/rss.xml">RSS</a>
+      <a href="/herramientas-ia/destacar">Destacar</a>
+      <a href="/recursos">Recursos</a>
+      <a href="/#reservar">Consultoría</a>
+      <a href={SOCIALS.tiktok} target="_blank" rel="noopener noreferrer">TikTok</a>
+      <a href={SOCIALS.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+    <p>© {year} · Cúcuta</p>
+  </footer>
+</div>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('[data-tool-search]');
+  const empty = document.querySelector<HTMLElement>('[data-tool-empty]');
+  if (input) {
+    const normalize = (value: string) =>
+      value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    const apply = () => {
+      const query = normalize(input.value);
+      let visible = 0;
+      document.querySelectorAll<HTMLElement>('[data-tool]').forEach((row) => {
+        const show = !query || normalize(row.dataset.tool || '').includes(query);
+        row.hidden = !show;
+        if (show) visible += 1;
+      });
+      document.querySelectorAll<HTMLElement>('[data-tool-group]').forEach((group) => {
+        group.hidden = ![...group.querySelectorAll<HTMLElement>('[data-tool]')].some((row) => !row.hidden);
+      });
+      if (empty) empty.hidden = visible !== 0;
+    };
+
+    input.addEventListener('input', apply);
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const card = button.closest('[data-prompt]');
+      const text = card?.querySelector('[data-prompt-text]')?.textContent?.trim() || '';
+      const status = card?.querySelector<HTMLElement>('[data-copy-status]');
+      if (!text) return;
+      const mark = (ok: boolean) => {
+        if (status) status.textContent = ok ? 'Copiado' : 'No se pudo copiar';
+      };
+      try {
+        await navigator.clipboard.writeText(text);
+        mark(true);
+      } catch {
+        const area = document.createElement('textarea');
+        area.value = text;
+        area.setAttribute('readonly', '');
+        area.style.position = 'fixed';
+        area.style.inset = '0 auto auto 0';
+        area.style.opacity = '0';
+        document.body.appendChild(area);
+        area.select();
+        mark(document.execCommand('copy'));
+        area.remove();
+      }
+    });
+  });
+</script>

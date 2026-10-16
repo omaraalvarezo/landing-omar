@@ -1,0 +1,166 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DirectoryChrome from '../../components/directory/DirectoryChrome.astro';
+import { formatCop, formatUsd } from '../../lib/consulting';
+import { DIRECTORY_PRICE_BASIS, getCategories, getDirectoryPlans } from '../../lib/directory';
+
+const plans = getDirectoryPlans();
+const categories = getCategories();
+const site = 'https://omaralvarezo.co';
+const title = 'Destaca tu herramienta de IA para pymes';
+const description =
+  'Listado básico, destacado o patrocinio en el directorio de herramientas de IA para pymes. Precios fijos en COP, pago por Wompi.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      name: title,
+      description,
+      inLanguage: 'es',
+      url: `${site}/herramientas-ia/destacar`,
+      mainEntity: {
+        '@type': 'OfferCatalog',
+        name: 'Planes del directorio de herramientas de IA',
+        itemListElement: plans.map((plan) => ({
+          '@type': 'Offer',
+          name: plan.name,
+          description: plan.summary,
+          price: String(plan.amountCop),
+          priceCurrency: 'COP',
+          url: `${site}/herramientas-ia/destacar`,
+        })),
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: site },
+        { '@type': 'ListItem', position: 2, name: 'Herramientas de IA', item: `${site}/herramientas-ia` },
+        { '@type': 'ListItem', position: 3, name: 'Destacar', item: `${site}/herramientas-ia/destacar` },
+      ],
+    },
+  ],
+};
+---
+
+<Layout title={title} description={description} showNav={false} minimal themeColor="#FFF8EA">
+  <DirectoryChrome active="destacar">
+    <nav class="crumb" aria-label="Miga de pan">
+      <a href="/herramientas-ia">Herramientas</a>
+      <span aria-hidden="true">/</span>
+      <span>Destacar</span>
+    </nav>
+    <p class="dir-kicker">Para quien construye la herramienta</p>
+    <h1>Paga el lugar. Yo reviso y publico.</h1>
+    <p class="dir-lead">
+      Tres planes, en pesos, equivalentes a los precios en dólares. El cobro es un pago de Wompi, no una suscripción. El destacado dura 30 días y se apaga cuando vence la fecha en los datos.
+    </p>
+
+    <form class="dir-form" id="destacar-form" novalidate>
+      <div class="plans">
+        {plans.map((plan) => (
+          <label class:list={['plan', { 'plan--featured': plan.id === 'destacado', 'plan--sponsor': plan.id === 'patrocinio' }]}>
+            <input type="radio" name="plan" value={plan.id} required />
+            <span class="plan__cadence">{plan.cadence} · {formatUsd(plan.priceUsd)}</span>
+            <strong>{formatCop(plan.amountCop)}</strong>
+            <em>{plan.name}</em>
+            <p>{plan.summary}</p>
+            {plan.id === 'destacado' && <span class="badge">Destacado</span>}
+            {plan.id === 'patrocinio' && <span class="badge badge--sponsor">Portada</span>}
+          </label>
+        ))}
+      </div>
+      <p class="price-note">
+        Equivalente redondeado al millar superior con la TRM del {DIRECTORY_PRICE_BASIS.trmDate}
+        (${DIRECTORY_PRICE_BASIS.trmCop.toLocaleString('es-CO')}) más 1,65%. La tasa operativa de ese día fue
+        ${DIRECTORY_PRICE_BASIS.operationalRateCop.toLocaleString('es-CO')}. Estos montos quedan fijos: no usan la cotización diaria de la consultoría.
+      </p>
+
+      <label>
+        <span>Nombre de la herramienta</span>
+        <input name="toolName" required minlength="2" maxlength="80" autocomplete="organization" />
+      </label>
+      <label>
+        <span>URL</span>
+        <input name="toolUrl" type="url" required maxlength="300" placeholder="https://" inputmode="url" />
+      </label>
+      <label>
+        <span>Correo</span>
+        <input name="email" type="email" required maxlength="254" autocomplete="email" />
+      </label>
+      <label>
+        <span>Categoría</span>
+        <select name="category" required>
+          <option value="">Elige una</option>
+          {categories.map((category) => (
+            <option value={category.slug}>{category.label}</option>
+          ))}
+        </select>
+      </label>
+      <label>
+        <span>Descripción</span>
+        <textarea name="description" required minlength="20" maxlength="500" placeholder="Qué hace y para qué tarea de una pyme sirve."></textarea>
+      </label>
+      <div class="dir-hp" aria-hidden="true">
+        <label>No llenar <input name="company" tabindex="-1" autocomplete="off" /></label>
+      </div>
+      <p class="price-note">Si la URL no abre o la herramienta no existe, no la publico y devuelvo el pago. La ficha no queda automática al pagar.</p>
+      <p class="form-error" id="destacar-error" role="alert"></p>
+      <button type="submit" data-pay-label="Pagar con Wompi">Elegir un plan y pagar con Wompi</button>
+    </form>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
+  </DirectoryChrome>
+</Layout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#destacar-form');
+  const errorNode = document.querySelector<HTMLElement>('#destacar-error');
+  const amounts: Record<string, string> = {
+    basico: 'Pagar $94.000 con Wompi',
+    destacado: 'Pagar $159.000 con Wompi',
+    patrocinio: 'Pagar $482.000 con Wompi',
+  };
+
+  form?.addEventListener('change', () => {
+    const selected = new FormData(form).get('plan');
+    const button = form.querySelector('button');
+    if (button && typeof selected === 'string' && amounts[selected]) button.textContent = amounts[selected];
+  });
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const button = form.querySelector('button');
+    const data = new FormData(form);
+    if (errorNode) errorNode.textContent = '';
+    if (button) button.disabled = true;
+
+    try {
+      const response = await fetch('/api/herramientas/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan: data.get('plan'),
+          toolName: data.get('toolName'),
+          toolUrl: data.get('toolUrl'),
+          email: data.get('email'),
+          category: data.get('category'),
+          description: data.get('description'),
+          company: data.get('company'),
+        }),
+      });
+      const payload = await response.json();
+      if (!response.ok || typeof payload.checkoutUrl !== 'string') {
+        throw new Error(payload.error || 'No pudimos abrir el pago.');
+      }
+      window.location.assign(payload.checkoutUrl);
+    } catch (error) {
+      if (errorNode) {
+        errorNode.textContent = error instanceof Error ? error.message : 'No pudimos abrir el pago.';
+      }
+      if (button) button.disabled = false;
+    }
+  });
+</script>

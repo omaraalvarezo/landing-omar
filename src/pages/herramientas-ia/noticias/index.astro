@@ -1,0 +1,43 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import NewsletterSlot from '../../../components/directory/NewsletterSlot.astro';
+import { collectionNode, newsPath, publishedNews, SITE } from '../../../lib/editorial';
+import { formatDirectoryDate } from '../../../lib/directory';
+
+const entries = await publishedNews();
+const editions = [...new Set(entries.map((entry) => entry.data.edition))].sort((a, b) => b.localeCompare(a));
+const description =
+  'Noticias de IA para pymes, en una nota semanal. Cada una trae un resumen propio, qué significa para el negocio y el enlace a la fuente.';
+const title = 'Noticias de IA para pymes';
+const jsonLd = collectionNode({
+  url: `${SITE}${newsPath()}`,
+  name: title,
+  description,
+  items: entries.map((entry) => ({ name: entry.data.title, url: `${SITE}${newsPath(entry.id)}` })),
+});
+---
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Noticias"
+  heading="Noticias de IA para una pyme."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Noticias' }]}
+  jsonLd={jsonLd}
+>
+  {editions.map((edition) => (
+    <section>
+      <h2 class="block-title">Edición del {formatDirectoryDate(edition)}</h2>
+      <nav class="entries" aria-label={`Noticias del ${edition}`}>
+        {entries.filter((entry) => entry.data.edition === edition).map((entry) => (
+          <a class="entry" href={newsPath(entry.id)}>
+            <span>{entry.data.sourceName} · {formatDirectoryDate(entry.data.sourceDate)}</span>
+            <strong>{entry.data.title}</strong>
+            <em>{entry.data.description}</em>
+          </a>
+        ))}
+      </nav>
+    </section>
+  ))}
+  <p class="price-note"><a class="source-link" href="/herramientas-ia/rss.xml">RSS de las guías</a></p>
+  <NewsletterSlot />
+</EditorialFrame>

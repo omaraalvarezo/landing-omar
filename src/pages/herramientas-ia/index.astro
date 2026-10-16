@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DirectoryChrome from '../../components/directory/DirectoryChrome.astro';
+import ToolList from '../../components/directory/ToolList.astro';
+import { categoryPath, getCategories, getTools } from '../../lib/directory';
+
+const tools = getTools();
+const categories = getCategories();
+const site = 'https://omaralvarezo.co';
+const title = 'Herramientas de IA para pymes — directorio de Omar Álvarez';
+const description =
+  'Directorio en español de herramientas de IA para pymes: asistentes, ventas, atención, diseño, video y automatización. Las destacadas van primero.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${site}/herramientas-ia`,
+      name: title,
+      description,
+      inLanguage: 'es',
+      url: `${site}/herramientas-ia`,
+      isPartOf: { '@type': 'WebSite', name: 'Omar Álvarez', url: site },
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: tools.length,
+        itemListElement: tools.map((tool, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: tool.nombre,
+          url: `${site}/herramientas-ia/${tool.slug}`,
+        })),
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: site },
+        { '@type': 'ListItem', position: 2, name: 'Herramientas de IA', item: `${site}/herramientas-ia` },
+      ],
+    },
+  ],
+};
+---
+
+<Layout title={title} description={description} showNav={false} minimal themeColor="#FFF8EA" rss>
+  <DirectoryChrome active="directorio">
+    <p class="dir-kicker">Directorio · {tools.length} herramientas · {categories.length} categorías</p>
+    <h1>Herramientas de IA para una pyme.</h1>
+    <p class="dir-lead">
+      Una lista corta, en español, de herramientas que sí se pueden usar esta semana. Lo destacado va primero y lleva distintivo. El resto está ordenado por nombre.
+    </p>
+    <p class="dir-legend">
+      <span class="badge">Destacado</span>
+      <span>sale arriba mientras la fecha siga vigente.</span>
+      <span class="badge badge--sponsor">Portada</span>
+      <span>es el patrocinio de 30 días.</span>
+    </p>
+
+    <label class="dir-search">
+      <span>Buscar</span>
+      <input type="search" data-tool-search placeholder="Nombre o tarea" autocomplete="off" />
+    </label>
+
+    <nav class="dir-cats" aria-label="Guías">
+      <a href="/herramientas-ia/guias">Guías</a>
+      <a href="/herramientas-ia/para">Para una tarea</a>
+      <a href="/herramientas-ia/noticias">Noticias</a>
+      <a href="/herramientas-ia/prompts">Prompts</a>
+      <a href="/herramientas-ia/semana">Semana</a>
+      <a href="/herramientas-ia/comparar">Comparar</a>
+      <a href="/herramientas-ia/alternativas">Alternativas</a>
+      <a href="/herramientas-ia/casos">Casos</a>
+      <a href="/herramientas-ia/tendencias">Tendencias</a>
+    </nav>
+
+    <nav class="dir-cats" aria-label="Filtrar por categoría">
+      <a href="/herramientas-ia" aria-current="page">Todas</a>
+      {categories.map((category) => (
+        <a href={categoryPath(category.slug)}>{category.label}</a>
+      ))}
+    </nav>
+
+    <ToolList tools={tools} grouped as="h3" />
+    <p class="tool-empty" data-tool-empty hidden>Ninguna herramienta coincide con esa búsqueda.</p>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
+  </DirectoryChrome>
+</Layout>

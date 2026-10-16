@@ -1,0 +1,13 @@
+---
+import type { Tool } from '../../lib/directory';
+
+interface Props {
+  tools: Tool[];
+}
+const { tools } = Astro.props;
+---
+<ul class="chips">
+  {tools.map((tool) => (
+    <li><a href={`/herramientas-ia/${tool.slug}`}>{tool.nombre}</a></li>
+  ))}
+</ul>

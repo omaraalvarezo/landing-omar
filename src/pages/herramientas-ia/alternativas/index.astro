@@ -1,0 +1,37 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { alternativesPath, collectionNode, publishedAlternatives, SITE, toolsOf } from '../../../lib/editorial';
+import { formatDirectoryDate } from '../../../lib/directory';
+
+const entries = await publishedAlternatives();
+const description =
+  'Páginas de alternativas a una herramienta del directorio. Cada opción es otra ficha real, con la fecha en que se armó la lista.';
+const title = 'Alternativas a herramientas de IA';
+const jsonLd = collectionNode({
+  url: `${SITE}${alternativesPath()}`,
+  name: title,
+  description,
+  items: entries.map((entry) => ({ name: entry.data.title, url: `${SITE}${alternativesPath(entry.id)}` })),
+});
+---
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Alternativas"
+  heading="Si esa no es la pieza."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Alternativas' }]}
+  jsonLd={jsonLd}
+>
+  <nav class="entries" aria-label="Páginas de alternativas">
+    {entries.map((entry) => {
+      const tool = toolsOf([entry.data.insteadOf])[0];
+      return (
+        <a class="entry" href={alternativesPath(entry.id)}>
+          <span>Revisado {formatDirectoryDate(entry.data.checked)} · en vez de {tool.nombre}</span>
+          <strong>{entry.data.title}</strong>
+          <em>{entry.data.description}</em>
+        </a>
+      );
+    })}
+  </nav>
+</EditorialFrame>

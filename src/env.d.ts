@@ -15,6 +15,13 @@ interface ImportMetaEnv {
   readonly CONSULTING_ORDER_STORE_URL: string;
   readonly WOMPI_TEST_PUBLIC_KEY: string;
   readonly WOMPI_TEST_INTEGRITY_SECRET: string;
+  readonly WOMPI_EVENTS_SECRET: string;
+  readonly WOMPI_TEST_EVENTS_SECRET: string;
+  readonly DIRECTORY_NOTIFY_EMAIL: string;
+  readonly DIRECTORY_NOTIFY_FROM: string;
+  readonly RESEND_API_KEY: string;
+  readonly NEWSLETTER_PROVIDER: string;
+  readonly NEWSLETTER_ACTION_URL: string;
 }
 
 interface ImportMeta {

@@ -1,0 +1,98 @@
+---
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro';
+import DirectoryChrome from '../../../components/directory/DirectoryChrome.astro';
+import { formatCop } from '../../../lib/consulting';
+import { getDirectoryPlan } from '../../../lib/directory';
+import { settleDirectoryPayment } from '../../../lib/directory-payment';
+import {
+  directoryAccessCookieName,
+  getDirectoryOrderById,
+  hasDirectoryOrderAccess,
+  isDirectoryOrderId,
+  type DirectoryOrder,
+} from '../../../lib/directory-orders';
+import { fetchTransaction } from '../../../lib/wompi-consulting';
+
+const orderId = Astro.params.orderId || '';
+let order: DirectoryOrder | null = null;
+let allowed = false;
+let note = '';
+
+if (isDirectoryOrderId(orderId)) {
+  try {
+    order = await getDirectoryOrderById(orderId);
+    const token = Astro.cookies.get(directoryAccessCookieName(orderId))?.value || '';
+    allowed = Boolean(order) && (await hasDirectoryOrderAccess(order as DirectoryOrder, token));
+  } catch (error) {
+    console.error('[directorio] no se pudo leer la orden', error);
+    note = 'El registro de pagos no está disponible en este momento.';
+  }
+}
+
+if (allowed && order) {
+  const transactionId = Astro.url.searchParams.get('id') || '';
+  if (/^[A-Za-z0-9-]{4,80}$/.test(transactionId)) {
+    try {
+      const transaction = await fetchTransaction(transactionId);
+      if (!transaction || transaction.reference !== order.reference) {
+        note = 'Esa transacción no corresponde a este pago.';
+      } else {
+        const settled = await settleDirectoryPayment(transaction);
+        if (settled.ok) order = settled.order;
+      }
+    } catch (error) {
+      console.warn('[directorio] se muestra el estado guardado mientras Wompi no responde', error);
+      note = 'Wompi no respondió ahora. Este es el estado que ya teníamos guardado.';
+    }
+  }
+}
+
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+Astro.response.headers.set('Referrer-Policy', 'no-referrer');
+if (!allowed) Astro.response.status = note ? 503 : 404;
+
+const plan = order && allowed ? getDirectoryPlan(order.plan) : null;
+const title = allowed ? 'Pago del directorio' : 'Pago no disponible';
+---
+
+<Layout title={title} description="Estado privado de un pago del directorio de herramientas." showNav={false} minimal noIndex privatePage themeColor="#FFF8EA">
+  <DirectoryChrome consultCta={false}>
+    <p class="dir-kicker">Directorio · pago</p>
+    {allowed && order && plan ? (
+      <>
+        <h1>
+          {order.status === 'APPROVED'
+            ? 'Pago registrado.'
+            : order.status === 'DECLINED' || order.status === 'VOIDED' || order.status === 'ERROR'
+              ? 'Ese pago no quedó aprobado.'
+              : 'Todavía no hay confirmación.'}
+        </h1>
+        <p class="dir-lead">
+          {order.status === 'APPROVED'
+            ? 'Omar revisa que la herramienta exista y después la publica. El distintivo, si aplica, lo prende en los datos con fecha de vencimiento.'
+            : 'Puedes volver a intentarlo desde la página de planes. Un redirect de Wompi no alcanza para publicar.'}
+        </p>
+        {note && <p class="form-error">{note}</p>}
+        <div class="receipt">
+          <dl>
+            <div><dt>Plan</dt><dd>{plan.name}</dd></div>
+            <div><dt>Monto</dt><dd>{formatCop(order.amountInCents / 100)} COP</dd></div>
+            <div><dt>Herramienta</dt><dd>{order.toolName}</dd></div>
+            <div><dt>Estado</dt><dd>{order.status}</dd></div>
+            <div><dt>Referencia</dt><dd>{order.reference}</dd></div>
+          </dl>
+        </div>
+        <p><a href="/herramientas-ia">Volver al directorio</a></p>
+      </>
+    ) : (
+      <>
+        <h1>No hay un pago asociado a este navegador.</h1>
+        <p class="dir-lead">{note || 'El comprobante vive en el navegador que inició el pago.'}</p>
+        <p><a href="/herramientas-ia/destacar">Ver planes</a></p>
+      </>
+    )}
+  </DirectoryChrome>
+</Layout>
