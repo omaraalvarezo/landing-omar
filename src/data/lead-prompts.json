@@ -1,0 +1,227 @@
+{
+  "title": "Prompts de IA para talleres, detailing y pymes",
+  "published": "2026-10-16",
+  "intro": "Pega el prompt en el asistente que ya uses. Completa los corchetes con datos tuyos. Si un dato no está, deja el corchete: no aceptes un precio, un tiempo, un kilometraje ni un diagnóstico que el modelo se invente.",
+  "areas": [
+    {
+      "id": "agenda",
+      "title": "Agenda y recepción del taller",
+      "prompts": [
+        {
+          "title": "Ordenar el día sin agregar carros",
+          "text": "Soy el dueño de un taller. Organiza el día con estas notas y no agregues vehículos que no estén escritos:\n[notas: hora si la hay, cliente, vehículo, qué se pidió]\nDevuelve una lista con hora, cliente, vehículo, trabajo pedido y qué falta confirmar. Si una nota no trae hora, márcala como sin hora. No inventes citas ni duraciones."
+        },
+        {
+          "title": "Pedir los datos mínimos para recibir el carro",
+          "text": "Arma las preguntas cortas que le hago a un cliente antes de recibir el carro para [servicio pedido]. El vehículo es [marca, modelo, año si lo sé].\nPregunta solo lo que cambia el trabajo: síntomas, desde cuándo, si ya lo revisaron, y si puede dejarlo [fecha]. No diagnostiques. No prometas un tiempo de entrega."
+        },
+        {
+          "title": "Avisar que la hora se corrió",
+          "text": "Escribe un WhatsApp corto para [nombre]. La cita era el [fecha] a las [hora] para [servicio]. La nueva hora que yo sí puedo ofrecer es [nueva hora].\nPide que confirme. No ofrezcas otras horas. No expliques una causa que yo no haya escrito aquí: [causa real o déjalo en blanco]."
+        },
+        {
+          "title": "Resumen de recepción para el técnico",
+          "text": "Convierte esta conversación en una nota para el técnico del taller. No agregues fallas que el cliente no mencionó.\nConversación:\n[pega el chat]\nDevuelve: lo que el cliente pidió, lo que dijo que ya intentó, y las preguntas que quedaron abiertas. Si no hay diagnóstico en el chat, escribe que todavía no hay diagnóstico."
+        }
+      ]
+    },
+    {
+      "id": "taller-cotizacion",
+      "title": "Cotización de taller",
+      "prompts": [
+        {
+          "title": "Notas del carro a borrador de cotización",
+          "text": "Con estas notas arma un borrador de cotización para [nombre] y [vehículo]. Notas mías, no las completes con suposiciones:\n[qué se revisó, qué se encontró, repuestos que ya confirmé, precios que yo anoté]\nSepara: incluye, no incluye, precio solo si yo lo escribí, y preguntas pendientes. Si falta un precio, deja la línea en [precio] y no calcules uno."
+        },
+        {
+          "title": "Decir qué entra y qué no entra",
+          "text": "El cliente pidió [pedido]. Yo voy a hacer [alcance real]. Esto queda por fuera: [exclusiones].\nEscribe un párrafo claro, en español de taller, para pegarlo en la cotización. No agregues garantía, tiempo ni repuestos que yo no haya listado."
+        },
+        {
+          "title": "Dos caminos de reparación",
+          "text": "Explica dos opciones que yo ya definí, sin empujar la más cara.\nOpción A: [trabajo, precio mío, qué resuelve]\nOpción B: [trabajo, precio mío, qué resuelve]\nDi en qué se diferencian y qué queda sin resolver en cada una. No inventes una tercera opción ni cambies los precios."
+        },
+        {
+          "title": "Responder un pedido de descuento",
+          "text": "El cliente pide descuento sobre esta cotización: [pega la cotización y el precio]. Mi respuesta de fondo es [sí bajo a este monto / no bajo el precio / puedo quitar este ítem].\nEscribe el mensaje. No ofrezcas un descuento distinto al que acabo de escribir. No inventes una promoción."
+        }
+      ]
+    },
+    {
+      "id": "detailing",
+      "title": "Cotización y alcance de detailing",
+      "prompts": [
+        {
+          "title": "Alcance según el estado que yo vi",
+          "text": "Arma el alcance de un detailing para [vehículo]. El estado lo vi yo, no lo completes:\nPintura: [lo que observé]\nInterior: [lo que observé]\nLo que el cliente pidió: [pedido]\nPropón solo pasos que correspondan a esas notas. Si no viste un daño, no lo agregues. No pongas horas ni precio."
+        },
+        {
+          "title": "Separar interior, pintura y protección",
+          "text": "Separa esta cotización en tres bloques: interior, pintura y protección. Datos míos:\n[lista de trabajos y precios que ya definí]\nEn cada bloque di qué incluye y qué no. Si un bloque no tiene precio mío, márcalo [sin precio todavía]. No sumes tú el total: deja la suma como [total] para que yo la haga."
+        },
+        {
+          "title": "Explicar qué no hace un cerámico",
+          "text": "Escribe una explicación corta para un cliente que cree que el cerámico [expectativa que dijo]. El producto que yo aplico es [nombre o tipo] y la duración que el fabricante publica, si la tengo a mano, es [dato o no la tengo].\nDi qué sí hace y qué no hace, sin prometer que la pintura queda nueva ni inventar años de duración. Si no pegué el dato del fabricante, no lo inventes."
+        },
+        {
+          "title": "Qué debe traer y cómo entregar el carro",
+          "text": "Lista lo que el cliente debe saber antes de dejar [vehículo] para [servicio de detailing]. Incluye solo estas condiciones mías: [horario de entrega, objetos personales, permiso de fotos sí o no, tiempo que yo ya prometí].\nNo agregues una garantía ni un tiempo distinto. Cierra con la frase para confirmar por WhatsApp."
+        }
+      ]
+    },
+    {
+      "id": "whatsapp",
+      "title": "WhatsApp de citas y seguimiento",
+      "prompts": [
+        {
+          "title": "Confirmar la cita",
+          "text": "Escribe un WhatsApp de confirmación para [nombre]. Cita: [fecha] a las [hora]. Servicio: [servicio]. Lugar: [dirección].\nPide un sí o un no. No ofrezcas otra hora. No agregues un precio."
+        },
+        {
+          "title": "Mandar la cotización",
+          "text": "Convierte estos datos en un WhatsApp de cotización, con viñetas cortas:\nCliente: [nombre]\nVehículo: [vehículo]\nIncluye: [alcance]\nNo incluye: [exclusiones]\nPrecio: [precio]\nEntrega: [fecha u hora que ya definí]\nNo cambies el precio ni el alcance. Cierra preguntando si lo autoriza."
+        },
+        {
+          "title": "Seguimiento si no responde",
+          "text": "El [fecha] le mandé a [nombre] esta cotización y no respondió:\n[pega el mensaje]\nEscribe un solo seguimiento, corto, sin culpa y sin descuento. Pregunta si sigue en pie o si lo cerramos. No inventes urgencia ni cupos."
+        },
+        {
+          "title": "Aviso de listo para entregar",
+          "text": "Avisa a [nombre] que [vehículo] está listo. El servicio hecho fue [servicio real]. Lo puede recoger [fecha y hora]. El saldo, si lo hay, es [monto o no hay saldo].\nNo describas trabajos que no estén en la lista. No agregues una reseña en este mensaje."
+        },
+        {
+          "title": "Reprogramar sin perder el dato",
+          "text": "El cliente no puede venir el [fecha original]. Las únicas franjas que yo tengo son: [lista].\nEscribe el mensaje ofreciendo solo esas franjas. Pide que elija una. No inventes disponibilidad ni digas que el taller está lleno si yo no lo escribí."
+        }
+      ]
+    },
+    {
+      "id": "mantenimiento",
+      "title": "Mantenimiento y recordatorios",
+      "prompts": [
+        {
+          "title": "Recordatorio con el kilometraje que el cliente dio",
+          "text": "Escribe un recordatorio para [nombre]. En la visita del [fecha] anoté [servicio hecho] y el kilometraje que el cliente dijo: [km]. El siguiente punto que acordamos fue [km o fecha].\nNo calcules un kilometraje nuevo. Si el dato de kilometraje está vacío, pregunta cuál es hoy en vez de estimarlo."
+        },
+        {
+          "title": "Recordatorio solo por fecha",
+          "text": "No tengo kilometraje. Escribe un recordatorio por fecha para [nombre], vehículo [vehículo], último servicio [servicio] el [fecha]. Propongo verlo de nuevo el [fecha que yo elijo].\nNo menciones kilómetros. No digas que el carro está en riesgo."
+        },
+        {
+          "title": "Qué preguntar para no inventar el kilometraje",
+          "text": "Arma tres preguntas de WhatsApp para saber cuándo volver a ver [vehículo] después de [servicio]. Quiero la fecha de la última visita si la recuerda, el kilometraje que marca hoy el tablero, y si ya hizo ese servicio en otro lado.\nNo conviertas las respuestas en un plan todavía. Solo las preguntas."
+        },
+        {
+          "title": "Nota interna del próximo servicio",
+          "text": "Con esta ficha arma una nota interna de una línea para mi tablero, más el mensaje al cliente.\nFicha: [nombre, vehículo, servicio de hoy, fecha de hoy, próximo paso que yo definí, fecha de ese paso]\nLa nota interna no es un mensaje bonito: es para que yo no dependa de la memoria. El mensaje al cliente no agrega servicios."
+        }
+      ]
+    },
+    {
+      "id": "resenas",
+      "title": "Reseñas",
+      "prompts": [
+        {
+          "title": "Pedir la reseña después de entregar",
+          "text": "Escribe el pedido de reseña para [nombre], después de [servicio que sí se hizo] en [vehículo]. Enlace de la ficha: [url].\nAgradece en una frase. Pide la reseña. Di que si algo quedó mal me escriba primero a [WhatsApp o teléfono]. No ofrezcas descuento a cambio de la reseña."
+        },
+        {
+          "title": "Responder una reseña buena",
+          "text": "Responde esta reseña de [estrellas] en nombre de [negocio]. Reseña:\n[texto]\nMenciona el servicio solo si la reseña o yo lo decimos: [servicio o no lo menciones]. No agregues una promoción. Máximo 60 palabras."
+        },
+        {
+          "title": "Responder una queja sin discutir",
+          "text": "Responde esta reseña negativa de [negocio] sin discutir y sin admitir una falla que yo no haya confirmado.\nReseña:\n[texto]\nLo que yo sé que pasó: [hechos o todavía no lo reviso]\nInvita a seguir por [teléfono o WhatsApp]. No ofrezcas un reembolso ni un descuento si yo no lo escribí en los hechos. Máximo 80 palabras."
+        },
+        {
+          "title": "Responder cuando hablan de un antes y después",
+          "text": "Esta reseña habla de un trabajo de detailing o de estética. Responde en nombre de [negocio] mencionando solo [servicio realizado].\nReseña:\n[texto]\nNo digas que todas las piezas quedan así. No inventes productos. Si la reseña nombra algo que no hicimos, no lo confirmes: agradece y aclara con cuidado qué servicio fue."
+        }
+      ]
+    },
+    {
+      "id": "redes",
+      "title": "Antes y después para redes",
+      "prompts": [
+        {
+          "title": "Guion de un reel con fotos reales",
+          "text": "Escribe un guion de reel de 20 segundos para [negocio]. Material que sí tengo: [describe las fotos o el video del mismo vehículo, antes y después]. Servicio hecho: [servicio].\nNo pidas una toma que yo no tenga. No inventes la duración del trabajo ni un precio. Cierra con [la frase de cierre que yo uso, o propone una sin datos numéricos]."
+        },
+        {
+          "title": "Texto de la foto del después",
+          "text": "Escribe el texto de una publicación para la foto del después de [vehículo y servicio]. Lo que se ve en la foto: [descríbelo]. Lo que no se debe decir: [si hay placa, cara o un dato que no quiero publicar].\nCuatro líneas máximo. Sin hashtags inventados de moda y sin cifras de alcance."
+        },
+        {
+          "title": "Lista de lo que no se publica",
+          "text": "Revisa este texto antes de publicarlo y dime qué hay que tapar o quitar:\n[texto y descripción de la pieza]\nMarca placa, rostros, documentos, teléfono de un cliente y cualquier precio que no esté en [precios que sí autoricé]. No reescribas la pieza todavía: primero la lista de riesgos."
+        },
+        {
+          "title": "Piezas de la semana a partir de trabajos reales",
+          "text": "Estos son los trabajos que sí salieron esta semana:\n[lista: vehículo, servicio, si tengo foto sí o no]\nPropón hasta 4 piezas para redes. Si no hay foto, la pieza es solo texto o no se propone. No agregues trabajos que no estén en la lista ni métricas de vistas."
+        }
+      ]
+    },
+    {
+      "id": "inventario",
+      "title": "Inventario y proveedores",
+      "prompts": [
+        {
+          "title": "Lista de compra de lo que ya se acabó",
+          "text": "Arma la lista de compra con estos faltantes que yo conté. No agregues productos:\n[producto, cantidad que queda, cantidad que quiero comprar, proveedor si lo anoté]\nDevuelve una lista por proveedor. Si un producto no tiene proveedor, déjalo en un grupo [sin proveedor]. No calcules precios."
+        },
+        {
+          "title": "Anotar un repuesto sin volverlo contabilidad",
+          "text": "Convierte esta nota de voz en una fila de tablero, no en un asiento contable:\n[nota]\nColumnas: producto, para qué carro o servicio, cantidad, dónde quedó, falta comprar sí o no. Si un dato no está en la nota, deja la celda vacía. No valores el inventario."
+        },
+        {
+          "title": "Aviso interno de faltante",
+          "text": "Escribe un mensaje interno para el equipo: se acabó [producto] y el próximo trabajo que lo necesita es [trabajo o no hay uno agendado]. Quién compra: [nombre o todavía no].\nNo culpes a nadie. No inventes una fecha de llegada del proveedor."
+        }
+      ]
+    },
+    {
+      "id": "atencion",
+      "title": "Atención de una pyme",
+      "prompts": [
+        {
+          "title": "Primera respuesta a un mensaje largo",
+          "text": "Un cliente escribió esto por WhatsApp:\n[mensaje]\nResponde en menos de 80 palabras: confirma que leí, repite lo que entendí que necesita, y haz solo las preguntas que faltan para cotizar o agendar. No des un precio. No prometas una fecha."
+        },
+        {
+          "title": "Objeción de precio sin bajarlo",
+          "text": "El cliente dice que [objeción]. Mi precio se mantiene en [precio] por [alcance].\nEscribe la respuesta. Explica el alcance en una frase. No ofrezcas otro precio. Si puedo quitar una parte, la única que autoricé es [ítem o ninguna]."
+        },
+        {
+          "title": "Pasar un reclamo a pasos",
+          "text": "Este es el reclamo:\n[texto]\nLo que yo ya verifiqué: [hechos]\nArma los pasos internos: qué miro, a quién le pregunto en el equipo, y qué le contesto hoy al cliente sin prometer una solución que todavía no decidí. El siguiente mensaje al cliente pide [dato que falta] o propone [cita que yo sí tengo]."
+        },
+        {
+          "title": "Cerrar los pendientes de WhatsApp",
+          "text": "Estas son las conversaciones abiertas de hoy:\n[lista: nombre, última frase, qué falta]\nDevuelve una lista de pendientes con el siguiente mensaje que yo debería enviar, en borrador. No marques ninguna como cerrada si yo no dije que ya se resolvió. No inventes conversaciones."
+        }
+      ]
+    },
+    {
+      "id": "operacion",
+      "title": "Operación de la pyme",
+      "prompts": [
+        {
+          "title": "Resumen de la semana a partir de mis notas",
+          "text": "Resume mi semana de [negocio] usando solo estas notas:\n[notas]\nQuiero: qué se entregó, qué quedó abierto, y qué tengo que decidir yo. No calcules ventas ni márgenes. Si una nota no trae monto, no lo estimes."
+        },
+        {
+          "title": "Borrador de una propuesta de servicio",
+          "text": "Arma un borrador de propuesta de una página para [servicio] de [negocio]. El cliente es [tipo de cliente]. El alcance que yo vendo es [alcance]. El precio es [precio o déjalo en blanco]. Lo que no hago: [exclusiones].\nTono directo. Sin adjetivos de gurú. Si el precio está en blanco, no pongas uno."
+        },
+        {
+          "title": "Checklist de apertura",
+          "text": "Convierte esta lista desordenada en un checklist de apertura para [taller, detailing u otro negocio]:\n[tareas reales del local]\nOrdénalas en el orden en que hay que hacerlas. No agregues tareas de un negocio genérico que yo no haya escrito. Cada ítem se responde con sí o no."
+        },
+        {
+          "title": "Explicarle un proceso a alguien del equipo",
+          "text": "Escribe los pasos para que [rol: recepcionista, técnico, lavador] haga [proceso] en [negocio]. Las reglas que ya usamos son:\n[reglas]\nNumerales cortos. Dónde para y me pregunta: [decisiones que no puede tomar solo]. No inventes una política de descuentos ni de garantía."
+        }
+      ]
+    }
+  ]
+}

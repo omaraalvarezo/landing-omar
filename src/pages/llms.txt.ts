@@ -47,6 +47,12 @@ export const GET: APIRoute = async () => {
 ## Directorio
 
 ${line('Herramientas de IA', '/herramientas-ia', 'Lista de herramientas para pymes, con buscador y destacados primero.')}
+${line('PDF de prompts', '/herramientas-ia/prompts-gratis', 'Cuarenta prompts para talleres, detailing y pymes. El PDF se entrega después del correo.')}
+${line('Kit de IA', '/herramientas-ia/kit', 'Prompts, mensajes de WhatsApp, flujos y CSV. Pago único en COP.')}
+${line('Calculadoras', '/herramientas-ia/recursos', 'Ahorro, reseñas y cotizador de detailing. Los números los escribe el visitante.')}
+${line('Calculadora de ahorro', '/herramientas-ia/recursos/ahorro', 'Tiempo y dinero a partir de minutos, frecuencia y costo por hora escritos por el visitante.')}
+${line('Respuestas a reseñas', '/herramientas-ia/recursos/resenas', 'Plantillas en el navegador. No usan una API de modelo.')}
+${line('Cotizador de detailing', '/herramientas-ia/recursos/cotizador-detailing', 'Suma de precios escritos por el visitante. Sin tarifas precargadas.')}
 ${line('Destacar una herramienta', '/herramientas-ia/destacar', 'Planes de listado en COP. El pago no publica solo.')}
 ${categories.map((category) => line(category.label, `/herramientas-ia/categoria/${category.slug}`, `Categoría ${category.label}.`)).join('\n')}
 ${tools.map((tool) => line(tool.nombre, `/herramientas-ia/${tool.slug}`, tool.desc)).join('\n')}

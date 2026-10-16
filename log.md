@@ -488,3 +488,14 @@ redirect; se evalúa caso por caso si aparecen 404.
   `/herramientas-ia/para/detailing`: problemas del negocio, seis herramientas del directorio con
   pasos, prompts y preguntas. No se agregaron fichas nuevas: no entró un software de taller sin
   verificación. El índice de tareas las enlaza primero.
+
+## 2026-10-16 — PDF, kit y calculadoras
+
+- PDF gratis en `/herramientas-ia/prompts-gratis`: 40 prompts. El correo queda en Upstash
+  (`oa:lead:*`) mientras la newsletter no esté conectada. El archivo sale por un enlace de 24 horas.
+- Kit en `/herramientas-ia/kit` a $81.000 COP (USD 25, millar superior de $80.750). Referencia
+  `oa-kit-*`, zip con prompts, mensajes, flujos y CSV, enlace de 14 días. El aviso a Omar reutiliza
+  Resend. Sin variables de pago el checkout queda cerrado.
+- Calculadoras en `/herramientas-ia/recursos`: ahorro, reseñas por plantilla y cotizador de detailing.
+  Los supuestos los escribe el visitante. Decisión: `wiki/decisiones/ofertas-directorio-herramientas-ia.md`.
+

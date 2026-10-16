@@ -8,6 +8,7 @@ Catálogo plano del conocimiento del proyecto. Una línea por página `wiki/` y 
 
 ### Decisiones
 
+- [[wiki/decisiones/ofertas-directorio-herramientas-ia]] — 2026-10-16 — PDF de prompts, kit de talleres y calculadoras.
 - [[wiki/decisiones/rutina-editorial-herramientas-ia]] — 2026-10-16 — cómo el agente publica guías, noticias y prompts del directorio.
 - [[wiki/decisiones/directorio-herramientas-ia]] — 2026-10-16 — directorio, planes COP, Wompi y activación por datos.
 - [[wiki/decisiones/sistema-vivo-control-room]] — 2026-08-20 — dirección de arte, voz, color y motion vigentes del home.

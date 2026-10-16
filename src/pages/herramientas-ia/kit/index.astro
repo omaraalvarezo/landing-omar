@@ -1,0 +1,156 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import DirectoryChrome from '../../../components/directory/DirectoryChrome.astro';
+import JsonLd from '../../../components/directory/JsonLd.astro';
+import kitPack from '../../../data/kit-pack.json';
+import { formatCop, formatUsd } from '../../../lib/consulting';
+import { breadcrumb, faqNode, SITE } from '../../../lib/editorial';
+import { KIT } from '../../../lib/kit';
+
+const title = 'Kit de IA para talleres y detailing';
+const description =
+  'Prompts, mensajes de WhatsApp, flujos con herramientas reales y una plantilla CSV de seguimiento. Pago único de $81.000 COP, equivalente redondeado a USD 25.';
+const url = `${SITE}/herramientas-ia/kit`;
+const faqs = [
+  {
+    q: '¿Cuándo llega el kit?',
+    a: 'Cuando Wompi confirma el pago, la página de regreso muestra un enlace de descarga. También le llega a Omar por correo, por si pierdes esa página. El enlace vence a los 14 días.',
+  },
+  {
+    q: '¿El enlace es público?',
+    a: 'No. Lleva un código largo, no está en el sitemap y deja de servir si el pago se anula o si vence la fecha.',
+  },
+  {
+    q: '¿Por qué $81.000 y no otra cifra?',
+    a: `USD 25 por la tasa operativa del ${KIT.basis.trmDate} ($${KIT.basis.operationalRateCop.toLocaleString('es-CO')}) da $80.750. El mismo redondeo de los planes del directorio, al millar superior, lo deja en $81.000. El monto queda fijo.`,
+  },
+];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Product',
+      '@id': `${url}#product`,
+      name: KIT.name,
+      description,
+      url,
+      brand: { '@type': 'Organization', name: 'Omar Álvarez', url: SITE },
+      offers: {
+        '@type': 'Offer',
+        price: String(KIT.amountCop),
+        priceCurrency: 'COP',
+        availability: 'https://schema.org/InStock',
+        url,
+      },
+    },
+    faqNode(url, faqs),
+    breadcrumb([
+      { name: 'Inicio', url: SITE },
+      { name: 'Herramientas de IA', url: `${SITE}/herramientas-ia` },
+      { name: 'Kit', url },
+    ]),
+  ],
+};
+---
+
+<Layout title={title} description={description} showNav={false} minimal themeColor="#FFF8EA">
+  <DirectoryChrome active="guias">
+    <nav class="crumb" aria-label="Miga de pan">
+      <a href="/herramientas-ia">Herramientas</a>
+      <span aria-hidden="true">/</span>
+      <span>Kit</span>
+    </nav>
+    <p class="dir-kicker">Pago único · {formatUsd(KIT.priceUsd)} · {KIT.downloadDays} días para descargar</p>
+    <h1 class="dir-title">Kit de IA para talleres y detailing.</h1>
+    <p class="dir-lead">{description}</p>
+    <p class="kit-price">{formatCop(KIT.amountCop)}</p>
+    <p class="price-note">
+      USD {KIT.priceUsd} × ${KIT.basis.operationalRateCop.toLocaleString('es-CO')} = $80.750. Millar superior: {formatCop(KIT.amountCop)}.
+      La tasa operativa sale de la TRM del {KIT.basis.trmDate} (${KIT.basis.trmCop.toLocaleString('es-CO')}) más 1,65%.
+      No usa la cotización diaria de la consultoría.
+    </p>
+
+    <h2 class="block-title">Qué incluye</h2>
+    <ul class="includes">
+      <li>El PDF de 40 prompts para talleres, detailing y pymes.</li>
+      <li>Mensajes de WhatsApp: {kitPack.messages.map((message) => message.title.toLowerCase()).join(', ')}.</li>
+      <li>Cinco flujos con ChatGPT, ManyChat, Notion, n8n y CapCut. Cada herramienta hace una pieza.</li>
+      <li>Un CSV de seguimiento. La fila de ejemplo se borra. No trae clientes ni precios.</li>
+    </ul>
+    <p class="price-note">El PDF suelto sigue gratis en <a href="/herramientas-ia/prompts-gratis">prompts de IA</a>. El kit agrega los mensajes, los flujos y la plantilla.</p>
+
+    <form class="dir-form" id="kit-form">
+      <label>
+        <span>Nombre</span>
+        <input name="buyerName" required minlength="2" maxlength="80" autocomplete="name" />
+      </label>
+      <label>
+        <span>Correo</span>
+        <input name="email" type="email" required maxlength="254" autocomplete="email" />
+      </label>
+      <label>
+        <span>Negocio</span>
+        <select name="business" required>
+          <option value="">Elige uno</option>
+          <option value="taller">Taller</option>
+          <option value="detailing">Detailing</option>
+          <option value="ambos">Taller y detailing</option>
+          <option value="otra">Otra pyme</option>
+        </select>
+      </label>
+      <div class="dir-hp" aria-hidden="true">
+        <label>No llenar <input name="company" tabindex="-1" autocomplete="off" /></label>
+      </div>
+      <p class="price-note">Si faltan las variables de pago, el botón responde que el cobro está cerrado. La página no se rompe y no abre Wompi.</p>
+      <p class="form-error" id="kit-error" role="alert"></p>
+      <button type="submit">Pagar {formatCop(KIT.amountCop)} con Wompi</button>
+    </form>
+
+    <h2 class="block-title">Preguntas frecuentes</h2>
+    <div class="faq">
+      {faqs.map((faq) => (
+        <>
+          <h3>{faq.q}</h3>
+          <p>{faq.a}</p>
+        </>
+      ))}
+    </div>
+    <JsonLd data={jsonLd} />
+  </DirectoryChrome>
+</Layout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#kit-form');
+  const errorNode = document.querySelector<HTMLElement>('#kit-error');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const button = form.querySelector('button');
+    const data = new FormData(form);
+    if (errorNode) errorNode.textContent = '';
+    if (button) button.disabled = true;
+    try {
+      const response = await fetch('/api/herramientas/kit-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buyerName: data.get('buyerName'),
+          email: data.get('email'),
+          business: data.get('business'),
+          company: data.get('company'),
+        }),
+      });
+      const body = (await response.json()) as { checkoutUrl?: string; error?: string };
+      if (!response.ok || !body.checkoutUrl) {
+        if (errorNode) errorNode.textContent = body.error || 'No se pudo iniciar el pago.';
+        if (button) button.disabled = false;
+        return;
+      }
+      window.location.href = body.checkoutUrl;
+    } catch {
+      if (errorNode) errorNode.textContent = 'No hubo respuesta. Intenta de nuevo.';
+      if (button) button.disabled = false;
+    }
+  });
+</script>

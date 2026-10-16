@@ -176,8 +176,9 @@ Estas reglas no se modifican por razones visuales:
     es idempotente, una anulación de la misma transacción revoca el acceso y un doble cobro alerta.
 
 El directorio `/herramientas-ia` no entra en estas reglas. Usa el prefijo `oa-directorio-*`,
-precios COP fijos y Upstash. No escribe en Adjudika ni desbloquea Cal.com. El webhook de Adjudika
-sigue procesando solo `oa-consultoria-2h-*`. Las guías viven en colecciones Markdown
+precios COP fijos y Upstash. No escribe en Adjudika ni desbloquea Cal.com. El kit de talleres
+usa otro prefijo, `oa-kit-*`, el mismo endpoint de eventos y el mismo Upstash. El webhook de
+Adjudika sigue procesando solo `oa-consultoria-2h-*`. Las guías viven en colecciones Markdown
 (`src/content/`) y no cambian el cobro.
 
 ---
@@ -305,6 +306,7 @@ npm run preview
 
 ## Changelog breve
 
+- **2026.10.16 · ofertas del directorio:** PDF de prompts con correo en Upstash, kit `oa-kit-*` a $81.000 y calculadoras en `/herramientas-ia/recursos`. El checkout queda cerrado si faltan las variables de pago.
 - **2026.10.16 · guías:** colecciones en `/herramientas-ia` para tareas, noticias, prompts, herramienta de la semana, comparativas, alternativas, casos y tendencias. Publicar es agregar un Markdown.
 - **2026.10.16 · directorio:** `/herramientas-ia` con 32 herramientas, fichas, categorías, planes en COP y checkout Wompi separado de la consultoría (`oa-directorio-*`).
 - **2026.08.20 · v3.3:** reemplazo total de “expediente editorial” por “Sistema vivo / taller

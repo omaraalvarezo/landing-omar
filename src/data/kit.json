@@ -1,0 +1,14 @@
+{
+  "id": "talleres",
+  "name": "Kit de IA para talleres y detailing",
+  "priceUsd": 25,
+  "amountCop": 81000,
+  "downloadDays": 14,
+  "basis": {
+    "trmDate": "2026-10-16",
+    "trmCop": 3170.46,
+    "spreadBps": 165,
+    "operationalRateCop": 3230,
+    "rounding": "millar superior"
+  }
+}

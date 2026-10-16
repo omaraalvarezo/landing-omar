@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import GuideOffers from '../../../components/directory/GuideOffers.astro';
 import PromptCard from '../../../components/directory/PromptCard.astro';
 import ToolChips from '../../../components/directory/ToolChips.astro';
 import {
@@ -72,6 +73,7 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <div class="prose"><Content /></div>
+  {(entry.id === 'talleres-de-carros' || entry.id === 'detailing') && <GuideOffers lead resources />}
   <h2 class="block-title">Herramientas del directorio</h2>
   <ToolChips tools={tools} />
   {entry.data.guides?.length ? (

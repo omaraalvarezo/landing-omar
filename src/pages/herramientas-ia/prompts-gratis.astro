@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DirectoryChrome from '../../components/directory/DirectoryChrome.astro';
+import JsonLd from '../../components/directory/JsonLd.astro';
+import prompts from '../../data/lead-prompts.json';
+import { breadcrumb, faqNode, SITE } from '../../lib/editorial';
+import { promptCount, type PromptPack } from '../../lib/printable';
+
+const pack = prompts as PromptPack;
+const count = promptCount(pack);
+const title = 'Prompts de IA para talleres, detailing y pymes — PDF gratis';
+const description =
+  'Cuarenta prompts para agenda, cotización, WhatsApp, mantenimiento, reseñas y redes. Dejas el correo y descargas el PDF. Los corchetes se llenan con datos tuyos.';
+const url = `${SITE}/herramientas-ia/prompts-gratis`;
+const faqs = [
+  {
+    q: '¿El PDF está publicado en una URL abierta?',
+    a: 'No. El archivo se entrega después de dejar el correo, con un enlace que vence. No hay una ruta pública adivinable.',
+  },
+  {
+    q: '¿A dónde va el correo?',
+    a: 'Mientras la lista de novedades no esté conectada, el correo se guarda en el almacén privado del sitio para esta entrega. No se publica en la página.',
+  },
+  {
+    q: '¿Los prompts traen precios o tiempos de un taller real?',
+    a: 'No. Cada prompt deja en corchetes el precio, la hora y el kilometraje para que los escribas tú. Si el modelo inventa uno, no lo uses.',
+  },
+];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'DigitalDocument',
+      '@id': `${url}#pdf`,
+      name: pack.title,
+      description,
+      inLanguage: 'es',
+      url,
+      isAccessibleForFree: true,
+      datePublished: pack.published,
+      author: { '@type': 'Organization', name: 'Omar Álvarez', url: SITE },
+    },
+    faqNode(url, faqs),
+    breadcrumb([
+      { name: 'Inicio', url: SITE },
+      { name: 'Herramientas de IA', url: `${SITE}/herramientas-ia` },
+      { name: 'PDF de prompts', url },
+    ]),
+  ],
+};
+---
+
+<Layout title={title} description={description} showNav={false} minimal themeColor="#FFF8EA">
+  <DirectoryChrome active="guias">
+    <nav class="crumb" aria-label="Miga de pan">
+      <a href="/herramientas-ia">Herramientas</a>
+      <span aria-hidden="true">/</span>
+      <a href="/herramientas-ia/guias">Guías</a>
+      <span aria-hidden="true">/</span>
+      <span>PDF de prompts</span>
+    </nav>
+    <p class="dir-kicker">Gratis · {count} prompts · {pack.published}</p>
+    <h1 class="dir-title">Prompts de IA para talleres, detailing y pymes.</h1>
+    <p class="dir-lead">{description}</p>
+    <p class="price-note">{pack.intro}</p>
+
+    <ol class="areas">
+      {pack.areas.map((area) => (
+        <li>
+          <h2>{area.title}</h2>
+          <ul>
+            {area.prompts.map((prompt) => <li>{prompt.title}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ol>
+
+    <form class="dir-form" id="lead-form">
+      <h2 class="block-title">Deja el correo y descarga</h2>
+      <label>
+        <span>Correo</span>
+        <input name="email" type="email" required maxlength="254" autocomplete="email" />
+      </label>
+      <div class="dir-hp" aria-hidden="true">
+        <label>No llenar <input name="company" tabindex="-1" autocomplete="off" /></label>
+      </div>
+      <p class="form-error" id="lead-error" role="alert"></p>
+      <button type="submit">Quiero el PDF</button>
+    </form>
+    <p class="download-ready" id="lead-ready" hidden>
+      Listo. El enlace vence en 24 horas y alcanza para unas pocas descargas.
+      <a id="lead-download" href="/herramientas-ia/prompts-gratis" rel="noreferrer">Descargar el PDF</a>
+    </p>
+
+    <h2 class="block-title">Preguntas frecuentes</h2>
+    <div class="faq">
+      {faqs.map((faq) => (
+        <>
+          <h3>{faq.q}</h3>
+          <p>{faq.a}</p>
+        </>
+      ))}
+    </div>
+    <nav class="offer-links" aria-label="Sigue por aquí">
+      <a href="/herramientas-ia/para/talleres-de-carros">IA para talleres</a>
+      <a href="/herramientas-ia/para/detailing">IA para detailing</a>
+      <a href="/herramientas-ia/prompts">Prompts por rol</a>
+      <a href="/herramientas-ia/kit">Kit de pago</a>
+    </nav>
+    <JsonLd data={jsonLd} />
+  </DirectoryChrome>
+</Layout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#lead-form');
+  const errorNode = document.querySelector<HTMLElement>('#lead-error');
+  const ready = document.querySelector<HTMLElement>('#lead-ready');
+  const download = document.querySelector<HTMLAnchorElement>('#lead-download');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const button = form.querySelector('button');
+    const data = new FormData(form);
+    if (errorNode) errorNode.textContent = '';
+    if (button) button.disabled = true;
+    try {
+      const response = await fetch('/api/herramientas/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.get('email'), company: data.get('company') }),
+      });
+      const body = (await response.json()) as { downloadUrl?: string; error?: string };
+      if (!response.ok || !body.downloadUrl || !download) {
+        if (errorNode) errorNode.textContent = body.error || 'No se pudo preparar el PDF.';
+        if (button) button.disabled = false;
+        return;
+      }
+      download.href = body.downloadUrl;
+      if (ready) ready.hidden = false;
+      form.hidden = true;
+    } catch {
+      if (errorNode) errorNode.textContent = 'No hubo respuesta. Intenta de nuevo.';
+      if (button) button.disabled = false;
+    }
+  });
+</script>
