@@ -1,0 +1,188 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { breadcrumb, faqNode, SITE } from '../../../lib/editorial';
+
+const services = [
+  'Lavado exterior',
+  'Interior',
+  'Descontaminación',
+  'Corrección o pulido',
+  'Protección, cera o cerámico',
+  'Motor',
+  'Faros',
+  'Otro',
+];
+
+const title = 'Cotizador simple para detailing';
+const description =
+  'Marca los servicios y escribe el precio de cada uno. El total es la suma de lo que tú pongas. No hay tarifas de Cúcuta ni de ningún mercado cargadas en la página.';
+const url = `${SITE}/herramientas-ia/recursos/cotizador-detailing`;
+const faqs = [
+  {
+    q: '¿Estos son precios del mercado?',
+    a: 'No. Cada casilla empieza vacía. El total aparece cuando cada servicio marcado tiene un precio escrito por ti.',
+  },
+  {
+    q: '¿El tipo de vehículo cambia el precio?',
+    a: 'No solo. Moto, carro o camioneta entra en el mensaje para que sepas de qué cotización se trata. No multiplica nada.',
+  },
+  {
+    q: '¿La cotización se guarda?',
+    a: 'No. Vive en esta pestaña. Puedes copiar el mensaje para WhatsApp.',
+  },
+];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      '@id': `${url}#app`,
+      name: 'Cotizador de detailing',
+      description,
+      url,
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'COP' },
+      isAccessibleForFree: true,
+      inLanguage: 'es',
+    },
+    faqNode(url, faqs),
+    breadcrumb([
+      { name: 'Inicio', url: SITE },
+      { name: 'Herramientas de IA', url: `${SITE}/herramientas-ia` },
+      { name: 'Recursos', url: `${SITE}/herramientas-ia/recursos` },
+      { name: 'Cotizador de detailing', url },
+    ]),
+  ],
+};
+---
+
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Plantilla · precios tuyos"
+  heading="Cotizador simple para detailing."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { href: '/herramientas-ia/recursos', label: 'Recursos' }, { label: 'Cotizador' }]}
+  jsonLd={jsonLd}
+>
+  <p>El total es la suma de los precios que escribas en los servicios marcados. Si falta uno, la página dice cuál y no muestra un total a medias.</p>
+  <form class="dir-form" id="cotiza-form">
+    <label>
+      <span>Cliente</span>
+      <input name="customer" maxlength="60" />
+    </label>
+    <label>
+      <span>Vehículo</span>
+      <input name="vehicle" maxlength="80" placeholder="marca y modelo, si los tienes" />
+    </label>
+    <label>
+      <span>Tipo, solo para el mensaje</span>
+      <select name="body">
+        <option value="carro">Carro</option>
+        <option value="moto">Moto</option>
+        <option value="camioneta">Camioneta</option>
+        <option value="otro">Otro</option>
+      </select>
+    </label>
+    <div class="service-list">
+      {services.map((service, index) => (
+        <div class="service-row">
+          <label>
+            <input type="checkbox" name="on" value={String(index)} />
+            <span>{service}</span>
+          </label>
+          {service === 'Otro' && <input name={`label-${index}`} maxlength="40" placeholder="nombre del servicio" />}
+          <input name={`price-${index}`} inputmode="numeric" placeholder="80000 o 80.000" />
+        </div>
+      ))}
+    </div>
+    <button type="submit">Sumar</button>
+  </form>
+  <div class="calc-result" id="cotiza-result" hidden>
+    <p data-total></p>
+    <textarea data-message readonly rows="8"></textarea>
+    <button type="button" data-copy>Copiar mensaje</button>
+    <p data-copy-status></p>
+  </div>
+  <div class="faq">
+    {faqs.map((faq) => (
+      <>
+        <h3>{faq.q}</h3>
+        <p>{faq.a}</p>
+      </>
+    ))}
+  </div>
+  <nav class="offer-links" aria-label="Sigue por aquí">
+    <a href="/herramientas-ia/para/detailing">IA para detailing</a>
+    <a href="/herramientas-ia/kit">Mensajes de cotización en el kit</a>
+    <a href="/herramientas-ia/recursos">Todas las calculadoras</a>
+  </nav>
+</EditorialFrame>
+
+<script is:inline define:vars={{ services }}>
+  const form = document.querySelector('#cotiza-form');
+  const box = document.querySelector('#cotiza-result');
+  const totalNode = box?.querySelector('[data-total]');
+  const message = box?.querySelector('[data-message]');
+  const status = box?.querySelector('[data-copy-status]');
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!form || !box || !totalNode || !message) return;
+    const data = new FormData(form);
+    const selected = data.getAll('on').map(String);
+    if (!selected.length) {
+      box.hidden = false;
+      totalNode.textContent = 'Marca al menos un servicio.';
+      message.value = '';
+      return;
+    }
+    const lines = [];
+    const missing = [];
+    let sum = 0;
+    for (const index of selected) {
+      const base = services[Number(index)] || 'Servicio';
+      const custom = String(data.get(`label-${index}`) || '').trim();
+      const name = base === 'Otro' && custom ? custom : base;
+      const raw = String(data.get(`price-${index}`) || '').trim().replace(/\./g, '').replace(',', '.');
+      if (!raw) {
+        missing.push(name);
+        continue;
+      }
+      const price = Number(raw);
+      if (!Number.isFinite(price) || price < 0 || price > 100000000) {
+        missing.push(name);
+        continue;
+      }
+      sum += price;
+      const label = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(price);
+      lines.push(`- ${name}: ${label}`);
+    }
+    box.hidden = false;
+    if (missing.length || !lines.length) {
+      totalNode.textContent = `Falta el precio de: ${missing.join(', ') || 'los servicios marcados'}.`;
+      message.value = '';
+      return;
+    }
+    const money = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(sum);
+    totalNode.textContent = `Total ${money}. Es la suma de lo que escribiste.`;
+    const customer = String(data.get('customer') || '').trim();
+    const vehicle = String(data.get('vehicle') || '').trim();
+    const body = String(data.get('body') || 'carro');
+    const hello = customer ? `Hola ${customer}.` : 'Hola.';
+    const about = vehicle ? ` Cotización de detailing para ${vehicle} (${body}).` : ` Cotización de detailing (${body}).`;
+    message.value = `${hello}${about}\n${lines.join('\n')}\nTotal: ${money}\nEste mensaje no cambia el alcance. Si quieres quitar algo, dímelo antes de empezar.`;
+    if (status) status.textContent = '';
+  });
+
+  box?.querySelector('[data-copy]')?.addEventListener('click', async () => {
+    const text = message?.value || '';
+    if (!text || !status) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      status.textContent = 'Copiado';
+    } catch {
+      status.textContent = 'No se pudo copiar';
+    }
+  });
+</script>

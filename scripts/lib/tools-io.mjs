@@ -20,6 +20,9 @@ export const RESERVED_SLUGS = new Set([
   'casos',
   'tendencias',
   'guias',
+  'prompts-gratis',
+  'kit',
+  'recursos',
 ]);
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;

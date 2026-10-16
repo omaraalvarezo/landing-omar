@@ -3,6 +3,8 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { parseDirectoryReference } from '../../../lib/directory';
 import { settleDirectoryPayment } from '../../../lib/directory-payment';
+import { parseKitReference } from '../../../lib/kit';
+import { settleKitPayment } from '../../../lib/kit-payment';
 import { verifyWompiEvent } from '../../../lib/wompi-events';
 import { fetchTransaction } from '../../../lib/wompi-consulting';
 
@@ -44,16 +46,24 @@ export const POST: APIRoute = async ({ request }) => {
 
   const reference = referenceOf(payload);
   if (reference.startsWith('oa-consultoria-2h')) return json(200, { ignored: 'consultoria' });
-  if (!parseDirectoryReference(reference)) return json(200, { ignored: 'referencia' });
+  const directoryReference = parseDirectoryReference(reference);
+  const kitReference = parseKitReference(reference);
+  if (!directoryReference && !kitReference) return json(200, { ignored: 'referencia' });
 
   try {
     const transaction = await fetchTransaction(verified.transactionId);
     if (!transaction || transaction.id !== verified.transactionId) return json(503, { error: 'transaccion' });
     if (transaction.reference !== reference) return json(401, { error: 'referencia' });
 
-    const settled = await settleDirectoryPayment(transaction);
+    const channel = directoryReference ? 'directorio' : 'kit';
+    const settled = directoryReference
+      ? await settleDirectoryPayment(transaction)
+      : kitReference
+        ? await settleKitPayment(transaction, kitReference.amountInCents)
+        : null;
+    if (!settled) return json(200, { ignored: 'referencia' });
     if (!settled.ok) {
-      console.error('[directorio] evento sin orden aplicable', settled.reason, reference);
+      console.error(`[${channel}] evento sin orden aplicable`, settled.reason, reference);
       return json(200, { ignored: settled.reason });
     }
     if (settled.email === 'failed') return json(503, { error: 'aviso' });

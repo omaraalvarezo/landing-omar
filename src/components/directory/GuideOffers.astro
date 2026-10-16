@@ -1,0 +1,25 @@
+---
+interface Props {
+  lead?: boolean;
+  resources?: boolean;
+}
+
+const { lead = false, resources = false } = Astro.props;
+---
+
+{lead && (
+  <aside class="lead-cta">
+    <p>PDF gratis</p>
+    <h2>Prompts de IA para talleres, detailing y pymes.</h2>
+    <p>Cuarenta prompts por área. Dejas el correo y se descarga. No hay una lista de novedades conectada: el correo queda guardado solo para esta entrega.</p>
+    <a href="/herramientas-ia/prompts-gratis">Quiero el PDF</a>
+  </aside>
+)}
+{resources && (
+  <nav class="offer-links" aria-label="Calculadoras y kit">
+    <a href="/herramientas-ia/recursos/ahorro">Calculadora de ahorro</a>
+    <a href="/herramientas-ia/recursos/resenas">Respuestas a reseñas</a>
+    <a href="/herramientas-ia/recursos/cotizador-detailing">Cotizador de detailing</a>
+    <a href="/herramientas-ia/kit">Kit de IA · $81.000</a>
+  </nav>
+)}

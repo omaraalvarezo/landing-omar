@@ -72,6 +72,12 @@ export const GET: APIRoute = async () => {
     { loc: `${SITE}/`, changefreq: 'monthly', priority: '1.0' },
     { loc: `${SITE}/herramientas-ia`, changefreq: 'weekly', priority: '0.8' },
     { loc: `${SITE}/herramientas-ia/destacar`, changefreq: 'monthly', priority: '0.4' },
+    { loc: `${SITE}/herramientas-ia/prompts-gratis`, changefreq: 'monthly', priority: '0.7' },
+    { loc: `${SITE}/herramientas-ia/kit`, changefreq: 'monthly', priority: '0.6' },
+    { loc: `${SITE}/herramientas-ia/recursos`, changefreq: 'monthly', priority: '0.7' },
+    { loc: `${SITE}/herramientas-ia/recursos/ahorro`, changefreq: 'monthly', priority: '0.6' },
+    { loc: `${SITE}/herramientas-ia/recursos/resenas`, changefreq: 'monthly', priority: '0.6' },
+    { loc: `${SITE}/herramientas-ia/recursos/cotizador-detailing`, changefreq: 'monthly', priority: '0.6' },
     ...contentUrls,
     ...directoryCategories.map((category) => ({
       loc: `${SITE}${categoryPath(category.slug)}`,

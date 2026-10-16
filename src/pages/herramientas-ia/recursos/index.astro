@@ -1,0 +1,86 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { breadcrumb, collectionNode, faqNode, SITE } from '../../../lib/editorial';
+
+const title = 'Calculadoras y plantillas gratis para talleres y pymes';
+const description =
+  'Tres herramientas en el navegador: cuánto tiempo y dinero ahorras con los números que tú pones, respuestas a reseñas de Google y un cotizador de detailing sin tarifas de muestra.';
+const url = `${SITE}/herramientas-ia/recursos`;
+const items = [
+  {
+    href: '/herramientas-ia/recursos/ahorro',
+    label: 'Ahorro de tiempo y dinero',
+    text: 'Minutos, veces por semana y el costo por hora que tú escribes. La página no trae un ahorro típico.',
+  },
+  {
+    href: '/herramientas-ia/recursos/resenas',
+    label: 'Respuestas a reseñas de Google',
+    text: 'Plantillas en el navegador según las estrellas. La reseña no se envía a un servidor.',
+  },
+  {
+    href: '/herramientas-ia/recursos/cotizador-detailing',
+    label: 'Cotizador de detailing',
+    text: 'Marca servicios y escribe tus precios. El total es la suma. No hay tarifas precargadas.',
+  },
+];
+const faqs = [
+  {
+    q: '¿Estas cifras salen de un estudio?',
+    a: 'No. Las calculadoras empiezan vacías. El resultado usa solo lo que escribes en esa visita.',
+  },
+  {
+    q: '¿Se guarda lo que escribo?',
+    a: 'No. El cálculo ocurre en el navegador. Cerrar la pestaña lo borra.',
+  },
+];
+const collected = collectionNode({
+  url,
+  name: title,
+  description,
+  items: items.map((item) => ({ name: item.label, url: `${SITE}${item.href}` })),
+});
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    collected['@graph'][0],
+    faqNode(url, faqs),
+    breadcrumb([
+      { name: 'Inicio', url: SITE },
+      { name: 'Herramientas de IA', url: `${SITE}/herramientas-ia` },
+      { name: 'Recursos', url },
+    ]),
+  ],
+};
+---
+
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Gratis · en el navegador"
+  heading="Calculadoras y plantillas."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Recursos' }]}
+  jsonLd={jsonLd}
+>
+  <nav class="entries" aria-label="Recursos">
+    {items.map((item) => (
+      <a class="entry" href={item.href}>
+        <strong>{item.label}</strong>
+        <em>{item.text}</em>
+      </a>
+    ))}
+  </nav>
+  <nav class="offer-links" aria-label="Guías relacionadas">
+    <a href="/herramientas-ia/para/talleres-de-carros">IA para talleres</a>
+    <a href="/herramientas-ia/para/detailing">IA para detailing</a>
+    <a href="/herramientas-ia/prompts-gratis">PDF de prompts</a>
+    <a href="/herramientas-ia/kit">Kit de IA</a>
+  </nav>
+  <div class="faq">
+    {faqs.map((faq) => (
+      <>
+        <h3>{faq.q}</h3>
+        <p>{faq.a}</p>
+      </>
+    ))}
+  </div>
+</EditorialFrame>

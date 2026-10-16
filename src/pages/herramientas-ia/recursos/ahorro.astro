@@ -1,0 +1,157 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { breadcrumb, faqNode, SITE } from '../../../lib/editorial';
+
+const title = 'Calculadora de tiempo y dinero con IA para tu taller';
+const description =
+  'Escribe los minutos de hoy, los minutos que estimas con la herramienta, las veces por semana y lo que vale tu hora. El ahorro sale de esa cuenta, no de un promedio.';
+const url = `${SITE}/herramientas-ia/recursos/ahorro`;
+const faqs = [
+  {
+    q: '¿De dónde sale el ahorro?',
+    a: 'De cinco datos que escribes tú: minutos que te toma hoy, minutos que estimas con la herramienta, veces por semana, semanas del mes en que haces esa tarea y el costo por hora. No hay un ahorro típico de talleres cargado en la página.',
+  },
+  {
+    q: '¿El costo por hora es un dato oficial?',
+    a: 'No. Puede ser lo que te pagas, lo que le pagas a alguien del equipo, o el valor que le das a esa hora. La página no lo sugiere.',
+  },
+  {
+    q: '¿Cómo se redondea?',
+    a: 'Las horas se muestran con un decimal. El peso usa la cuenta completa, sin recortar las horas antes de multiplicar.',
+  },
+];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      '@id': `${url}#app`,
+      name: 'Calculadora de ahorro con IA',
+      description,
+      url,
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'COP' },
+      isAccessibleForFree: true,
+      inLanguage: 'es',
+    },
+    faqNode(url, faqs),
+    breadcrumb([
+      { name: 'Inicio', url: SITE },
+      { name: 'Herramientas de IA', url: `${SITE}/herramientas-ia` },
+      { name: 'Recursos', url: `${SITE}/herramientas-ia/recursos` },
+      { name: 'Ahorro', url },
+    ]),
+  ],
+};
+---
+
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Calculadora · sin cifras de muestra"
+  heading="Cuánto tiempo y dinero ahorras."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { href: '/herramientas-ia/recursos', label: 'Recursos' }, { label: 'Ahorro' }]}
+  jsonLd={jsonLd}
+>
+  <p>
+    La cuenta es esta: minutos ahorrados por vez = minutos de hoy − minutos con la herramienta.
+    Horas al mes = minutos ahorrados × veces por semana × semanas al mes ÷ 60.
+    Pesos al mes = horas al mes × el costo por hora que tú pongas.
+  </p>
+  <form class="dir-form" id="ahorro-form">
+    <label>
+      <span>Tarea</span>
+      <input name="tarea" maxlength="80" placeholder="ej. armar cotizaciones" />
+    </label>
+    <label>
+      <span>Minutos que te toma hoy, cada vez</span>
+      <input name="hoy" inputmode="decimal" placeholder="lo escribes tú" />
+    </label>
+    <label>
+      <span>Minutos que estimas con la herramienta, cada vez</span>
+      <input name="conIa" inputmode="decimal" placeholder="tu estimación, no un promedio" />
+    </label>
+    <label>
+      <span>Veces por semana</span>
+      <input name="veces" inputmode="decimal" placeholder="lo escribes tú" />
+    </label>
+    <label>
+      <span>Semanas del mes en que haces esa tarea</span>
+      <input name="semanas" inputmode="decimal" placeholder="un mes puede tener 4 o 5" />
+    </label>
+    <label>
+      <span>Costo por hora, en COP</span>
+      <input name="costo" inputmode="decimal" placeholder="el valor que tú le das a esa hora" />
+    </label>
+    <p class="price-note">Los ejemplos del placeholder no entran en la cuenta. Si dejas un campo vacío, no hay resultado.</p>
+    <button type="submit">Calcular</button>
+  </form>
+  <div class="calc-result" id="ahorro-result" aria-live="polite"></div>
+  <div class="faq">
+    {faqs.map((faq) => (
+      <>
+        <h3>{faq.q}</h3>
+        <p>{faq.a}</p>
+      </>
+    ))}
+  </div>
+  <nav class="offer-links" aria-label="Sigue por aquí">
+    <a href="/herramientas-ia/para/talleres-de-carros">IA para talleres</a>
+    <a href="/herramientas-ia/para/detailing">IA para detailing</a>
+    <a href="/herramientas-ia/recursos">Todas las calculadoras</a>
+  </nav>
+</EditorialFrame>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#ahorro-form');
+  const result = document.querySelector<HTMLElement>('#ahorro-result');
+
+  function read(name: string): number | null {
+    const raw = String(new FormData(form as HTMLFormElement).get(name) || '').trim().replace(',', '.');
+    if (!raw) return null;
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value < 0) return Number.NaN;
+    return value;
+  }
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!result || !form) return;
+    result.replaceChildren();
+    const hoy = read('hoy');
+    const conIa = read('conIa');
+    const veces = read('veces');
+    const semanas = read('semanas');
+    const costo = read('costo');
+    const values = [hoy, conIa, veces, semanas, costo];
+    if (values.some((value) => value === null)) {
+      result.textContent = 'Escribe los cinco datos para ver la cuenta.';
+      return;
+    }
+    if (values.some((value) => Number.isNaN(value)) || values.some((value) => (value as number) > 1_000_000_000)) {
+      result.textContent = 'Revisa los números. Uno no se pudo leer o quedó demasiado grande.';
+      return;
+    }
+    const savedMinutes = (hoy as number) - (conIa as number);
+    const title = document.createElement('p');
+    const tarea = String(new FormData(form).get('tarea') || '').trim();
+    title.textContent = tarea ? `Tarea: ${tarea}` : 'Tarea sin nombre.';
+    result.append(title);
+    if (savedMinutes <= 0) {
+      const note = document.createElement('p');
+      note.textContent = 'Con esos minutos, la herramienta no te ahorra tiempo. La cuenta de dinero queda en $0.';
+      result.append(note);
+      return;
+    }
+    const hours = (savedMinutes * (veces as number) * (semanas as number)) / 60;
+    const money = hours * (costo as number);
+    const hoursLabel = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 1 }).format(hours);
+    const moneyLabel = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(money);
+    const line = document.createElement('p');
+    line.textContent = `${hoursLabel} horas al mes · ${moneyLabel} al mes.`;
+    const detail = document.createElement('p');
+    detail.textContent = `${savedMinutes} minutos menos por vez × ${veces} veces × ${semanas} semanas ÷ 60 × ${costo} COP/hora.`;
+    result.append(line, detail);
+  });
+</script>

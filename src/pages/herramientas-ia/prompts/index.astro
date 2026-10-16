@@ -1,5 +1,6 @@
 ---
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import GuideOffers from '../../../components/directory/GuideOffers.astro';
 import NewsletterSlot from '../../../components/directory/NewsletterSlot.astro';
 import { collectionNode, promptsPath, publishedPrompts, SITE } from '../../../lib/editorial';
 import { formatDirectoryDate } from '../../../lib/directory';
@@ -32,5 +33,6 @@ const jsonLd = collectionNode({
       </a>
     ))}
   </nav>
+  <GuideOffers lead />
   <NewsletterSlot />
 </EditorialFrame>

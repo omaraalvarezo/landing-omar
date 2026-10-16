@@ -129,10 +129,25 @@ npm run content:check
 ```
 
 Hay un `content:new:*` por cada tipo. El archivo nace con `draft: true` y no entra al sitio hasta
-quitar el borrador. La rutina y las fuentes están en `wiki/decisiones/rutina-editorial-herramientas-ia.md`.
+quitar el borrador. La rutina y las fuentes están en   `wiki/decisiones/rutina-editorial-herramientas-ia.md`.
 
-La lista de correo queda apagada si no hay `NEWSLETTER_PROVIDER` (`beehiiv` o `buttondown`) y
-`NEWSLETTER_ACTION_URL`. El formulario no guarda correos en el sitio.
+La lista de correo de las guías queda apagada si no hay `NEWSLETTER_PROVIDER` (`beehiiv` o
+`buttondown`) y `NEWSLETTER_ACTION_URL`. Ese formulario no guarda direcciones.
+
+El PDF de prompts (`/herramientas-ia/prompts-gratis`) sí guarda el correo en el mismo Upstash,
+claves `oa:lead:*`, hasta que esa lista exista. Sin Upstash el formulario responde cerrado y el
+archivo no queda en una URL pública. `npm run lead:list` los muestra en local.
+
+El kit (`/herramientas-ia/kit`) cuesta $81.000 COP, la misma regla de millar superior que los
+planes (USD 25 × $3.230). La referencia es `oa-kit-*`. Adjudika tiene que reenviar también ese
+prefijo a `/api/herramientas/evento`. El zip se entrega con un enlace que vence a los 14 días.
+`npm run kit:pending` lista las órdenes; `--link` imprime el enlace.
+
+```bash
+npm run offers:check
+npm run lead:list
+npm run kit:pending
+```
 
 La llave privada de Wompi no es necesaria para este flujo. La consulta individual de una
 transacción se autentica con la llave pública, según la API de Wompi.

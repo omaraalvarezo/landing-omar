@@ -35,6 +35,9 @@
     "content:new:casos": "node scripts/content-new.mjs --type casos",
     "content:new:tendencias": "node scripts/content-new.mjs --type tendencias",
     "content:check": "node scripts/check-content.mjs",
+    "offers:check": "node --experimental-strip-types scripts/check-offers.mjs",
+    "lead:list": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-leads.mjs",
+    "kit:pending": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-kit-orders.mjs",
     "prepare": "husky"
   },
   "dependencies": {

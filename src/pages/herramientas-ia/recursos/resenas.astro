@@ -1,0 +1,187 @@
+---
+import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import { breadcrumb, faqNode, SITE } from '../../../lib/editorial';
+
+const title = 'Generador de respuestas a reseñas de Google';
+const description =
+  'Arma un borrador según las estrellas, el servicio y el canal que tú escribes. Las frases salen de plantillas en el navegador. La reseña no se envía a un servidor.';
+const url = `${SITE}/herramientas-ia/recursos/resenas`;
+const faqs = [
+  {
+    q: '¿Esto publica la respuesta en Google?',
+    a: 'No. Deja un borrador para que lo copies. Tú decides si lo publicas.',
+  },
+  {
+    q: '¿Usa una API de pago?',
+    a: 'No. En este sitio no hay una clave de modelo para reseñas. La respuesta sale de plantillas en tu navegador y no reescribe el texto de la reseña.',
+  },
+  {
+    q: '¿Ofrece un descuento si la reseña es mala?',
+    a: 'No. La plantilla agradece, no discute y, si escribiste un canal, invita a seguir por ahí. No inventa una compensación.',
+  },
+];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      '@id': `${url}#app`,
+      name: 'Respuestas a reseñas de Google',
+      description,
+      url,
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'COP' },
+      isAccessibleForFree: true,
+      inLanguage: 'es',
+    },
+    faqNode(url, faqs),
+    breadcrumb([
+      { name: 'Inicio', url: SITE },
+      { name: 'Herramientas de IA', url: `${SITE}/herramientas-ia` },
+      { name: 'Recursos', url: `${SITE}/herramientas-ia/recursos` },
+      { name: 'Reseñas', url },
+    ]),
+  ],
+};
+---
+
+<EditorialFrame
+  documentTitle={title}
+  description={description}
+  kicker="Plantilla · sin API"
+  heading="Respuestas a reseñas de Google."
+  crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { href: '/herramientas-ia/recursos', label: 'Recursos' }, { label: 'Reseñas' }]}
+  jsonLd={jsonLd}
+>
+  <p>La plantilla usa el nombre del negocio, las estrellas, el servicio y el canal que escribas. No resume la reseña ni admite una falla que tú no hayas puesto en la frase opcional.</p>
+  <form class="dir-form" id="resena-form">
+    <label>
+      <span>Nombre del negocio</span>
+      <input name="business" required maxlength="80" />
+    </label>
+    <label>
+      <span>Tipo</span>
+      <select name="kind">
+        <option value="taller">Taller</option>
+        <option value="detailing">Detailing</option>
+        <option value="otro">Otro</option>
+      </select>
+    </label>
+    <fieldset class="stars">
+      <legend>Estrellas</legend>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <label>
+          <input type="radio" name="stars" value={String(star)} required />
+          <span>{star}</span>
+        </label>
+      ))}
+    </fieldset>
+    <label>
+      <span>Nombre del cliente, si lo usas</span>
+      <input name="customer" maxlength="40" />
+    </label>
+    <label>
+      <span>Servicio que sí hiciste</span>
+      <input name="service" maxlength="80" placeholder="déjalo vacío si no lo vas a mencionar" />
+    </label>
+    <label>
+      <span>Canal para seguir la conversación</span>
+      <input name="channel" maxlength="80" placeholder="WhatsApp, teléfono o vacío" />
+    </label>
+    <label>
+      <span>Frase tuya, opcional</span>
+      <input name="note" maxlength="160" placeholder="se pega tal cual, si la escribes" />
+    </label>
+    <label>
+      <span>Texto de la reseña, para tenerlo a la vista</span>
+      <textarea name="review" maxlength="1000" placeholder="no se envía y no se reescribe"></textarea>
+    </label>
+    <button type="submit">Armar borrador</button>
+  </form>
+  <div class="calc-result" id="resena-result" hidden>
+    <p data-draft></p>
+    <p class="price-note" data-source hidden></p>
+    <button type="button" data-copy>Copiar borrador</button>
+    <p data-copy-status></p>
+  </div>
+  <div class="faq">
+    {faqs.map((faq) => (
+      <>
+        <h3>{faq.q}</h3>
+        <p>{faq.a}</p>
+      </>
+    ))}
+  </div>
+  <nav class="offer-links" aria-label="Sigue por aquí">
+    <a href="/herramientas-ia/para/talleres-de-carros">IA para talleres</a>
+    <a href="/herramientas-ia/para/detailing">IA para detailing</a>
+    <a href="/herramientas-ia/prompts-gratis">Prompts de reseñas en el PDF</a>
+  </nav>
+</EditorialFrame>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#resena-form');
+  const box = document.querySelector<HTMLElement>('#resena-result');
+  const draft = box?.querySelector<HTMLElement>('[data-draft]');
+  const source = box?.querySelector<HTMLElement>('[data-source]');
+  const status = box?.querySelector<HTMLElement>('[data-copy-status]');
+
+  function clean(value: FormDataEntryValue | null, max: number): string {
+    return String(value || '').replace(/\s+/g, ' ').trim().slice(0, max);
+  }
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!form.reportValidity() || !draft || !box || !source) return;
+    const data = new FormData(form);
+    const business = clean(data.get('business'), 80);
+    const customer = clean(data.get('customer'), 40);
+    const service = clean(data.get('service'), 80);
+    const channel = clean(data.get('channel'), 80);
+    const note = clean(data.get('note'), 160);
+    const review = clean(data.get('review'), 1000);
+    const kind = clean(data.get('kind'), 20);
+    const stars = Number(data.get('stars'));
+    const who = customer ? `, ${customer}` : '';
+    const subject = service
+      ? `el servicio de ${service}`
+      : kind === 'detailing'
+        ? 'el detailing'
+        : kind === 'taller'
+          ? 'el trabajo en el taller'
+          : 'el trabajo';
+    const follow = channel ? ` Seguimos por ${channel}.` : ' Si quieres, respondemos por el medio donde nos escribiste.';
+    let text = '';
+    if (stars >= 4) {
+      text = `Gracias${who}. Nos alegra que ${subject} te haya servido.${channel ? ` Cuando quieras volver, estamos en ${channel}.` : ' Cuando quieras volver, aquí estamos.'}`;
+    } else if (stars === 3) {
+      text = `Gracias${who} por contarlo. Tomamos nota de ${subject}.${follow}`;
+    } else {
+      text = `Gracias${who} por escribirlo. Lamentamos que ${subject} no haya quedado bien.${follow}`;
+    }
+    if (note) text += ` ${note}`;
+    text += ` — ${business}`;
+    draft.textContent = text;
+    if (review) {
+      source.hidden = false;
+      source.textContent = `Reseña a la vista, sin reescribir: ${review}`;
+    } else {
+      source.hidden = true;
+      source.textContent = '';
+    }
+    if (status) status.textContent = '';
+    box.hidden = false;
+  });
+
+  box?.querySelector('button')?.addEventListener('click', async () => {
+    const text = draft?.textContent || '';
+    if (!text || !status) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      status.textContent = 'Copiado';
+    } catch {
+      status.textContent = 'No se pudo copiar';
+    }
+  });
+</script>

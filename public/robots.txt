@@ -3,5 +3,6 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 Disallow: /herramientas-ia/pedido/
+Disallow: /herramientas-ia/kit/pedido/
 
 Sitemap: https://omaralvarezo.co/sitemap.xml

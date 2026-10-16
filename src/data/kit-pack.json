@@ -1,0 +1,83 @@
+{
+  "readme": "Kit de IA para talleres y detailing\nOmar Álvarez · omaralvarezo.co/herramientas-ia/kit\n\nQué hay en esta carpeta:\n- prompts-ia-talleres-detailing-pymes.pdf · 40 prompts. Pega los datos reales. Si falta un dato, no dejes que el modelo lo invente.\n- mensajes-whatsapp.txt · citas, cotización, recordatorio de mantenimiento, reseña y posventa.\n- flujos.txt · pasos con herramientas del directorio. Cada una hace una pieza, no el taller entero.\n- seguimiento-clientes.csv · columnas para anotar clientes. La fila de ejemplo se borra. No trae clientes ni precios.\n\nEl monto, la fecha y el kilometraje los escribes tú. Este kit no publica nada solo.\n",
+  "messages": [
+    {
+      "id": "cita",
+      "title": "Confirmar una cita",
+      "text": "Hola [nombre]. Te confirmo la cita el [fecha] a las [hora] para [servicio].\nTrae el carro [indicación real: documentos, llaves, nivel de combustible]. Si esa hora ya no te sirve, respóndeme y la movemos.\n[nombre del negocio]"
+    },
+    {
+      "id": "cotizacion",
+      "title": "Enviar una cotización",
+      "text": "Hola [nombre]. Cotización de [servicio] para [vehículo]:\n- Incluye: [lo que sí entra]\n- No incluye: [lo que queda por fuera]\n- Precio: [precio que ya definiste]\n- Tiempo estimado de entrega: [fecha u hora que ya definiste]\nEste mensaje no cambia el precio. Si quieres ajustar el alcance, dímelo antes de empezar.\n[nombre del negocio]"
+    },
+    {
+      "id": "mantenimiento",
+      "title": "Recordatorio de mantenimiento",
+      "text": "Hola [nombre]. Según lo que anotamos el [fecha de la visita], el siguiente mantenimiento de [vehículo] queda para [fecha o kilometraje que el cliente dio].\nNo estoy calculando un kilometraje nuevo. Si ya lo hiciste en otro lado, dime la fecha o el kilometraje real y actualizo la nota.\n¿Agendamos [servicio]?\n[nombre del negocio]"
+    },
+    {
+      "id": "resena",
+      "title": "Pedir una reseña",
+      "text": "Hola [nombre]. Gracias por traer [vehículo] para [servicio que sí se hizo].\nSi te quedó bien, una reseña en Google nos sirve. Este es el enlace: [enlace de tu ficha].\nSi algo quedó mal, escríbeme primero por aquí y lo vemos.\n[nombre del negocio]"
+    },
+    {
+      "id": "posventa",
+      "title": "Posventa",
+      "text": "Hola [nombre]. Pasaron [días que tú elijas] desde que entregamos [vehículo] con [servicio].\n¿Quedó como esperabas? Si hay un ruido, una mancha o algo que no te cierra, respóndeme con qué pasa y desde cuándo. No lo adivino por este mensaje.\n[nombre del negocio]"
+    }
+  ],
+  "flows": [
+    {
+      "tool": "chatgpt",
+      "title": "Pasar las notas del carro a un borrador de cotización",
+      "steps": [
+        "Abre ChatGPT. Pega solo las notas que tomaste en el carro: qué pediste revisar, qué viste y qué repuesto ya confirmaste.",
+        "Usa un prompt del PDF de cotización. Pide que separe lo que entra, lo que no entra y las preguntas que faltan.",
+        "Borra cualquier precio o tiempo que el modelo haya escrito si tú no lo dictaste. El precio sale de tu lista, no del chat.",
+        "Copia el texto ya corregido al mensaje de cotización de este kit y envíalo tú por WhatsApp."
+      ]
+    },
+    {
+      "tool": "manychat",
+      "title": "Confirmación de cita por WhatsApp",
+      "steps": [
+        "En ManyChat arma un mensaje con la plantilla de cita. Los campos son nombre, fecha, hora y servicio.",
+        "La hora sale de tu agenda. El flujo no ve qué bahía está libre.",
+        "Si la persona responde que no puede, el flujo pide otra franja y te deja la conversación a ti. No confirmes solo con el bot.",
+        "Cuando cierres la hora, mándale la plantilla de confirmación con los datos ya cuadrados."
+      ]
+    },
+    {
+      "tool": "notion",
+      "title": "Tablero simple de clientes",
+      "steps": [
+        "Crea una base en Notion con las mismas columnas del CSV: contacto, vehículo, servicio, estado, próximo paso y fecha.",
+        "Un estado por vez: por cotizar, citado, en curso, entregado, por reseña. No agregues columnas de contabilidad.",
+        "Cada carro nuevo es una fila. Si no tienes el dato, deja la celda vacía.",
+        "El tablero no descuenta inventario ni calcula impuestos. Sirve para no depender de la memoria del día."
+      ]
+    },
+    {
+      "tool": "n8n",
+      "title": "Recordatorio a partir de una fecha que ya anotaste",
+      "steps": [
+        "En n8n, lee la fecha de próximo contacto de tu hoja o de Notion. Esa fecha la escribiste tú.",
+        "El flujo arma el mensaje de mantenimiento y te lo deja listo. No calcula kilometraje ni inventa la visita.",
+        "Revisa el nombre y el servicio antes de enviar. Si la fila está incompleta, el flujo no dispara.",
+        "Después de enviar, anota en la fila que el recordatorio salió y cuándo."
+      ]
+    },
+    {
+      "tool": "capcut",
+      "title": "Pieza de antes y después con fotos reales",
+      "steps": [
+        "Usa solo fotos del mismo carro, tomadas tú, con permiso si se ve una placa o una persona.",
+        "En CapCut pon la foto de antes y la de después. No generes una foto de antes que no exista.",
+        "El texto dice el servicio que hiciste. No pongas una duración ni un precio que no estén en la cotización.",
+        "Publicas tú. El editor no sube el video solo."
+      ]
+    }
+  ],
+  "csv": "fecha_contacto,nombre,telefono,vehiculo,placa,servicio,estado,monto_cop,proximo_paso,fecha_proximo_paso,notas\nYYYY-MM-DD,[nombre],[telefono],[vehiculo],[placa o vacio],[servicio],por_cotizar,[precio o vacio],[proximo paso],YYYY-MM-DD,BORRA ESTA FILA. Es la plantilla, no un cliente.\n"
+}

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import GuideOffers from '../../../components/directory/GuideOffers.astro';
 import PromptCard from '../../../components/directory/PromptCard.astro';
 import { articleNode, breadcrumb, promptsPath, publicEntries, SITE, type PromptEntry } from '../../../lib/editorial';
 
@@ -57,4 +58,5 @@ const jsonLd = {
       {role.prompts.map((prompt) => <PromptCard title={prompt.title} text={prompt.text} />)}
     </section>
   ))}
+  <GuideOffers lead />
 </EditorialFrame>
