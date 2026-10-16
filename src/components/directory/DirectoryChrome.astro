@@ -5,6 +5,7 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/600.css';
 import '../../styles/directory.css';
 import { SOCIALS } from '../../lib/contact';
+import { LEGAL_PAGES } from '../../lib/legal';
 
 interface Props {
   active?: 'directorio' | 'destacar' | 'guias';
@@ -54,6 +55,7 @@ const year = new Date().getFullYear();
       <a href={SOCIALS.tiktok} target="_blank" rel="noopener noreferrer">TikTok</a>
       <a href={SOCIALS.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
       <a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      {LEGAL_PAGES.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
     <p>© {year} · Cúcuta</p>
   </footer>

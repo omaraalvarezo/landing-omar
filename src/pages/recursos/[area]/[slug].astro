@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import Footer from '../../../components/Footer.astro';
 import ResourceDetail from '../../../components/ResourceDetail.astro';
 import { getVisibleAreas, getResourcesByArea, type Area, type Resource } from '../../../lib/resources';
+import { DEFAULT_OG_IMAGE, SITE, WEBSITE_ID, breadcrumbList, personRef } from '../../../lib/schema';
 
 export function getStaticPaths() {
   return getVisibleAreas().flatMap((area) =>
@@ -21,9 +22,37 @@ const { area, resource } = Astro.props;
 
 const title = `${resource.title} — Recursos · Omar Álvarez`;
 const description = resource.description;
+
+const pageUrl = `${SITE}/recursos/${area.slug}/${resource.slug}`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    breadcrumbList([
+      { name: 'Inicio', url: `${SITE}/` },
+      { name: 'Recursos', url: `${SITE}/recursos` },
+      { name: area.label, url: `${SITE}/recursos/${area.slug}` },
+      { name: resource.title, url: pageUrl },
+    ]),
+    {
+      '@type': 'Article',
+      '@id': `${pageUrl}#article`,
+      headline: resource.title,
+      description,
+      inLanguage: 'es',
+      url: pageUrl,
+      mainEntityOfPage: pageUrl,
+      dateModified: resource.updatedAt,
+      articleSection: area.label,
+      image: `${SITE}${DEFAULT_OG_IMAGE}`,
+      author: personRef(),
+      publisher: personRef(),
+      isPartOf: { '@type': 'WebSite', '@id': WEBSITE_ID, url: `${SITE}/` },
+    },
+  ],
+};
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} jsonLd={jsonLd}>
   <ResourceDetail area={area} resource={resource} />
   <Footer />
 </Layout>

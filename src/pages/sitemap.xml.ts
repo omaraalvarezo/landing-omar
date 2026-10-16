@@ -19,6 +19,7 @@ import {
   weekPath,
 } from '../lib/editorial';
 import { getVisibleAreas, getResourcesByArea } from '../lib/resources';
+import { LEGAL } from '../lib/legal';
 
 const SITE = 'https://omaralvarezo.co';
 
@@ -72,6 +73,14 @@ export const GET: APIRoute = async () => {
 
   const urls = [
     { loc: `${SITE}/`, changefreq: 'monthly', priority: '1.0' },
+    { loc: `${SITE}/sobre-mi`, changefreq: 'yearly', priority: '0.5' },
+    // Las páginas legales entran al sitemap cuando Omar apruebe el borrador (LEGAL.draft).
+    ...(LEGAL.draft
+      ? []
+      : [
+          { loc: `${SITE}/privacidad`, changefreq: 'yearly', priority: '0.3' },
+          { loc: `${SITE}/terminos`, changefreq: 'yearly', priority: '0.3' },
+        ]),
     { loc: `${SITE}/herramientas-ia`, changefreq: 'weekly', priority: '0.8' },
     { loc: `${SITE}/herramientas-ia/destacar`, changefreq: 'monthly', priority: '0.4' },
     { loc: `${SITE}/herramientas-ia/prompts-gratis`, changefreq: 'monthly', priority: '0.7' },

@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ConsultingLanding from '../components/consulting/ConsultingLanding.astro';
+import { homeGraph } from '../lib/schema';
 ---
 
 <Layout
@@ -9,6 +10,7 @@ import ConsultingLanding from '../components/consulting/ConsultingLanding.astro'
   showNav={false}
   minimal
   themeColor="#131118"
+  jsonLd={homeGraph()}
 >
   <ConsultingLanding />
 </Layout>

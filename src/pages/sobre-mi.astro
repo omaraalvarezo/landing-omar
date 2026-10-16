@@ -1,0 +1,73 @@
+---
+import LegalFrame from '../components/LegalFrame.astro';
+import { SOCIALS } from '../lib/contact';
+import { PERSON_ID } from '../lib/schema';
+
+// Todo dato de esta página sale de lo que el home ya publica (taller, proyectos, recibos)
+// o del CLAUDE.md raíz. No agregar cifras, clientes ni cargos sin fuente.
+
+const site = 'https://omaralvarezo.co';
+const title = 'Sobre mí · Omar Álvarez';
+const description =
+  'Opero Enzo Motorsport y Arkhē en Cúcuta y construyo sus sistemas. Esto es lo que hago, lo que he construido y cómo trabajo con otras empresas de servicios.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  '@id': `${site}/sobre-mi`,
+  url: `${site}/sobre-mi`,
+  name: title,
+  description,
+  inLanguage: 'es',
+  mainEntity: { '@id': PERSON_ID },
+  isPartOf: { '@type': 'WebSite', name: 'Omar Álvarez', url: site },
+};
+---
+
+<LegalFrame title={title} description={description} kicker="Quién escribe" heading="Sobre mí" jsonLd={jsonLd}>
+  <p>
+    Soy Omar Álvarez. Vivo en Cúcuta, Colombia, y dirijo Grupo Empresarial Enzo, la empresa detrás de dos
+    negocios físicos: <a href="https://enzomotorsport.co" target="_blank" rel="noopener noreferrer">Enzo Motorsport</a>,
+    un taller de detailing automotriz, y <a href="https://arkhespace.co" target="_blank" rel="noopener noreferrer">Arkhē</a>,
+    un coworking café.
+  </p>
+  <p>
+    No vengo de una agencia. Primero me cansé de cotizar en Excel, perseguir reportes, reconstruir cierres y
+    depender de que alguien se acordara. El código vino después, porque mis propias empresas lo necesitaban
+    para vender, cumplir y seguir atendiendo.
+  </p>
+
+  <h2 class="block-title">Lo que he construido</h2>
+  <ul>
+    <li><strong>Enzo Motorsport:</strong> caja, taller, cotización, garantías, asistencia, documentos y reportes. Una cotización pasó de 20 a 2 minutos.</li>
+    <li><strong>Arkhē:</strong> checkout, reservas, validación de pagos y análisis histórico de cómo se usa el espacio. Ver el P&amp;L pasó de hora y media a 10 minutos.</li>
+    <li><strong>Grupo Enzo:</strong> indicadores, alertas y reportes separados por negocio. Un reporte operativo dejó de comerse 10 horas a la semana.</li>
+    <li><strong>Adjudika:</strong> software para leer procesos de contratación pública en SECOP II sin perder el criterio humano.</li>
+  </ul>
+
+  <h2 class="block-title">Qué publico aquí</h2>
+  <ul>
+    <li><a href="/herramientas-ia">Directorio de herramientas de IA para pymes</a>, con guías, comparativas y calculadoras.</li>
+    <li><a href="/recursos">Recursos</a> abiertos: prompts, plantillas, frameworks y skills por área de negocio.</li>
+    <li>Videos cortos en <a href={SOCIALS.tiktok} target="_blank" rel="noopener noreferrer">TikTok</a> sobre las piezas que uso en mis negocios.</li>
+  </ul>
+  <p>
+    Escribo desde la operación: datos antes que adjetivos. Si una herramienta no le sirve a una empresa de
+    servicios, no la recomiendo, aunque esté de moda.
+  </p>
+
+  <h2 class="block-title">Cómo trabajo con otras empresas</h2>
+  <p>
+    Hago una sesión privada de 120 minutos con dueños o socios de empresas de servicios. Usamos el Marco 4C
+    (captar, convertir, cumplir, continuar) para encontrar el cuello de botella que hoy frena la empresa y
+    decidir qué pieza vale la pena construir primero. Si el caso no cabe en dos horas, te lo digo antes.
+  </p>
+  <p><a href="/#contacto">Cuéntame tu caso →</a></p>
+
+  <h2 class="block-title">Dónde encontrarme</h2>
+  <ul>
+    <li><a href={SOCIALS.tiktok} target="_blank" rel="noopener noreferrer">TikTok</a></li>
+    <li><a href={SOCIALS.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
+    <li><a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+  </ul>
+</LegalFrame>

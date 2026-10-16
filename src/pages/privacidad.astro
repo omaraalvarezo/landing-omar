@@ -1,0 +1,177 @@
+---
+import LegalFrame from '../components/LegalFrame.astro';
+import { LEGAL, LEGAL_CITY } from '../lib/legal';
+
+// Aprobado por Omar el 2026-10-16 (persona natural). Describe solo lo que el código del sitio hace hoy
+// (formularios, Resend, Upstash, Wompi, Vercel) más las cookies de Google AdSense, que
+// aplican desde el día en que se activen los anuncios. No es asesoría jurídica.
+
+const title = 'Política de privacidad y tratamiento de datos · Omar Álvarez';
+const description =
+  'Qué datos recoge omaralvarezo.co, para qué los uso, con quién se comparten, qué cookies usan Google y sus socios publicitarios y cómo ejercer tus derechos bajo la Ley 1581 de 2012.';
+
+---
+
+<LegalFrame title={title} description={description} kicker="Datos personales" heading="Política de privacidad" legal>
+  <p>
+    Esta política explica qué datos personales se recogen en <strong>omaralvarezo.co</strong>, para qué
+    se usan y cómo puedes conocerlos, corregirlos o pedir que se borren. Se rige por la Ley Estatutaria
+    1581 de 2012, el Decreto 1377 de 2013 (compilado en el Decreto 1074 de 2015) y las demás normas
+    colombianas de protección de datos personales.
+  </p>
+
+  <h2 class="block-title">1. Responsable del tratamiento</h2>
+  <ul>
+    <li>Responsable: {LEGAL.controllerName}, {LEGAL.controllerType}.</li>
+    {LEGAL.controllerId && <li>Identificación: {LEGAL.controllerId}</li>}
+    <li>Domicilio: {LEGAL_CITY}</li>
+    {LEGAL.address && <li>Dirección: {LEGAL.address}</li>}
+    {LEGAL.phone && <li>Teléfono: {LEGAL.phone}</li>}
+    <li>
+      Correo para consultas y reclamos sobre tus datos:
+      <a href={`mailto:${LEGAL.privacyEmail}`}>{LEGAL.privacyEmail}</a>
+    </li>
+  </ul>
+
+  <h2 class="block-title">2. Qué datos recojo y para qué</h2>
+  <p>Solo recojo los datos que tú escribes en un formulario o los que el navegador envía al visitar el sitio.</p>
+  <table>
+    <thead>
+      <tr><th>Dónde</th><th>Datos</th><th>Para qué</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Formulario de contacto de la consultoría (<a href="/#contacto">/#contacto</a>)</td>
+        <td>Nombre, correo, teléfono (opcional), empresa, etapa del Marco 4C y la descripción del problema.</td>
+        <td>Leer tu caso y responderte por correo con el siguiente paso. Nada más.</td>
+      </tr>
+      <tr>
+        <td>Destacar una herramienta (<a href="/herramientas-ia/destacar">/herramientas-ia/destacar</a>)</td>
+        <td>Nombre y enlace de la herramienta, correo, categoría y descripción.</td>
+        <td>Crear la orden, procesar el pago, publicar el listado y avisarte del estado.</td>
+      </tr>
+      <tr>
+        <td>Kit para talleres (<a href="/herramientas-ia/kit">/herramientas-ia/kit</a>)</td>
+        <td>Nombre, correo y tipo de negocio.</td>
+        <td>Crear la orden, procesar el pago y entregarte el kit.</td>
+      </tr>
+      <tr>
+        <td>PDF de prompts (<a href="/herramientas-ia/prompts-gratis">/herramientas-ia/prompts-gratis</a>)</td>
+        <td>Correo.</td>
+        <td>Entregarte un enlace de descarga que vence a las 24 horas.</td>
+      </tr>
+      <tr>
+        <td>Cualquier página</td>
+        <td>Dirección IP, navegador y páginas visitadas, en los registros técnicos del servidor.</td>
+        <td>Mantener el sitio funcionando, limitar abusos (por ejemplo, máximo 5 envíos por hora del formulario de contacto) y prevenir fraude.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    No vendo tus datos. No uso los datos de un formulario para una finalidad distinta a la que aparece en
+    esta tabla sin pedirte una nueva autorización.
+  </p>
+
+  <h2 class="block-title">3. Con quién se comparten</h2>
+  <p>Para operar el sitio uso proveedores que tratan datos por encargo. Algunos almacenan información fuera de Colombia:</p>
+  <ul>
+    <li><strong>Vercel</strong>: alojamiento del sitio y registros técnicos.</li>
+    <li><strong>Resend</strong>: envío de los correos del formulario de contacto y de los avisos de pedidos.</li>
+    <li><strong>Upstash</strong>: almacén de órdenes, correos del PDF de prompts y límite de envíos por IP.</li>
+    <li><strong>Wompi</strong>: procesamiento de pagos del directorio y del kit. Los datos de tu tarjeta o cuenta los recibe Wompi directamente; este sitio no los ve ni los guarda.</li>
+    <li><strong>Google</strong>: anuncios, cuando estén activos (ver sección 4).</li>
+  </ul>
+  <p>
+    Si la lista de novedades está conectada a un proveedor de boletines (Beehiiv o Buttondown), el correo
+    que dejes en ese formulario lo recibe ese proveedor directamente.
+  </p>
+
+  <h2 class="block-title">4. Cookies y publicidad</h2>
+  <p>
+    El sitio no usa cookies propias para rastrearte. Guarda en tu navegador (almacenamiento local, no
+    cookie) solo tu preferencia de tema claro u oscuro en algunas páginas.
+  </p>
+  <p>
+    Este sitio puede mostrar anuncios de Google AdSense. Cuando los anuncios estén activos:
+  </p>
+  <ul>
+    <li>
+      Proveedores externos, incluido Google, usan cookies para mostrar anuncios basados en tus visitas
+      anteriores a este sitio o a otros sitios web.
+    </li>
+    <li>
+      Las cookies de publicidad de Google, como la cookie DoubleClick, permiten que Google y sus socios
+      te muestren anuncios según tus visitas a este y a otros sitios de internet.
+    </li>
+    <li>
+      Puedes desactivar la publicidad personalizada en la
+      <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">configuración de anuncios de Google</a>.
+      También puedes desactivar las cookies de otros proveedores de publicidad personalizada en
+      <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener noreferrer">aboutads.info</a>.
+    </li>
+    <li>
+      Google explica cómo usa los datos de los sitios que muestran sus anuncios en
+      <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">policies.google.com/technologies/partner-sites</a>.
+    </li>
+  </ul>
+  <p>
+    Si visitas el sitio desde el Espacio Económico Europeo, el Reino Unido o Suiza, verás un mensaje de
+    consentimiento antes de que se usen cookies publicitarias. Puedes cambiar tu decisión en cualquier
+    momento desde ese mismo mensaje.
+  </p>
+  <p>
+    También puedes bloquear o borrar cookies desde la configuración de tu navegador. El sitio sigue
+    funcionando sin ellas.
+  </p>
+
+  <h2 class="block-title">5. Tus derechos</h2>
+  <p>Como titular de los datos tienes derecho a:</p>
+  <ul>
+    <li>Conocer, actualizar y rectificar tus datos.</li>
+    <li>Pedir prueba de la autorización que diste.</li>
+    <li>Saber qué uso se le ha dado a tus datos.</li>
+    <li>Revocar la autorización o pedir que se borren tus datos, cuando no exista un deber legal o contractual de conservarlos.</li>
+    <li>Acceder gratis a tus datos.</li>
+    <li>Presentar quejas ante la Superintendencia de Industria y Comercio (SIC) después de agotar la consulta o el reclamo conmigo.</li>
+  </ul>
+
+  <h2 class="block-title">6. Cómo hacer una consulta o un reclamo</h2>
+  <p>
+    Escribe al correo de la sección 1 con tu nombre, el dato o la solicitud concreta y un medio para
+    responderte.
+  </p>
+  <ul>
+    <li><strong>Consultas</strong> (qué datos tengo tuyos): respuesta en máximo 10 días hábiles. Si no alcanza, te aviso el motivo y respondo dentro de los 5 días hábiles siguientes.</li>
+    <li><strong>Reclamos</strong> (corregir, actualizar, borrar o revocar): respuesta en máximo 15 días hábiles. Si no alcanza, te aviso el motivo y respondo dentro de los 8 días hábiles siguientes.</li>
+  </ul>
+
+  <h2 class="block-title">7. Cuánto tiempo guardo los datos</h2>
+  <p>
+    Guardo los datos solo el tiempo necesario para la finalidad para la que los diste:
+  </p>
+  <ul>
+    <li><strong>Mensajes del formulario de contacto:</strong> hasta 2 años después del último intercambio, salvo que antes me pidas borrarlos.</li>
+    <li><strong>Correo del PDF de prompts:</strong> hasta que me pidas borrarlo o revoques la autorización.</li>
+    <li><strong>Órdenes y soportes de pago:</strong> el tiempo que exijan las normas contables y tributarias, hasta 10 años.</li>
+    <li><strong>Registros técnicos del servidor:</strong> el tiempo que los conserve el proveedor de alojamiento.</li>
+  </ul>
+
+  <h2 class="block-title">8. Seguridad</h2>
+  <p>
+    El sitio funciona solo por HTTPS, los formularios validan los datos en el servidor y los pagos ocurren
+    en la pasarela de Wompi. Ningún sistema es infalible: si detecto un incidente que afecte tus datos, te
+    aviso y lo reporto ante la SIC como exige la ley.
+  </p>
+
+  <h2 class="block-title">9. Menores de edad</h2>
+  <p>
+    El sitio está dirigido a dueños y equipos de empresas. No recojo a sabiendas datos de menores de 18
+    años.
+  </p>
+
+  <h2 class="block-title">10. Cambios a esta política</h2>
+  <p>
+    Si cambio esta política, publico la nueva versión en esta página con la fecha de actualización. Si el
+    cambio afecta la finalidad del tratamiento, te pido una nueva autorización.
+  </p>
+</LegalFrame>

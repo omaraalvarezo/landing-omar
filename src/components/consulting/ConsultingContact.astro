@@ -92,7 +92,8 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
   <label class="contact-form__accept">
     <input name="accepted" type="checkbox" required />
     <span>
-      Autorizo a Omar Álvarez a usar estos datos solo para responder mi solicitud de consultoría.
+      Autorizo a Omar Álvarez a usar estos datos solo para responder mi solicitud de consultoría, según la
+      <a href="/privacidad" target="_blank" rel="noopener">política de privacidad</a>.
     </span>
   </label>
 
@@ -507,6 +508,12 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
     font-size: 13px;
     line-height: 1.55;
     cursor: pointer;
+  }
+
+  .contact-form__accept a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .contact-form__accept input {

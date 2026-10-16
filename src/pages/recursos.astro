@@ -4,16 +4,26 @@ import ResourcesHero from '../components/ResourcesHero.astro';
 import AreaHub from '../components/AreaHub.astro';
 import Footer from '../components/Footer.astro';
 import { getAreasWithCounts } from '../lib/resources';
+import { SITE, breadcrumbList } from '../lib/schema';
 
 const areas = getAreasWithCounts();
 
 // El contacto es el formulario del home; ya no hay agenda de 20 min por Cal.com.
 const contactHref = '/#contacto';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  ...breadcrumbList([
+    { name: 'Inicio', url: `${SITE}/` },
+    { name: 'Recursos', url: `${SITE}/recursos` },
+  ]),
+};
 ---
 
 <Layout
   title="Recursos — biblioteca abierta de IA aplicada · Omar Álvarez"
   description="Biblioteca abierta de IA aplicada por área de negocio. Prompts, plantillas, frameworks y skills para Claude. Descarga libre, sin email."
+  jsonLd={jsonLd}
 >
   <section class="container-page recursos__inner">
     <ResourcesHero />

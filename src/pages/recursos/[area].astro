@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/Footer.astro';
 import AreaIndex from '../../components/AreaIndex.astro';
 import { getVisibleAreas, getResourcesByArea, type Area } from '../../lib/resources';
+import { SITE, breadcrumbList } from '../../lib/schema';
 
 export function getStaticPaths() {
   return getVisibleAreas().map((area) => ({
@@ -21,9 +22,19 @@ const title = `${area.label} · Recursos · Omar Álvarez`;
 const description = `${resources.length} recurso${
   resources.length === 1 ? '' : 's'
 } de IA aplicada para ${area.label}. Descarga libre, sin email.`;
+
+const pageUrl = `${SITE}/recursos/${area.slug}`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  ...breadcrumbList([
+    { name: 'Inicio', url: `${SITE}/` },
+    { name: 'Recursos', url: `${SITE}/recursos` },
+    { name: area.label, url: pageUrl },
+  ]),
+};
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} jsonLd={jsonLd}>
   <AreaIndex area={area} resources={resources} />
   <Footer />
 </Layout>

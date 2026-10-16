@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { getTool, type Tool } from './directory';
+import { personRef } from './schema';
 
 export const SITE = 'https://omaralvarezo.co';
 
@@ -183,8 +184,8 @@ export function articleNode(input: {
     articleSection: input.section,
     mainEntityOfPage: input.url,
     ...(input.citation ? { citation: input.citation } : {}),
-    author: { '@type': 'Organization', name: 'Omar Álvarez', url: SITE },
-    publisher: { '@type': 'Organization', name: 'Omar Álvarez', url: SITE },
+    author: personRef(),
+    publisher: personRef(),
     isPartOf: { '@type': 'WebSite', name: 'Omar Álvarez', url: SITE },
   };
 }

@@ -1,0 +1,5 @@
+# ads.txt de omaralvarezo.co
+# Plantilla: AdSense todavía no está activo.
+# Para activarlo, reemplaza XXXXXXXXXXXXXXXX por los 16 dígitos del pub-ID de la cuenta
+# (el mismo de src/lib/ads.ts, sin el prefijo "ca-") y quita el "#" de la línea siguiente.
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
