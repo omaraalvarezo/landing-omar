@@ -1,3 +1,5 @@
+import { getSecret } from 'astro:env/server';
+
 // Cliente Wompi compartido por el directorio (oa-directorio-*) y el kit (oa-kit-*).
 // La consultoría ya no cobra en línea desde 2026-10-16.
 const CHARGE_CURRENCY = 'COP';
@@ -27,7 +29,7 @@ export interface WompiTransaction {
 }
 
 function env(name: keyof ImportMetaEnv): string {
-  return String(import.meta.env[name] || '').trim();
+  return String(getSecret(String(name)) || '').trim();
 }
 
 export function getWompiConfig(): WompiConfig | null {
