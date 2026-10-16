@@ -1,4 +1,4 @@
-# PROYECTO: omaralvarezo.co — Consultoría 2H v3.3
+# PROYECTO: omaralvarezo.co — Consultoría 2H v3.5
 
 ## Contexto
 
@@ -6,17 +6,18 @@
 
 **Objetivo:** convertir tráfico de TikTok en una única sesión privada de 120 minutos para dueños o
 socios de empresas de servicios. El visitante debe entender primero cómo piensa y qué ha construido
-Omar; el precio y el brief aparecen después de la prueba.
+Omar; el formulario de contacto aparece después de la prueba. Desde v3.5 (2026-10-16) la
+consultoría **no cobra en línea**: no hay precio público.
 
 **Posicionamiento:** Omar no vende “IA” en abstracto ni se presenta como coach. Opera negocios
 físicos, construye sus sistemas y ayuda a otra empresa a decidir qué pieza vale la pena construir
 primero.
 
 **Recorrido:** TikTok → sistema vivo → evidencia operativa → Marco 4C → proyectos → sesión → encaje →
-FAQ → brief → Wompi → verificación server-side → Cal.com.
+FAQ → formulario de contacto → correo de Omar → Omar responde con el siguiente paso.
 
-No hay llamada gratuita, paquetes, retainer, contacto directo público, descuento inventado,
-temporizador ni escasez fabricada.
+No hay paquetes, retainer, descuento inventado, temporizador ni escasez fabricada. El correo de
+Omar solo aparece como respaldo cuando el envío del formulario falla.
 
 ---
 
@@ -26,16 +27,13 @@ temporizador ni escasez fabricada.
 |---|---|
 | Producto | Sesión privada para diseñar un sistema operativo con IA |
 | Duración | 120 minutos |
-| Precio base | `USD 797` |
-| Cobro | COP con tasa operativa diaria |
-| Tasa | TRM oficial + 1,65%, redondeada hacia arriba al múltiplo de `$10 COP` |
-| Pago | 100% anticipado por Wompi |
-| Agenda | Cal.com solo después de un pago `APPROVED` |
+| Precio | No se publica. Omar lo da por correo después de leer el caso |
+| Pago | Fuera del sitio, acordado con Omar (ya no hay Wompi ni TRM para la consultoría) |
+| Entrada | Formulario `#contacto-consultoria` → `POST /api/contacto` → Resend → correo de Omar |
 | Participantes | Dueño de la decisión + hasta 2 personas del equipo |
 | Incluye | Preparación, sesión, mapa del sistema, documento, grabación y 7 días de dudas puntuales |
 
-Si el brief no cabe en dos horas o no existe encaje, la reserva no se aprueba y se devuelve el 100%.
-Se puede reprogramar una vez con mínimo 24 horas de aviso.
+Si el caso no cabe en dos horas o no hay encaje, Omar lo dice antes de agendar.
 
 ---
 
@@ -142,8 +140,8 @@ Datos antes que adjetivos. Primera persona. Frases cortas. No inventar métricas
 5. **Sistemas.** Rail horizontal de Enzo, Arkhē, Adjudika y Grupo Enzo con interfaces code-native.
 6. **Sesión.** Ruta continua 00–120 y entregables.
 7. **Encaje y costo.** Filtro explícito + costo de construir la pieza equivocada.
-8. **FAQ.** Condiciones, TRM, alcance, pago y agenda sin letra pequeña.
-9. **Reserva.** Precio, conversión diaria, brief 4C, Wompi y handoff a Cal.com.
+8. **FAQ.** Condiciones, alcance, costo y siguiente paso sin letra pequeña.
+9. **Contacto (`#contacto`).** Brief 4C → formulario → correo de Omar.
 
 La navegación cambia su CTA de “empezar el recorrido” a “reservar 2 horas” después de que el usuario
 llega a los sistemas. También se retira al avanzar hacia abajo y reaparece al subir, para no tapar
@@ -151,34 +149,24 @@ copy ni campos en móvil; si contiene foco de teclado permanece visible.
 
 ---
 
-## Invariantes de pago y agenda
+## Invariantes del formulario de contacto
 
-Estas reglas no se modifican por razones visuales:
+1. El servidor valida todo de nuevo (límites en `src/lib/consulting.ts` → `CONTACT_LIMITS`); nunca
+   confía en el navegador.
+2. Honeypot `website`: si viene lleno se responde OK sin enviar nada.
+3. Rate limit de 5 envíos por hora por IP con Upstash; si Upstash falla, no se bloquea el contacto.
+4. Sin `RESEND_API_KEY`, o si Resend falla, responde 503/502 con `fallbackEmail` y el navegador
+   ofrece un `mailto:` con el mensaje ya escrito. El formulario no borra lo escrito si falla.
+5. Remitente: `CONTACT_FROM_EMAIL` → `DIRECTORY_NOTIFY_FROM` → `onboarding@resend.dev`. Destino:
+   `CONTACT_TO_EMAIL` o `omaraalvarezo@gmail.com`. `reply_to` es el correo del visitante.
+6. Las rutas viejas `/consultoria/agendar` y `/consultoria/agenda/*` redirigen a `/#contacto`
+   (`vercel.json`). Los pagos de consultoría emitidos antes de v3.5 se atienden a mano.
 
-1. El servidor consulta la TRM oficial cuya vigencia cubre la fecha de Bogotá.
-2. Aplica `1,65%` y redondea la tasa operativa hacia arriba al siguiente múltiplo de `$10 COP`.
-3. La página muestra precio USD, TRM oficial, tasa aplicada y total exacto antes de pagar.
-4. No existe fallback manual entre fechas. Una lectura oficial ya verificada solo puede reutilizarse
-   durante la misma fecha de Bogotá; si no hay tasa vigente, el checkout falla cerrado.
-5. El servidor recalcula el monto. Nunca confía en un total enviado por el navegador.
-6. La referencia codifica monto y fecha; la firma de integridad protege el Checkout Web.
-7. Un redirect no prueba el pago. Cal.com solo se revela cuando Wompi confirma `APPROVED`, referencia
-   correcta, monto exacto y moneda `COP`.
-8. Las referencias heredadas por `$2.400.000 COP` siguen verificándose para no romper pagos emitidos.
-9. La orden, cotización y brief se escriben como eventos append-only en la bitácora Supabase de
-   Adjudika **antes** de devolver la URL de Wompi. La landing solo accede al endpoint interno con HMAC;
-   nunca recibe la `service_role`. Si esa escritura falla, el checkout falla cerrado.
-10. El acceso a cada orden usa una cookie aleatoria `HttpOnly; Secure; SameSite=Lax`; Wompi recibe
-    solo un ID público de orden. El ID de transacción puede llegar por redirect o por webhook.
-11. La cuenta personal conserva su único webhook en Adjudika. Ese endpoint verifica la firma original,
-    guarda un inbox durable, reconsulta la API y procesa directamente solo `oa-consultoria-2h-*`.
-    La landing nunca decide el estado desde el navegador; lee la orden por el canal HMAC. `APPROVED`
-    es idempotente, una anulación de la misma transacción revoca el acceso y un doble cobro alerta.
-
-El directorio `/herramientas-ia` no entra en estas reglas. Usa el prefijo `oa-directorio-*`,
-precios COP fijos y Upstash. No escribe en Adjudika ni desbloquea Cal.com. El kit de talleres
+El directorio `/herramientas-ia` **sí conserva su cobro Wompi**: usa el prefijo `oa-directorio-*`,
+precios COP fijos y Upstash, con el cliente compartido `src/lib/wompi.ts` y los formatos de
+`src/lib/money.ts`. No escribe en Adjudika ni desbloquea Cal.com. El kit de talleres
 usa otro prefijo, `oa-kit-*`, el mismo endpoint de eventos y el mismo Upstash. El webhook de
-Adjudika sigue procesando solo `oa-consultoria-2h-*`. Las guías viven en colecciones Markdown
+Adjudika reenvía `oa-directorio-*` y `oa-kit-*` a `/api/herramientas/evento`. Las guías viven en colecciones Markdown
 (`src/content/`) y no cambian el cobro.
 
 ---
@@ -191,24 +179,19 @@ src/
 │   ├── index.astro
 │   ├── consultoria/agendar.astro
 │   ├── consultoria/agenda/[orderId].astro
-│   └── api/consultoria/
-│       ├── checkout.ts
-│       ├── quote.ts
-│       └── status.ts
+│   └── api/contacto.ts          ← formulario → Resend → correo de Omar
 ├── layouts/
 │   └── Layout.astro
 ├── components/consulting/
 │   ├── ConsultingLanding.astro  ← relato, escenas y motion
 │   ├── SystemIgnition.astro     ← mapa SVG 4C code-native
-│   ├── CheckoutForm.astro       ← brief + cotización + Wompi
-│   └── PaidCalendar.astro       ← verificación + Cal.com
+│   ├── ConversionCTA.astro      ← CTAs intermedios hacia el formulario
+│   └── ConsultingContact.astro  ← brief 4C + formulario de contacto
 └── lib/
-    ├── consulting.ts            ← precio y reglas comerciales
+    ├── consulting.ts            ← datos de la sesión y límites del formulario
     ├── framework.ts             ← 4C canónicas
-    ├── trm.ts                   ← fuente oficial, spread y cotización
-    ├── consulting-orders.ts     ← cliente HMAC del event store durable de Adjudika
-    ├── consulting-payment.ts    ← resolución nueva/legacy y acceso privado
-    └── wompi-consulting.ts      ← firma y verificación
+    ├── wompi.ts                 ← cliente Wompi del directorio y el kit
+    └── money.ts                 ← formatos COP/USD
 
 public/
 ├── og-image.svg                 ← OG “Sistema vivo” 1200×630
@@ -268,9 +251,8 @@ Fuentes locales clave para decisiones del home:
 - Tailwind 4 como plugin de Vite (`@tailwindcss/vite`); el tema sigue en `tailwind.config.mjs` vía `@config`.
 - Variables privadas en runtime con `getSecret()` de `astro:env/server`. `import.meta.env` se congela
   en el build desde Astro 6 y solo sirve para las `PUBLIC_*`.
-- Wompi Checkout Web en COP.
-- TRM de Superfinanciera vía Datos Abiertos Colombia.
-- Cal.com inline después del pago aprobado.
+- Resend para el formulario de contacto de la consultoría.
+- Wompi Checkout Web en COP solo para el directorio y el kit.
 - Bricolage Grotesque Variable + IBM Plex Sans Variable + IBM Plex Mono, self-hosted con Fontsource.
 - Sin WebGL, imágenes remotas, loader o dependencia visual externa en el home.
 
@@ -291,10 +273,10 @@ npm run preview
 - [ ] Hero llega a `data-phase="3"` con scroll y muestra el estado final con reduced motion.
 - [ ] Sin overflow horizontal a 390 px y 1440 px.
 - [ ] C1/C2/C3/C4 conservan coral/púrpura/cobalto/lima en landing, brief y agenda.
-- [ ] Precio ausente del hero y presente en reserva.
-- [ ] `/api/consultoria/quote` devuelve `priceUsd=797`, `spreadBps=165` y una tasa operativa ≥ TRM.
-- [ ] Formulario conserva required, límites y selección 4C.
-- [ ] Ningún error de consola en home ni handoff.
+- [ ] Ningún precio de la consultoría en el home ni en el JSON-LD.
+- [ ] `POST /api/contacto` sin key local devuelve 503 con `fallbackEmail`; con datos inválidos, 400.
+- [ ] Formulario conserva required, límites, honeypot y selección 4C.
+- [ ] Ningún error de consola en el home.
 - [ ] No se ejecuta un pago real durante QA automático.
 - [ ] El archivo temporal `public/resources/~$marco-4c-servicios-omar-alvarez.pptx` es del usuario: no
   borrar, modificar ni versionar.
@@ -304,13 +286,17 @@ npm run preview
 1. Leer este archivo completo.
 2. Revisar `log.md` y `git status` antes de editar.
 3. Leer la decisión `wiki/decisiones/sistema-vivo-control-room.md`.
-4. Mantener los invariantes de TRM/Wompi/Cal.com.
+4. Mantener los invariantes del formulario de contacto y del cobro del directorio.
 5. Validar visualmente desktop, móvil y reduced motion antes de publicar.
 
 ## Changelog breve
 
 - **2026.10.16 · fichas ampliadas:** colección `src/content/fichas/` con tarea, caso, límites, alternativas y checklist de pago para las 32 herramientas, con fuentes oficiales. No toca `tools.json` ni Wompi.
 - **2026.10.16 · dependencias:** Astro 7, adapter de Vercel 11 y Tailwind 4. `npm audit` queda en cero. Las variables privadas pasan a `getSecret()` para no congelarse en el build.
+- **2026.10.16 · v3.5:** se elimina el cobro de la consultoría (Wompi, TRM, órdenes en Adjudika y
+  Cal.com tras pago). Entra el formulario de contacto que llega al correo de Omar. El directorio y
+  el kit conservan su cobro.
+
 - **2026.10.16 · ofertas del directorio:** PDF de prompts con correo en Upstash, kit `oa-kit-*` a $81.000 y calculadoras en `/herramientas-ia/recursos`. El checkout queda cerrado si faltan las variables de pago.
 - **2026.10.16 · guías:** colecciones en `/herramientas-ia` para tareas, noticias, prompts, herramienta de la semana, comparativas, alternativas, casos y tendencias. Publicar es agregar un Markdown.
 - **2026.10.16 · directorio:** `/herramientas-ia` con 32 herramientas, fichas, categorías, planes en COP y checkout Wompi separado de la consultoría (`oa-directorio-*`).

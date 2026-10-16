@@ -1,24 +1,20 @@
 ---
-// FAB: agendar 20 min. Dispara el modal Cal.com vía data-cal-link
-// (requiere <CalRuntime /> montado en Layout.astro).
+// FAB de contacto: lleva al formulario del home (/#contacto).
+// La consultoría ya no agenda por Cal.com ni ofrece llamada de 20 minutos.
 //
 // Comportamiento: siempre visible en mobile; en desktop aparece tras 25% scroll.
-import { Calendar } from '@lucide/astro';
-import { calButtonAttrs } from '../lib/contact';
-
-const calAttrs = calButtonAttrs();
+import { Mail } from '@lucide/astro';
 ---
 
-<button
+<a
   id="book-float"
-  type="button"
-  {...calAttrs}
-  aria-label="Agendar llamada de 20 minutos"
+  href="/#contacto"
+  aria-label="Ir al formulario de contacto"
   data-state="hidden"
 >
-  <span class="book-float__tooltip" aria-hidden="true">agendar 20 min →</span>
-  <Calendar class="book-float__icon" size={22} stroke-width={1.5} aria-hidden="true" />
-</button>
+  <span class="book-float__tooltip" aria-hidden="true">contacto →</span>
+  <Mail class="book-float__icon" size={22} stroke-width={1.5} aria-hidden="true" />
+</a>
 
 <style>
   #book-float {

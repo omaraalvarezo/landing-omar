@@ -91,7 +91,12 @@ const jsonLd = {
     </p>
     <p class="dir-lead">{tool.desc}</p>
     <div class="dir-actions">
-      <a class="dir-button" href={tool.url} target="_blank" rel="noopener noreferrer">Abrir sitio ↗</a>
+      <a
+        class="dir-button"
+        href={tool.url}
+        target="_blank"
+        rel={sponsor || featured ? 'sponsored noopener noreferrer' : 'noopener noreferrer'}
+      >Abrir sitio ↗</a>
       <a href="/herramientas-ia/destacar">Destacar esta herramienta</a>
     </div>
     <dl class="dir-facts">

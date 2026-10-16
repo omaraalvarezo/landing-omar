@@ -499,6 +499,26 @@ redirect; se evalúa caso por caso si aparecen 404.
 - Calculadoras en `/herramientas-ia/recursos`: ahorro, reseñas por plantilla y cotizador de detailing.
   Los supuestos los escribe el visitante. Decisión: `wiki/decisiones/ofertas-directorio-herramientas-ia.md`.
 
+
+## 2026-10-16 · v3.5 — La consultoría deja de cobrar en línea
+
+- Decisión de Omar: quitar el pago de la consultoría. Quien quiera la sesión escribe por un formulario
+  que llega a su correo.
+- Eliminados: `api/consultoria/{checkout,quote,status}`, `/consultoria/agendar`,
+  `/consultoria/agenda/[orderId]`, `PaidCalendar`, `trm.ts`, `consulting-orders.ts` y
+  `consulting-payment.ts`. Las rutas viejas redirigen a `/#contacto`.
+- Nuevo: `POST /api/contacto` (validación en servidor, honeypot, rate limit Upstash, envío por Resend,
+  respaldo `mailto:`) y `ConsultingContact.astro` (el antiguo brief sin precio ni aceptación de pago).
+- El directorio y el kit conservan Wompi: el cliente compartido pasó a `src/lib/wompi.ts` y los
+  formatos a `src/lib/money.ts`.
+- Pendiente de Omar: `RESEND_API_KEY` y un remitente verificado (`CONTACT_FROM_EMAIL` o
+  `DIRECTORY_NOTIFY_FROM`) en Vercel. Sin eso el formulario ofrece el `mailto:`.
+- QA con 3 agentes en paralelo (home, formulario/APIs/seguridad, contenido/directorio): 36 bugs
+  corregidos. Entre ellos: el mensaje de éxito visible siempre, CSRF por `text/plain` en
+  `/api/contacto`, cuerpos sin límite, `null` que tumbaba los checkouts del directorio, contraste
+  < AA en 9 textos, foco en CTAs invisibles, anclas viejas del nav/footer, CTAs de Cal.com en
+  `/recursos`, overflow a 390 px en guías y voseo. `astro check` 0 errores, build OK.
+
 ## 2026-10-16 — Astro 7, Vercel 11 y Tailwind 4
 
 - El check `npm audit --audit-level=moderate` fallaba en `main` con 24 vulnerabilidades (una crítica
@@ -515,6 +535,45 @@ redirect; se evalúa caso por caso si aparecen 404.
   default de Astro 7 lo quita).
 - Verificado: `astro check` 0 errores, build, dev con home, `/recursos`, `/herramientas-ia` y APIs, y
   sin overflow a 390 y 1440 px. Comparación visual con producción sin diferencias.
+- Integración con la migración: `/api/contacto` lee sus secretos con `getSecret()` (Resend, Upstash y
+  remitente); `PUBLIC_SITE_URL` sigue con `import.meta.env`.
+
+## 2026-10-16 — Preparación para Google AdSense (sin anuncios)
+
+Se deja el sitio listo para solicitar AdSense. No se carga ningún script de anuncios.
+
+- Páginas nuevas `/privacidad` (Ley 1581/2012, cookies de Google/DoubleClick, enlaces a
+  adssettings y partner-sites), `/terminos` y `/sobre-mi`, con marco común `LegalFrame.astro`.
+  Enlazadas desde `Footer.astro`, `DirectoryChrome.astro`, el footer del home y el
+  consentimiento del formulario de contacto.
+- **Las legales son BORRADOR** (`src/lib/legal.ts` → `draft: true`): muestran aviso, salen con
+  `noindex` y no entran al sitemap. Omar debe llenar responsable, cédula/NIT, dirección, correo de
+  habeas data, plazo de conservación, licencia de recursos y política de reembolsos/retracto.
+- AdSense apagado en `src/lib/ads.ts` (`enabled: false`, pub-ID placeholder). El Layout tiene la
+  prop `ads` y solo imprime `google-adsense-account` con un ID de formato válido. `public/ads.txt`
+  es plantilla comentada.
+- `rel="sponsored"` en los enlaces salientes de herramientas con Portada o Destacado vigentes.
+- OG por defecto en PNG 1200×630 (`public/og-image.png`, render del SVG), con `og:locale=es_CO`,
+  `og:site_name` y dimensiones.
+- JSON-LD: el grafo WebSite/Person/ProfessionalService con `@id` solo en el home
+  (`src/lib/schema.ts`); BreadcrumbList en `/recursos/**` y Article en cada recurso. Los Article de
+  las guías ahora tienen autor Person en vez de Organization.
+- `vercel.json`: COOP `same-origin-allow-popups` y una CSP con los dominios de AdSense solo como
+  `Content-Security-Policy-Report-Only`; la CSP real no cambia.
+
+## 2026-10-16 — Legales aprobadas como persona natural
+
+Omar define que el responsable del sitio es él como **persona natural** y pide dejar lo necesario
+para pasar la revisión de AdSense. `src/lib/legal.ts` pasa a `draft: false`: sin aviso de borrador,
+indexables y en el sitemap. Correo de habeas data y de retracto: el de Omar.
+
+- Conservación: mensajes de contacto 2 años, correo del PDF hasta revocar, órdenes y soportes de pago
+  hasta 10 años por normas contables.
+- Recursos: uso y adaptación dentro de la propia empresa; prohibido revender o redistribuir.
+- Retracto de 5 días hábiles (art. 47 Ley 1480), con las excepciones de listado ya publicado y
+  archivo ya descargado; devolución en máximo 30 días calendario.
+- Cédula, dirección y teléfono quedan opcionales (`null`, no se imprimen). El Decreto 1377 pide
+  dirección y teléfono del responsable: llenarlos cuando Omar decida cuáles publicar.
 
 ## 2026-10-16 — Fichas ampliadas del directorio
 

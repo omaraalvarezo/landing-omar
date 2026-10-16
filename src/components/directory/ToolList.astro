@@ -60,7 +60,12 @@ const groups = grouped
               )}
             </div>
             <p>{tool.desc}</p>
-            <a class="tool__out" href={tool.url} target="_blank" rel="noopener noreferrer">
+            <a
+              class="tool__out"
+              href={tool.url}
+              target="_blank"
+              rel={sponsor || featuredLive ? 'sponsored noopener noreferrer' : 'noopener noreferrer'}
+            >
               sitio ↗
             </a>
           </article>

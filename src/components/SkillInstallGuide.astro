@@ -7,7 +7,7 @@ const STEPS = [
   {
     n: '01',
     title: 'Descarga el .md',
-    body: 'Elegí un skill de la lista de abajo y dale a "descargar". Vas a recibir un archivo Markdown con el frontmatter listo.',
+    body: 'Dale a "descargar" en este skill. Vas a recibir un archivo Markdown con el frontmatter listo.',
   },
   {
     n: '02',
@@ -17,7 +17,7 @@ const STEPS = [
   },
   {
     n: '03',
-    title: 'Abrí Claude Code y listo',
+    title: 'Abre Claude Code y listo',
     body: 'En tu próxima sesión, el skill aparece en la lista del tool Skill. Se activa solo cuando coincide con tu petición (según el campo description del frontmatter).',
   },
 ];
@@ -95,7 +95,8 @@ const STEPS = [
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 1fr;
+    /* minmax(0, …): el <pre> del paso no puede ensanchar la columna en móvil. */
+    grid-template-columns: minmax(0, 1fr);
     gap: 24px;
   }
 
@@ -109,6 +110,7 @@ const STEPS = [
   .skill-guide__step {
     display: flex;
     flex-direction: column;
+    min-width: 0;
     gap: 10px;
   }
 

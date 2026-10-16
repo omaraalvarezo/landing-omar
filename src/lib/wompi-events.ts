@@ -1,5 +1,5 @@
 import { getSecret } from 'astro:env/server';
-import { getWompiConfig } from './wompi-consulting';
+import { getWompiConfig } from './wompi';
 
 function env(name: keyof ImportMetaEnv): string {
   return String(getSecret(String(name)) || '').trim();

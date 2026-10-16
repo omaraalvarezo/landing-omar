@@ -1,14 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ConsultingLanding from '../components/consulting/ConsultingLanding.astro';
+import { homeGraph } from '../lib/schema';
 ---
 
 <Layout
   title="Tu empresa como sistema — Consultoría 2H con Omar Álvarez"
-  description="Una sesión privada para dueños y socios: trae un cuello de botella de ventas, operación o postventa y sal con el mapa del sistema que vale la pena construir."
+  description="Omar Álvarez opera Enzo Motorsport y Arkhē y construyó sus sistemas. Cuéntale el cuello de botella de ventas, operación o postventa de tu empresa de servicios y te dice qué vale la pena construir primero."
   showNav={false}
   minimal
   themeColor="#131118"
+  jsonLd={homeGraph()}
 >
   <ConsultingLanding />
 </Layout>

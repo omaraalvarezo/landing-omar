@@ -98,7 +98,7 @@ async function main() {
 
   const resources = await loadResources();
   if (resources.some((r) => r.slug === slug)) {
-    console.error(`✗ Ya existe un recurso con slug "${slug}". Elegí otro.`);
+    console.error(`✗ Ya existe un recurso con slug "${slug}". Elige otro.`);
     rl.close();
     process.exit(1);
   }

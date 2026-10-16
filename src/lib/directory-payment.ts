@@ -8,7 +8,7 @@ import {
   type DirectoryOrder,
   type DirectoryPaymentStatus,
 } from './directory-orders';
-import type { WompiTransaction } from './wompi-consulting';
+import type { WompiTransaction } from './wompi';
 
 export type DirectorySettlement =
   | { ok: true; order: DirectoryOrder; email: DirectoryMailResult | 'skipped' }

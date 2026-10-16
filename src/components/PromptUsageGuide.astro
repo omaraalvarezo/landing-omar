@@ -161,7 +161,8 @@ const STEPS = [
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 1fr;
+    /* minmax(0, …): el <pre> del paso no puede ensanchar la columna en móvil. */
+    grid-template-columns: minmax(0, 1fr);
     gap: 24px;
   }
   @media (min-width: 768px) {
@@ -174,6 +175,7 @@ const STEPS = [
   .prompt-guide__step {
     display: flex;
     flex-direction: column;
+    min-width: 0;
     gap: 10px;
   }
 
