@@ -263,8 +263,11 @@ Fuentes locales clave para decisiones del home:
 
 ## Stack
 
-- Astro 5 + TypeScript strict.
-- Adapter de Vercel para rutas server-side.
+- Astro 7 + TypeScript strict.
+- Adapter de Vercel 11 para rutas server-side.
+- Tailwind 4 como plugin de Vite (`@tailwindcss/vite`); el tema sigue en `tailwind.config.mjs` vía `@config`.
+- Variables privadas en runtime con `getSecret()` de `astro:env/server`. `import.meta.env` se congela
+  en el build desde Astro 6 y solo sirve para las `PUBLIC_*`.
 - Wompi Checkout Web en COP.
 - TRM de Superfinanciera vía Datos Abiertos Colombia.
 - Cal.com inline después del pago aprobado.
@@ -307,6 +310,7 @@ npm run preview
 ## Changelog breve
 
 - **2026.10.16 · fichas ampliadas:** colección `src/content/fichas/` con tarea, caso, límites, alternativas y checklist de pago para las 32 herramientas, con fuentes oficiales. No toca `tools.json` ni Wompi.
+- **2026.10.16 · dependencias:** Astro 7, adapter de Vercel 11 y Tailwind 4. `npm audit` queda en cero. Las variables privadas pasan a `getSecret()` para no congelarse en el build.
 - **2026.10.16 · ofertas del directorio:** PDF de prompts con correo en Upstash, kit `oa-kit-*` a $81.000 y calculadoras en `/herramientas-ia/recursos`. El checkout queda cerrado si faltan las variables de pago.
 - **2026.10.16 · guías:** colecciones en `/herramientas-ia` para tareas, noticias, prompts, herramienta de la semana, comparativas, alternativas, casos y tendencias. Publicar es agregar un Markdown.
 - **2026.10.16 · directorio:** `/herramientas-ia` con 32 herramientas, fichas, categorías, planes en COP y checkout Wompi separado de la consultoría (`oa-directorio-*`).

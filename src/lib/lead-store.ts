@@ -1,3 +1,4 @@
+import { getSecret } from 'astro:env/server';
 import { Redis } from '@upstash/redis';
 
 const TOKEN = /^[a-f0-9]{64}$/;
@@ -6,7 +7,7 @@ const DOWNLOAD_TTL_SECONDS = 24 * 60 * 60;
 const DOWNLOAD_USES = 5;
 
 const STORE_ENVIRONMENT: 'test' | 'production' =
-  import.meta.env.WOMPI_ENVIRONMENT === 'production' ? 'production' : 'test';
+  getSecret('WOMPI_ENVIRONMENT') === 'production' ? 'production' : 'test';
 
 export interface LeadRecord {
   version: 1;
@@ -23,7 +24,7 @@ interface DownloadGrant {
 }
 
 function env(name: keyof ImportMetaEnv): string {
-  return String(import.meta.env[name] || '').trim();
+  return String(getSecret(String(name)) || '').trim();
 }
 
 function storePrefix(): string {

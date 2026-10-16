@@ -499,6 +499,22 @@ redirect; se evalúa caso por caso si aparecen 404.
 - Calculadoras en `/herramientas-ia/recursos`: ahorro, reseñas por plantilla y cotizador de detailing.
   Los supuestos los escribe el visitante. Decisión: `wiki/decisiones/ofertas-directorio-herramientas-ia.md`.
 
+## 2026-10-16 — Astro 7, Vercel 11 y Tailwind 4
+
+- El check `npm audit --audit-level=moderate` fallaba en `main` con 24 vulnerabilidades (una crítica
+  en astro). `npm audit fix` bajó a 15; el resto exigía versiones mayores: astro 7.4, @astrojs/vercel
+  11, Tailwind 4 y @lucide/astro 1.x. Resultado: 0 vulnerabilidades.
+- `@vercel/routing-utils` fija `path-to-regexp@6.1.0`. Un `overrides` lo sube a 6.3.0 y el
+  `config.json` de Vercel sale idéntico byte a byte con y sin el override.
+- Desde Astro 6, `import.meta.env` se reemplaza en el build. `import.meta.env[name]` quedaba vacío en
+  el bundle y las llaves de Wompi, Upstash y Resend no se iban a leer en producción. Las variables
+  privadas pasan a `getSecret()` de `astro:env/server`, que lee en runtime como Astro 5. Solo cambia
+  la línea que lee la variable; la lógica de pago queda igual. Las `PUBLIC_*` siguen igual.
+- Tailwind 4 entra como plugin de Vite y conserva el tema con `@config`. Se fijan el color de borde y
+  de placeholder de la v3. `compressHTML: true` mantiene el espacio entre elementos en línea (el
+  default de Astro 7 lo quita).
+- Verificado: `astro check` 0 errores, build, dev con home, `/recursos`, `/herramientas-ia` y APIs, y
+  sin overflow a 390 y 1440 px. Comparación visual con producción sin diferencias.
 
 ## 2026-10-16 — Fichas ampliadas del directorio
 

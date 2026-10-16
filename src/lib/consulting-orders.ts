@@ -1,3 +1,4 @@
+import { getSecret } from 'astro:env/server';
 import { CONSULTING, expectedAmountForConsultingReference } from './consulting';
 import type { ConsultingQuote } from './trm';
 import type { WompiTransaction } from './wompi-consulting';
@@ -45,10 +46,10 @@ export interface ConsultingOrder {
 const ACCESS_TOKEN = /^[a-f0-9]{64}$/;
 const ORDER_ID = /^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/;
 const STORE_ENVIRONMENT: ConsultingEnvironment =
-  import.meta.env.WOMPI_ENVIRONMENT === 'production' ? 'production' : 'test';
+  getSecret('WOMPI_ENVIRONMENT') === 'production' ? 'production' : 'test';
 
 function env(name: keyof ImportMetaEnv): string {
-  return String(import.meta.env[name] || '').trim();
+  return String(getSecret(String(name)) || '').trim();
 }
 
 async function sha256(value: string): Promise<string> {
