@@ -1,0 +1,90 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import DirectoryChrome from '../../../components/directory/DirectoryChrome.astro';
+import ToolList from '../../../components/directory/ToolList.astro';
+import {
+  categoryPath,
+  getCategories,
+  getToolsByCategory,
+  type ToolCategory,
+} from '../../../lib/directory';
+
+export function getStaticPaths() {
+  return getCategories()
+    .filter((category) => getToolsByCategory(category.slug).length > 0)
+    .map((category) => ({ params: { slug: category.slug }, props: { category } }));
+}
+
+interface Props {
+  category: ToolCategory;
+}
+
+const { category } = Astro.props;
+const tools = getToolsByCategory(category.slug);
+const others = getCategories().filter((item) => item.slug !== category.slug);
+const site = 'https://omaralvarezo.co';
+const pageUrl = `${site}${categoryPath(category.slug)}`;
+const title = `IA para ${category.label.toLowerCase()} en pymes — herramientas`;
+const description = `${tools.length} herramientas de IA para ${category.label.toLowerCase()} en pymes. Directorio en español de Omar Álvarez, con destacados primero.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      name: title,
+      description,
+      inLanguage: 'es',
+      url: pageUrl,
+      isPartOf: { '@type': 'WebSite', name: 'Omar Álvarez', url: site },
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: tools.length,
+        itemListElement: tools.map((tool, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: tool.nombre,
+          url: `${site}/herramientas-ia/${tool.slug}`,
+        })),
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: site },
+        { '@type': 'ListItem', position: 2, name: 'Herramientas de IA', item: `${site}/herramientas-ia` },
+        { '@type': 'ListItem', position: 3, name: category.label, item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+
+<Layout title={title} description={description} showNav={false} minimal themeColor="#FFF8EA">
+  <DirectoryChrome active="directorio">
+    <nav class="crumb" aria-label="Miga de pan">
+      <a href="/herramientas-ia">Herramientas</a>
+      <span aria-hidden="true">/</span>
+      <span>{category.label}</span>
+    </nav>
+    <p class="dir-kicker">Categoría · {tools.length}</p>
+    <h1>IA para {category.label.toLowerCase()}.</h1>
+    <p class="dir-lead">
+      Herramientas de {category.label.toLowerCase()} que una pyme puede probar sin armar un proyecto de seis meses. Las que pagan destacado salen primero.
+    </p>
+    <label class="dir-search">
+      <span>Buscar en {category.label}</span>
+      <input type="search" data-tool-search placeholder="Nombre o tarea" autocomplete="off" />
+    </label>
+    <nav class="dir-cats" aria-label="Otras categorías">
+      <a href="/herramientas-ia">Todas</a>
+      <a href={categoryPath(category.slug)} aria-current="page">{category.label}</a>
+      {others.map((item) => (
+        <a href={categoryPath(item.slug)}>{item.label}</a>
+      ))}
+    </nav>
+    <ToolList tools={tools} grouped as="h3" />
+    <p class="tool-empty" data-tool-empty hidden>Ninguna herramienta de esta categoría coincide.</p>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
+  </DirectoryChrome>
+</Layout>

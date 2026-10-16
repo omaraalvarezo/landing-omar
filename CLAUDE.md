@@ -175,6 +175,10 @@ Estas reglas no se modifican por razones visuales:
     La landing nunca decide el estado desde el navegador; lee la orden por el canal HMAC. `APPROVED`
     es idempotente, una anulación de la misma transacción revoca el acceso y un doble cobro alerta.
 
+El directorio `/herramientas-ia` no entra en estas reglas. Usa el prefijo `oa-directorio-*`,
+precios COP fijos y Upstash. No escribe en Adjudika ni desbloquea Cal.com. El webhook de Adjudika
+sigue procesando solo `oa-consultoria-2h-*`.
+
 ---
 
 ## Archivos vigentes
@@ -212,6 +216,10 @@ public/
 
 Los componentes históricos fuera de `components/consulting/` siguen alimentando `/recursos` u otras
 rutas. No borrarlos durante cambios del home sin revisar sus importaciones.
+
+`/herramientas-ia` vive en `src/pages/herramientas-ia/`, `src/components/directory/` y
+`src/data/tools.json`. El contrato de pago y activación está en
+`wiki/decisiones/directorio-herramientas-ia.md`.
 
 ---
 
@@ -296,6 +304,7 @@ npm run preview
 
 ## Changelog breve
 
+- **2026.10.16 · directorio:** `/herramientas-ia` con 32 herramientas, fichas, categorías, planes en COP y checkout Wompi separado de la consultoría (`oa-directorio-*`).
 - **2026.08.20 · v3.3:** reemplazo total de “expediente editorial” por “Sistema vivo / taller
   abierto”; hero 4C code-native, nueva tipografía, paleta funcional, proyectos interactivos, checkout y
   agenda congruentes.

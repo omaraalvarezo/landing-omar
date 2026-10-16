@@ -1,0 +1,38 @@
+{
+  "basis": {
+    "trmDate": "2026-10-16",
+    "trmCop": 3170.46,
+    "spreadBps": 165,
+    "operationalRateCop": 3230,
+    "rounding": "millar superior"
+  },
+  "plans": [
+    {
+      "id": "basico",
+      "name": "Listado básico",
+      "priceUsd": 29,
+      "amountCop": 94000,
+      "periodDays": 0,
+      "cadence": "Pago único",
+      "summary": "Ficha en el directorio, dentro de su categoría, sin distintivo."
+    },
+    {
+      "id": "destacado",
+      "name": "Destacado",
+      "priceUsd": 49,
+      "amountCop": 159000,
+      "periodDays": 30,
+      "cadence": "30 días",
+      "summary": "Queda de primera en el directorio, con distintivo, durante 30 días."
+    },
+    {
+      "id": "patrocinio",
+      "name": "Patrocinio",
+      "priceUsd": 149,
+      "amountCop": 482000,
+      "periodDays": 30,
+      "cadence": "30 días",
+      "summary": "Portada del directorio y mención en la siguiente nota, durante 30 días."
+    }
+  ]
+}

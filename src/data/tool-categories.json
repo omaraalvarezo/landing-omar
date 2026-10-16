@@ -1,0 +1,14 @@
+[
+  { "slug": "asistentes", "label": "Asistentes" },
+  { "slug": "investigacion", "label": "Investigación" },
+  { "slug": "diseno", "label": "Diseño" },
+  { "slug": "video", "label": "Video" },
+  { "slug": "voz", "label": "Voz" },
+  { "slug": "automatizacion", "label": "Automatización" },
+  { "slug": "atencion-al-cliente", "label": "Atención al cliente" },
+  { "slug": "ventas-y-crm", "label": "Ventas y CRM" },
+  { "slug": "productividad", "label": "Productividad" },
+  { "slug": "desarrollo-web", "label": "Desarrollo web" },
+  { "slug": "escritura", "label": "Escritura" },
+  { "slug": "e-commerce", "label": "E-commerce" }
+]

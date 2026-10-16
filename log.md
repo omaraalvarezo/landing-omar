@@ -459,3 +459,13 @@ redirect; se evalúa caso por caso si aparecen 404.
   el brief guardado se prellena en Cal.com solo después de autorizar orden y cookie.
 - Las rutas privadas llevan `no-store`, `noindex` y `Referrer-Policy: no-referrer`; las rutas antiguas
   por transaction ID siguen disponibles solo para cobros emitidos antes de esta versión.
+
+## 2026-10-16 — Directorio /herramientas-ia
+
+- Directorio estático en español con las 32 herramientas de la fuente, fichas, categorías, buscador
+  y destacados primero. Los planes de listado quedan en COP fijos ($94.000, $159.000 y $482.000),
+  equivalentes redondeados a USD 29 / 49 / 149 con la TRM del 16 oct 2026.
+- El checkout reutiliza la firma de Wompi con el prefijo `oa-directorio-*`. No escribe en Adjudika
+  ni cambia la referencia `oa-consultoria-2h-*`. La orden vive en Upstash y el aviso a Omar sale por
+  Resend si está configurado. La publicación sigue siendo un edit de `src/data/tools.json`.
+- Decisión: `wiki/decisiones/directorio-herramientas-ia.md`.

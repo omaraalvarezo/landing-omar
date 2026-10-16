@@ -91,7 +91,33 @@ WOMPI_PUBLIC_KEY=
 WOMPI_INTEGRITY_SECRET=
 WOMPI_TEST_PUBLIC_KEY=
 WOMPI_TEST_INTEGRITY_SECRET=
+WOMPI_EVENTS_SECRET=
+WOMPI_TEST_EVENTS_SECRET=
+DIRECTORY_NOTIFY_EMAIL=omaraalvarezo@gmail.com
+DIRECTORY_NOTIFY_FROM=
+RESEND_API_KEY=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
 ```
+
+Las variables nuevas son solo del directorio `/herramientas-ia`. La consultoría no las usa.
+El detalle de eventos, correo y activación está en `wiki/decisiones/directorio-herramientas-ia.md`.
+
+## Directorio de herramientas
+
+`/herramientas-ia` lista las herramientas de `src/data/tools.json`. Un agente las agrega o destaca
+sin tocar el checkout de la consultoría:
+
+```bash
+npm run tool:list
+npm run tool:add -- --nombre "Acme" --url "https://acme.com" --categoria asistentes --desc "Qué hace."
+npm run tool:feature -- --slug acme --until 2026-11-16
+npm run tool:feature -- --slug acme --until 2026-11-16 --sponsor
+npm run tool:pending
+```
+
+`featuredUntil` y `sponsorUntil` son fechas inclusivas `YYYY-MM-DD`. Cuando vencen, el distintivo
+se apaga en el siguiente build. El pago no edita ese archivo.
 
 La llave privada de Wompi no es necesaria para este flujo. La consulta individual de una
 transacción se autentica con la llave pública, según la API de Wompi.

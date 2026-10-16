@@ -1,0 +1,65 @@
+export const prerender = false;
+
+import type { APIRoute } from 'astro';
+import { parseDirectoryReference } from '../../../lib/directory';
+import { settleDirectoryPayment } from '../../../lib/directory-payment';
+import { verifyWompiEvent } from '../../../lib/wompi-events';
+import { fetchTransaction } from '../../../lib/wompi-consulting';
+
+function json(status: number, body: object): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+    },
+  });
+}
+
+function referenceOf(payload: unknown): string {
+  if (!payload || typeof payload !== 'object') return '';
+  const reference = (payload as { data?: { transaction?: { reference?: unknown } } }).data?.transaction?.reference;
+  return typeof reference === 'string' ? reference : '';
+}
+
+export const POST: APIRoute = async ({ request }) => {
+  const contentLength = Number(request.headers.get('content-length') || 0);
+  if (contentLength > 100_000) return json(413, { error: 'payload' });
+
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return json(400, { error: 'json' });
+  }
+
+  let verified: { transactionId: string } | null = null;
+  try {
+    verified = await verifyWompiEvent(payload);
+  } catch (error) {
+    console.error('[directorio] eventos de Wompi sin configurar', error);
+    return json(503, { error: 'eventos no configurados' });
+  }
+  if (!verified) return json(401, { error: 'firma invalida' });
+
+  const reference = referenceOf(payload);
+  if (reference.startsWith('oa-consultoria-2h')) return json(200, { ignored: 'consultoria' });
+  if (!parseDirectoryReference(reference)) return json(200, { ignored: 'referencia' });
+
+  try {
+    const transaction = await fetchTransaction(verified.transactionId);
+    if (!transaction || transaction.id !== verified.transactionId) return json(503, { error: 'transaccion' });
+    if (transaction.reference !== reference) return json(401, { error: 'referencia' });
+
+    const settled = await settleDirectoryPayment(transaction);
+    if (!settled.ok) {
+      console.error('[directorio] evento sin orden aplicable', settled.reason, reference);
+      return json(200, { ignored: settled.reason });
+    }
+    if (settled.email === 'failed') return json(503, { error: 'aviso' });
+    return json(200, { ok: true, status: settled.order.status, email: settled.email });
+  } catch (error) {
+    console.error('[directorio] no se pudo registrar el evento', error);
+    return json(503, { error: 'registro' });
+  }
+};

@@ -1,0 +1,71 @@
+---
+import {
+  bogotaToday,
+  categoryLabel,
+  categoryPath,
+  directoryPath,
+  isLiveFeatured,
+  isLiveSponsor,
+  type Tool,
+} from '../../lib/directory';
+
+interface Props {
+  tools: Tool[];
+  grouped?: boolean;
+  as?: 'h2' | 'h3';
+}
+
+const { tools, grouped = false, as = 'h2' } = Astro.props as Props;
+const today = bogotaToday();
+const sponsors = tools.filter((tool) => isLiveSponsor(tool, today));
+const featured = tools.filter((tool) => isLiveFeatured(tool, today) && !isLiveSponsor(tool, today));
+const rest = tools.filter((tool) => !isLiveFeatured(tool, today) && !isLiveSponsor(tool, today));
+
+const groups = grouped
+  ? [
+      sponsors.length ? { title: 'En portada', tools: sponsors } : null,
+      featured.length ? { title: 'Destacadas', tools: featured } : null,
+      rest.length ? { title: sponsors.length || featured.length ? 'Directorio' : '', tools: rest } : null,
+    ].filter((group): group is { title: string; tools: Tool[] } => Boolean(group))
+  : [{ title: '', tools }];
+---
+
+{
+  groups.map((group) => (
+    <section class="tool-group" data-tool-group>
+      {group.title && <h2>{group.title}</h2>}
+      {group.tools.map((tool) => {
+        const label = categoryLabel(tool.categoria);
+        const sponsor = isLiveSponsor(tool, today);
+        const featuredLive = isLiveFeatured(tool, today);
+        return (
+          <article
+            class:list={['tool', { 'tool--sponsor': sponsor, 'tool--featured': featuredLive && !sponsor }]}
+            data-tool={`${tool.nombre} ${tool.desc} ${label}`}
+          >
+            <div>
+              <p class="tool__meta">
+                {sponsor && <span class="badge badge--sponsor">Portada</span>}
+                {featuredLive && <span class="badge">Destacado</span>}
+                <a href={categoryPath(tool.categoria)}>{label}</a>
+              </p>
+              {as === 'h3' ? (
+                <h3 class="tool__name">
+                  <a href={directoryPath(tool.slug)}>{tool.nombre}</a>
+                </h3>
+              ) : (
+                <h2 class="tool__name">
+                  <a href={directoryPath(tool.slug)}>{tool.nombre}</a>
+                </h2>
+              )}
+            </div>
+            <p>{tool.desc}</p>
+            <a class="tool__out" href={tool.url} target="_blank" rel="noopener noreferrer">
+              sitio ↗
+            </a>
+          </article>
+        );
+      })}
+    </section>
+  ))
+}
