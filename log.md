@@ -587,3 +587,16 @@ indexables y en el sitemap. Correo de habeas data y de retracto: el de Omar.
   precios en cifras. Donde el sitio se contradecía (HeyGen, Fireflies) la ficha lo dice y no da el
   número. Pendiente: NotebookLM ahora se llama Gemini Notebook y shopify.com/magic redirige a
   Sidekick; el nombre en `tools.json` no se tocó.
+
+## 2026-10-16 — Nombres nuevos: Gemini Notebook y Sidekick
+
+- Cierra el pendiente de la entrada anterior. Google renombró NotebookLM a Gemini Notebook el
+  16 jul 2026 (anuncio en blog.google) y `notebooklm.google.com` redirige a `notebook.google.com`.
+  `shopify.com/magic` redirige a `shopify.com/sidekick`. Lectura del 16 oct 2026.
+- `tools.json`: `nombre`, `url` y `desc` de las dos entradas pasan a «Gemini Notebook»
+  (`https://notebook.google`) y «Sidekick de Shopify» (`https://www.shopify.com/co/sidekick`).
+  El `slug` no cambia: `/herramientas-ia/notebooklm` y `/herramientas-ia/shopify-magic` siguen
+  vivas. Featured, sponsor y cobro sin tocar.
+- Fichas y guía «investigar antes de vender» usan el nombre nuevo y mencionan el anterior una vez.
+  El caso de Darla’s Downtown conserva «Shopify Magic» en título y relato porque así lo llama el
+  artículo de abril de 2025; solo el cierre apunta a la ficha de Sidekick.
