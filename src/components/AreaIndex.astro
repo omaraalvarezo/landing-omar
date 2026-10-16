@@ -1,7 +1,6 @@
 ---
 import ResourceCard from './ResourceCard.astro';
 import { ArrowLeft } from '@lucide/astro';
-import { calButtonAttrs } from '../lib/contact';
 import type { Area, Resource } from '../lib/resources';
 
 interface Props {
@@ -13,12 +12,8 @@ const { area, resources } = Astro.props;
 const num = String(area.order).padStart(2, '0');
 const isEmpty = resources.length === 0;
 
-const ctaAttrs = calButtonAttrs({
-  notes: `Estuve mirando los recursos de ${area.label} en tu landing y quiero hablar de mi caso.`,
-});
-const askAttrs = calButtonAttrs({
-  notes: `Vi el área de ${area.label} y me gustaría que publicaras un recurso sobre __.`,
-});
+// El contacto es el formulario del home; ya no hay agenda de 20 min por Cal.com.
+const contactHref = '/#contacto';
 ---
 
 <section class="area-index container-page" aria-labelledby="area-index-title">
@@ -55,11 +50,11 @@ const askAttrs = calButtonAttrs({
     <aside class="area-index__empty" data-reveal>
       <p class="mono-label area-index__empty-label">aún no hay recursos publicados</p>
       <p class="area-index__empty-body">
-        Esta carpeta está creciendo. Cuando suba el primero te aviso por aquí — o pedime algo específico y lo armo.
+        Esta carpeta está creciendo. Cuando suba el primero te aviso por aquí — o pídeme algo específico y lo armo.
       </p>
-      <button type="button" {...askAttrs} class="area-index__empty-cta">
-        agendar 20 min para pedirme uno <span aria-hidden="true">→</span>
-      </button>
+      <a href={contactHref} class="area-index__empty-cta">
+        escríbeme para pedir uno <span aria-hidden="true">→</span>
+      </a>
     </aside>
   ) : (
     <ul class="area-index__grid" role="list">
@@ -77,16 +72,15 @@ const askAttrs = calButtonAttrs({
       <h2 class="area-index__cta-headline">
         Si esto te sirvió, lo <span class="accent-italic">customizado</span> te multiplica.
       </h2>
-      <button
-        type="button"
-        {...ctaAttrs}
+      <a
+        href={contactHref}
         class="area-index__cta-btn"
         data-magnetic
         data-magnetic-strength="0.2"
       >
-        agendar 20 min
+        escríbeme
         <span class="area-index__cta-arrow" aria-hidden="true">→</span>
-      </button>
+      </a>
     </aside>
   )}
 </section>

@@ -3,7 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import DirectoryChrome from '../../../components/directory/DirectoryChrome.astro';
 import JsonLd from '../../../components/directory/JsonLd.astro';
 import kitPack from '../../../data/kit-pack.json';
-import { formatCop, formatUsd } from '../../../lib/consulting';
+import { formatCop, formatUsd } from '../../../lib/money';
 import { breadcrumb, faqNode, SITE } from '../../../lib/editorial';
 import { KIT } from '../../../lib/kit';
 
@@ -67,7 +67,7 @@ const jsonLd = {
     <p class="price-note">
       USD {KIT.priceUsd} × ${KIT.basis.operationalRateCop.toLocaleString('es-CO')} = $80.750. Millar superior: {formatCop(KIT.amountCop)}.
       La tasa operativa sale de la TRM del {KIT.basis.trmDate} (${KIT.basis.trmCop.toLocaleString('es-CO')}) más 1,65%.
-      No usa la cotización diaria de la consultoría.
+      El monto queda fijo.
     </p>
 
     <h2 class="block-title">Qué incluye</h2>

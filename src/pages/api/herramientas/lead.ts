@@ -32,7 +32,12 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   let input: Record<string, unknown>;
   try {
-    input = (await request.json()) as Record<string, unknown>;
+    // Lee como texto para acotar también cuerpos sin Content-Length; null o un arreglo no son un formulario.
+    const raw = await request.text();
+    if (raw.length > 8_000) return json(413, { error: 'Solicitud demasiado grande.' });
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('BAD_BODY');
+    input = parsed as Record<string, unknown>;
   } catch {
     return json(400, { error: 'No pudimos leer el formulario.' });
   }

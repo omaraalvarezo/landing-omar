@@ -3,7 +3,7 @@ export const prerender = false;
 
 import Layout from '../../../layouts/Layout.astro';
 import DirectoryChrome from '../../../components/directory/DirectoryChrome.astro';
-import { formatCop } from '../../../lib/consulting';
+import { formatCop } from '../../../lib/money';
 import { getDirectoryPlan } from '../../../lib/directory';
 import { settleDirectoryPayment } from '../../../lib/directory-payment';
 import {
@@ -13,7 +13,7 @@ import {
   isDirectoryOrderId,
   type DirectoryOrder,
 } from '../../../lib/directory-orders';
-import { fetchTransaction } from '../../../lib/wompi-consulting';
+import { fetchTransaction } from '../../../lib/wompi';
 
 const orderId = Astro.params.orderId || '';
 let order: DirectoryOrder | null = null;

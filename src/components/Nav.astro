@@ -1,5 +1,4 @@
 ---
-import { calButtonAttrs } from '../lib/contact';
 import Logo from './Logo.astro';
 
 interface Props {
@@ -11,17 +10,19 @@ const isHome = currentPath === '/' || currentPath === '';
 // Anchors a secciones del home: si estamos en /, usar hash. Si no, prefijar con /.
 const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
 
+// Secciones vigentes del home (#servicios, #casos y #metodo ya no existen).
 const NAV_LINKS = [
-  { href: anchor('#servicios'), label: 'servicios', match: null },
-  { href: anchor('#casos'), label: 'casos', match: null },
-  { href: anchor('#metodo'), label: 'método', match: null },
+  { href: anchor('#sesion'), label: 'sesión', match: null },
+  { href: anchor('#sistemas'), label: 'sistemas', match: null },
+  { href: anchor('#marco'), label: 'marco 4C', match: null },
   { href: '/recursos', label: 'recursos', match: '/recursos' },
   { href: '/herramientas-ia', label: 'herramientas', match: '/herramientas-ia' },
 ];
 
 const logoHref = isHome ? '#top' : '/';
 
-const calAttrs = calButtonAttrs();
+// La consultoría ya no agenda por Cal.com: el contacto es el formulario del home.
+const contactHref = anchor('#contacto');
 
 function isActive(match: string | null): boolean {
   return match !== null && currentPath.startsWith(match);
@@ -64,9 +65,9 @@ function isActive(match: string | null): boolean {
         </svg>
       </button>
 
-      <button type="button" {...calAttrs} class="nav__cta" data-magnetic data-magnetic-strength="0.18">
-        agendar 20 min →
-      </button>
+      <a href={contactHref} class="nav__cta" data-magnetic data-magnetic-strength="0.18">
+        contacto →
+      </a>
 
       <button id="nav-toggle" class="nav__toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-overlay">
         <span></span>
@@ -92,9 +93,9 @@ function isActive(match: string | null): boolean {
         </li>
       ))}
       <li>
-        <button type="button" {...calAttrs} class="nav-overlay__link nav-overlay__link--cta" data-overlay-link>
-          agendar 20 min →
-        </button>
+        <a href={contactHref} class="nav-overlay__link nav-overlay__link--cta" data-overlay-link>
+          contacto →
+        </a>
       </li>
     </ul>
   </nav>

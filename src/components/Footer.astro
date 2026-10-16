@@ -1,18 +1,18 @@
 ---
-import { LOCATION, SOCIALS, calButtonAttrs } from '../lib/contact';
+import { LOCATION, SOCIALS } from '../lib/contact';
 import Logo from './Logo.astro';
 
 const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
 const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
 
+// Secciones vigentes del home: #inicio, #taller, #marco, #sistemas, #sesion, #contacto.
 const NAV_LINKS = [
-  { href: anchor('#perfil'), label: 'perfil' },
-  { href: anchor('#servicios'), label: 'servicios' },
-  { href: anchor('#metodo'), label: 'método' },
-  { href: anchor('#casos'), label: 'casos' },
+  { href: anchor('#taller'), label: 'taller' },
+  { href: anchor('#marco'), label: 'marco 4C' },
+  { href: anchor('#sistemas'), label: 'sistemas' },
+  { href: anchor('#sesion'), label: 'sesión' },
   { href: '/recursos', label: 'recursos' },
   { href: '/herramientas-ia', label: 'herramientas' },
-  { href: anchor('#faq'), label: 'faq' },
   { href: anchor('#contacto'), label: 'contacto' },
 ];
 
@@ -22,7 +22,8 @@ const SOCIAL_LINKS = [
   { href: SOCIALS.linkedin, label: 'linkedin' },
 ];
 
-const calAttrs = calButtonAttrs();
+// La consultoría ya no agenda por Cal.com: el contacto es el formulario del home.
+const contactHref = anchor('#contacto');
 
 const today = new Date();
 const year = today.getFullYear();
@@ -50,13 +51,13 @@ const buildStamp = `${year}.${String(today.getMonth() + 1).padStart(2, '0')}.${S
       </ul>
     </nav>
 
-    <nav class="footer__col" aria-label="Agendar y sociales">
-      <p class="footer__col-label">agendar</p>
+    <nav class="footer__col" aria-label="Contacto y sociales">
+      <p class="footer__col-label">contacto</p>
       <ul>
         <li>
-          <button type="button" {...calAttrs} class="footer__cta-link">
-            agendar 20 min →
-          </button>
+          <a href={contactHref} class="footer__cta-link">
+            escribirme →
+          </a>
         </li>
         {SOCIAL_LINKS.map((l) => (
           <li>
@@ -174,7 +175,8 @@ const buildStamp = `${year}.${String(today.getMonth() + 1).padStart(2, '0')}.${S
     color: var(--accent);
   }
 
-  .footer__cta-link {
+  /* Más específico que `.footer__col a` para conservar el color de acento. */
+  .footer__col .footer__cta-link {
     background: transparent;
     border: 0;
     padding: 0;
@@ -185,7 +187,8 @@ const buildStamp = `${year}.${String(today.getMonth() + 1).padStart(2, '0')}.${S
     color: var(--accent);
     transition: opacity 0.2s ease;
   }
-  .footer__cta-link:hover {
+  .footer__col .footer__cta-link:hover {
+    color: var(--accent);
     opacity: 0.75;
   }
 

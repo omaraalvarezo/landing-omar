@@ -17,40 +17,49 @@
     }
   }
 
-  const cal = Cal();
+  // La consultoría ya no agenda por Cal.com. El runtime solo se carga si la página
+  // todavía trae un trigger (`data-cal-link`) o un embed inline; así no se descarga
+  // el script externo de Cal.com en páginas que ya no lo usan.
+  function initCal() {
+    const cal = Cal();
 
-  if (!window.__calOnboardingReady) {
-    cal('init', 'onboarding-20min', { origin: 'https://cal.com' });
-    cal.ns['onboarding-20min']('ui', {
-      cssVarsPerTheme: {
-        light: { 'cal-brand': '#1E5FA8' },
-        dark: { 'cal-brand': '#5B9BE0' },
-      },
-      hideEventTypeDetails: false,
-      layout: 'month_view',
-    });
-    window.__calOnboardingReady = true;
-  }
-
-  // Inline embed: cualquier <div data-cal-inline> en la página se renderiza
-  // como calendario embebido directo (sin click extra al modal).
-  function mountInline() {
-    const nodes = document.querySelectorAll<HTMLElement>('[data-cal-inline]');
-    nodes.forEach((el) => {
-      if (el.dataset.calInlineMounted === 'true') return;
-      const calLink = el.dataset.calLink || 'omaralvarezo/onboarding-20min';
-      cal.ns['onboarding-20min']('inline', {
-        elementOrSelector: el,
-        calLink,
-        config: { layout: 'month_view', theme: 'light' },
+    if (!window.__calOnboardingReady) {
+      cal('init', 'onboarding-20min', { origin: 'https://cal.com' });
+      cal.ns['onboarding-20min']('ui', {
+        cssVarsPerTheme: {
+          light: { 'cal-brand': '#1E5FA8' },
+          dark: { 'cal-brand': '#5B9BE0' },
+        },
+        hideEventTypeDetails: false,
+        layout: 'month_view',
       });
-      el.dataset.calInlineMounted = 'true';
-    });
+      window.__calOnboardingReady = true;
+    }
+
+    // Inline embed: cualquier <div data-cal-inline> en la página se renderiza
+    // como calendario embebido directo (sin click extra al modal).
+    function mountInline() {
+      const nodes = document.querySelectorAll<HTMLElement>('[data-cal-inline]');
+      nodes.forEach((el) => {
+        if (el.dataset.calInlineMounted === 'true') return;
+        const calLink = el.dataset.calLink || 'omaralvarezo/onboarding-20min';
+        cal.ns['onboarding-20min']('inline', {
+          elementOrSelector: el,
+          calLink,
+          config: { layout: 'month_view', theme: 'light' },
+        });
+        el.dataset.calInlineMounted = 'true';
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mountInline);
+    } else {
+      mountInline();
+    }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mountInline);
-  } else {
-    mountInline();
+  if (document.querySelector('[data-cal-link], [data-cal-inline]')) {
+    initCal();
   }
 </script>
