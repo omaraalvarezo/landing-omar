@@ -1,0 +1,117 @@
+---
+import LegalFrame from '../components/LegalFrame.astro';
+import { LEGAL, LEGAL_CITY } from '../lib/legal';
+
+// Aprobado por Omar el 2026-10-16 (persona natural). Reglas tomadas de lo que el sitio hace hoy:
+// consultoría sin cobro en línea, directorio y kit con pago Wompi en COP, recursos libres.
+
+const title = 'Términos y condiciones de uso · Omar Álvarez';
+const description =
+  'Condiciones para usar omaralvarezo.co: contenido, recursos descargables, directorio de herramientas de IA, listados pagados, kit, consultoría y anuncios.';
+---
+
+<LegalFrame title={title} description={description} kicker="Reglas del sitio" heading="Términos y condiciones" legal>
+  <p>
+    Estos términos aplican a <strong>omaralvarezo.co</strong> y a todas sus páginas. Al usar el sitio los
+    aceptas. Si no estás de acuerdo, no lo uses.
+  </p>
+
+  <h2 class="block-title">1. Quién opera el sitio</h2>
+  <p>
+    El sitio lo opera {LEGAL.controllerName}, {LEGAL.controllerType}, con domicilio en {LEGAL_CITY}.
+    Puedes escribirme a <a href={`mailto:${LEGAL.privacyEmail}`}>{LEGAL.privacyEmail}</a>. El tratamiento
+    de datos personales está en la <a href="/privacidad">política de privacidad</a>.
+  </p>
+
+  <h2 class="block-title">2. Qué es el contenido</h2>
+  <p>
+    Lo que publico (guías, comparativas, noticias, recursos, calculadoras y fichas de herramientas) es
+    información general basada en mi experiencia operando negocios. No es asesoría legal, contable,
+    tributaria ni financiera. Antes de tomar una decisión importante para tu empresa, valídala con tus
+    propios datos y, si aplica, con un profesional.
+  </p>
+  <p>
+    Las calculadoras dan estimaciones con los números que tú escribes. El resultado depende de esos números.
+  </p>
+
+  <h2 class="block-title">3. Recursos descargables</h2>
+  <p>
+    Los recursos de <a href="/recursos">/recursos</a> y el PDF de prompts son para uso en tu propio negocio.
+    Puedes usarlos, copiarlos y adaptarlos dentro de tu empresa. No los revendas, no los redistribuyas
+    como descarga en otro sitio y no los publiques como propios. Si quieres compartir uno, comparte el
+    enlace a esta página.
+  </p>
+
+  <h2 class="block-title">4. Directorio de herramientas de IA</h2>
+  <ul>
+    <li>Las fichas describen herramientas de terceros. Sus precios, planes y condiciones cambian; la fuente vigente es el sitio de cada herramienta.</li>
+    <li>Incluir una herramienta no significa que la recomiende para tu caso ni que tenga una relación comercial con ella.</li>
+    <li>
+      Los listados pagados se marcan como <strong>Portada</strong> o <strong>Destacado</strong>. Sus enlaces
+      salientes llevan la marca de enlace patrocinado. Un pago compra visibilidad, no una reseña favorable.
+    </li>
+    <li>Me reservo el derecho de no publicar o retirar un listado que sea engañoso, ilegal o que no sirva a una pyme.</li>
+    <li>Los enlaces a sitios externos llevan a páginas que no controlo. No respondo por su contenido ni por sus prácticas de privacidad.</li>
+  </ul>
+
+  <h2 class="block-title">5. Compras: listados del directorio y kit</h2>
+  <ul>
+    <li>Los precios se publican en pesos colombianos (COP) en la página de cada producto.</li>
+    <li>El pago se procesa en Wompi. La orden se activa cuando Wompi confirma la transacción como aprobada.</li>
+  </ul>
+
+  <h3>Retracto y reembolsos</h3>
+  <ul>
+    <li>
+      Tienes 5 días hábiles desde la compra para retractarte, como dice el artículo 47 de la Ley 1480 de
+      2011, salvo en los casos que la misma ley excluye: un listado que ya se publicó en el directorio con
+      tu acuerdo, o un archivo digital que ya descargaste y que por su naturaleza no se puede devolver.
+    </li>
+    <li>Si pagaste y no recibes lo que compraste, te devuelvo el dinero completo.</li>
+    <li>
+      Para pedir un retracto o un reembolso, escribe a
+      <a href={`mailto:${LEGAL.privacyEmail}`}>{LEGAL.privacyEmail}</a> con la referencia de la orden.
+      El dinero se devuelve por el mismo medio de pago en máximo 30 días calendario.
+    </li>
+  </ul>
+
+  <h2 class="block-title">6. Consultoría</h2>
+  <p>
+    El formulario de <a href="/#contacto">/#contacto</a> es una solicitud, no una compra. No hay pago en el
+    sitio. Leo el caso y respondo por correo. Si hay encaje, el precio, la fecha y las condiciones se
+    acuerdan por escrito antes de la sesión. Si no hay encaje, te lo digo.
+  </p>
+
+  <h2 class="block-title">7. Anuncios</h2>
+  <p>
+    Algunas páginas pueden mostrar anuncios de Google. Los anuncios los elige Google; no son recomendaciones
+    mías. La forma en que Google usa cookies está explicada en la <a href="/privacidad">política de privacidad</a>.
+  </p>
+
+  <h2 class="block-title">8. Uso permitido</h2>
+  <p>No uses el sitio para:</p>
+  <ul>
+    <li>Enviar formularios con datos de otra persona sin su autorización.</li>
+    <li>Saturar los formularios o la infraestructura, o intentar acceder a zonas privadas.</li>
+    <li>Copiar el sitio de forma masiva o republicar su contenido como propio.</li>
+  </ul>
+
+  <h2 class="block-title">9. Propiedad intelectual</h2>
+  <p>
+    Los textos, el diseño, el código y la marca “omar álvarez” son de su titular, salvo los nombres y marcas
+    de terceros, que pertenecen a sus dueños. Puedes citar fragmentos cortos con enlace a la fuente.
+  </p>
+
+  <h2 class="block-title">10. Responsabilidad</h2>
+  <p>
+    El sitio se ofrece tal como está. Hago lo posible para que funcione y la información sea correcta, pero
+    no garantizo que esté siempre disponible ni libre de errores. Nada de esto limita los derechos que te da
+    la ley colombiana como consumidor.
+  </p>
+
+  <h2 class="block-title">11. Cambios y ley aplicable</h2>
+  <p>
+    Puedo actualizar estos términos; la versión vigente es la publicada en esta página con su fecha. Estos
+    términos se rigen por las leyes de la República de Colombia.
+  </p>
+</LegalFrame>

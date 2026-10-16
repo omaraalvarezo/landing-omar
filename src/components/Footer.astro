@@ -1,6 +1,7 @@
 ---
 import { LOCATION, SOCIALS } from '../lib/contact';
 import Logo from './Logo.astro';
+import { LEGAL_PAGES } from '../lib/legal';
 
 const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
 const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
@@ -63,6 +64,15 @@ const buildStamp = `${year}.${String(today.getMonth() + 1).padStart(2, '0')}.${S
           <li>
             <a href={l.href} target="_blank" rel="noopener">{l.label}</a>
           </li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="footer__col" aria-label="Legal">
+      <p class="footer__col-label">legal</p>
+      <ul>
+        {LEGAL_PAGES.map((l) => (
+          <li><a href={l.href}>{l.label.toLowerCase()}</a></li>
         ))}
       </ul>
     </nav>
@@ -278,7 +288,7 @@ const buildStamp = `${year}.${String(today.getMonth() + 1).padStart(2, '0')}.${S
 
   @media (min-width: 768px) {
     .footer__grid {
-      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
       gap: 32px;
     }
   }

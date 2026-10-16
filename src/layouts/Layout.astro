@@ -6,6 +6,8 @@ import CustomCursor from '../components/CustomCursor.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
 import BookFloat from '../components/BookFloat.astro';
 import CalRuntime from '../components/CalRuntime.astro';
+import { ADSENSE, adsenseAccount } from '../lib/ads';
+import { DEFAULT_OG_IMAGE, SITE_NAME } from '../lib/schema';
 
 interface Props {
   title?: string;
@@ -17,24 +19,31 @@ interface Props {
   privatePage?: boolean;
   themeColor?: string;
   rss?: boolean;
+  /** Imprime la meta de verificación de AdSense. Apagada mientras ADSENSE.enabled sea false. */
+  ads?: boolean;
+  /** JSON-LD propio de la página; el grafo Persona/Servicio solo lo pasa el home. */
+  jsonLd?: unknown;
 }
 
 const {
   title = 'omar.alvarez — Negocios reales, código real',
   description = 'Trabajo 1:1 con dueños y socios de empresas de servicios para mejorar captación, CRM, operación y postventa con sistemas e inteligencia artificial.',
-  image = '/og-image.svg',
+  image = DEFAULT_OG_IMAGE,
   showNav = true,
   minimal = false,
   noIndex = false,
   privatePage = false,
   themeColor = '#FAFAF9',
   rss = false,
+  ads = ADSENSE.enabled,
+  jsonLd,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-// El JSON-LD de Persona/Servicio se imprime en todas las páginas: su URL y el punto de
-// contacto apuntan siempre al home, donde vive el formulario (#contacto).
-const homeURL = new URL('/', Astro.site).toString();
+const ogImage = new URL(image, Astro.site);
+const isDefaultImage = image === DEFAULT_OG_IMAGE;
+// El placeholder del pub-ID nunca se imprime; tampoco en páginas privadas o noindex.
+const adsAccount = ads && !privatePage && !noIndex ? adsenseAccount() : null;
 ---
 
 <!doctype html>
@@ -86,10 +95,20 @@ const homeURL = new URL('/', Astro.site).toString();
     {!privatePage && (
       <>
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:locale" content="es_CO" />
         <meta property="og:url" content={canonicalURL} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:image" content={new URL(image, Astro.site)} />
+        <meta property="og:image" content={ogImage} />
+        {isDefaultImage && (
+          <>
+            <meta property="og:image:type" content="image/png" />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta property="og:image:alt" content="Omar Álvarez: consultoría privada para conectar ventas, operación y postventa con el Marco 4C" />
+          </>
+        )}
       </>
     )}
 
@@ -99,46 +118,18 @@ const homeURL = new URL('/', Astro.site).toString();
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={new URL(image, Astro.site)} />
+        <meta name="twitter:image" content={ogImage} />
       </>
     )}
 
     <meta name="theme-color" content={themeColor} />
 
-    <!-- Schema.org Person + ProfessionalService -->
-    {!privatePage && <script is:inline type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "Person",
-          "name": "Omar Álvarez",
-          "jobTitle": "Operador y consultor de sistemas para empresas de servicios",
-          "description": "Sesiones privadas de 120 minutos para dueños y socios que quieren mejorar captación, CRM, operación o postventa con sistemas e inteligencia artificial.",
-          "url": homeURL,
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "CO"
-          },
-          "alumniOf": [
-            { "@type": "EducationalOrganization", "name": "Universidad EAFIT" },
-            { "@type": "EducationalOrganization", "name": "Universidad Pontificia Bolivariana" },
-            { "@type": "EducationalOrganization", "name": "La Salle Barcelona" }
-          ]
-        },
-        {
-          "@type": "ProfessionalService",
-          "name": "Omar Álvarez · Sistemas e IA para empresas de servicios",
-          "url": homeURL,
-          "areaServed": ["CO", "MX", "PE", "CL", "ES"],
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "contactType": "consultoría",
-            "url": `${homeURL}#contacto`,
-            "availableLanguage": ["es"]
-          }
-        }
-      ]
-    })}></script>}
+    {adsAccount && <meta name="google-adsense-account" content={adsAccount} />}
+
+    {/* JSON-LD de la página. El grafo Persona/ProfessionalService solo viaja en el home. */}
+    {!privatePage && jsonLd && (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
+    )}
   </head>
   <body>
     <a
