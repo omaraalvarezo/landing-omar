@@ -600,3 +600,10 @@ indexables y en el sitemap. Correo de habeas data y de retracto: el de Omar.
 - Fichas y guía «investigar antes de vender» usan el nombre nuevo y mencionan el anterior una vez.
   El caso de Darla’s Downtown conserva «Shopify Magic» en título y relato porque así lo llama el
   artículo de abril de 2025; solo el cierre apunta a la ficha de Sidekick.
+
+## 2026-10-16 — AdSense: pub-ID y verificación
+
+Omar creó la cuenta de AdSense (Individual). `src/lib/ads.ts` pasa a `enabled: true` con
+`ca-pub-9860528927079608`: el Layout imprime la meta `google-adsense-account` en las páginas
+públicas. `public/ads.txt` declara `google.com, pub-9860528927079608, DIRECT, f08c47fec0942fa0`.
+Todavía no se carga el script de anuncios ni cambia la CSP real.
