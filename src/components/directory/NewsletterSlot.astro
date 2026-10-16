@@ -1,9 +1,10 @@
 ---
+import { getSecret } from 'astro:env/server';
 import { resolveNewsletter } from '../../lib/newsletter';
 
 const slot = resolveNewsletter({
-  provider: import.meta.env.NEWSLETTER_PROVIDER,
-  action: import.meta.env.NEWSLETTER_ACTION_URL,
+  provider: getSecret('NEWSLETTER_PROVIDER'),
+  action: getSecret('NEWSLETTER_ACTION_URL'),
 });
 const providerLabel = slot.ready ? (slot.provider === 'beehiiv' ? 'Beehiiv' : 'Buttondown') : '';
 ---

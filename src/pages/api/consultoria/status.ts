@@ -1,6 +1,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
+import { getSecret } from 'astro:env/server';
 import {
   consultingAccessCookieName,
   isConsultingAccessToken,
@@ -51,7 +52,7 @@ export const GET: APIRoute = async ({ request, cookies }) => {
     };
 
     if (result.approved) {
-      const calLink = String(import.meta.env.CAL_CONSULTING_LINK || '').trim();
+      const calLink = String(getSecret('CAL_CONSULTING_LINK') || '').trim();
       if (calLink) payload.calLink = calLink;
     }
 

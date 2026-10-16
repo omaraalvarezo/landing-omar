@@ -41,8 +41,9 @@ transacción directamente en Wompi y exige simultáneamente:
 
 ## Stack
 
-- Astro 5 + TypeScript strict.
-- Vercel adapter para los endpoints serverless.
+- Astro 7 + TypeScript strict.
+- Vercel adapter 11 para los endpoints serverless.
+- Tailwind 4 con `@tailwindcss/vite`.
 - Wompi Checkout Web para cobro en COP.
 - TRM diaria suministrada por Superfinanciera mediante Datos Abiertos Colombia.
 - Tasa operativa = TRM oficial + 1,65%, redondeada al siguiente múltiplo de `$10 COP`.
