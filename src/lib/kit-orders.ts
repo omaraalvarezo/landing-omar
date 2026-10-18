@@ -33,6 +33,8 @@ export interface KitOrder {
   alertedTransactionIds?: string[];
   downloadToken?: string;
   downloadExpiresAt?: string;
+  /** Cuándo se le avisó al comprador que los videos ya están (script sistema:avisar-videos). */
+  videosNotifiedAt?: string;
 }
 
 const ACCESS_TOKEN = /^[a-f0-9]{64}$/;

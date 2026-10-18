@@ -1,4 +1,5 @@
-import { notifyKitPayment, type KitMailKind, type KitMailResult } from './kit-mail';
+import { SITE } from './editorial';
+import { notifyKitPayment, sendBuyerReceipt, type KitMailKind, type KitMailResult } from './kit-mail';
 import {
   claimKitMailLock,
   createKitDownloadToken,
@@ -13,7 +14,7 @@ import { getProduct, productAmountInCents, type ProductId } from './products';
 import type { WompiTransaction } from './wompi';
 
 export type KitSettlement =
-  | { ok: true; order: KitOrder; email: KitMailResult | 'skipped' }
+  | { ok: true; order: KitOrder; email: KitMailResult | 'skipped'; buyerEmail?: KitMailResult | 'skipped' }
   | { ok: false; reason: 'NOT_FOUND' | 'MISMATCH' };
 
 function statusFromTransaction(status: WompiTransaction['status']): KitPaymentStatus {
@@ -84,28 +85,69 @@ export async function settleKitPayment(
   }
 
   await saveKitOrder(order);
-  if (!emailKind) return { ok: true, order, email: 'skipped' };
 
+  const email = emailKind ? await notifyOwner(order, transaction.id, emailKind, now) : 'skipped';
+
+  // Correo al comprador: independiente del aviso a Omar, para que un reintento de Wompi
+  // pueda reenviar solo el que falló. Una vez por transacción, nunca en un doble cobro.
+  const buyerDue =
+    transaction.status === 'APPROVED' &&
+    order.status === 'APPROVED' &&
+    order.transactionId === transaction.id &&
+    product.buyerEmail;
+  const buyerEmail = buyerDue ? await notifyBuyer(order, transaction.id) : 'skipped';
+
+  return { ok: true, order, email, buyerEmail };
+}
+
+async function notifyOwner(
+  order: KitOrder,
+  transactionId: string,
+  kind: KitMailKind,
+  now: string,
+): Promise<KitMailResult | 'skipped'> {
   const alerts = new Set(order.alertedTransactionIds || []);
-  const alertKey = `${emailKind}:${transaction.id}`;
-  if (alerts.has(alertKey)) return { ok: true, order, email: 'skipped' };
+  const alertKey = `${kind}:${transactionId}`;
+  if (alerts.has(alertKey)) return 'skipped';
 
   const lockKey = `${order.id}:${alertKey}`;
   const claimed = await claimKitMailLock(lockKey);
-  if (!claimed) return { ok: true, order, email: 'skipped' };
+  if (!claimed) return 'skipped';
 
-  const email = await notifyKitPayment({ ...order, transactionId: transaction.id }, emailKind);
+  const email = await notifyKitPayment({ ...order, transactionId }, kind);
   if (email === 'failed') {
     await releaseKitMailLock(lockKey);
     order.notifyStatus = 'failed';
     await saveKitOrder(order);
-    return { ok: true, order, email };
+    return email;
   }
 
   alerts.add(alertKey);
   order.alertedTransactionIds = [...alerts];
   order.notifyStatus = email === 'sent' ? 'sent' : 'unconfigured';
-  if (email === 'sent' && emailKind === 'approved') order.notifiedAt = now;
+  if (email === 'sent' && kind === 'approved') order.notifiedAt = now;
   await saveKitOrder(order);
-  return { ok: true, order, email };
+  return email;
+}
+
+async function notifyBuyer(order: KitOrder, transactionId: string): Promise<KitMailResult | 'skipped'> {
+  const alerts = new Set(order.alertedTransactionIds || []);
+  const alertKey = `buyer:${transactionId}`;
+  if (alerts.has(alertKey)) return 'skipped';
+
+  const lockKey = `${order.id}:${alertKey}`;
+  const claimed = await claimKitMailLock(lockKey);
+  if (!claimed) return 'skipped';
+
+  const email = await sendBuyerReceipt({ ...order, transactionId }, SITE);
+  if (email === 'failed') {
+    // Sin la clave de alerta, el siguiente reintento de Wompi lo vuelve a intentar.
+    await releaseKitMailLock(lockKey);
+    return email;
+  }
+
+  alerts.add(alertKey);
+  order.alertedTransactionIds = [...alerts];
+  await saveKitOrder(order);
+  return email;
 }

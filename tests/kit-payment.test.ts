@@ -20,6 +20,7 @@ vi.mock('../src/lib/kit-orders', () => ({
 
 vi.mock('../src/lib/kit-mail', () => ({
   notifyKitPayment: vi.fn(async () => 'sent'),
+  sendBuyerReceipt: vi.fn(async () => 'sent'),
 }));
 
 import { notifyKitPayment } from '../src/lib/kit-mail';

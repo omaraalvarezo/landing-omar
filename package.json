@@ -39,6 +39,7 @@
     "offers:check": "node --experimental-strip-types scripts/check-offers.mjs",
     "lead:list": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-leads.mjs",
     "kit:pending": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-kit-orders.mjs",
+    "sistema:avisar-videos": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/notify-sistema-videos.mjs",
     "prepare": "husky"
   },
   "dependencies": {
