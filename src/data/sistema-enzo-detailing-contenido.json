@@ -73,7 +73,7 @@
         "Activa el correo de respuesta automática con el PDF del envío adjunto, para que el cliente reciba las dos páginas apenas firma.",
         "Cuando llega el cliente, abre el borrador que guardó quien aprobó la inspección y sigue en la página 2.",
         "Antes de que firme, recorre el carro con el cliente y muéstrale lo que se hizo. Si queda saldo, el carro no sale; si decides entregar debiendo, lo decides tú y queda escrito en observaciones.",
-        "Las fotos de salida son opcionales. En Enzo lo decidí así: con firma, pago y recorrido, ocho fotos obligatorias más son el camino directo a que el equipo empiece a saltarse cosas.",
+        "Fotos de salida: en Enzo la entrega las pide, una por cada toma que tiene foto de ingreso. Saltarlas exige escribir el motivo y el PIN de alguien del equipo, y el salto queda registrado. Lo puse así porque antes solo 2 de 78 entregas tenían fotos de salida. Si quieres arrancar más liviano, déjalas opcionales en tu formulario, pero agrega un campo obligatorio de motivo que aparezca cuando falten.",
         "Si el servicio lleva garantía, llena garantia.txt y mándala con el mensaje /entregado.",
         "Guarda el acta firmada. Antes de borrar actas o fotos, pregúntale a tu contador cuánto tiempo pide la ley de tu país guardar documentos del negocio."
       ],

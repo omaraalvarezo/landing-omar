@@ -19,7 +19,7 @@ const priceLine = (rung: typeof primary) =>
   rung.priceCop ? `${formatCop(rung.priceCop)}${rung.usdReference ? ` · aprox. USD ${rung.usdReference}` : ''}` : null;
 
 const secondary = [
-  { rung: pdf, tag: 'Gratis', text: 'Los prompts que uso yo. Te lo mando al correo.' },
+  { rung: pdf, tag: 'Gratis', text: 'Los prompts que uso yo. Dejas tu correo y lo descargas.' },
   { rung: kit, tag: priceLine(kit) ?? '', text: 'Prompts y guías para el taller, con descarga directa.' },
 ];
 

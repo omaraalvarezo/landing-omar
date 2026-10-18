@@ -21,7 +21,7 @@ faqs:
   - q: "¿Sirve si tengo un taller y no un detailing?"
     a: "La recepción, la entrega con firma y el seguimiento sirven igual en un taller. El checklist está pensado para detailing: si tu trabajo es mecánica o latonería, los 5 puntos los tienes que cambiar por los tuyos."
   - q: "¿Hay alguna mensualidad contigo?"
-    a: "No. Me pagas una vez. Lo único mensual es lo que cobre la herramienta paga, y eso se lo pagas a ella, no a mí."
+    a: "No. Me pagas una vez. Lo único mensual es lo que cobre cada herramienta de pago, y eso se lo pagas a cada una, no a mí."
   - q: "¿Me lo instalas tú?"
     a: "No. Hoy no estoy tomando instalaciones ni sesiones. Si te anotas, te escribo cuando abra cupo. Si es una pregunta del sistema, te respondo por correo."
   - q: "¿Trae clientes, precios o datos de Enzo?"
