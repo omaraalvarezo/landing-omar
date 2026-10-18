@@ -137,6 +137,7 @@ export async function createKitOrder(args: {
   email: string;
   business: string;
   accessToken: string;
+  country?: string;
 }): Promise<KitOrder> {
   if (!isKitOrderId(args.id)) throw new Error('KIT_ORDER_ID_INVALID');
   if (!isKitAccessToken(args.accessToken)) throw new Error('KIT_ACCESS_TOKEN_INVALID');
@@ -150,6 +151,7 @@ export async function createKitOrder(args: {
     environment: STORE_ENVIRONMENT,
     reference: args.reference,
     product: args.product,
+    ...(args.country ? { country: args.country } : {}),
     amountInCents: args.amountInCents,
     currency: 'COP',
     buyerName: args.buyerName,

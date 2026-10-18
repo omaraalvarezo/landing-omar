@@ -1,6 +1,8 @@
 import kitData from '../data/kit.json';
 import enzoData from '../data/sistema-enzo-detailing.json';
+import paises from '../data/paises.json';
 import { bogotaToday } from './directory';
+import { isKitBusiness } from './kit';
 
 export type ProductId = 'talleres' | 'enzo-detailing';
 
@@ -119,4 +121,46 @@ export function isProductOnSale(product: Product, today: string = bogotaToday())
   const due = product.presale.videosDueDate;
   if (!due) return false;
   return due >= today;
+}
+
+const CHECKOUT_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Mismo saneado que usaba el endpoint del kit: sin <>, espacios colapsados, recortado.
+function cleanField(value: unknown, max: number): string {
+  return typeof value === 'string' ? value.replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, max) : '';
+}
+
+export type CheckoutInput =
+  | { ok: true; product: ProductId; buyerName: string; email: string; business: string; country: string }
+  | { ok: false; error: string };
+
+/** Valida y sanea el cuerpo del checkout. Sin `product` es el kit, así su formulario no cambia. */
+export function validateCheckoutInput(input: Record<string, unknown>): CheckoutInput {
+  const product = input.product === undefined ? getProduct('talleres') : getProduct(input.product);
+  if (!product) return { ok: false, error: 'Ese producto no existe.' };
+
+  const buyerName = cleanField(input.buyerName, 80);
+  const email = cleanField(input.email, 254).toLowerCase();
+
+  if (product.id === 'talleres') {
+    const business = cleanField(input.business, 20);
+    if (buyerName.length < 2 || !CHECKOUT_EMAIL.test(email) || !isKitBusiness(business)) {
+      return { ok: false, error: 'Revisa nombre, correo y tipo de negocio.' };
+    }
+    return { ok: true, product: product.id, buyerName, email, business, country: '' };
+  }
+
+  const business = cleanField(input.business, 200);
+  const country = cleanField(input.country, 2).toUpperCase();
+  const countryOk = paises.some((pais) => pais.id === country);
+  if (
+    buyerName.length < 2 ||
+    !CHECKOUT_EMAIL.test(email) ||
+    business.length < 2 ||
+    business.length > 80 ||
+    !countryOk
+  ) {
+    return { ok: false, error: 'Revisa nombre, correo, nombre del negocio y país.' };
+  }
+  return { ok: true, product: product.id, buyerName, email, business, country };
 }
