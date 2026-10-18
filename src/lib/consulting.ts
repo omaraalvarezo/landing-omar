@@ -14,6 +14,8 @@ export const CONTACT_LIMITS = {
   business: 120,
   problemMin: 20,
   problemMax: 1200,
+  oficioOtro: 60,
+  message: 600,
 } as const;
 
 // Validación compartida: el navegador y `/api/contacto` aplican exactamente las mismas reglas.
