@@ -18,13 +18,16 @@ vi.mock('../src/lib/kit-orders', () => ({
   isKitDownloadToken: vi.fn((value: unknown) => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value)),
 }));
 
+vi.mock('@vercel/analytics/server', () => ({ track: vi.fn(async () => undefined) }));
+
 vi.mock('../src/lib/kit-mail', () => ({
   notifyKitPayment: vi.fn(async () => 'sent'),
   sendBuyerReceipt: vi.fn(async () => 'sent'),
 }));
 
+import { track } from '@vercel/analytics/server';
 import { notifyKitPayment } from '../src/lib/kit-mail';
-import { createKitDownloadToken, saveKitOrder } from '../src/lib/kit-orders';
+import { claimKitMailLock, createKitDownloadToken, saveKitOrder } from '../src/lib/kit-orders';
 import { settleKitPayment } from '../src/lib/kit-payment';
 import { parseProductReference, productAmountInCents, type ProductId } from '../src/lib/products';
 
@@ -195,5 +198,88 @@ describe('settleKitPayment por producto', () => {
     expect(result.order.status).toBe('DECLINED');
     expect(result.order.downloadToken).toBeUndefined();
     expect(createKitDownloadToken).not.toHaveBeenCalled();
+  });
+});
+
+describe('medición: sistema_comprado', () => {
+  async function settle(product: ProductId, overrides: Record<string, unknown> = {}) {
+    const reference = (state.order?.reference as string | undefined) ?? referenceFor(product);
+    return settleKitPayment(transactionFor(reference, overrides), parseProductReference(reference)!);
+  }
+
+  it('se emite una vez, con solo el producto, en la primera aprobación del sistema', async () => {
+    seedOrder('enzo-detailing');
+    await settle('enzo-detailing');
+    expect(track).toHaveBeenCalledTimes(1);
+    expect(track).toHaveBeenCalledWith('sistema_comprado', { product: 'enzo-detailing' });
+  });
+
+  it('un reintento de Wompi con el mismo APPROVED no lo emite otra vez', async () => {
+    seedOrder('enzo-detailing');
+    await settle('enzo-detailing');
+    await settle('enzo-detailing');
+    await settle('enzo-detailing');
+    expect(track).toHaveBeenCalledTimes(1);
+  });
+
+  it('un cobro doble (otra transacción aprobada) no lo emite otra vez', async () => {
+    seedOrder('enzo-detailing');
+    await settle('enzo-detailing');
+    await settle('enzo-detailing', { id: 'tx-2' });
+    expect(track).toHaveBeenCalledTimes(1);
+  });
+
+  it('si el aviso a Omar o el correo del comprador fallan, igual se emitió una sola vez', async () => {
+    const { sendBuyerReceipt } = await import('../src/lib/kit-mail');
+    vi.mocked(sendBuyerReceipt).mockResolvedValueOnce('failed' as never);
+    seedOrder('enzo-detailing');
+    await settle('enzo-detailing');
+    await settle('enzo-detailing');
+    expect(track).toHaveBeenCalledTimes(1);
+  });
+
+  it('otra liquidación simultánea (candado tomado) no lo duplica', async () => {
+    vi.mocked(claimKitMailLock).mockImplementation(async (key: string) => !key.includes(':track:'));
+    seedOrder('enzo-detailing');
+    await settle('enzo-detailing');
+    expect(track).not.toHaveBeenCalled();
+    vi.mocked(claimKitMailLock).mockImplementation(async () => true);
+  });
+
+  it('no se emite con DECLINED, PENDING ni para el kit de talleres', async () => {
+    seedOrder('enzo-detailing');
+    await settle('enzo-detailing', { status: 'DECLINED' });
+    await settle('enzo-detailing', { status: 'PENDING' });
+    seedOrder('talleres');
+    await settle('talleres');
+    expect(track).not.toHaveBeenCalled();
+  });
+
+  it('no se emite en un MISMATCH', async () => {
+    const order = seedOrder('talleres');
+    const parsed = parseProductReference(referenceFor('enzo-detailing'))!;
+    await settleKitPayment(
+      transactionFor(order.reference as string, { amount_in_cents: parsed.amountInCents }),
+      parsed,
+    );
+    expect(track).not.toHaveBeenCalled();
+  });
+
+  it('si el SDK lanza o se cuelga, el pago igual se liquida', async () => {
+    vi.mocked(track).mockRejectedValueOnce(new Error('analytics caído'));
+    seedOrder('enzo-detailing');
+    const result = await settle('enzo-detailing');
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.order.status).toBe('APPROVED');
+    expect(result.order.downloadToken).toBe(TOKEN);
+    expect(result.buyerEmail).toBe('sent');
+
+    vi.mocked(track).mockImplementationOnce(() => {
+      throw new Error('síncrono');
+    });
+    seedOrder('enzo-detailing');
+    const second = await settle('enzo-detailing');
+    expect(second.ok).toBe(true);
   });
 });

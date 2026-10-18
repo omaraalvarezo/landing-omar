@@ -103,7 +103,7 @@ const jsonLd = {
       </div>
       <p class="price-note">Si faltan las variables de pago, el botón responde que el cobro está cerrado. La página no se rompe y no abre Wompi.</p>
       <p class="form-error" id="kit-error" role="alert"></p>
-      <button type="submit">Pagar {formatCop(KIT.amountCop)} con Wompi</button>
+      <button type="submit" data-track="kit_checkout_iniciado">Pagar {formatCop(KIT.amountCop)} con Wompi</button>
     </form>
 
     <h2 class="block-title">Preguntas frecuentes</h2>
@@ -120,6 +120,8 @@ const jsonLd = {
 </Layout>
 
 <script>
+  import { trackEvent } from '../../../lib/track';
+
   const form = document.querySelector<HTMLFormElement>('#kit-form');
   const errorNode = document.querySelector<HTMLElement>('#kit-error');
 
@@ -147,6 +149,7 @@ const jsonLd = {
         if (button) button.disabled = false;
         return;
       }
+      trackEvent('kit_checkout_iniciado');
       window.location.href = body.checkoutUrl;
     } catch {
       if (errorNode) errorNode.textContent = 'No hubo respuesta. Intenta de nuevo.';

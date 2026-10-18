@@ -8,4 +8,9 @@ const test: InlineConfig = {
   environment: 'node',
 };
 
-export default getViteConfig({ test } as Parameters<typeof getViteConfig>[0]);
+// `@vercel/analytics/astro` publica un `.ts`/`.astro` dentro de node_modules (Layout lo importa): Node no
+// quita tipos ahí, así que Vite tiene que transformarlo en vez de dejarlo como dependencia externa.
+export default getViteConfig({
+  test,
+  ssr: { noExternal: ['@vercel/analytics'] },
+} as Parameters<typeof getViteConfig>[0]);

@@ -607,3 +607,23 @@ Omar creó la cuenta de AdSense (Individual). `src/lib/ads.ts` pasa a `enabled: 
 `ca-pub-9860528927079608`: el Layout imprime la meta `google-adsense-account` en las páginas
 públicas. `public/ads.txt` declara `google.com, pub-9860528927079608, DIRECT, f08c47fec0942fa0`.
 Todavía no se carga el script de anuncios ni cambia la CSP real.
+
+## 2026-10-17 — Medición: visitas y eventos del embudo (Vercel Web Analytics)
+
+- `@vercel/analytics@2.0.1` (exacto). `<Analytics />` en `Layout.astro`, mismo origen
+  (`/_vercel/insights`), sin cambio de CSP. Apagado en páginas `privatePage` (su URL lleva el token del
+  pedido) y en `/admin`.
+- `src/lib/track.ts`: `trackEvent` (nunca lanza, solo props string), `bindTrackedLinks` (un oyente de clic:
+  `[data-track="escalon_click"]` + `data-track-id`/`data-track-placement`) y `trackShortLinkVisit`
+  (`?ref=` válido contra `short-links.json` -> `link_corto { ref }`, una vez por carga).
+- Eventos de envío, solo con respuesta buena del servidor: `sistema_checkout_iniciado { product }`,
+  `kit_checkout_iniciado`, `lista_espera_enviada` (sin props). `boletin_suscrito` va al enviar el
+  formulario del boletín (el proveedor es otro origen: no hay confirmación que leer); el PDF de prompts
+  no tiene casilla de boletín y no dispara nada.
+- Servidor: `sistema_comprado { product }` desde `settleKitPayment`, una vez por primera aprobación del
+  sistema (orden sin `approvedAt` + candado), envuelto en try/catch y con tope de 2,5 s.
+- No se pudo comprobar con el MCP de Vercel si el plan recoge eventos personalizados; se implementó el
+  bloque completo. Si el plan no los recoge, el envío es inofensivo y las ventas se cuentan con
+  `npm run kit:pending`.
+- Ojo: en 2026-08 `/_vercel/insights/script.js` devolvió 404 detrás del proxy de Cloudflare. Verificar en
+  producción que no pase otra vez.

@@ -255,6 +255,9 @@ Fuentes locales clave para decisiones del home:
 - Wompi Checkout Web en COP solo para el directorio y el kit.
 - Bricolage Grotesque Variable + IBM Plex Sans Variable + IBM Plex Mono, self-hosted con Fontsource.
 - Sin WebGL, imágenes remotas, loader o dependencia visual externa en el home.
+- Medición: Vercel Web Analytics por el mismo origen (`/_vercel/insights`, sin tocar la CSP). Eventos en
+  `src/lib/track.ts`; `sistema_comprado` sale del servidor en `settleKitPayment`. Solo props string, nunca
+  correos, nombres ni texto libre.
 
 ## Comandos
 

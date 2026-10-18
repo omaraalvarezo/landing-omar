@@ -6,6 +6,7 @@ import CustomCursor from '../components/CustomCursor.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
 import BookFloat from '../components/BookFloat.astro';
 import CalRuntime from '../components/CalRuntime.astro';
+import Analytics from '@vercel/analytics/astro';
 import { ADSENSE, adsenseAccount } from '../lib/ads';
 import { DEFAULT_OG_IMAGE, SITE_NAME } from '../lib/schema';
 
@@ -23,6 +24,8 @@ interface Props {
   ads?: boolean;
   /** JSON-LD propio de la página; el grafo Persona/Servicio solo lo pasa el home. */
   jsonLd?: unknown;
+  /** Visitas y eventos (Vercel Web Analytics). Apagado por defecto en páginas privadas: su URL lleva el token del pedido. */
+  analytics?: boolean;
 }
 
 const {
@@ -37,6 +40,7 @@ const {
   rss = false,
   ads = ADSENSE.enabled,
   jsonLd,
+  analytics = !privatePage,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -149,6 +153,15 @@ const adsAccount = ads && !privatePage && !noIndex ? adsenseAccount() : null;
       <span id="top" class="sr-only" aria-hidden="true"></span>
       <slot />
     </main>
+
+    {analytics && <Analytics />}
+    {analytics && (
+      <script>
+        import { bindTrackedLinks, trackShortLinkVisit } from '../lib/track';
+        bindTrackedLinks();
+        trackShortLinkVisit();
+      </script>
+    )}
 
     {!minimal && <BookFloat />}
     {!minimal && <CalRuntime />}

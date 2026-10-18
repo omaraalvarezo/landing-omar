@@ -1,3 +1,4 @@
+import { track } from '@vercel/analytics/server';
 import { notifyKitPayment, sendBuyerReceipt, type KitMailKind, type KitMailResult } from './kit-mail';
 import {
   claimKitMailLock,
@@ -25,6 +26,28 @@ function grantDownload(order: KitOrder, now: string, downloadDays: number): void
   if (!isKitDownloadToken(order.downloadToken) || !order.downloadExpiresAt) {
     order.downloadToken = createKitDownloadToken();
     order.downloadExpiresAt = new Date(Date.parse(now) + downloadDays * 24 * 60 * 60 * 1_000).toISOString();
+  }
+}
+
+const TRACK_TIMEOUT_MS = 2_500;
+
+// Mide la venta del sistema en Vercel Web Analytics. Si el plan no recoge eventos personalizados el
+// envío es inofensivo. Nunca lanza ni retrasa de más: un pago no puede fallar por medir. Solo `product`.
+async function trackSistemaPurchase(order: KitOrder, transactionId: string, product: ProductId): Promise<void> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    // El webhook de Wompi y el regreso del comprador pueden liquidar a la vez: solo uno mide.
+    if (!(await claimKitMailLock(`${order.id}:track:${transactionId}`))) return;
+    await Promise.race([
+      track('sistema_comprado', { product }),
+      new Promise<void>((resolve) => {
+        timer = setTimeout(resolve, TRACK_TIMEOUT_MS);
+      }),
+    ]);
+  } catch {
+    // Medir no es parte del pago.
+  } finally {
+    clearTimeout(timer);
   }
 }
 
@@ -84,6 +107,18 @@ export async function settleKitPayment(
   }
 
   await saveKitOrder(order);
+
+  // Venta del sistema: una vez, en la primera aprobación (la orden guardada aún no tenía `approvedAt`).
+  // Los reintentos de Wompi y los pedidos que se vuelven a leer ya la traen y no cuentan otra vez.
+  if (
+    transaction.status === 'APPROVED' &&
+    !existing.approvedAt &&
+    order.status === 'APPROVED' &&
+    order.transactionId === transaction.id &&
+    product.buyerEmail
+  ) {
+    await trackSistemaPurchase(order, transaction.id, product.id);
+  }
 
   const email = emailKind ? await notifyOwner(order, transaction.id, emailKind, now) : 'skipped';
 

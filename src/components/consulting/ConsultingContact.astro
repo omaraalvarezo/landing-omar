@@ -749,6 +749,7 @@ const wantCopy: Record<(typeof WAITLIST_WANTS)[number], { tag: string; hint: str
     wantFromQuery,
     type WaitlistInput,
   } from '../../lib/waitlist';
+  import { trackEvent } from '../../lib/track';
   import oficios from '../../data/oficios.json';
   import paises from '../../data/paises.json';
 
@@ -928,6 +929,8 @@ const wantCopy: Record<(typeof WAITLIST_WANTS)[number], { tag: string; hint: str
       };
 
       if (response.ok && payload.ok) {
+        // Sin props: el formulario lleva nombre, correo y texto libre, y nada de eso se mide.
+        trackEvent('lista_espera_enviada');
         form.querySelectorAll<HTMLElement>(':scope > :not([data-contact-success]):not(.contact-form__spectrum)')
           .forEach((node) => { node.hidden = true; });
         if (successNode) {

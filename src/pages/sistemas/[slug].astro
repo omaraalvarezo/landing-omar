@@ -369,6 +369,8 @@ const jsonLd = {
 </SistemaShell>
 
 <script>
+  import { trackEvent } from '../../lib/track';
+
   const form = document.querySelector<HTMLFormElement>('#sistema-form');
   const errorNode = document.querySelector<HTMLElement>('#sistema-error');
   const closedNode = document.querySelector<HTMLElement>('#sistema-closed');
@@ -422,6 +424,8 @@ const jsonLd = {
         if (button) button.disabled = false;
         return;
       }
+      // Solo cuando el servidor devolvió el enlace de pago (no en el clic): así no cuenta el 503 de "Abre pronto".
+      trackEvent('sistema_checkout_iniciado', { product: form.dataset.product ?? '' });
       window.location.href = body.checkoutUrl;
     } catch {
       if (errorNode) errorNode.textContent = 'No hubo respuesta. Intenta de nuevo.';

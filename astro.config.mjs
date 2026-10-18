@@ -13,8 +13,9 @@ export default defineConfig({
   // output 'static' por default permite mezclar estático + endpoints
   // con `export const prerender = false` (corren serverless).
   output: 'static',
-  // La analítica de tráfico vive en Cloudflare. El script de Vercel Analytics devolvía 404
-  // detrás del dominio proxied y generaba ruido de consola sin aportar una segunda medición útil.
+  // Visitas por Cloudflare; embudo y eventos por Vercel Web Analytics (`<Analytics />` en Layout.astro,
+  // mismo origen `/_vercel/insights`). Ojo: en 2026-08 ese script devolvió 404 detrás del dominio
+  // proxied de Cloudflare y se retiró. Si vuelve a pasar, revisar que `/_vercel/*` no pase por el proxy.
   // El regreso de pago consulta Wompi y el almacén durable de Adjudika. El
   // límite explícito evita cortar una verificación válida a mitad.
   adapter: vercel({ maxDuration: 30 }),
