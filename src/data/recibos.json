@@ -1,0 +1,93 @@
+[
+  {
+    "id": "espera-recogida",
+    "value": "aprox. 8 días",
+    "label": "esperaba un carro listo a que el cliente lo recogiera, frente a unos 3 días de trabajo en el taller",
+    "origin": "medido en el sistema del taller de Enzo, ago 2026",
+    "negocio": "enzo",
+    "source": "second-brain/projects/cotizador-enzo/README.md#L726-L734",
+    "method": "Promedio de las órdenes entregadas en los 30 días anteriores al 2026-08-18, calculado por taller_dashboard_stats (migración 20260819_tiempos_taller.sql): recibido → listo = 2,9 días; listo → entregado = 7,9 días. Redondeado a 3 y 8 días.",
+    "date": "2026-08-18"
+  },
+  {
+    "id": "entregas-con-acta",
+    "value": "aprox. 80 entregas",
+    "label": "registradas en el sistema del taller",
+    "origin": "según una revisión del sistema de Enzo, sep 2026",
+    "negocio": "enzo",
+    "source": "second-brain/projects/cotizador-enzo/log.md#L364",
+    "method": "Inferido: es el denominador de una medición del 2026-09-24 sobre las fotos de salida (\"las fotos de salida se tomaban en 2 de 78 entregas\"). No es un conteo hecho para este recibo y el registro no fija la ventana. 78 redondeado a 80.",
+    "date": "2026-09-24"
+  },
+  {
+    "id": "fotos-salida-antes",
+    "value": "aprox. 3 %",
+    "label": "de las entregas tenía fotos de cómo salió el carro antes de que el sistema las pidiera",
+    "origin": "medido en el sistema del taller de Enzo, sep 2026",
+    "negocio": "enzo",
+    "source": "second-brain/projects/cotizador-enzo/log.md#L364",
+    "method": "2 de 78 entregas con fotos de salida al 2026-09-24 = 2,6 %, redondeado a 3 %. Ese mismo cambio hizo que la entrega pida las tomas de salida y que saltarlas exija motivo y PIN.",
+    "date": "2026-09-24"
+  },
+  {
+    "id": "inspeccion-puntos",
+    "value": "de hasta 18 a 5 puntos",
+    "label": "en la inspección final: antes la lista cambiaba con cada servicio; ahora son los mismos 5 para todo carro",
+    "origin": "regla del sistema del taller de Enzo, ago 2026",
+    "negocio": "enzo",
+    "source": "second-brain/projects/cotizador-enzo/src/constants/taller.js#L502-L505",
+    "method": "Regla de diseño exacta, no medición: el comentario de CHECKLIST_ENTREGA (2026-08-03) dice que la lista por servicio llegaba a 18 ítems (un polarizado sacaba 10 y dos no aplicaban) y que se reemplazó por 5 puntos fijos. Por ser exacta no lleva \"aprox.\" (kind: exacto). Respaldo también en README.md#L633.",
+    "date": "2026-08-03",
+    "kind": "exacto"
+  },
+  {
+    "id": "ordenes-taller",
+    "value": "aprox. 100 órdenes",
+    "label": "de taller en el sistema de Enzo",
+    "origin": "según una revisión del sistema de Enzo, sep 2026",
+    "negocio": "enzo",
+    "source": "second-brain/projects/cotizador-enzo/log.md#L349",
+    "method": "Inferido: es el denominador de una auditoría de teléfonos en producción del 2026-09-17 (\"46 de 106 ordenes del taller\"). No es un conteo hecho para este recibo y no dice qué estados incluye. 106 redondeado a 100.",
+    "date": "2026-09-17"
+  },
+  {
+    "id": "garantias-registradas",
+    "value": "aprox. 500 garantías",
+    "label": "en el sistema de Enzo",
+    "origin": "según una revisión del sistema de Enzo, sep 2026",
+    "negocio": "enzo",
+    "source": "second-brain/projects/cotizador-enzo/log.md#L349",
+    "method": "Inferido: es el denominador de una medición de teléfonos sin aplicar del 2026-09-17 (\"garantias 367 de 497\"), que pudo contar solo las filas con teléfono. No es un conteo hecho para este recibo; incluye garantías históricas ingresadas a mano y no todas están publicadas. 497 redondeado a 500.",
+    "date": "2026-09-17"
+  },
+  {
+    "id": "encuesta-segundos",
+    "value": "aprox. 40 s",
+    "label": "para responder la encuesta después de la entrega: 4 preguntas, solo 2 obligatorias",
+    "origin": "estimado al diseñar la encuesta de Enzo, ago 2026",
+    "negocio": "enzo",
+    "source": "grupo-enzo/enzo-motorsport/log.md#L245",
+    "method": "Estimado de diseño escrito al mudar la encuesta NPS al sitio (\"4 preguntas, solo 2 obligatorias, ~40 s\"), con el largo calibrado por la referencia de Survicate. No es un tiempo cronometrado a clientes.",
+    "date": "2026-08-01"
+  },
+  {
+    "id": "cotizacion-minutos",
+    "value": "aprox. 20 → 2 min",
+    "label": "para armar una cotización: del Excel al cotizador de Enzo",
+    "origin": "estimado de Omar al cambiar el Excel por el cotizador de Enzo, abr 2026",
+    "negocio": "enzo",
+    "source": "second-brain/projects/marca-personal-tiktok/serie-90-dias/07-inventario-casos.md#L17",
+    "method": "Número escrito por Omar en el inventario de casos (caso E1, actualizado 2026-04-21): \"tiempo de cotización de ~20 min → 2 min\". Es su estimado de operador; el sistema no cronometra cotizaciones.",
+    "date": "2026-04-21"
+  },
+  {
+    "id": "pl-arkhe",
+    "value": "aprox. 1,5 h → 10 min",
+    "label": "para leer el P&L del mes de Arkhē",
+    "origin": "estimado de Omar sobre el P&L de Arkhē, abr 2026",
+    "negocio": "arkhe",
+    "source": "second-brain/projects/marca-personal-tiktok/serie-90-dias/07-inventario-casos.md#L82",
+    "method": "Número escrito por Omar en el inventario de casos (caso A2, actualizado 2026-04-21): \"El P&L de Arkhē lo leo en 10 min con Claude. Antes: 1.5 horas con el contador.\" Es su estimado; no hay medición en sistema.",
+    "date": "2026-04-21"
+  }
+]

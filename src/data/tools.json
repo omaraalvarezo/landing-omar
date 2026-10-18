@@ -382,5 +382,41 @@
     "sponsor": false,
     "sponsorUntil": null,
     "added": "2026-10-16"
+  },
+  {
+    "slug": "jotform",
+    "nombre": "Jotform",
+    "url": "https://www.jotform.com",
+    "categoria": "productividad",
+    "desc": "Formularios con fotos desde el celular, firma electrónica y un PDF de cada envío. Tiene app para llenarlos sin señal y tablas para ordenar lo que llega.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-10-17"
+  },
+  {
+    "slug": "whatsapp-business",
+    "nombre": "WhatsApp Business",
+    "url": "https://whatsappbusiness.com",
+    "categoria": "atencion-al-cliente",
+    "desc": "App gratis de WhatsApp para negocios: perfil de empresa, respuestas rápidas, etiquetas y mensajes automáticos de saludo y ausencia.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-10-17"
+  },
+  {
+    "slug": "google-business-profile",
+    "nombre": "Google Business Profile",
+    "url": "https://business.google.com",
+    "categoria": "ventas-y-crm",
+    "desc": "Perfil gratis de tu negocio en Google Search y Maps: horario, fotos, reseñas y un enlace o código QR para pedirles reseñas a tus clientes.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-10-17"
   }
 ]

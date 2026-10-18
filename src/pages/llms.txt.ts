@@ -14,9 +14,11 @@ import {
   publishedNews,
   publishedPara,
   publishedPrompts,
+  publishedSistemas,
   publishedTrends,
   publishedWeeks,
   SITE,
+  sistemaPath,
   trendPath,
   weekPath,
 } from '../lib/editorial';
@@ -26,7 +28,7 @@ function line(title: string, path: string, description: string) {
 }
 
 export const GET: APIRoute = async () => {
-  const [sections, paras, news, prompts, weeks, comparisons, alternatives, cases, trends] = await Promise.all([
+  const [sections, paras, news, prompts, weeks, comparisons, alternatives, cases, trends, sistemas] = await Promise.all([
     guideSections(),
     publishedPara(),
     publishedNews(),
@@ -36,13 +38,19 @@ export const GET: APIRoute = async () => {
     publishedAlternatives(),
     publishedCases(),
     publishedTrends(),
+    publishedSistemas(),
   ]);
 
   const categories = getCategories();
   const tools = getTools();
   const body = `# Omar Álvarez — herramientas de IA para pymes
 
-> Directorio y guías en español. El primer párrafo de cada pieza es la respuesta directa. Las cifras citan la fuente y la fecha. No hay llamada gratuita ni paquetes de consultoría en estas páginas.
+> Directorio y guías en español. El primer párrafo de cada pieza es la respuesta directa. Las cifras citan la fuente y la fecha. No hay llamada gratuita ni paquetes de consultoría en estas páginas; hoy no se ofrecen sesiones ni instalaciones, solo una lista de espera.
+
+## Sistemas
+
+${line('Sistemas', sistemaPath(), 'Los sistemas con los que Omar opera Enzo Motorsport, por oficio, para montarlos con herramientas que ya existen. Pago único.')}
+${sistemas.map((entry) => line(entry.data.title, sistemaPath(entry.id), entry.data.description)).join('\n')}
 
 ## Directorio
 
@@ -72,7 +80,7 @@ ${trends.map((entry) => line(entry.data.title, trendPath(entry.id), entry.data.d
 ## Opcional
 
 - [RSS](${SITE}/herramientas-ia/rss.xml): novedades de las guías.
-- [Consultoría](${SITE}/#contacto): sesión privada de 120 minutos, aparte del directorio.
+- [Lista de espera](${SITE}/#contacto): instalaciones y sesiones no están abiertas hoy; anotarse no tiene costo ni compromiso.
 `;
 
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

@@ -13,7 +13,7 @@ const providerLabel = slot.ready ? (slot.provider === 'beehiiv' ? 'Beehiiv' : 'B
   {slot.ready ? (
     <>
       <p>Una nota a la semana: la noticia, la herramienta y un prompt. Sale por {providerLabel}.</p>
-      <form method="post" action={slot.action}>
+      <form method="post" action={slot.action} data-newsletter-form>
         <label for="newsletter-email">Correo</label>
         <input id="newsletter-email" type="email" name="email" required autocomplete="email" placeholder="tu@empresa.com" />
         {slot.provider === 'buttondown' && <input type="hidden" name="embed" value="1" />}
@@ -31,3 +31,13 @@ const providerLabel = slot.ready ? (slot.provider === 'beehiiv' ? 'Beehiiv' : 'B
     </>
   )}
 </aside>
+
+<script>
+  import { trackEvent } from '../../lib/track';
+
+  // El formulario envía directo al proveedor (otro origen): no hay respuesta que leer. Se cuenta el
+  // envío válido (el navegador ya revisó el correo), no la confirmación del proveedor. Sin props.
+  document.querySelectorAll<HTMLFormElement>('[data-newsletter-form]').forEach((form) => {
+    form.addEventListener('submit', () => trackEvent('boletin_suscrito'));
+  });
+</script>

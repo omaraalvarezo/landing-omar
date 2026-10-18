@@ -1,9 +1,13 @@
 import kitData from '../data/kit.json';
-import { bogotaToday } from './directory';
+import {
+  PRODUCT_REFERENCE_PREFIX,
+  createProductReference,
+  parseProductReference,
+  productAmountInCents,
+  type ProductId,
+} from './products';
 
-export const KIT_REFERENCE_PREFIX = 'oa-kit';
-
-const KIT_REFERENCE = /^oa-kit-talleres-q(\d{7,12})-d(\d{8})-t(\d{13})-[a-f0-9]{8}$/;
+export const KIT_REFERENCE_PREFIX = PRODUCT_REFERENCE_PREFIX;
 
 export const KIT = {
   id: 'talleres' as const,
@@ -14,44 +18,23 @@ export const KIT = {
   basis: kitData.basis,
 };
 
-if (!Number.isSafeInteger(KIT.amountCop) || KIT.amountCop !== Math.ceil((KIT.priceUsd * KIT.basis.operationalRateCop) / 1000) * 1000) {
-  throw new Error('KIT_PRICE_INVALID');
-}
-
 export function kitAmountInCents(): number {
-  return KIT.amountCop * 100;
+  return productAmountInCents('talleres');
 }
 
 export function createKitReference(): string {
-  const date = bogotaToday().replace(/-/g, '');
-  const reference = `${KIT_REFERENCE_PREFIX}-talleres-q${kitAmountInCents()}-d${date}-t${Date.now()}-${crypto.randomUUID().slice(0, 8)}`;
-  if (
-    reference.startsWith('oa-consultoria-2h') ||
-    reference.startsWith('oa-directorio-') ||
-    !parseKitReference(reference)
-  ) {
-    throw new Error('KIT_REFERENCE_INVALID');
-  }
-  return reference;
+  return createProductReference('talleres');
 }
 
-export function parseKitReference(reference: unknown): { amountInCents: number } | null {
-  if (typeof reference !== 'string' || reference.length > 140) return null;
-  if (reference.startsWith('oa-consultoria-2h') || reference.startsWith('oa-directorio-')) return null;
-  const match = reference.match(KIT_REFERENCE);
-  if (!match) return null;
-  const amountInCents = Number(match[1]);
-  if (!Number.isSafeInteger(amountInCents) || amountInCents !== kitAmountInCents()) return null;
-  return { amountInCents };
+// Solo referencias del kit: las del sistema de Enzo las lee parseProductReference.
+export function parseKitReference(reference: unknown): { product: ProductId; amountInCents: number } | null {
+  const parsed = parseProductReference(reference);
+  return parsed && parsed.product === 'talleres' ? parsed : null;
 }
 
 export function kitDownloadPath(orderId: string, token: string): string {
   return `/api/herramientas/kit-archivo?pedido=${encodeURIComponent(orderId)}&t=${encodeURIComponent(token)}`;
 }
 
-export const KIT_BUSINESSES = ['taller', 'detailing', 'ambos', 'otra'] as const;
-export type KitBusiness = (typeof KIT_BUSINESSES)[number];
-
-export function isKitBusiness(value: string): value is KitBusiness {
-  return (KIT_BUSINESSES as readonly string[]).includes(value);
-}
+// Viven en `kit-businesses.ts` (sin dependencias) para que `products.ts` no importe este módulo.
+export { KIT_BUSINESSES, isKitBusiness, type KitBusiness } from './kit-businesses';

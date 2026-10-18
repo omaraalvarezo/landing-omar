@@ -1,0 +1,147 @@
+---
+// Marco de las páginas de /sistemas: misma tipografía y tokens del home ("Sistema vivo / taller
+// abierto"), sin el relato del hero ni scripts de terceros.
+import '@fontsource-variable/bricolage-grotesque/wdth.css';
+import '@fontsource-variable/ibm-plex-sans/wdth.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
+
+import Layout from '../../layouts/Layout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  jsonLd?: unknown;
+  noIndex?: boolean;
+  /** El enlace del encabezado se mide como un clic de escalón (`escalon_click`). */
+  cta?: { href: string; label: string; track: 'escalon_click'; trackId: string; placement?: string };
+}
+
+const { title, description, jsonLd, noIndex = false, cta } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<Layout title={title} description={description} showNav={false} minimal themeColor="#131118" jsonLd={jsonLd} noIndex={noIndex}>
+  <div class="sx">
+    <header class="sx-top">
+      <a class="sx-wordmark" href="/" aria-label="Omar Álvarez, inicio">
+        <strong>omar</strong><i aria-hidden="true"></i><span>álvarez</span>
+      </a>
+      <nav aria-label="Secciones">
+        <a href="/sistemas">sistemas</a>
+        <a href="/herramientas-ia">herramientas</a>
+        {cta && (
+          <a class="sx-top__cta" href={cta.href} data-track={cta.track} data-track-id={cta.trackId} data-track-placement={cta.placement}>{cta.label}</a>
+        )}
+      </nav>
+    </header>
+    <slot />
+    <footer class="sx-foot">
+      <p>© {year} Omar Álvarez · Cúcuta, Colombia</p>
+      <nav aria-label="Legal">
+        <a href="/terminos">términos</a>
+        <a href="/privacidad">privacidad</a>
+        <a href="/#contacto">escríbeme</a>
+      </nav>
+    </footer>
+  </div>
+</Layout>
+
+<style>
+  :global(html) { background: #131118; }
+  :global(body) { margin: 0; background: #131118 !important; }
+
+  .sx {
+    --ink: #131118;
+    --ink-soft: #1d1921;
+    --bone: #fff8ea;
+    --bone-muted: #e2dccc;
+    --coral: #ff6b45;
+    --purple: #c79aff;
+    --cobalt: #4b5fe3;
+    --lime: #c8ff3d;
+    --sky: #bdd9d8;
+    --display: 'Bricolage Grotesque Variable', 'Arial Narrow', sans-serif;
+    --body: 'IBM Plex Sans Variable', Arial, sans-serif;
+    --data: 'IBM Plex Mono', monospace;
+    --gutter: clamp(16px, 4.5vw, 70px);
+    min-height: 100vh;
+    overflow-x: clip;
+    color: var(--bone);
+    background: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.55;
+    font-variation-settings: 'wdth' 96;
+  }
+
+  .sx :global(*),
+  .sx :global(*::before),
+  .sx :global(*::after) { box-sizing: border-box; }
+
+  .sx :global(:focus-visible) { outline: 3px solid var(--lime); outline-offset: 3px; border-radius: 2px; }
+
+  .sx-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    padding: 18px var(--gutter);
+    border-bottom: 1px solid rgba(255, 248, 234, .12);
+  }
+
+  .sx-wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    color: var(--bone);
+    font-family: var(--display);
+    font-size: 18px;
+    font-stretch: 84%;
+    letter-spacing: -.045em;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .sx-wordmark strong { font-weight: 760; }
+  .sx-wordmark span { font-weight: 420; }
+  .sx-wordmark i { align-self: center; width: 7px; height: 7px; background: var(--coral); border-radius: 50%; }
+
+  .sx-top nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+  .sx-top nav a,
+  .sx-foot a {
+    color: inherit;
+    font-family: var(--data);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .sx-top nav a:hover,
+  .sx-foot a:hover { color: var(--lime); }
+  .sx-top nav .sx-top__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 10px 16px;
+    color: var(--ink);
+    background: var(--lime);
+    border-radius: 999px;
+  }
+  .sx-top nav .sx-top__cta:hover { color: var(--ink); background: var(--bone); }
+
+  .sx-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px 24px;
+    padding: 28px var(--gutter) 40px;
+    color: rgba(255, 248, 234, .62);
+    border-top: 1px solid rgba(255, 248, 234, .12);
+    font-family: var(--data);
+    font-size: 11px;
+  }
+  .sx-foot p { margin: 0; }
+  .sx-foot nav { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+</style>

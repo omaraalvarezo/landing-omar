@@ -1,3 +1,5 @@
+import type { SistemaContent } from './sistema';
+
 const PAGE_W = 595;
 const PAGE_H = 842;
 const MARGIN = 48;
@@ -345,4 +347,73 @@ export function buildKitZip(prompts: PromptPack, kitPack: KitPack): Uint8Array {
 
 export function promptCount(pack: PromptPack): number {
   return pack.areas.reduce((sum, area) => sum + area.prompts.length, 0);
+}
+
+function sistemaGuideLines(content: SistemaContent): PdfLine[] {
+  const lines: PdfLine[] = [
+    { text: 'El sistema de Enzo · detailing', font: 'F2', size: 18, gap: 24 },
+    { text: 'Omar Álvarez', font: 'F1', size: 10, gap: 16 },
+  ];
+  const paragraph = (text: string, width = 92) => {
+    for (const row of wrap(text, width)) lines.push({ text: row, font: 'F1', size: 10, gap: 13 });
+  };
+  const blank = () => lines.push({ text: '', font: 'F1', size: 10, gap: 8 });
+
+  paragraph(content.intro, 88);
+  blank();
+  lines.push({ text: 'Orden para montarlo', font: 'F2', size: 13, gap: 18 });
+  content.setupOrder.forEach((item, index) => paragraph(`${index + 1}. ${item}`));
+  blank();
+  content.pieces.forEach((piece, index) => {
+    lines.push({ text: `${index + 1}. ${piece.title}`, font: 'F2', size: 13, gap: 18 });
+    paragraph(piece.why);
+    blank();
+    piece.steps.forEach((step, stepIndex) => paragraph(`${stepIndex + 1}) ${step}`));
+    blank();
+  });
+  return lines;
+}
+
+export function buildSistemaGuidePdf(content: SistemaContent): Uint8Array {
+  const pages = paginate(sistemaGuideLines(content));
+  return buildPdf(pages.map((lines, index) => pageStream(lines, index + 1, pages.length)));
+}
+
+function sistemaLeeme(content: SistemaContent): string {
+  return [
+    'El sistema de Enzo · detailing',
+    '',
+    content.intro,
+    '',
+    'Qué trae este zip:',
+    '- guia-sistema-enzo-detailing.pdf: la guía completa, en el orden para montarlo.',
+    ...content.pieces.map(
+      (piece, index) => `- ${index + 1}-${piece.id}/: pasos y plantillas de la pieza "${piece.title}".`,
+    ),
+    '',
+    'Orden para montarlo:',
+    ...content.setupOrder.map((item, index) => `${index + 1}. ${item}`),
+  ].join('\n');
+}
+
+function sistemaPieceFiles(content: SistemaContent): { name: string; data: Uint8Array }[] {
+  return content.pieces.flatMap((piece, index) => {
+    const folder = `${index + 1}-${piece.id}`;
+    const steps = [piece.title, '', piece.why, '', ...piece.steps.map((step, i) => `${i + 1}) ${step}`)].join('\n');
+    return [
+      { name: `${folder}/pasos.txt`, data: textFile(steps) },
+      ...piece.templates.map((template) => ({
+        name: `${folder}/${template.file}`,
+        data: textFile(`${template.title}\n\n${template.body}`),
+      })),
+    ];
+  });
+}
+
+export function buildSistemaZip(content: SistemaContent): Uint8Array {
+  return zipStore([
+    { name: 'leeme.txt', data: textFile(sistemaLeeme(content)) },
+    { name: 'guia-sistema-enzo-detailing.pdf', data: buildSistemaGuidePdf(content) },
+    ...sistemaPieceFiles(content),
+  ]);
 }

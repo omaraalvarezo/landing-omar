@@ -1,13 +1,26 @@
 ---
 import LegalFrame from '../components/LegalFrame.astro';
 import { LEGAL, LEGAL_CITY } from '../lib/legal';
+import { formatCop } from '../lib/money';
+import { getProduct, isProductOnSale } from '../lib/products';
+import { guaranteeTerms, hasGuarantee, longDate, presaleTerms } from '../lib/sistema-copy';
 
 // Aprobado por Omar el 2026-10-16 (persona natural). Reglas tomadas de lo que el sitio hace hoy:
-// consultoría sin cobro en línea, directorio y kit con pago Wompi en COP, recursos libres.
+// directorio, kit y sistema de Enzo con pago Wompi en COP, recursos libres, y una lista de espera
+// (sin cobro) para instalaciones y sesiones. Precio, garantía y fecha de videos salen de getProduct().
+const product = getProduct('enzo-detailing');
+if (!product) throw new Error('Producto ausente: enzo-detailing');
+const price = formatCop(product.amountCop);
+const guarantee = hasGuarantee(product.guaranteeDays) ? product.guaranteeDays : null;
+const dueIso = product.presale?.videosDueDate ?? null;
+const dueDate = dueIso ? longDate(dueIso) : '';
+const onSale = isProductOnSale(product);
+// Fecha vencida: la preventa ya no cobra, pero quien compró antes conserva la devolución.
+const pastDue = Boolean(dueDate) && !onSale;
 
 const title = 'Términos y condiciones de uso · Omar Álvarez';
 const description =
-  'Condiciones para usar omaralvarezo.co: contenido, recursos descargables, directorio de herramientas de IA, listados pagados, kit, consultoría y anuncios.';
+  'Condiciones para usar omaralvarezo.co: contenido, recursos descargables, directorio de herramientas de IA, listados pagados, kit, el sistema de Enzo, lista de espera y anuncios.';
 ---
 
 <LegalFrame title={title} description={description} kicker="Reglas del sitio" heading="Términos y condiciones" legal>
@@ -54,13 +67,21 @@ const description =
     <li>Los enlaces a sitios externos llevan a páginas que no controlo. No respondo por su contenido ni por sus prácticas de privacidad.</li>
   </ul>
 
-  <h2 class="block-title">5. Compras: listados del directorio y kit</h2>
+  <h2 class="block-title">5. Compras: listados del directorio, kit y el sistema de Enzo</h2>
   <ul>
     <li>Los precios se publican en pesos colombianos (COP) en la página de cada producto.</li>
     <li>El pago se procesa en Wompi. La orden se activa cuando Wompi confirma la transacción como aprobada.</li>
+    <li>
+      <strong>{product.name}</strong> cuesta {price} en pago único (referencia: aprox. USD {product.usdReference}).
+      Los datos que pido al comprar son tu nombre, tu correo, tu negocio y tu país.
+    </li>
   </ul>
 
   <h3>Retracto y reembolsos</h3>
+  <p>
+    Esta sección aplica a los listados del directorio y al kit. <strong>{product.name}</strong> tiene sus
+    propias reglas, en la siguiente sección.
+  </p>
   <ul>
     <li>
       Tienes 5 días hábiles desde la compra para retractarte, como dice el artículo 47 de la Ley 1480 de
@@ -75,11 +96,47 @@ const description =
     </li>
   </ul>
 
-  <h2 class="block-title">6. Consultoría</h2>
+  <h3>El sistema de Enzo: preventa y garantía</h3>
   <p>
-    El formulario de <a href="/#contacto">/#contacto</a> es una solicitud, no una compra. No hay pago en el
-    sitio. Leo el caso y respondo por correo. Si hay encaje, el precio, la fecha y las condiciones se
-    acuerdan por escrito antes de la sesión. Si no hay encaje, te lo digo.
+    Estas reglas aplican solo a <strong>{product.name}</strong> ({price}) y son las mismas que lees en
+    <a href={product.page}>{product.page}</a>.
+  </p>
+  <ul>
+    <li>
+      <strong>Preventa.</strong> {presaleTerms({ dueDate, onSale, place: 'fuera' })}
+      {pastDue && ' Si compraste antes y los videos no llegaron para esa fecha, te devuelvo el dinero completo.'}
+    </li>
+    {guarantee && (
+      <li>
+        <strong>Garantía de {guarantee} días calendario.</strong> {guaranteeTerms(guarantee)} Mi correo es
+        <a href={`mailto:${LEGAL.privacyEmail}`}>{LEGAL.privacyEmail}</a>; incluye tu nombre y el correo con el
+        que compraste. Los {guarantee} días se cuentan desde la fecha de la compra.
+      </li>
+    )}
+    {guarantee && (
+      <li>
+        <strong>Retracto.</strong> Para este producto, la garantía reemplaza la excepción del retracto por archivo
+        descargado: aunque ya hayas descargado la guía y las plantillas, puedes pedir la devolución dentro del
+        plazo de la garantía.
+      </li>
+    )}
+    <li>
+      <strong>Devolución.</strong> El dinero se devuelve por el mismo medio de pago en máximo 30 días calendario.
+    </li>
+    <li>
+      El sistema es la guía, las plantillas y los videos para montar las piezas en tu negocio con herramientas
+      que ya existen. No prometo un resultado de ventas. Lo que cuestan esas herramientas se lo pagas a cada
+      una, no a mí.
+    </li>
+  </ul>
+
+  <h2 class="block-title">6. Sesión privada e instalación</h2>
+  <p>
+    Hoy no ofrezco instalaciones ni sesiones privadas, y no hay precio ni paquete publicado para ellas. En
+    <a href="/#contacto">/#contacto</a> solo hay una lista de espera. Anotarte es una solicitud, no una
+    compra ni un compromiso mío: no hay pago en el sitio y no te obliga a nada. Si abro cupo, te escribo y
+    ahí se acuerda por escrito el precio, la fecha y las condiciones. También puedes usar la lista para
+    hacer una pregunta del sistema, que respondo por correo.
   </p>
 
   <h2 class="block-title">7. Anuncios</h2>

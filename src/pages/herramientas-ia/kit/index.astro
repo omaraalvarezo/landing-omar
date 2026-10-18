@@ -120,6 +120,8 @@ const jsonLd = {
 </Layout>
 
 <script>
+  import { trackEvent } from '../../../lib/track';
+
   const form = document.querySelector<HTMLFormElement>('#kit-form');
   const errorNode = document.querySelector<HTMLElement>('#kit-error');
 
@@ -147,6 +149,7 @@ const jsonLd = {
         if (button) button.disabled = false;
         return;
       }
+      trackEvent('kit_checkout_iniciado');
       window.location.href = body.checkoutUrl;
     } catch {
       if (errorNode) errorNode.textContent = 'No hubo respuesta. Intenta de nuevo.';

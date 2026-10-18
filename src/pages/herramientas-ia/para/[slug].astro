@@ -4,6 +4,8 @@ import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
 import GuideOffers from '../../../components/directory/GuideOffers.astro';
 import PromptCard from '../../../components/directory/PromptCard.astro';
 import ToolChips from '../../../components/directory/ToolChips.astro';
+import { formatCop } from '../../../lib/money';
+import { getProduct } from '../../../lib/products';
 import {
   articleNode,
   breadcrumb,
@@ -13,8 +15,10 @@ import {
   paraPath,
   publicEntries,
   publishedPara,
+  publishedSistemas,
   requireRelated,
   SITE,
+  sistemaPath,
   softwareNodes,
   toolsOf,
   type ParaEntry,
@@ -39,6 +43,9 @@ const promptCards = entry.data.prompts?.length
     : [];
 const related = requireRelated(entry.data.related, await publishedPara(), entry.id);
 const news = await newsForPara(entry.id);
+// La guía y el sistema del mismo oficio se enlazan entre sí (la vuelta está en /sistemas/[slug]).
+const sistema = (await publishedSistemas()).find((item) => item.data.oficio === entry.id) ?? null;
+const sistemaProduct = sistema ? getProduct(sistema.data.product) : null;
 const url = `${SITE}${paraPath(entry.id)}`;
 const documentTitle = `${entry.data.title} — guía para pymes`;
 const jsonLd = {
@@ -73,6 +80,16 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <div class="prose"><Content /></div>
+  {sistema && sistemaProduct && (
+    <aside class="lead-cta">
+      <p>Sistema · pago único</p>
+      <h2>{sistema.data.title}</h2>
+      <p>{sistema.data.problem}</p>
+      <a href={sistemaPath(sistema.id)} data-track="escalon_click" data-track-id="sistema-enzo">
+        Ver el sistema · {formatCop(sistemaProduct.amountCop)}
+      </a>
+    </aside>
+  )}
   {(entry.id === 'talleres-de-carros' || entry.id === 'detailing') && <GuideOffers lead resources />}
   <h2 class="block-title">Herramientas del directorio</h2>
   <ToolChips tools={tools} />

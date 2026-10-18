@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Lee las órdenes del kit en Upstash.
+// Lee las órdenes del kit y del sistema en Upstash. Primera columna: producto. Tras el estado van el aviso a Omar y el correo al comprador ('-' si no aplica).
 //   npm run kit:pending
 //   npm run kit:pending -- --link
 //
@@ -31,15 +31,19 @@ if (list.length === 0) {
 for (const id of list) {
   const order = await redis.get(`${prefix}:order:${id}`);
   if (!order || typeof order !== 'object') continue;
+  // Las órdenes anteriores a los productos múltiples no traen `product`: eran del kit.
   const columns = [
+    order.product || 'talleres',
     order.status,
     order.notifyStatus || 'sin-aviso',
+    order.buyerNotifyStatus || '-',
     order.amountInCents,
     order.buyerName,
     order.email,
     order.business,
     order.reference,
     order.downloadExpiresAt || 'sin-enlace',
+    order.country || '-',
   ];
   if (withLink && order.status === 'APPROVED' && order.downloadToken) {
     columns.push(`${site}/api/herramientas/kit-archivo?pedido=${order.id}&t=${order.downloadToken}`);

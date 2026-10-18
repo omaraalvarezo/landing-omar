@@ -1,5 +1,10 @@
-import { KIT } from './kit';
-import { notifyKitPayment, type KitMailKind, type KitMailResult } from './kit-mail';
+import {
+  notifyKitPayment,
+  sendBuyerReceipt,
+  type BuyerMailResult,
+  type KitMailKind,
+  type KitMailResult,
+} from './kit-mail';
 import {
   claimKitMailLock,
   createKitDownloadToken,
@@ -10,10 +15,16 @@ import {
   type KitOrder,
   type KitPaymentStatus,
 } from './kit-orders';
+import { getProduct, productAmountInCents, type ProductId } from './products';
 import type { WompiTransaction } from './wompi';
 
 export type KitSettlement =
-  | { ok: true; order: KitOrder; email: KitMailResult | 'skipped' }
+  | {
+      ok: true;
+      order: KitOrder;
+      email: KitMailResult | 'skipped';
+      buyerEmail: BuyerMailResult | 'skipped';
+    }
   | { ok: false; reason: 'NOT_FOUND' | 'MISMATCH' };
 
 function statusFromTransaction(status: WompiTransaction['status']): KitPaymentStatus {
@@ -21,30 +32,39 @@ function statusFromTransaction(status: WompiTransaction['status']): KitPaymentSt
   return 'PENDING';
 }
 
-function grantDownload(order: KitOrder, now: string): void {
+function grantDownload(order: KitOrder, now: string, downloadDays: number): void {
   if (!isKitDownloadToken(order.downloadToken) || !order.downloadExpiresAt) {
     order.downloadToken = createKitDownloadToken();
-    order.downloadExpiresAt = new Date(Date.parse(now) + KIT.downloadDays * 24 * 60 * 60 * 1_000).toISOString();
+    order.downloadExpiresAt = new Date(Date.parse(now) + downloadDays * 24 * 60 * 60 * 1_000).toISOString();
   }
 }
 
 export async function settleKitPayment(
   transaction: WompiTransaction,
-  amountInCents: number,
+  parsed: { product: ProductId; amountInCents: number },
 ): Promise<KitSettlement> {
-  if (transaction.currency !== 'COP' || transaction.amount_in_cents !== amountInCents) {
+  const { amountInCents } = parsed;
+  const product = getProduct(parsed.product);
+  if (
+    !product ||
+    amountInCents !== productAmountInCents(product.id) ||
+    transaction.currency !== 'COP' ||
+    transaction.amount_in_cents !== amountInCents
+  ) {
     return { ok: false, reason: 'MISMATCH' };
   }
 
   const existing = await getKitOrderByReference(transaction.reference);
   if (!existing) return { ok: false, reason: 'NOT_FOUND' };
-  if (existing.amountInCents !== amountInCents || existing.product !== 'talleres') {
+  // `getKitOrderByReference` ya normaliza las órdenes viejas sin `product` a `talleres`.
+  if (existing.amountInCents !== amountInCents || existing.product !== product.id) {
     return { ok: false, reason: 'MISMATCH' };
   }
 
   const now = new Date().toISOString();
   const order: KitOrder = {
     ...existing,
+    product: product.id,
     updatedAt: now,
     paymentMethod: String(transaction.payment_method_type || '').slice(0, 60) || existing.paymentMethod,
     statusMessage: String(transaction.status_message || '').slice(0, 240) || existing.statusMessage,
@@ -60,7 +80,7 @@ export async function settleKitPayment(
     order.status = 'APPROVED';
     if (!double) order.transactionId = transaction.id;
     order.approvedAt = order.approvedAt || now;
-    grantDownload(order, now);
+    grantDownload(order, now, product.downloadDays);
     if (double) emailKind = 'double';
     else if (!order.notifiedAt) emailKind = 'approved';
   } else if (transaction.status === 'VOIDED' && order.transactionId === transaction.id && approvedIds.has(transaction.id)) {
@@ -75,28 +95,73 @@ export async function settleKitPayment(
   }
 
   await saveKitOrder(order);
-  if (!emailKind) return { ok: true, order, email: 'skipped' };
 
+  const email = emailKind ? await notifyOwner(order, transaction.id, emailKind, now) : 'skipped';
+
+  // Correo al comprador: independiente del aviso a Omar, para que un reintento de Wompi
+  // pueda reenviar solo el que falló. Una vez por transacción, nunca en un doble cobro.
+  const buyerDue =
+    transaction.status === 'APPROVED' &&
+    order.status === 'APPROVED' &&
+    order.transactionId === transaction.id &&
+    product.buyerEmail;
+  const buyerEmail = buyerDue ? await notifyBuyer(order, transaction.id) : 'skipped';
+
+  return { ok: true, order, email, buyerEmail };
+}
+
+async function notifyOwner(
+  order: KitOrder,
+  transactionId: string,
+  kind: KitMailKind,
+  now: string,
+): Promise<KitMailResult | 'skipped'> {
   const alerts = new Set(order.alertedTransactionIds || []);
-  const alertKey = `${emailKind}:${transaction.id}`;
-  if (alerts.has(alertKey)) return { ok: true, order, email: 'skipped' };
+  const alertKey = `${kind}:${transactionId}`;
+  if (alerts.has(alertKey)) return 'skipped';
 
   const lockKey = `${order.id}:${alertKey}`;
   const claimed = await claimKitMailLock(lockKey);
-  if (!claimed) return { ok: true, order, email: 'skipped' };
+  if (!claimed) return 'skipped';
 
-  const email = await notifyKitPayment({ ...order, transactionId: transaction.id }, emailKind);
+  const email = await notifyKitPayment({ ...order, transactionId }, kind);
   if (email === 'failed') {
     await releaseKitMailLock(lockKey);
     order.notifyStatus = 'failed';
     await saveKitOrder(order);
-    return { ok: true, order, email };
+    return email;
   }
 
   alerts.add(alertKey);
   order.alertedTransactionIds = [...alerts];
   order.notifyStatus = email === 'sent' ? 'sent' : 'unconfigured';
-  if (email === 'sent' && emailKind === 'approved') order.notifiedAt = now;
+  if (email === 'sent' && kind === 'approved') order.notifiedAt = now;
   await saveKitOrder(order);
-  return { ok: true, order, email };
+  return email;
+}
+
+async function notifyBuyer(order: KitOrder, transactionId: string): Promise<BuyerMailResult | 'skipped'> {
+  const alerts = new Set(order.alertedTransactionIds || []);
+  const alertKey = `buyer:${transactionId}`;
+  if (alerts.has(alertKey)) return 'skipped';
+
+  const lockKey = `${order.id}:${alertKey}`;
+  const claimed = await claimKitMailLock(lockKey);
+  if (!claimed) return 'skipped';
+
+  const email = await sendBuyerReceipt({ ...order, transactionId });
+  // Un rechazo permanente queda como `failed` en la orden, pero con su clave: el reintento de Wompi
+  // no lo vuelve a mandar y el webhook no responde 503 para siempre. Omar lo ve en la orden.
+  order.buyerNotifyStatus = email === 'failed-permanent' ? 'failed' : email;
+  if (email === 'failed') {
+    // Sin la clave de alerta, el reintento de Wompi (el evento responde 503) lo vuelve a intentar.
+    await releaseKitMailLock(lockKey);
+    await saveKitOrder(order);
+    return email;
+  }
+
+  alerts.add(alertKey);
+  order.alertedTransactionIds = [...alerts];
+  await saveKitOrder(order);
+  return email;
 }

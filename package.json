@@ -35,9 +35,11 @@
     "content:new:casos": "node scripts/content-new.mjs --type casos",
     "content:new:tendencias": "node scripts/content-new.mjs --type tendencias",
     "content:check": "node scripts/check-content.mjs",
+    "test": "vitest run",
     "offers:check": "node --experimental-strip-types scripts/check-offers.mjs",
     "lead:list": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-leads.mjs",
     "kit:pending": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-kit-orders.mjs",
+    "sistema:avisar-videos": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/notify-sistema-videos.mjs",
     "prepare": "husky"
   },
   "dependencies": {
@@ -54,6 +56,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
+    "@vercel/analytics": "2.0.1",
     "astro": "^7.4.0",
     "bcryptjs": "^3.0.3",
     "lenis": "^1.1.20",
@@ -64,7 +67,8 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "gitleaks": "^1.0.0",
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "vitest": "4.1.12"
   },
   "overrides": {
     "@vercel/routing-utils": {

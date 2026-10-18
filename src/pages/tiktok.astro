@@ -1,0 +1,170 @@
+---
+// Destino del link de la bio de TikTok. Una sola pantalla, sin scripts de terceros, a 390 px.
+// Arriba el escalón principal (El sistema de Enzo); abajo lo gratis y el kit.
+import SistemaShell from '../components/sistemas/SistemaShell.astro';
+import { LADDER, PRIMARY_RUNG } from '../lib/ladder';
+import { formatCop } from '../lib/money';
+
+const primary = LADDER.find((rung) => rung.id === PRIMARY_RUNG);
+if (!primary) throw new Error(`TIKTOK_ESCALON_PRINCIPAL_FALTA:${PRIMARY_RUNG}`);
+const pdf = LADDER.find((rung) => rung.id === 'pdf');
+const kit = LADDER.find((rung) => rung.id === 'kit');
+if (!pdf || !kit) throw new Error('TIKTOK_ESCALON_FALTA');
+
+// La bitácora entra solo cuando exista su ruta en src/pages.
+const hasBitacora =
+  Object.keys(import.meta.glob(['./bitacora*', './bitacora*/**'])).length > 0;
+
+const priceLine = (rung: typeof primary) =>
+  rung.priceCop ? `${formatCop(rung.priceCop)}${rung.usdReference ? ` · aprox. USD ${rung.usdReference}` : ''}` : null;
+
+const secondary = [
+  { rung: pdf, tag: 'Gratis', text: 'Los prompts que uso yo. Dejas tu correo y lo descargas.' },
+  { rung: kit, tag: priceLine(kit) ?? '', text: 'Prompts y guías para el taller, con descarga directa.' },
+];
+
+const title = 'Desde TikTok — Omar Álvarez';
+const description = 'Lo que vi en el video, en un solo lugar: el sistema de Enzo, el PDF de prompts y el kit para talleres.';
+---
+
+<SistemaShell title={title} description={description} noIndex>
+  <section class="tk" aria-labelledby="tk-titulo">
+    <p class="tk__eyebrow">Vienes de TikTok</p>
+    <h1 id="tk-titulo">Lo que opero en Enzo, en un solo lugar.</h1>
+    <p class="tk__lede">Empieza por el primero. Lo demás es para probar sin compromiso.</p>
+
+    <a
+      class="tk__main"
+      href={primary.href}
+      data-track="escalon_click"
+      data-track-id={primary.id}
+      data-track-placement="tiktok"
+    >
+      <span class="tk__tag">{primary.action === 'preventa' ? 'Preventa' : 'Principal'}{priceLine(primary) ? ` · ${priceLine(primary)}` : ''}</span>
+      <strong>{primary.name}</strong>
+      <span class="tk__text">{primary.gets}</span>
+      <span class="tk__go">ver el sistema <i aria-hidden="true">↗</i></span>
+    </a>
+
+    <ul class="tk__list">
+      {secondary.map(({ rung, tag, text }) => (
+        <li>
+          <a
+            href={rung.href}
+            data-track="escalon_click"
+            data-track-id={rung.id}
+            data-track-placement="tiktok"
+          >
+            <span class="tk__tag tk__tag--soft">{tag}</span>
+            <strong>{rung.name}</strong>
+            <span class="tk__text">{text}</span>
+          </a>
+        </li>
+      ))}
+      {hasBitacora && (
+        <li>
+          <a href="/bitacora" data-track="escalon_click" data-track-id="bitacora" data-track-placement="tiktok">
+            <span class="tk__tag tk__tag--soft">Gratis</span>
+            <strong>Bitácora</strong>
+            <span class="tk__text">Lo que voy armando, semana a semana.</span>
+          </a>
+        </li>
+      )}
+    </ul>
+
+    <p class="tk__note">Hoy no estoy tomando instalaciones ni sesiones. <a href="/#contacto">Anótate en la lista</a> y te escribo cuando abra cupo.</p>
+  </section>
+</SistemaShell>
+
+<style>
+  .tk {
+    width: min(100%, 560px);
+    margin: 0 auto;
+    padding: clamp(36px, 8vw, 72px) var(--gutter) clamp(48px, 9vw, 88px);
+  }
+  .tk h1,
+  .tk p { margin-top: 0; }
+  .tk a { color: inherit; }
+
+  .tk__eyebrow,
+  .tk__tag {
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .tk__eyebrow { margin-bottom: 14px; color: var(--lime); }
+
+  .tk h1 {
+    margin-bottom: 12px;
+    font-family: var(--display);
+    font-size: clamp(34px, 9vw, 52px);
+    font-stretch: 78%;
+    font-weight: 780;
+    letter-spacing: -.035em;
+    line-height: .98;
+  }
+  .tk__lede { margin-bottom: 28px; color: var(--bone-muted); }
+
+  .tk__main,
+  .tk__list a {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+  .tk__main strong,
+  .tk__list strong {
+    font-family: var(--display);
+    font-stretch: 84%;
+    font-weight: 740;
+    letter-spacing: -.02em;
+    line-height: 1.08;
+  }
+
+  .tk__main {
+    color: var(--ink);
+    background: var(--lime);
+    border: 2px solid var(--lime);
+  }
+  .tk__main strong { font-size: clamp(24px, 6.4vw, 30px); }
+  .tk__main .tk__text { color: rgba(19, 17, 24, .82); }
+  .tk__go {
+    margin-top: 6px;
+    font-family: var(--data);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .tk__main:hover { background: var(--bone); border-color: var(--bone); }
+
+  .tk__list {
+    display: grid;
+    gap: 12px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tk__list a {
+    min-height: 48px;
+    color: var(--bone);
+    background: var(--ink-soft);
+    border: 1px solid rgba(255, 248, 234, .18);
+  }
+  .tk__list strong { font-size: 20px; }
+  .tk__list a:hover { border-color: var(--lime); }
+  .tk__tag--soft { color: var(--purple); }
+  .tk__list .tk__text { color: var(--bone-muted); font-size: 15px; }
+
+  .tk__note {
+    margin: 28px 0 0;
+    color: rgba(255, 248, 234, .72);
+    font-size: 14px;
+  }
+  .tk__note a { text-decoration: underline; text-underline-offset: 3px; }
+  .tk__note a:hover { color: var(--lime); }
+</style>

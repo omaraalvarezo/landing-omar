@@ -8,6 +8,7 @@ Catálogo plano del conocimiento del proyecto. Una línea por página `wiki/` y 
 
 ### Decisiones
 
+- [[wiki/decisiones/sistema-de-enzo]] — 2026-10-17 — v4.0: el sistema de Enzo, escalera, lista de espera y §11.
 - [[wiki/decisiones/ofertas-directorio-herramientas-ia]] — 2026-10-16 — PDF de prompts, kit de talleres y calculadoras.
 - [[wiki/decisiones/rutina-editorial-herramientas-ia]] — 2026-10-16 — cómo el agente publica guías, noticias y prompts del directorio.
 - [[wiki/decisiones/directorio-herramientas-ia]] — 2026-10-16 — directorio, planes COP, Wompi y activación por datos.
@@ -20,6 +21,7 @@ _(vacío)_
 
 ### Síntesis
 
+- [[wiki/sintesis/recibos-operativos]] — 2026-10-17 — cifras de Enzo y Arkhē con fuente, método y fecha; lo que no se publica y por qué.
 - [[wiki/sintesis/precio-psicologico-trm-tiktok]] — 2026-08-19 — evidencia de pricing, USD 797, TRM y secuencia TikTok.
 - [[wiki/sintesis/posicionamiento-consultoria-dos-horas]] — 2026-08-19 — oferta única, ticket, cliente y flujo Wompi → Cal.com.
 - [[wiki/sintesis/framework-4c-empresas-servicios]] — 2026-08-20 — Captar, Convertir, Cumplir y Continuar para dueños y socios de empresas de servicios.
@@ -46,5 +48,5 @@ _(vacío)_
 
 ---
 
-> **Última revisión:** 2026-10-16
+> **Última revisión:** 2026-10-17
 > **Convención de actualización:** cada vez que se agrega una página a `wiki/` o un archivo a `raw/`, sumar una línea aquí con `[[ruta]]` y una descripción de ≤ 80 caracteres.

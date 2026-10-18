@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="ogTitle ogDesc">
-  <title id="ogTitle">Omar Álvarez — Consultoría privada para construir un sistema vivo</title>
-  <desc id="ogDesc">Consultoría de dos horas para conectar ventas, operación y postventa mediante el Marco 4C: Captar, Convertir, Cumplir y Continuar.</desc>
+  <title id="ogTitle">Omar Álvarez — Los sistemas con los que opero Enzo y Arkhē</title>
+  <desc id="ogDesc">Sistemas reales de Enzo Motorsport y Arkhē para conectar ventas, operación y postventa con el Marco 4C: Captar, Convertir, Cumplir y Continuar. Disponible: El sistema de Enzo, detailing.</desc>
 
   <defs>
     <radialGradient id="coralGlow" cx="50%" cy="50%" r="50%">
@@ -34,7 +34,7 @@
   <text x="58" y="58" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="800" fill="#F7F0E6" letter-spacing="1.8">OMAR ÁLVAREZ</text>
   <circle cx="249" cy="51" r="5" fill="#B9F227"/>
   <text x="267" y="58" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#A9A1A8" letter-spacing="2.1">NEGOCIO × SISTEMAS × IA</text>
-  <text x="1142" y="58" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#A9A1A8" letter-spacing="1.7">CONSULTORÍA PRIVADA · 120 MIN</text>
+  <text x="1142" y="58" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#A9A1A8" letter-spacing="1.7">SISTEMAS REALES DE ENZO Y ARKHĒ</text>
   <line x1="58" y1="84" x2="1142" y2="84" stroke="#F7F0E6" stroke-opacity="0.14"/>
 
   <!-- Core promise -->
@@ -77,9 +77,9 @@
   <!-- Conversion rail -->
   <line x1="58" y1="542" x2="1142" y2="542" stroke="#F7F0E6" stroke-opacity="0.14"/>
   <g transform="translate(58 569)">
-    <rect width="186" height="38" rx="19" fill="#F7F0E6"/>
-    <text x="93" y="25" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="900" fill="#141014" letter-spacing="0.8">SESIÓN DE 2 HORAS</text>
+    <rect width="318" height="38" rx="19" fill="#F7F0E6"/>
+    <text x="159" y="25" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="900" fill="#141014" letter-spacing="0.8">EL SISTEMA DE ENZO · DETAILING</text>
   </g>
-  <text x="264" y="594" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#A9A1A8" letter-spacing="1.2">PARA DUEÑOS Y SOCIOS DE EMPRESAS DE SERVICIOS</text>
+  <text x="396" y="594" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#A9A1A8" letter-spacing="1.2">MONTADO CON HERRAMIENTAS QUE YA EXISTEN</text>
   <text x="1142" y="594" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800" fill="#F7F0E6">omaralvarezo.co →</text>
 </svg>

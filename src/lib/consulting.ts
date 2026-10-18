@@ -1,10 +1,5 @@
-// Datos comerciales de la consultoría. Desde 2026-10-16 no hay pago en línea:
-// quien quiere la sesión escribe por el formulario y Omar responde por correo.
-export const CONSULTING = {
-  name: 'Sesión de arquitectura operativa con IA',
-  shortName: 'Consultoría 2H',
-  durationMinutes: 120,
-} as const;
+// Límites y validación del formulario de la lista de espera (y de /api/contacto).
+// La sesión de consultoría ya no se ofrece: solo queda la lista de espera.
 
 // Límites compartidos entre el formulario y el endpoint `/api/contacto`.
 export const CONTACT_LIMITS = {
@@ -12,8 +7,8 @@ export const CONTACT_LIMITS = {
   email: 254,
   phone: 24,
   business: 120,
-  problemMin: 20,
-  problemMax: 1200,
+  oficioOtro: 60,
+  message: 600,
 } as const;
 
 // Validación compartida: el navegador y `/api/contacto` aplican exactamente las mismas reglas.

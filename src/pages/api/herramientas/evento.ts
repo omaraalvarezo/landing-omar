@@ -3,8 +3,9 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { parseDirectoryReference } from '../../../lib/directory';
 import { settleDirectoryPayment } from '../../../lib/directory-payment';
-import { parseKitReference } from '../../../lib/kit';
 import { settleKitPayment } from '../../../lib/kit-payment';
+import { parseProductReference } from '../../../lib/products';
+import { trackSistemaSale } from '../../../lib/track-server';
 import { verifyWompiEvent } from '../../../lib/wompi-events';
 import { fetchTransaction } from '../../../lib/wompi';
 
@@ -49,7 +50,7 @@ export const POST: APIRoute = async ({ request }) => {
   const reference = referenceOf(payload);
   if (reference.startsWith('oa-consultoria-2h')) return json(200, { ignored: 'consultoria' });
   const directoryReference = parseDirectoryReference(reference);
-  const kitReference = parseKitReference(reference);
+  const kitReference = parseProductReference(reference);
   if (!directoryReference && !kitReference) return json(200, { ignored: 'referencia' });
 
   try {
@@ -61,14 +62,23 @@ export const POST: APIRoute = async ({ request }) => {
     const settled = directoryReference
       ? await settleDirectoryPayment(transaction)
       : kitReference
-        ? await settleKitPayment(transaction, kitReference.amountInCents)
+        ? await settleKitPayment(transaction, kitReference)
         : null;
     if (!settled) return json(200, { ignored: 'referencia' });
     if (!settled.ok) {
       console.error(`[${channel}] evento sin orden aplicable`, settled.reason, reference);
       return json(200, { ignored: settled.reason });
     }
-    if (settled.email === 'failed') return json(503, { error: 'aviso' });
+    // La venta se mide aquí y no en `settleKitPayment` ni en las páginas de pedido: esta URL no lleva
+    // secretos. Da igual quién liquidó primero (el regreso del comprador casi siempre llega antes que el
+    // webhook): `purchaseTrackedAt` y un candado evitan contarla dos veces. El tope de tiempo acota la respuesta.
+    if (kitReference && 'product' in settled.order) await trackSistemaSale(settled.order);
+    // 503 hace que Wompi reintente. El aviso a Omar y el del comprador tienen cada uno su clave,
+    // así que el reintento solo reenvía el que falló. Un rechazo permanente del recibo
+    // (`failed-permanent`, un 4xx de Resend) no se reintenta: ya quedó registrado en la orden.
+    if (settled.email === 'failed' || ('buyerEmail' in settled && settled.buyerEmail === 'failed')) {
+      return json(503, { error: 'aviso' });
+    }
     return json(200, { ok: true, status: settled.order.status, email: settled.email });
   } catch (error) {
     console.error('[directorio] no se pudo registrar el evento', error);

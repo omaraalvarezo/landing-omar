@@ -1,0 +1,10 @@
+[
+  { "id": "detailing", "label": "Detailing automotriz" },
+  { "id": "taller", "label": "Taller (mecánico, latonería, pintura)" },
+  { "id": "coworking", "label": "Coworking" },
+  { "id": "cafe-restaurante", "label": "Café o restaurante" },
+  { "id": "clinica", "label": "Clínica o consultorio" },
+  { "id": "inmobiliaria", "label": "Inmobiliaria" },
+  { "id": "peluqueria", "label": "Peluquería o barbería" },
+  { "id": "otro", "label": "Otro oficio" }
+]

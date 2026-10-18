@@ -24,9 +24,13 @@ let note = '';
 
 if (isKitOrderId(orderId)) {
   try {
-    order = await getKitOrderById(orderId);
-    const token = Astro.cookies.get(kitAccessCookieName(orderId))?.value || '';
-    allowed = Boolean(order) && (await hasKitOrderAccess(order as KitOrder, token));
+    const found = await getKitOrderById(orderId);
+    // Un pedido de otro producto (el sistema de Enzo) se trata igual que uno que no existe.
+    if (found && found.product === 'talleres') {
+      order = found;
+      const token = Astro.cookies.get(kitAccessCookieName(orderId))?.value || '';
+      allowed = await hasKitOrderAccess(found, token);
+    }
   } catch (error) {
     console.error('[kit] no se pudo leer la orden', error);
     note = 'El registro de pagos no está disponible en este momento.';
@@ -42,7 +46,7 @@ if (allowed && order) {
       if (!transaction || transaction.reference !== order.reference || !parsed) {
         note = 'Esa transacción no corresponde a este pago.';
       } else {
-        const settled = await settleKitPayment(transaction, parsed.amountInCents);
+        const settled = await settleKitPayment(transaction, parsed);
         if (settled.ok) order = settled.order;
       }
     } catch (error) {

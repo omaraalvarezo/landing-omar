@@ -1,7 +1,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { createKitReference, isKitBusiness, kitAmountInCents } from '../../../lib/kit';
+import { bogotaToday } from '../../../lib/directory';
 import {
   consumeKitRateLimit,
   createKitAccessToken,
@@ -9,9 +9,14 @@ import {
   createKitOrderId,
   kitAccessCookieName,
 } from '../../../lib/kit-orders';
+import {
+  createProductReference,
+  getProduct,
+  isProductOnSale,
+  productAmountInCents,
+  validateCheckoutInput,
+} from '../../../lib/products';
 import { createCheckoutUrl } from '../../../lib/wompi';
-
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function clean(value: unknown, max: number): string {
   return typeof value === 'string' ? value.replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, max) : '';
@@ -53,11 +58,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   if (clean(input.company, 80)) return json(400, { error: 'No pudimos iniciar el pago.' });
 
-  const buyerName = clean(input.buyerName, 80);
-  const email = clean(input.email, 254).toLowerCase();
-  const business = clean(input.business, 20);
-  if (buyerName.length < 2 || !EMAIL.test(email) || !isKitBusiness(business)) {
-    return json(400, { error: 'Revisa nombre, correo y tipo de negocio.' });
+  const checked = validateCheckoutInput(input);
+  if (!checked.ok) return json(400, { error: checked.error });
+  const { buyerName, email, business, country } = checked;
+  const product = getProduct(checked.product);
+  if (!product) return json(400, { error: 'Ese producto no existe.' });
+
+  // Antes de gastar un intento del límite o de llamar a Wompi: sin venta abierta no se cobra.
+  if (!isProductOnSale(product, bogotaToday())) {
+    return json(503, { error: 'Abre pronto. Anótate en la lista y te aviso.' });
   }
 
   const siteUrl = configuredSite || requestOrigin;
@@ -66,11 +75,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       return json(429, { error: 'Demasiados intentos. Espera unos minutos.' });
     }
 
-    const amountInCents = kitAmountInCents();
-    const reference = createKitReference();
+    const amountInCents = productAmountInCents(product.id);
+    const reference = createProductReference(product.id);
     const orderId = createKitOrderId();
     const accessToken = createKitAccessToken();
-    const redirectUrl = new URL(`/herramientas-ia/kit/pedido/${orderId}`, siteUrl).toString();
+    const redirectUrl = new URL(`${product.orderPath}/${orderId}`, siteUrl).toString();
     const checkoutUrl = await createCheckoutUrl({
       reference,
       amountInCents,
@@ -82,11 +91,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     await createKitOrder({
       id: orderId,
       reference,
+      product: product.id,
       amountInCents,
       buyerName,
       email,
       business,
       accessToken,
+      country: country || undefined,
     });
 
     const secure = new URL(siteUrl).protocol === 'https:' ? '; Secure' : '';
