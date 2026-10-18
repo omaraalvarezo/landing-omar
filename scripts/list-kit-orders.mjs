@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Lee las órdenes del kit y del sistema en Upstash. Primera columna: producto.
+// Lee las órdenes del kit y del sistema en Upstash. Primera columna: producto. Tras el estado van el aviso a Omar y el correo al comprador ('-' si no aplica).
 //   npm run kit:pending
 //   npm run kit:pending -- --link
 //
@@ -36,6 +36,7 @@ for (const id of list) {
     order.product || 'talleres',
     order.status,
     order.notifyStatus || 'sin-aviso',
+    order.buyerNotifyStatus || '-',
     order.amountInCents,
     order.buyerName,
     order.email,

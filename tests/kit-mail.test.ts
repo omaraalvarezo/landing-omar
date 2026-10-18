@@ -35,7 +35,7 @@ vi.mock('../src/lib/editorial', () => ({ SITE: 'https://omaralvarezo.co' }));
 import { buyerOrderLink, sendBuyerReceipt } from '../src/lib/kit-mail';
 import { settleKitPayment } from '../src/lib/kit-payment';
 import type { KitOrder } from '../src/lib/kit-orders';
-import { parseProductReference, productAmountInCents, type ProductId } from '../src/lib/products';
+import { getProduct, parseProductReference, productAmountInCents, type ProductId } from '../src/lib/products';
 
 const ORDER_ID = '22222222-2222-4222-8222-222222222222';
 const TOKEN = 'b'.repeat(64);
@@ -133,6 +133,19 @@ describe('sendBuyerReceipt', () => {
     expect(call.headers['Idempotency-Key']).toBe(`buyer-receipt-${ORDER_ID}-tx-1`);
   });
 
+  it('con videosDueDate dice "antes del 30 de noviembre de 2026"', async () => {
+    const presale = getProduct('enzo-detailing')!.presale!;
+    const previous = presale.videosDueDate;
+    presale.videosDueDate = '2026-11-30';
+    try {
+      const order = { ...seedOrder('enzo-detailing'), downloadToken: TOKEN };
+      await sendBuyerReceipt(order, 'https://omaralvarezo.co');
+      expect(String(sent(fetchMock)[0].body.text)).toContain('antes del 30 de noviembre de 2026');
+    } finally {
+      presale.videosDueDate = previous;
+    }
+  });
+
   it('reply_to cae al correo de Omar si no hay DIRECTORY_NOTIFY_EMAIL', async () => {
     delete env.values.DIRECTORY_NOTIFY_EMAIL;
     const order = { ...seedOrder('enzo-detailing'), downloadToken: TOKEN };
@@ -219,6 +232,51 @@ describe('settleKitPayment: correo al comprador', () => {
     await settleKitPayment(approved(order.reference, 'tx-1'), parsed);
     const double = await settleKitPayment(approved(order.reference, 'tx-2'), parsed);
     expect(double.ok && double.buyerEmail).toBe('skipped');
+    expect(sentTo(fetchMock, 'laura@example.com')).toHaveLength(1);
+  });
+
+  it('guarda buyerNotifyStatus: failed si Resend rechaza y sent en el reintento', async () => {
+    const order = seedOrder('enzo-detailing');
+    const parsed = parseProductReference(order.reference)!;
+    const tx = approved(order.reference);
+    fetchMock
+      .mockResolvedValueOnce(new Response('{}', { status: 200 }))
+      .mockResolvedValueOnce(new Response('{}', { status: 500 }));
+    await settleKitPayment(tx, parsed);
+    expect(env.order!.buyerNotifyStatus).toBe('failed');
+    await settleKitPayment(tx, parsed);
+    expect(env.order!.buyerNotifyStatus).toBe('sent');
+  });
+
+  it('sin RESEND_API_KEY guarda buyerNotifyStatus unconfigured', async () => {
+    delete env.values.RESEND_API_KEY;
+    const order = seedOrder('enzo-detailing');
+    await settleKitPayment(approved(order.reference), parseProductReference(order.reference)!);
+    expect(env.order!.buyerNotifyStatus).toBe('unconfigured');
+  });
+
+  it('el enlace del comprador usa PUBLIC_SITE_URL, igual que el correo de Omar', async () => {
+    env.values.PUBLIC_SITE_URL = 'https://preview.example.vercel.app/';
+    const order = seedOrder('enzo-detailing');
+    await settleKitPayment(approved(order.reference), parseProductReference(order.reference)!);
+    const text = String(sentTo(fetchMock, 'laura@example.com')[0].body.text);
+    expect(text).toContain(`https://preview.example.vercel.app/sistemas/pedido/${ORDER_ID}?t=${TOKEN}`);
+  });
+
+  it.each(['DECLINED', 'VOIDED', 'ERROR'] as const)('%s no manda correo al comprador', async (status) => {
+    const order = seedOrder('enzo-detailing');
+    const parsed = parseProductReference(order.reference)!;
+    const result = await settleKitPayment({ ...approved(order.reference), status }, parsed);
+    expect(result.ok && result.buyerEmail).toBe('skipped');
+    expect(sentTo(fetchMock, 'laura@example.com')).toHaveLength(0);
+  });
+
+  it('VOIDED tras un APPROVED no manda otro correo al comprador', async () => {
+    const order = seedOrder('enzo-detailing');
+    const parsed = parseProductReference(order.reference)!;
+    await settleKitPayment(approved(order.reference), parsed);
+    const voided = await settleKitPayment({ ...approved(order.reference), status: 'VOIDED' }, parsed);
+    expect(voided.ok && voided.buyerEmail).toBe('skipped');
     expect(sentTo(fetchMock, 'laura@example.com')).toHaveLength(1);
   });
 });

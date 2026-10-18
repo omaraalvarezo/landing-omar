@@ -1,4 +1,3 @@
-import { SITE } from './editorial';
 import { notifyKitPayment, sendBuyerReceipt, type KitMailKind, type KitMailResult } from './kit-mail';
 import {
   claimKitMailLock,
@@ -14,7 +13,7 @@ import { getProduct, productAmountInCents, type ProductId } from './products';
 import type { WompiTransaction } from './wompi';
 
 export type KitSettlement =
-  | { ok: true; order: KitOrder; email: KitMailResult | 'skipped'; buyerEmail?: KitMailResult | 'skipped' }
+  | { ok: true; order: KitOrder; email: KitMailResult | 'skipped'; buyerEmail: KitMailResult | 'skipped' }
   | { ok: false; reason: 'NOT_FOUND' | 'MISMATCH' };
 
 function statusFromTransaction(status: WompiTransaction['status']): KitPaymentStatus {
@@ -139,10 +138,12 @@ async function notifyBuyer(order: KitOrder, transactionId: string): Promise<KitM
   const claimed = await claimKitMailLock(lockKey);
   if (!claimed) return 'skipped';
 
-  const email = await sendBuyerReceipt({ ...order, transactionId }, SITE);
+  const email = await sendBuyerReceipt({ ...order, transactionId });
+  order.buyerNotifyStatus = email;
   if (email === 'failed') {
-    // Sin la clave de alerta, el siguiente reintento de Wompi lo vuelve a intentar.
+    // Sin la clave de alerta, el reintento de Wompi (el evento responde 503) lo vuelve a intentar.
     await releaseKitMailLock(lockKey);
+    await saveKitOrder(order);
     return email;
   }
 

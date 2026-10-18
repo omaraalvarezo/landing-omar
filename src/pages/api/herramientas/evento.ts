@@ -68,7 +68,11 @@ export const POST: APIRoute = async ({ request }) => {
       console.error(`[${channel}] evento sin orden aplicable`, settled.reason, reference);
       return json(200, { ignored: settled.reason });
     }
-    if (settled.email === 'failed') return json(503, { error: 'aviso' });
+    // 503 hace que Wompi reintente. El aviso a Omar y el del comprador tienen cada uno su clave,
+    // así que el reintento solo reenvía el que falló.
+    if (settled.email === 'failed' || ('buyerEmail' in settled && settled.buyerEmail === 'failed')) {
+      return json(503, { error: 'aviso' });
+    }
     return json(200, { ok: true, status: settled.order.status, email: settled.email });
   } catch (error) {
     console.error('[directorio] no se pudo registrar el evento', error);

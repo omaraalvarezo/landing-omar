@@ -28,6 +28,8 @@ export interface KitOrder {
   approvedAt?: string;
   notifiedAt?: string;
   notifyStatus?: 'sent' | 'unconfigured' | 'failed';
+  /** Estado del correo al comprador (enlace que funciona en otro dispositivo). */
+  buyerNotifyStatus?: 'sent' | 'unconfigured' | 'failed';
   approvedTransactionIds?: string[];
   voidedTransactionIds?: string[];
   alertedTransactionIds?: string[];

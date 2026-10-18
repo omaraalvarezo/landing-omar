@@ -1,5 +1,6 @@
 import { getSecret } from 'astro:env/server';
 import { formatCop } from './money';
+import { SITE } from './editorial';
 import { kitDownloadPath } from './kit';
 import { getProduct } from './products';
 import type { KitOrder } from './kit-orders';
@@ -14,7 +15,7 @@ function env(name: keyof ImportMetaEnv): string {
 }
 
 function siteOrigin(): string {
-  return env('PUBLIC_SITE_URL').replace(/\/$/, '') || 'https://omaralvarezo.co';
+  return env('PUBLIC_SITE_URL').replace(/\/$/, '') || SITE;
 }
 
 function message(order: KitOrder, kind: KitMailKind): { subject: string; text: string } {
@@ -138,7 +139,7 @@ function buyerMessage(order: KitOrder, siteUrl: string): { subject: string; text
 }
 
 /** Recibo al comprador con el enlace que funciona sin cookie. Lo manda la liquidación del pago. */
-export async function sendBuyerReceipt(order: KitOrder, siteUrl: string): Promise<KitMailResult> {
+export async function sendBuyerReceipt(order: KitOrder, siteUrl: string = siteOrigin()): Promise<KitMailResult> {
   const apiKey = env('RESEND_API_KEY');
   const from = env('DIRECTORY_NOTIFY_FROM');
   if (!apiKey || !from || !order.email) return 'unconfigured';
