@@ -9,6 +9,7 @@ import {
   guaranteeTerms,
   hasGuarantee,
   longDate,
+  offerAvailability,
   presaleTerms,
   toolsAnswer,
   toolsTotalLabel,
@@ -128,5 +129,14 @@ describe('costo de las herramientas', () => {
 describe('estado de las piezas', () => {
   it('cubre las 4 piezas en coral, púrpura, cobalto y lima', () => {
     expect(content.pieces.map((piece) => PIECE_STATE[piece.id].color)).toEqual(['#ff6b45', '#c79aff', '#4b5fe3', '#c8ff3d']);
+  });
+});
+
+describe('offerAvailability (JSON-LD)', () => {
+  it('preventa abierta: PreOrder; cerrada: OutOfStock; sin preventa: InStock', () => {
+    expect(offerAvailability({ presale: true, onSale: true })).toBe('https://schema.org/PreOrder');
+    expect(offerAvailability({ presale: true, onSale: false })).toBe('https://schema.org/OutOfStock');
+    expect(offerAvailability({ presale: false, onSale: true })).toBe('https://schema.org/InStock');
+    expect(offerAvailability({ presale: false, onSale: false })).toBe('https://schema.org/OutOfStock');
   });
 });

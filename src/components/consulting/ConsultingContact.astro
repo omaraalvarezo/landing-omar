@@ -746,6 +746,7 @@ const wantCopy: Record<(typeof WAITLIST_WANTS)[number], { tag: string; hint: str
     QUESTION_MESSAGE_MIN,
     WAITLIST_WANT_LABELS,
     validateWaitlist,
+    waitlistTrackProps,
     wantFromQuery,
     type WaitlistInput,
   } from '../../lib/waitlist';
@@ -929,8 +930,8 @@ const wantCopy: Record<(typeof WAITLIST_WANTS)[number], { tag: string; hint: str
       };
 
       if (response.ok && payload.ok) {
-        // Sin props: el formulario lleva nombre, correo y texto libre, y nada de eso se mide.
-        trackEvent('lista_espera_enviada');
+        // Solo los ids validados de opción, oficio y país; nombre, correo y texto libre no se miden.
+        trackEvent('lista_espera_enviada', waitlistTrackProps(value));
         form.querySelectorAll<HTMLElement>(':scope > :not([data-contact-success]):not(.contact-form__spectrum)')
           .forEach((node) => { node.hidden = true; });
         if (successNode) {

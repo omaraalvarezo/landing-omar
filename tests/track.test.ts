@@ -5,7 +5,14 @@ const sdk = vi.hoisted(() => ({ track: vi.fn() }));
 vi.mock('@vercel/analytics', () => ({ track: sdk.track }));
 
 import { SHORT_LINKS } from '../src/lib/short-links';
-import { bindTrackedLinks, refFromSearch, trackEvent, trackShortLinkVisit } from '../src/lib/track';
+import { bindTrackedLinks, isClickEvent, refFromSearch, trackEvent, trackShortLinkVisit } from '../src/lib/track';
+
+// Todo el código de src que puede marcar un enlace con data-track.
+const sources = import.meta.glob(['../src/**/*.astro', '../src/**/*.ts', '../src/**/*.tsx', '../src/**/*.mjs'], {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
 
 beforeEach(() => {
   sdk.track.mockReset();
@@ -160,5 +167,30 @@ describe('?ref= (link corto)', () => {
     expect(refFromSearch('?utm=1&ref=entregas')).toBe('entregas');
     expect(refFromSearch('?ref=desconocido')).toBeNull();
     expect(refFromSearch('')).toBeNull();
+  });
+});
+
+describe('data-track en src', () => {
+  it('todo data-track literal y todo track: de enlace es un evento de clic que se mide', () => {
+    const found: string[] = [];
+    for (const [file, code] of Object.entries(sources)) {
+      if (file.endsWith('/lib/track.ts')) continue;
+      for (const match of code.matchAll(/data-track="([^"]+)"/g)) found.push(`${file}:${match[1]}`);
+      for (const match of code.matchAll(/\btrack: '([^']+)'/g)) found.push(`${file}:${match[1]}`);
+    }
+    expect(found.length).toBeGreaterThan(5);
+    const unhandled = found.filter((entry) => !isClickEvent(entry.slice(entry.lastIndexOf(':') + 1)));
+    expect(unhandled).toEqual([]);
+  });
+
+  it('los data-track dinámicos ({...}) solo están donde el tipo los ata a un evento de clic', () => {
+    const dynamic: string[] = [];
+    for (const [file, code] of Object.entries(sources)) {
+      for (const match of code.matchAll(/data-track=\{([^}]+)\}/g)) dynamic.push(`${file.replace('../src/', '')}:${match[1]}`);
+    }
+    expect(dynamic.sort()).toEqual([
+      'components/sistemas/SistemaShell.astro:cta.track',
+      'pages/sistemas/[slug].astro:faq.link.track',
+    ]);
   });
 });

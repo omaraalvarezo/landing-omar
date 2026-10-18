@@ -13,7 +13,8 @@ interface Props {
   description: string;
   jsonLd?: unknown;
   noIndex?: boolean;
-  cta?: { href: string; label: string; track: string };
+  /** El enlace del encabezado se mide como un clic de escalón (`escalon_click`). */
+  cta?: { href: string; label: string; track: 'escalon_click'; trackId: string; placement?: string };
 }
 
 const { title, description, jsonLd, noIndex = false, cta } = Astro.props;
@@ -30,7 +31,7 @@ const year = new Date().getFullYear();
         <a href="/sistemas">sistemas</a>
         <a href="/herramientas-ia">herramientas</a>
         {cta && (
-          <a class="sx-top__cta" href={cta.href} data-track={cta.track}>{cta.label}</a>
+          <a class="sx-top__cta" href={cta.href} data-track={cta.track} data-track-id={cta.trackId} data-track-placement={cta.placement}>{cta.label}</a>
         )}
       </nav>
     </header>

@@ -22,6 +22,11 @@ export type TrackName =
 /** Eventos que se disparan al hacer clic en un elemento marcado con `data-track`. */
 const CLICK_EVENTS: ReadonlySet<string> = new Set<TrackName>(['escalon_click']);
 
+/** ¿Este valor de `data-track` lo mide el oyente de clics? Todo `data-track` del sitio debe serlo. */
+export function isClickEvent(name: string): boolean {
+  return CLICK_EVENTS.has(name);
+}
+
 const PROP_MAX_LENGTH = 60;
 
 function cleanProps(props: Record<string, string> | undefined): Record<string, string> | undefined {
@@ -68,7 +73,7 @@ export function bindTrackedLinks(root: ParentNode = document): void {
     const target = event.target as Element | null;
     const marked = target?.closest?.('[data-track]') as HTMLElement | null;
     const name = marked?.dataset.track;
-    if (!marked || !name || !CLICK_EVENTS.has(name)) return;
+    if (!marked || !name || !isClickEvent(name)) return;
     trackEvent(name as TrackName, propsFromDataset(marked.dataset));
   });
 }

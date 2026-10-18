@@ -12,6 +12,8 @@ const sistemas = (await publishedSistemas()).map((entry) => {
   if (!product) throw new Error(`SISTEMA_SIN_PRODUCTO:${entry.id}`);
   return {
     id: entry.id,
+    // El escalón del sistema de Enzo se mide con el mismo id en todo el sitio.
+    trackId: product.id === 'enzo-detailing' ? 'sistema-enzo' : `sistema-${entry.id}`,
     href: sistemaPath(entry.id),
     title: entry.data.title,
     description: entry.data.description,
@@ -67,7 +69,7 @@ const jsonLd = {
     <ol>
       {sistemas.map((sistema, index) => (
         <li>
-          <a href={sistema.href} data-track="sistema_abierto" data-track-id={sistema.id}>
+          <a href={sistema.href} data-track="escalon_click" data-track-id={sistema.trackId} data-track-placement="sistemas">
             <span class="list__index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
             <span class="list__body">
               <span class="list__oficio">{sistema.oficio} · {sistema.status}</span>

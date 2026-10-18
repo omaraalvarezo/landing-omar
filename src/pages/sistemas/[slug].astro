@@ -23,6 +23,7 @@ import {
   guaranteeTerms,
   hasGuarantee,
   longDate,
+  offerAvailability,
   presaleTerms,
   toolName,
   toolsAnswer,
@@ -77,9 +78,9 @@ const pieces = content.pieces.map((piece, index) => ({
 }));
 const templates = content.pieces.flatMap((piece) => piece.templates);
 
-type Faq = { q: string; a: string; link?: { href: string; label: string; track: string; trackId?: string } };
+type Faq = { q: string; a: string; link?: { href: string; label: string; track: 'escalon_click'; trackId?: string } };
 
-const QUESTION_LINK = { href: QUESTION_HREF, track: 'escalon_click', trackId: 'lista' };
+const QUESTION_LINK = { href: QUESTION_HREF, track: 'escalon_click' as const, trackId: 'lista' };
 const foreign = foreignAnswer(product.acceptsForeignCards);
 const foreignFaq: Faq = {
   q: foreign.q,
@@ -117,7 +118,7 @@ const jsonLd = {
         '@type': 'Offer',
         price: String(product.amountCop),
         priceCurrency: 'COP',
-        availability: product.presale ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
+        availability: offerAvailability({ presale: Boolean(product.presale), onSale }),
         url,
         seller: personRef(),
       },
@@ -136,7 +137,7 @@ const jsonLd = {
   title={`${product.name} — Omar Álvarez`}
   description={entry.data.description}
   jsonLd={jsonLd}
-  cta={{ href: '#comprar', label: 'comprar', track: 'sistema_ir_a_comprar' }}
+  cta={{ href: '#comprar', label: onSale ? 'comprar' : 'ver precio', track: 'escalon_click', trackId: 'sistema-enzo', placement: 'sistema-nav' }}
 >
   <!-- 1. El problema -->
   <section class="opening" aria-labelledby="sistema-titulo">
@@ -145,7 +146,7 @@ const jsonLd = {
       <h1 id="sistema-titulo">{nameMain}{nameTail && <span> · {nameTail}</span>}</h1>
       <p class="opening__problem">{entry.data.problem}</p>
       <div class="opening__actions">
-        <a class="btn btn--lime" href="#comprar" data-track="sistema_ir_a_comprar">
+        <a class="btn btn--lime" href="#comprar" data-track="escalon_click" data-track-id="sistema-enzo" data-track-placement="sistema-hero">
           {onSale ? `Comprar · ${formatCop(product.amountCop)}` : `Ver precio · ${formatCop(product.amountCop)}`}
         </a>
         <a class="link-line" href="#piezas">Mira las 4 piezas</a>
@@ -214,7 +215,7 @@ const jsonLd = {
     <div class="section-head">
       <p class="overline">Con qué se monta</p>
       <h2 id="herramientas-titulo">Lo que te cuesta al mes, antes de comprar.</h2>
-      <p>Elegí la mejor herramienta para cada pieza, aunque sea paga. Lo mensual se lo pagas a cada una, no a mí.</p>
+      <p>Escogí la mejor herramienta para cada pieza, aunque sea de pago. Lo mensual se lo pagas a cada una, no a mí.</p>
     </div>
     <div class="ledger__sheet">
       {tools.map((tool) => (
@@ -323,7 +324,7 @@ const jsonLd = {
       </p>
       {guide && (
         <p class="buy__guide">
-          ¿Prefieres empezar gratis? Lee la <a href={paraPath(guide.id)} data-track="guia_click">guía de {guide.data.title}</a>.
+          ¿Prefieres empezar gratis? Lee la <a href={paraPath(guide.id)} data-track="escalon_click" data-track-id={`guia-${guide.id}`} data-track-placement="sistema-comprar">guía de {guide.data.title}</a>.
         </p>
       )}
     </div>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateWaitlist, wantFromQuery, WAITLIST_WANTS, WAITLIST_WANT_LABELS } from '../src/lib/waitlist';
+import { validateWaitlist, waitlistTrackProps, wantFromQuery, WAITLIST_WANTS, WAITLIST_WANT_LABELS } from '../src/lib/waitlist';
 
 const valid = {
   name: 'Ana Pérez',
@@ -143,5 +143,24 @@ describe('wantFromQuery', () => {
     expect(wantFromQuery(null)).toBeNull();
     expect(wantFromQuery('')).toBeNull();
     for (const want of WAITLIST_WANTS) expect(wantFromQuery(want)).toBe(want);
+  });
+});
+
+describe('waitlistTrackProps', () => {
+  it('mide solo opción, oficio y país validados; nunca texto libre ni datos de contacto', () => {
+    const result = validateWaitlist({
+      ...valid,
+      phone: '300 000 0000',
+      oficio: 'otro',
+      oficioOtro: 'Tapicería de lujo',
+      message: 'Quiero saber si sirve para mi taller de tapicería.',
+    });
+    if (!result.ok) throw new Error('se esperaba válido');
+    const props = waitlistTrackProps(result.value);
+    expect(props).toEqual({ want: 'instalacion', oficio: 'otro', country: 'CO' });
+    const serialized = JSON.stringify(props);
+    for (const secret of ['Ana', 'ana@example.com', 'Detailing Ana', 'Tapicería', 'taller de tapicería', '300']) {
+      expect(serialized).not.toContain(secret);
+    }
   });
 });

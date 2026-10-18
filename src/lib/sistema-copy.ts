@@ -87,6 +87,15 @@ export interface PresaleState {
   place: CopyPlace;
 }
 
+/**
+ * `offers.availability` del JSON-LD: con preventa abierta, PreOrder; cerrada (sin fecha o vencida),
+ * OutOfStock, porque hoy no se puede comprar; sin preventa y a la venta, InStock.
+ */
+export function offerAvailability({ presale, onSale }: { presale: boolean; onSale: boolean }): string {
+  if (!onSale) return 'https://schema.org/OutOfStock';
+  return presale ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock';
+}
+
 /** Respuesta "¿Cuándo llegan los videos?". */
 export function videosAnswer({ dueDate, onSale, place }: PresaleState): string {
   if (!dueDate) {

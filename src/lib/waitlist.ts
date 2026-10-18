@@ -58,6 +58,18 @@ export function wantFromQuery(value: string | null): WaitlistInput['want'] | nul
   return isWant(value) ? value : null;
 }
 
+/**
+ * Props del evento `lista_espera_enviada`: solo los ids ya validados de opción, oficio y país.
+ * Nunca `oficioOtro`, mensaje, nombre, correo, teléfono ni negocio.
+ */
+export function waitlistTrackProps(value: Pick<WaitlistInput, 'want' | 'oficio' | 'country'>): {
+  want: string;
+  oficio: string;
+  country: string;
+} {
+  return { want: value.want, oficio: value.oficio, country: value.country };
+}
+
 export function validateWaitlist(
   body: Record<string, unknown>,
 ): { ok: true; value: WaitlistInput } | Failure {
