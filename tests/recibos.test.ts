@@ -1,19 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import data from '../src/data/recibos.json';
+import { publicRecibo, recibos } from '../src/lib/recibos';
 
-type Recibo = {
-  id: string;
-  value: string;
-  label: string;
-  origin: string;
-  negocio: 'enzo' | 'arkhe' | 'grupo';
-  source: string;
-  method: string;
-  date: string;
-};
-
-const recibos = data as Recibo[];
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const MES_ANIO = /\b(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic) \d{4}\b/;
 
 describe('recibos operativos con fuente', () => {
   it('trae recibos', () => {
@@ -35,9 +24,14 @@ describe('recibos operativos con fuente', () => {
     }
   });
 
-  it('value incluye "aprox."', () => {
+  it('value incluye "aprox.", salvo las reglas exactas marcadas con kind "exacto"', () => {
     for (const recibo of recibos) {
-      expect(recibo.value, recibo.id).toContain('aprox.');
+      if (recibo.kind === 'exacto') {
+        expect(recibo.value, recibo.id).not.toContain('aprox.');
+        expect(recibo.method, recibo.id).toMatch(/exact/i);
+      } else {
+        expect(recibo.value, recibo.id).toContain('aprox.');
+      }
     }
   });
 
@@ -46,6 +40,28 @@ describe('recibos operativos con fuente', () => {
       expect(recibo.label.trim(), recibo.id).not.toBe('');
       expect(recibo.origin.trim(), recibo.id).not.toBe('');
       expect(recibo.origin, recibo.id).not.toContain('/');
+    }
+  });
+
+  it('origin dice mes y año', () => {
+    for (const recibo of recibos) {
+      expect(recibo.origin, recibo.id).toMatch(MES_ANIO);
+    }
+  });
+
+  it('si el método es un estimado, el origin lo dice', () => {
+    for (const recibo of recibos) {
+      if (/estim/i.test(recibo.method)) {
+        expect(recibo.origin, recibo.id).toContain('estimado');
+      }
+    }
+  });
+
+  it('si el total es inferido, el origin no dice contado ni medido', () => {
+    for (const recibo of recibos) {
+      if (/inferido/i.test(recibo.method)) {
+        expect(recibo.origin, recibo.id).not.toMatch(/contado|medido/i);
+      }
     }
   });
 
@@ -62,5 +78,24 @@ describe('recibos operativos con fuente', () => {
 
   it('hay al menos 2 recibos de Enzo', () => {
     expect(recibos.filter((recibo) => recibo.negocio === 'enzo').length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('ningún recibo dice que el equipo entra al cotizador con su PIN', () => {
+    for (const recibo of recibos) {
+      expect(`${recibo.value} ${recibo.label} ${recibo.origin}`, recibo.id).not.toMatch(/\bPIN\b/);
+    }
+  });
+});
+
+describe('publicRecibo', () => {
+  it('devuelve solo value, label y origin', () => {
+    const recibo = publicRecibo('espera-recogida');
+    expect(Object.keys(recibo).sort()).toEqual(['label', 'origin', 'value']);
+    expect(recibo).not.toHaveProperty('source');
+    expect(recibo).not.toHaveProperty('method');
+  });
+
+  it('falla con un id desconocido', () => {
+    expect(() => publicRecibo('no-existe')).toThrow(/no-existe/);
   });
 });

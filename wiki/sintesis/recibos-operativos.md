@@ -24,9 +24,15 @@ Registro de las cifras que el sitio puede mostrar como "recibos" (spec §6.8). L
 
 Cómo se presentan:
 
-- `value` siempre lleva "aprox.": son redondeos de una medición o estimados del propio Omar.
-- `origin` es la única línea de origen que se imprime ("medido en el sistema del taller de Enzo,
-  ago 2026"). `source` es la ruta interna y **nunca se imprime**.
+- `value` lleva "aprox.": son redondeos de una medición o estimados del propio Omar. **Única
+  excepción:** una regla de diseño exacta se marca con `kind: "exacto"` y va sin "aprox.", porque
+  ponérselo la falsearía. Hoy solo la usa el recibo 4.
+- `origin` es la única línea de origen que se imprime, siempre con mes y año. Dice lo que es la
+  cifra: "medido en…" si se midió, "estimado de…" si es un estimado, y "según una revisión del
+  sistema de Enzo…" si el total se infiere del denominador de una medición hecha con otro fin.
+  Un total inferido nunca dice "contado" ni "medido".
+- `source` y `method` son internos y **nunca se imprimen**. Las páginas leen los recibos con
+  `publicRecibo(id)` de `src/lib/recibos.ts`, que devuelve solo `value`, `label` y `origin`.
 - Ningún recibo trae precios internos, datos de clientes, placas ni datos de empleados.
 - Enzo y Arkhē van separados (`negocio`), como pide `CLAUDE.md` §3.2.
 - Las rutas son relativas a `proyectos-vibe-coding/`. Los números de línea son los del día de
@@ -48,15 +54,17 @@ Cómo se presentan:
 - **Para qué sirve en la página:** respalda la pieza de aviso y seguimiento. El cuello no era el
   trabajo, era que el carro listo se quedaba esperando.
 
-### 2. Entregas con acta · `entregas-con-acta` · Enzo
+### 2. Entregas registradas · `entregas-con-acta` · Enzo · inferido
 
-- **Valor:** aprox. 80 entregas cerradas con acta de entrega.
-- **Cómo se calculó:** es el denominador de la medición del 2026-09-24 ("las fotos de salida se
-  tomaban en 2 de 78 entregas"). 78 redondeado a 80. El registro no fija la ventana; es el total
-  medido ese día.
-- **Fuente:** `second-brain/projects/cotizador-enzo/log.md#L364`. Que toda entrega pase por firma
-  lo fija el trigger descrito en `README.md#L639` (la transición a `entregado` exige `entregado_by`).
+- **Valor:** aprox. 80 entregas registradas en el sistema del taller.
+- **Cómo se calculó:** **inferido**. Es el denominador de una medición del 2026-09-24 sobre las
+  fotos de salida ("las fotos de salida se tomaban en 2 de 78 entregas"). No es un conteo hecho
+  para este recibo y el registro no fija la ventana. 78 redondeado a 80.
+- **Origen público:** "según una revisión del sistema de Enzo, sep 2026".
+- **Fuente:** `second-brain/projects/cotizador-enzo/log.md#L364`.
 - **Fecha de la evidencia:** 2026-09-24.
+- **Cuidado al redactar:** el registro no dice cuántas de esas 78 tienen acta firmada por el
+  cliente; la etiqueta solo dice "registradas".
 
 ### 3. Fotos de salida antes del cambio · `fotos-salida-antes` · Enzo
 
@@ -68,34 +76,41 @@ Cómo se presentan:
 - **Para qué sirve:** es una cifra del "antes", honesta. Muestra por qué la entrega con fotos tiene
   que estar en el flujo y no depender de la memoria.
 
-### 4. Inspección final de 18 a 5 puntos · `inspeccion-puntos` · Enzo
+### 4. Inspección final de 18 a 5 puntos · `inspeccion-puntos` · Enzo · exacto
 
-- **Valor:** aprox. 18 → 5 puntos.
-- **Cómo se calculó:** la lista se armaba por servicio y llegaba a 18 ítems (un polarizado sacaba
-  10, dos de ellos no aplicaban). Omar la reemplazó por los mismos 5 puntos para todo vehículo.
-  El 18 es el máximo que alcanzaba, por eso va con "aprox.".
+- **Valor:** de hasta 18 a 5 puntos (`kind: "exacto"`, sin "aprox.").
+- **Cómo se calculó:** regla de diseño, no medición. La lista se armaba por servicio y llegaba a
+  18 ítems (un polarizado sacaba 10, dos de ellos no aplicaban). Omar la reemplazó por los mismos
+  5 puntos para todo vehículo. El 18 es el máximo que alcanzaba, por eso el valor dice "de hasta".
 - **Fuente:** `second-brain/projects/cotizador-enzo/src/constants/taller.js#L502-L505`; también
   `second-brain/projects/cotizador-enzo/README.md#L633`.
 - **Fecha de la evidencia:** 2026-08-03 (fecha del comentario; commit `6c66972f` del 2026-08-04).
 
-### 5. Órdenes del taller · `ordenes-taller` · Enzo
+### 5. Órdenes del taller · `ordenes-taller` · Enzo · inferido
 
-- **Valor:** aprox. 100 órdenes de taller registradas.
-- **Cómo se calculó:** denominador de la medición de producción del 2026-09-17 ("46 de 106 ordenes
-  del taller"). 106 redondeado a 100. Incluye órdenes en cualquier estado, de la cita a la entrega.
+- **Valor:** aprox. 100 órdenes de taller en el sistema de Enzo.
+- **Cómo se calculó:** **inferido**. Es el denominador de una auditoría de teléfonos en producción
+  del 2026-09-17 ("46 de 106 ordenes del taller"). No es un conteo hecho para este recibo y no dice
+  qué estados incluye. 106 redondeado a 100.
+- **Origen público:** "según una revisión del sistema de Enzo, sep 2026".
 - **Fuente:** `second-brain/projects/cotizador-enzo/log.md#L349`.
 - **Fecha de la evidencia:** 2026-09-17.
 
-### 6. Garantías por placa · `garantias-registradas` · Enzo
+### 6. Garantías · `garantias-registradas` · Enzo · inferido
 
-- **Valor:** aprox. 500 garantías registradas por placa.
-- **Cómo se calculó:** denominador de la segunda medición en solo lectura del 2026-09-17
-  ("garantias 367 de 497"). 497 redondeado a 500. Incluye garantías históricas ingresadas a mano;
-  no todas están aprobadas ni publicadas en enzomotorsport.co/garantia.
+- **Valor:** aprox. 500 garantías en el sistema de Enzo.
+- **Cómo se calculó:** **inferido**. Es el denominador de una medición de teléfonos sin aplicar del
+  2026-09-17 ("garantias 367 de 497"), que pudo contar solo las filas con teléfono. No es un conteo
+  hecho para este recibo. Incluye garantías históricas ingresadas a mano; no todas están aprobadas
+  ni publicadas en enzomotorsport.co/garantia. 497 redondeado a 500.
+- **Origen público:** "según una revisión del sistema de Enzo, sep 2026".
 - **Fuente:** `second-brain/projects/cotizador-enzo/log.md#L349`.
 - **Fecha de la evidencia:** 2026-09-17.
-- **Cuidado al redactar:** decir "registradas", no "publicadas". La web solo muestra las aprobadas
+- **Cuidado al redactar:** no decir "publicadas" ni "por placa". La web solo muestra las aprobadas
   (`README.md#L600`).
+
+Los tres inferidos (2, 5 y 6) no se contaron contra ninguna base para esta tarea. Si Omar quiere
+afirmarlos con más fuerza, hace falta un conteo de solo lectura hecho a propósito y fechado aquí.
 
 ### 7. Encuesta en 40 segundos · `encuesta-segundos` · Enzo
 
@@ -108,9 +123,12 @@ Cómo se presentan:
 
 ### 8. Cotización de 20 a 2 minutos · `cotizacion-minutos` · Enzo (recibo actual del home)
 
-- **Valor:** aprox. 20 → 2 min para armar una cotización.
+- **Valor:** aprox. 20 → 2 min para armar una cotización, del Excel al cotizador de Enzo.
 - **Cómo se calculó:** número escrito por Omar en el inventario de casos (caso E1): "tiempo de
   cotización de ~20 min → 2 min". Es su estimado de operador; el cotizador no cronometra.
+- **Cuidado al redactar:** no decir que el equipo entra al cotizador con su PIN. El inventario es de
+  abril de 2026 y desde el 2026-08-12 los PINs del equipo de Enzo ya no abren la app: sirven para el
+  kiosco y para firmar (`CLAUDE.md` raíz, §3.2).
 - **Fuente:** `second-brain/projects/marca-personal-tiktok/serie-90-dias/07-inventario-casos.md#L17`.
 - **Fecha de la evidencia:** 2026-04-21 (fecha de actualización del inventario).
 
@@ -120,6 +138,7 @@ Cómo se presentan:
 - **Cómo se calculó:** número escrito por Omar en el inventario (caso A2): "El P&L de Arkhē lo leo
   en 10 min con Claude. Antes: 1.5 horas con el contador." Estimado propio, sin medición en sistema.
 - **Fuente:** `second-brain/projects/marca-personal-tiktok/serie-90-dias/07-inventario-casos.md#L82`.
+- **Origen público:** "estimado de Omar sobre el P&L de Arkhē, abr 2026".
 - **Fecha de la evidencia:** 2026-04-21.
 - **Nota:** el home hoy lo escribe "1.5 h"; en español va "1,5 h".
 
@@ -140,13 +159,12 @@ Cómo se presentan:
   `enzo-telegram-report`). Mostrarla en presente describe un sistema que ya no corre. Además es un
   estimado (2 h/día) sin medición. Si se quiere un recibo de reportes, hace falta una medición nueva
   del tablero que lo reemplazó.
-- **"$19,9M al mes" (dependencia, enzo).** Sale de `second-brain/CLAUDE.md#L265` ("JD = single
-  point of failure · $19.9M/mes dependen de él") y del inventario `#L54`. Es la facturación que pasa
-  por **una persona del equipo**: choca con "cero datos de empleados" y con no mostrar cifras
-  internas de facturación. Tampoco hay fecha de medición (la alerta no la trae).
+- **"$19,9M al mes" (dependencia, enzo).** Tiene fuente (`second-brain/CLAUDE.md#L265`, alerta 1,
+  e inventario `#L54`), pero describe a una persona del equipo y su facturación. Choca con "cero
+  datos de empleados" y con no mostrar cifras internas. Tampoco trae fecha de medición.
 - **Respuestas NPS.** La ventana de julio a septiembre de 2026 dio 11 respuestas
   (`second-brain/projects/cotizador-enzo/log.md#L397`; `README.md#L1131` dice que no llega a 20).
-  Es real, pero frente a las aprox. 80 entregas medidas a septiembre deja ver una muestra pequeña y
+  Es real, pero frente a las aprox. 80 entregas registradas a septiembre deja ver una muestra pequeña y
   una tasa de respuesta baja. No sirve como prueba de que el sistema funciona.
 - **37 órdenes con foto del baúl** (`README.md#L720`, 2026-09-10). Real, pero describe un bug
   corregido (la foto no cargaba en el link del cliente), no un resultado.
@@ -156,8 +174,9 @@ Cómo se presentan:
 
 ## Hechos exactos que no van como recibo
 
-Son ciertos y ya los usa el contenido del producto (Task 8), pero son reglas de diseño exactas, no
-cifras aproximadas, y ponerles "aprox." las falsearía:
+Son ciertos y ya los usa el contenido del producto (Task 8). Son reglas de diseño exactas, no
+cifras aproximadas: ponerles "aprox." las falsearía. Si una página los quiere como recibo, entran
+con `kind: "exacto"`, como el recibo 4.
 
 - **8 fotos obligatorias en la recepción**, en una sola vuelta al carro:
   `second-brain/projects/cotizador-enzo/src/components/taller/capturaSecuencia.js` y

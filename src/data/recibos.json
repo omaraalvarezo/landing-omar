@@ -12,11 +12,11 @@
   {
     "id": "entregas-con-acta",
     "value": "aprox. 80 entregas",
-    "label": "cerradas con acta de entrega en el sistema del taller",
-    "origin": "contado en el sistema del taller de Enzo, sep 2026",
+    "label": "registradas en el sistema del taller",
+    "origin": "según una revisión del sistema de Enzo, sep 2026",
     "negocio": "enzo",
     "source": "second-brain/projects/cotizador-enzo/log.md#L364",
-    "method": "Denominador de la medición del 2026-09-24 sobre el acta de entrega (\"las fotos de salida se tomaban en 2 de 78 entregas\"). 78 redondeado a 80. El registro no fija la ventana: es el total que se midió ese día.",
+    "method": "Inferido: es el denominador de una medición del 2026-09-24 sobre las fotos de salida (\"las fotos de salida se tomaban en 2 de 78 entregas\"). No es un conteo hecho para este recibo y el registro no fija la ventana. 78 redondeado a 80.",
     "date": "2026-09-24"
   },
   {
@@ -31,32 +31,33 @@
   },
   {
     "id": "inspeccion-puntos",
-    "value": "aprox. 18 → 5 puntos",
+    "value": "de hasta 18 a 5 puntos",
     "label": "en la inspección final: antes la lista cambiaba con cada servicio; ahora son los mismos 5 para todo carro",
     "origin": "regla del sistema del taller de Enzo, ago 2026",
     "negocio": "enzo",
     "source": "second-brain/projects/cotizador-enzo/src/constants/taller.js#L502-L505",
-    "method": "Comentario de CHECKLIST_ENTREGA (2026-08-03): la lista por servicio llegaba a 18 ítems (un polarizado sacaba 10 y dos no aplicaban); se reemplazó por 5 puntos fijos. El 18 es el máximo que alcanzaba, por eso va con aprox. Respaldo también en README.md#L633.",
-    "date": "2026-08-03"
+    "method": "Regla de diseño exacta, no medición: el comentario de CHECKLIST_ENTREGA (2026-08-03) dice que la lista por servicio llegaba a 18 ítems (un polarizado sacaba 10 y dos no aplicaban) y que se reemplazó por 5 puntos fijos. Por ser exacta no lleva \"aprox.\" (kind: exacto). Respaldo también en README.md#L633.",
+    "date": "2026-08-03",
+    "kind": "exacto"
   },
   {
     "id": "ordenes-taller",
     "value": "aprox. 100 órdenes",
-    "label": "de taller registradas en el sistema de Enzo, de la cita a la entrega",
-    "origin": "contado en el sistema del taller de Enzo, sep 2026",
+    "label": "de taller en el sistema de Enzo",
+    "origin": "según una revisión del sistema de Enzo, sep 2026",
     "negocio": "enzo",
     "source": "second-brain/projects/cotizador-enzo/log.md#L349",
-    "method": "Total de órdenes del taller usado como denominador en la medición de producción del 2026-09-17 (\"46 de 106 ordenes del taller\"). 106 redondeado a 100.",
+    "method": "Inferido: es el denominador de una auditoría de teléfonos en producción del 2026-09-17 (\"46 de 106 ordenes del taller\"). No es un conteo hecho para este recibo y no dice qué estados incluye. 106 redondeado a 100.",
     "date": "2026-09-17"
   },
   {
     "id": "garantias-registradas",
     "value": "aprox. 500 garantías",
-    "label": "registradas por placa en el sistema de Enzo",
-    "origin": "contado en el sistema de garantías de Enzo, sep 2026",
+    "label": "en el sistema de Enzo",
+    "origin": "según una revisión del sistema de Enzo, sep 2026",
     "negocio": "enzo",
     "source": "second-brain/projects/cotizador-enzo/log.md#L349",
-    "method": "Denominador de la segunda medición en solo lectura del 2026-09-17 (\"garantias 367 de 497\"): filas de garantías medidas en producción. Incluye garantías históricas ingresadas a mano y no todas están publicadas en la web. 497 redondeado a 500.",
+    "method": "Inferido: es el denominador de una medición de teléfonos sin aplicar del 2026-09-17 (\"garantias 367 de 497\"), que pudo contar solo las filas con teléfono. No es un conteo hecho para este recibo; incluye garantías históricas ingresadas a mano y no todas están publicadas. 497 redondeado a 500.",
     "date": "2026-09-17"
   },
   {
@@ -72,7 +73,7 @@
   {
     "id": "cotizacion-minutos",
     "value": "aprox. 20 → 2 min",
-    "label": "para armar una cotización: del Excel al cotizador que el equipo usa con su PIN",
+    "label": "para armar una cotización: del Excel al cotizador de Enzo",
     "origin": "estimado de Omar al cambiar el Excel por el cotizador de Enzo, abr 2026",
     "negocio": "enzo",
     "source": "second-brain/projects/marca-personal-tiktok/serie-90-dias/07-inventario-casos.md#L17",
@@ -83,7 +84,7 @@
     "id": "pl-arkhe",
     "value": "aprox. 1,5 h → 10 min",
     "label": "para leer el P&L del mes de Arkhē",
-    "origin": "estimado de Omar con el cierre de Arkhē, abr 2026",
+    "origin": "estimado de Omar sobre el P&L de Arkhē, abr 2026",
     "negocio": "arkhe",
     "source": "second-brain/projects/marca-personal-tiktok/serie-90-dias/07-inventario-casos.md#L82",
     "method": "Número escrito por Omar en el inventario de casos (caso A2, actualizado 2026-04-21): \"El P&L de Arkhē lo leo en 10 min con Claude. Antes: 1.5 horas con el contador.\" Es su estimado; no hay medición en sistema.",
