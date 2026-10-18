@@ -72,7 +72,7 @@ export const POST: APIRoute = async ({ request }) => {
     // La venta se mide aquí y no en `settleKitPayment` ni en las páginas de pedido: esta URL no lleva
     // secretos. Da igual quién liquidó primero (el regreso del comprador casi siempre llega antes que el
     // webhook): `purchaseTrackedAt` y un candado evitan contarla dos veces. El tope de tiempo acota la respuesta.
-    if (kitReference) await trackSistemaSale(settled.order);
+    if (kitReference && 'product' in settled.order) await trackSistemaSale(settled.order);
     // 503 hace que Wompi reintente. El aviso a Omar y el del comprador tienen cada uno su clave,
     // así que el reintento solo reenvía el que falló.
     if (settled.email === 'failed' || ('buyerEmail' in settled && settled.buyerEmail === 'failed')) {
