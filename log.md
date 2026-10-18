@@ -620,8 +620,10 @@ Todavía no se carga el script de anuncios ni cambia la CSP real.
   `kit_checkout_iniciado`, `lista_espera_enviada` (sin props). `boletin_suscrito` va al enviar el
   formulario del boletín (el proveedor es otro origen: no hay confirmación que leer); el PDF de prompts
   no tiene casilla de boletín y no dispara nada.
-- Servidor: `sistema_comprado { product }` desde `settleKitPayment`, una vez por primera aprobación del
-  sistema (orden sin `approvedAt` + candado), envuelto en try/catch y con tope de 2,5 s.
+- Servidor: `sistema_comprado { product }` sale SOLO del webhook `/api/herramientas/evento`
+  (`src/lib/track-server.ts`), con `firstApproval` que devuelve `settleKitPayment` (primera aprobación del
+  sistema), `headers: {}` explícito (sin cookie, IP ni user-agent) y tope de 2,5 s. Nunca desde las páginas
+  de pedido: su URL lleva el id del pedido y a veces el token, y el SDK copia URL y cookie de la petición.
 - No se pudo comprobar con el MCP de Vercel si el plan recoge eventos personalizados; se implementó el
   bloque completo. Si el plan no los recoge, el envío es inofensivo y las ventas se cuentan con
   `npm run kit:pending`.

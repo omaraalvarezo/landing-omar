@@ -18,16 +18,13 @@ vi.mock('../src/lib/kit-orders', () => ({
   isKitDownloadToken: vi.fn((value: unknown) => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value)),
 }));
 
-vi.mock('@vercel/analytics/server', () => ({ track: vi.fn(async () => undefined) }));
-
 vi.mock('../src/lib/kit-mail', () => ({
   notifyKitPayment: vi.fn(async () => 'sent'),
   sendBuyerReceipt: vi.fn(async () => 'sent'),
 }));
 
-import { track } from '@vercel/analytics/server';
 import { notifyKitPayment } from '../src/lib/kit-mail';
-import { claimKitMailLock, createKitDownloadToken, saveKitOrder } from '../src/lib/kit-orders';
+import { createKitDownloadToken, saveKitOrder } from '../src/lib/kit-orders';
 import { settleKitPayment } from '../src/lib/kit-payment';
 import { parseProductReference, productAmountInCents, type ProductId } from '../src/lib/products';
 
@@ -201,85 +198,51 @@ describe('settleKitPayment por producto', () => {
   });
 });
 
-describe('medición: sistema_comprado', () => {
+describe('firstApproval (la usa el webhook para medir la venta)', () => {
   async function settle(product: ProductId, overrides: Record<string, unknown> = {}) {
     const reference = (state.order?.reference as string | undefined) ?? referenceFor(product);
     return settleKitPayment(transactionFor(reference, overrides), parseProductReference(reference)!);
   }
+  const first = (result: Awaited<ReturnType<typeof settle>>) => (result.ok ? result.firstApproval : undefined);
 
-  it('se emite una vez, con solo el producto, en la primera aprobación del sistema', async () => {
+  it('true en la primera aprobación del sistema', async () => {
     seedOrder('enzo-detailing');
-    await settle('enzo-detailing');
-    expect(track).toHaveBeenCalledTimes(1);
-    expect(track).toHaveBeenCalledWith('sistema_comprado', { product: 'enzo-detailing' });
+    expect(first(await settle('enzo-detailing'))).toBe(true);
   });
 
-  it('un reintento de Wompi con el mismo APPROVED no lo emite otra vez', async () => {
+  it('false en los reintentos del mismo APPROVED', async () => {
     seedOrder('enzo-detailing');
     await settle('enzo-detailing');
-    await settle('enzo-detailing');
-    await settle('enzo-detailing');
-    expect(track).toHaveBeenCalledTimes(1);
+    expect(first(await settle('enzo-detailing'))).toBe(false);
+    expect(first(await settle('enzo-detailing'))).toBe(false);
   });
 
-  it('un cobro doble (otra transacción aprobada) no lo emite otra vez', async () => {
+  it('false en un cobro doble (otra transacción aprobada)', async () => {
     seedOrder('enzo-detailing');
     await settle('enzo-detailing');
-    await settle('enzo-detailing', { id: 'tx-2' });
-    expect(track).toHaveBeenCalledTimes(1);
+    expect(first(await settle('enzo-detailing', { id: 'tx-2' }))).toBe(false);
   });
 
-  it('si el aviso a Omar o el correo del comprador fallan, igual se emitió una sola vez', async () => {
+  it('false si el correo falla: el reintento no cuenta otra venta', async () => {
     const { sendBuyerReceipt } = await import('../src/lib/kit-mail');
     vi.mocked(sendBuyerReceipt).mockResolvedValueOnce('failed' as never);
     seedOrder('enzo-detailing');
-    await settle('enzo-detailing');
-    await settle('enzo-detailing');
-    expect(track).toHaveBeenCalledTimes(1);
+    expect(first(await settle('enzo-detailing'))).toBe(true);
+    expect(first(await settle('enzo-detailing'))).toBe(false);
   });
 
-  it('otra liquidación simultánea (candado tomado) no lo duplica', async () => {
-    vi.mocked(claimKitMailLock).mockImplementation(async (key: string) => !key.includes(':track:'));
+  it('false con DECLINED, PENDING y para el kit de talleres', async () => {
     seedOrder('enzo-detailing');
-    await settle('enzo-detailing');
-    expect(track).not.toHaveBeenCalled();
-    vi.mocked(claimKitMailLock).mockImplementation(async () => true);
-  });
-
-  it('no se emite con DECLINED, PENDING ni para el kit de talleres', async () => {
-    seedOrder('enzo-detailing');
-    await settle('enzo-detailing', { status: 'DECLINED' });
-    await settle('enzo-detailing', { status: 'PENDING' });
+    expect(first(await settle('enzo-detailing', { status: 'DECLINED' }))).toBe(false);
+    expect(first(await settle('enzo-detailing', { status: 'PENDING' }))).toBe(false);
     seedOrder('talleres');
-    await settle('talleres');
-    expect(track).not.toHaveBeenCalled();
+    expect(first(await settle('talleres'))).toBe(false);
   });
 
-  it('no se emite en un MISMATCH', async () => {
-    const order = seedOrder('talleres');
-    const parsed = parseProductReference(referenceFor('enzo-detailing'))!;
-    await settleKitPayment(
-      transactionFor(order.reference as string, { amount_in_cents: parsed.amountInCents }),
-      parsed,
-    );
-    expect(track).not.toHaveBeenCalled();
-  });
-
-  it('si el SDK lanza o se cuelga, el pago igual se liquida', async () => {
-    vi.mocked(track).mockRejectedValueOnce(new Error('analytics caído'));
-    seedOrder('enzo-detailing');
-    const result = await settle('enzo-detailing');
-    expect(result.ok).toBe(true);
-    if (!result.ok) return;
-    expect(result.order.status).toBe('APPROVED');
-    expect(result.order.downloadToken).toBe(TOKEN);
-    expect(result.buyerEmail).toBe('sent');
-
-    vi.mocked(track).mockImplementationOnce(() => {
-      throw new Error('síncrono');
-    });
-    seedOrder('enzo-detailing');
-    const second = await settle('enzo-detailing');
-    expect(second.ok).toBe(true);
+  it('kit-payment ya no mide: no importa el SDK de analítica', () => {
+    const sources = import.meta.glob('../src/lib/kit-payment.ts', { query: '?raw', import: 'default', eager: true });
+    const [source] = Object.values(sources) as string[];
+    expect(source).toBeTruthy();
+    expect(source).not.toMatch(/@vercel\/analytics/);
   });
 });

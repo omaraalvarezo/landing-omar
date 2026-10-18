@@ -354,7 +354,7 @@ const jsonLd = {
         </div>
       </fieldset>
       <p class="buy__error" id="sistema-error" role="alert"></p>
-      <button type="submit" disabled={!onSale} data-track="sistema_checkout_iniciado">
+      <button type="submit" disabled={!onSale}>
         {onSale ? `Pagar ${formatCop(product.amountCop)} con Wompi` : 'Abre pronto'}
       </button>
       <p class="buy__closed" id="sistema-closed" hidden={onSale}>

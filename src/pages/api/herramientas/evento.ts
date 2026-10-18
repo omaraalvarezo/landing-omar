@@ -5,6 +5,7 @@ import { parseDirectoryReference } from '../../../lib/directory';
 import { settleDirectoryPayment } from '../../../lib/directory-payment';
 import { settleKitPayment } from '../../../lib/kit-payment';
 import { parseProductReference } from '../../../lib/products';
+import { trackSistemaPurchase } from '../../../lib/track-server';
 import { verifyWompiEvent } from '../../../lib/wompi-events';
 import { fetchTransaction } from '../../../lib/wompi';
 
@@ -67,6 +68,11 @@ export const POST: APIRoute = async ({ request }) => {
     if (!settled.ok) {
       console.error(`[${channel}] evento sin orden aplicable`, settled.reason, reference);
       return json(200, { ignored: settled.reason });
+    }
+    // La venta se mide aquí y no en `settleKitPayment`: esta URL no lleva secretos. Va después de
+    // liquidar (los correos ya salieron) y su tope de tiempo acota la respuesta al webhook.
+    if (kitReference && 'firstApproval' in settled && settled.firstApproval) {
+      await trackSistemaPurchase(kitReference.product);
     }
     // 503 hace que Wompi reintente. El aviso a Omar y el del comprador tienen cada uno su clave,
     // así que el reintento solo reenvía el que falló.
