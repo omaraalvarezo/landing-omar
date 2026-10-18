@@ -79,6 +79,30 @@ describe('contenido del sistema de Enzo · detailing', () => {
     }
   });
 
+  it('ningún monto en pesos coincide con un valor del catálogo de Enzo', () => {
+    // Montos que aparecen en cotizador-enzo/src/constants/ (consultado el 2026-10-17). Se fijan aquí a
+    // mano: la prueba no lee el repo hermano. Si un ejemplo cae en esta lista, es un precio de Enzo.
+    const ENZO_AMOUNTS = new Set([
+      10800, 21600, 28000, 30000, 32000, 32400, 33000, 36500, 42000, 48000, 50000, 58000, 60000, 67000,
+      77000, 80000, 90000, 95000, 105000, 120000, 130000, 135000, 150000, 155000, 165000, 175000, 180000,
+      190000, 200000, 209000, 210000, 216000, 245000, 250000, 285000, 290000, 300000, 315000, 345000,
+      350000, 355000, 384000, 410000, 425000, 450000, 475000, 480000, 485000, 500000, 515000, 524000,
+      550000, 560000, 580000, 590000, 620000, 640000, 650000, 659000, 690000, 691000, 750000, 850000,
+      890000, 900000, 920000, 980000, 1000000, 1035000, 1090000, 1100000, 1139000, 1200000, 1210000,
+      1390000, 1414000, 1450000, 1550000, 1560000, 1650000, 1660000, 1790000, 1890000, 2190000, 2250000,
+      2350000, 2400000, 2570000, 2950000, 3332000, 3800000, 6150000,
+    ]);
+    const amounts = [...allText.matchAll(/\$\s?(\d{1,3}(?:\.\d{3})+|\d+)/g)].map((match) => Number(match[1].replace(/\./g, '')));
+    for (const amount of amounts) expect(ENZO_AMOUNTS.has(amount), `$${amount}`).toBe(false);
+  });
+
+  it('no recomienda plazos de retención sin pasar por el contador ni niega la clonación de Jotform', () => {
+    expect(allText).not.toMatch(/24 meses/);
+    expect(allText).toMatch(/pregúntale a tu contador/);
+    expect(allText).not.toMatch(/No hay archivos para importar/);
+    expect(allText).toMatch(/clonar/);
+  });
+
   it('ninguna plantilla trae algo que parezca una placa colombiana ni un celular', () => {
     for (const template of templates) {
       const text = `${template.title}\n${template.body}`;
