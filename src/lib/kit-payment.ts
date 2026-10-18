@@ -45,9 +45,8 @@ export async function settleKitPayment(
 
   const existing = await getKitOrderByReference(transaction.reference);
   if (!existing) return { ok: false, reason: 'NOT_FOUND' };
-  // Una orden anterior a los productos múltiples no trae `product`: era del kit.
-  const orderProduct = existing.product === undefined ? 'talleres' : getProduct(existing.product)?.id;
-  if (existing.amountInCents !== amountInCents || orderProduct !== product.id) {
+  // `getKitOrderByReference` ya normaliza las órdenes viejas sin `product` a `talleres`.
+  if (existing.amountInCents !== amountInCents || existing.product !== product.id) {
     return { ok: false, reason: 'MISMATCH' };
   }
 

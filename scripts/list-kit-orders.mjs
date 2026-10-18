@@ -42,8 +42,8 @@ for (const id of list) {
     order.business,
     order.reference,
     order.downloadExpiresAt || 'sin-enlace',
+    order.country || '-',
   ];
-  if (order.country) columns.push(order.country);
   if (withLink && order.status === 'APPROVED' && order.downloadToken) {
     columns.push(`${site}/api/herramientas/kit-archivo?pedido=${order.id}&t=${order.downloadToken}`);
   }

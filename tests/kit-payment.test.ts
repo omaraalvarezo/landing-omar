@@ -169,25 +169,20 @@ describe('settleKitPayment por producto', () => {
     expect(Date.parse(result.order.downloadExpiresAt!)).toBe(Date.parse(result.order.approvedAt!) + 14 * DAY);
   });
 
-  it('orden vieja sin product se trata como talleres (14 días)', async () => {
-    const order = seedOrder(undefined);
-    const parsed = parseProductReference(order.reference as string)!;
-    expect(parsed.product).toBe('talleres');
-    const result = await settleKitPayment(transactionFor(order.reference as string), parsed);
-    expect(result.ok).toBe(true);
-    if (!result.ok) return;
-    expect(Date.parse(result.order.downloadExpiresAt!)).toBe(Date.parse(result.order.approvedAt!) + 14 * DAY);
-  });
-
-  it('orden vieja sin product no se liquida con una referencia de enzo-detailing', async () => {
-    const order = seedOrder(undefined);
+  it('MISMATCH solo por producto: monto de la orden, de Wompi y de parsed coinciden, pero la orden es talleres', async () => {
+    const order = seedOrder('talleres', { amountInCents: productAmountInCents('enzo-detailing') });
     const parsed = parseProductReference(referenceFor('enzo-detailing'))!;
+    expect(order.amountInCents).toBe(parsed.amountInCents);
     const result = await settleKitPayment(
       transactionFor(order.reference as string, { amount_in_cents: parsed.amountInCents }),
       parsed,
     );
     expect(result).toEqual({ ok: false, reason: 'MISMATCH' });
     expect(createKitDownloadToken).not.toHaveBeenCalled();
+    expect(saveKitOrder).not.toHaveBeenCalled();
+    expect(notifyKitPayment).not.toHaveBeenCalled();
+    expect(state.order!.status).toBe('CREATED');
+    expect(state.order!.downloadToken).toBeUndefined();
   });
 
   it('DECLINED no concede descarga', async () => {
