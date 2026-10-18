@@ -23,6 +23,7 @@ _(vacío)_
 - [[wiki/sintesis/precio-psicologico-trm-tiktok]] — 2026-08-19 — evidencia de pricing, USD 797, TRM y secuencia TikTok.
 - [[wiki/sintesis/posicionamiento-consultoria-dos-horas]] — 2026-08-19 — oferta única, ticket, cliente y flujo Wompi → Cal.com.
 - [[wiki/sintesis/framework-4c-empresas-servicios]] — 2026-08-20 — Captar, Convertir, Cumplir y Continuar para dueños y socios de empresas de servicios.
+- [[wiki/sintesis/recibos-operativos]] — 2026-10-17 — cifras de Enzo y Arkhē con fuente, método y fecha; lo que no se publica y por qué.
 
 ---
 
