@@ -13,8 +13,10 @@ import {
   publishedNews,
   publishedPara,
   publishedPrompts,
+  publishedSistemas,
   publishedTrends,
   publishedWeeks,
+  sistemaPath,
   trendPath,
   weekPath,
 } from '../lib/editorial';
@@ -40,7 +42,7 @@ export const GET: APIRoute = async () => {
   const directoryTools = getTools();
   const directoryCategories = getCategories().filter((category) => getToolsByCategory(category.slug).length > 0);
 
-  const [paras, news, prompts, weeks, comparisons, alternatives, cases, trends] = await Promise.all([
+  const [paras, news, prompts, weeks, comparisons, alternatives, cases, trends, sistemas] = await Promise.all([
     publishedPara(),
     publishedNews(),
     publishedPrompts(),
@@ -49,6 +51,7 @@ export const GET: APIRoute = async () => {
     publishedAlternatives(),
     publishedCases(),
     publishedTrends(),
+    publishedSistemas(),
   ]);
 
   const contentUrls = [
@@ -74,6 +77,8 @@ export const GET: APIRoute = async () => {
   const urls = [
     { loc: `${SITE}/`, changefreq: 'monthly', priority: '1.0' },
     { loc: `${SITE}/sobre-mi`, changefreq: 'yearly', priority: '0.5' },
+    { loc: `${SITE}${sistemaPath()}`, changefreq: 'monthly', priority: '0.8' },
+    ...sistemas.map((entry) => ({ loc: `${SITE}${sistemaPath(entry.id)}`, changefreq: 'weekly', priority: '0.9' })),
     // Las páginas legales entran al sitemap cuando Omar apruebe el borrador (LEGAL.draft).
     ...(LEGAL.draft
       ? []

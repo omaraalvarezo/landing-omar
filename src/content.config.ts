@@ -2,6 +2,9 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { getTool } from './lib/directory';
+import { PRODUCT_IDS, type ProductId } from './lib/products';
+import { recibos } from './lib/recibos';
+import oficios from './data/oficios.json';
 
 const isoDate = z.union([z.string().regex(/^\d{4}-\d{2}-\d{2}$/), z.date()]).transform((value) => {
   if (typeof value === 'string') return value;
@@ -215,8 +218,48 @@ const fichas = defineCollection({
   }),
 });
 
+// Un sistema por oficio: la página que vende el producto. Los recibos se citan por id y salen
+// de recibos.json con publicRecibo(); el contenido de las piezas vive en src/data.
+const reciboId = z.string().refine((id) => recibos.some((recibo) => recibo.id === id), {
+  message: 'El recibo no está en recibos.json',
+});
+
+const sistemas = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/sistemas' }),
+  schema: z
+    .object({
+      ...base,
+      oficio: z.string().refine((id) => oficios.some((oficio) => oficio.id === id), {
+        message: 'El oficio no está en oficios.json',
+      }),
+      negocio: z.enum(['enzo', 'arkhe']),
+      product: z.enum(PRODUCT_IDS as unknown as [ProductId, ...ProductId[]]),
+      problem: z.string().min(40),
+      enzoHow: z.string().min(80),
+      receipts: z
+        .array(reciboId)
+        .min(2)
+        .refine((ids) => new Set(ids).size === ids.length, { message: 'Hay un recibo repetido' }),
+      faqs: z.array(faq).min(5),
+    })
+    .superRefine((value, ctx) => {
+      // Un sistema de Enzo no cita cifras de Arkhē, y al revés. Los recibos de grupo sirven a los dos.
+      value.receipts.forEach((id, index) => {
+        const recibo = recibos.find((item) => item.id === id);
+        if (recibo && recibo.negocio !== 'grupo' && recibo.negocio !== value.negocio) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: `El recibo ${id} es de ${recibo.negocio}, no de ${value.negocio}`,
+            path: ['receipts', index],
+          });
+        }
+      });
+    }),
+});
+
 export const collections = {
   fichas,
+  sistemas,
   para,
   noticias,
   prompts,

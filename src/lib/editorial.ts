@@ -40,6 +40,9 @@ export async function publishedCases() {
 export async function publishedTrends() {
   return publicEntries(await getCollection('tendencias'));
 }
+export async function publishedSistemas() {
+  return publicEntries(await getCollection('sistemas'));
+}
 
 export function toolsOf(slugs: string[]): Tool[] {
   return slugs.map((slug) => {
@@ -69,6 +72,9 @@ export function alternativesPath(slug = '') {
 }
 export function casePath(slug = '') {
   return slug ? `/herramientas-ia/casos/${slug}` : '/herramientas-ia/casos';
+}
+export function sistemaPath(slug = '') {
+  return slug ? `/sistemas/${slug}` : '/sistemas';
 }
 export function trendPath(slug = '') {
   return slug ? `/herramientas-ia/tendencias/${slug}` : '/herramientas-ia/tendencias';
@@ -269,3 +275,4 @@ export type CompareEntry = CollectionEntry<'comparar'>;
 export type AlternativeEntry = CollectionEntry<'alternativas'>;
 export type CaseEntry = CollectionEntry<'casos'>;
 export type TrendEntry = CollectionEntry<'tendencias'>;
+export type SistemaEntry = CollectionEntry<'sistemas'>;

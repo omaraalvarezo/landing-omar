@@ -1,0 +1,847 @@
+---
+// Página de venta de un sistema. Es estática, como la del kit: "a la venta" se calcula al
+// construir. Cambiar la fecha de los videos exige un deploy; si la fecha vence entre deploys,
+// el script de abajo cierra el botón y el checkout responde 503 de todos modos.
+import { getCollection } from 'astro:content';
+import SistemaShell from '../../components/sistemas/SistemaShell.astro';
+import contenidoDetailing from '../../data/sistema-enzo-detailing-contenido.json';
+import oficios from '../../data/oficios.json';
+import paises from '../../data/paises.json';
+import { bogotaToday, getTool } from '../../lib/directory';
+import { breadcrumb, faqNode, paraPath, publicEntries, publishedPara, sistemaPath, SITE, type SistemaEntry } from '../../lib/editorial';
+import { formatCop, formatUsd } from '../../lib/money';
+import { getProduct, isProductOnSale, type ProductId } from '../../lib/products';
+import { publicRecibo } from '../../lib/recibos';
+import { personRef } from '../../lib/schema';
+import type { SistemaContent, SistemaPiece, SistemaTool } from '../../lib/sistema';
+
+export async function getStaticPaths() {
+  const entries = publicEntries(await getCollection('sistemas'));
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: SistemaEntry;
+}
+
+const CONTENT: Partial<Record<ProductId, SistemaContent>> = {
+  'enzo-detailing': contenidoDetailing as SistemaContent,
+};
+
+// Cada pieza es un estado del trabajo y conserva su color en toda la página.
+const PIECE_STATE: Record<SistemaPiece['id'], { color: string; ink: string; failure: string }> = {
+  recepcion: { color: '#ff6b45', ink: '#131118', failure: 'El rayón ya estaba. Nadie lo fotografió.' },
+  checklist: { color: '#c79aff', ink: '#131118', failure: 'Se olvidó un paso.' },
+  entrega: { color: '#4b5fe3', ink: '#fff8ea', failure: 'El carro salió sin firma.' },
+  seguimiento: { color: '#c8ff3d', ink: '#131118', failure: 'Nadie le volvió a escribir.' },
+};
+
+const { entry } = Astro.props;
+const product = getProduct(entry.data.product);
+const kit = getProduct('talleres');
+const content = CONTENT[entry.data.product];
+if (!product || !kit || !content) throw new Error(`SISTEMA_SIN_PRODUCTO:${entry.id}`);
+
+const today = bogotaToday();
+const onSale = isProductOnSale(product, today);
+const dueIso = product.presale?.videosDueDate ?? null;
+const longDate = (iso: string) =>
+  new Intl.DateTimeFormat('es-CO', { dateStyle: 'long', timeZone: 'America/Bogota' }).format(new Date(`${iso}T12:00:00-05:00`));
+const dueDate = dueIso ? longDate(dueIso) : '';
+const guarantee = product.guaranteeDays;
+const oficioLabel = oficios.find((oficio) => oficio.id === entry.data.oficio)?.label ?? entry.data.oficio;
+const [nameMain, nameTail] = product.name.split(' · ');
+const recibos = entry.data.receipts.map((id) => publicRecibo(id));
+const guide = (await publishedPara()).find((para) => para.id === entry.data.oficio) ?? null;
+const url = `${SITE}${sistemaPath(entry.id)}`;
+
+function toolName(slug: string) {
+  const tool = getTool(slug);
+  if (!tool) throw new Error(`Herramienta ausente del directorio: ${slug}`);
+  return tool.nombre;
+}
+
+function costLabel(tool: SistemaTool) {
+  const parts: string[] = [];
+  if (tool.monthlyCostUsd) parts.push(formatUsd(tool.monthlyCostUsd));
+  if (tool.monthlyCostCop) parts.push(formatCop(tool.monthlyCostCop));
+  if (parts.length) return `${parts.join(' · ')} al mes`;
+  if (tool.monthlyCostUsd === 0 || tool.monthlyCostCop === 0) return 'Gratis';
+  return 'Sin precio publicado';
+}
+
+const tools = content.tools.map((tool) => ({
+  ...tool,
+  name: toolName(tool.slug),
+  cost: costLabel(tool),
+  checked: longDate(tool.checkedOn),
+}));
+const totalUsd = content.tools.reduce((sum, tool) => sum + (tool.monthlyCostUsd ?? 0), 0);
+const totalCop = content.tools.reduce((sum, tool) => sum + (tool.monthlyCostUsd === null ? tool.monthlyCostCop ?? 0 : 0), 0);
+const totalLabel =
+  [totalUsd ? formatUsd(totalUsd) : '', totalCop ? formatCop(totalCop) : ''].filter(Boolean).join(' + ') || 'Gratis';
+const checkedDates = [...new Set(tools.map((tool) => tool.checked))];
+
+const pieces = content.pieces.map((piece, index) => ({
+  ...piece,
+  index: String(index + 1).padStart(2, '0'),
+  state: PIECE_STATE[piece.id],
+  toolNames: piece.tools.map(toolName),
+}));
+const templates = content.pieces.flatMap((piece) => piece.templates);
+
+type Faq = { q: string; a: string; link?: { href: string; label: string; track: string; trackId?: string } };
+
+const toolsAnswer =
+  tools.map((tool) => `${tool.name}: ${tool.cost === 'Gratis' ? 'gratis' : tool.cost}.`).join(' ') +
+  (checkedDates.length === 1 ? ` Precios consultados el ${checkedDates[0]} en la página de cada una.` : '') +
+  ` En total, ${totalLabel.toLowerCase() === 'gratis' ? 'nada' : `${totalLabel} al mes`}, y eso se lo pagas a cada herramienta, no a mí.`;
+
+const videosAnswer = dueDate
+  ? onSale
+    ? `Los videos llegan antes del ${dueDate}. Al pagar recibes la guía y las plantillas, y te aviso por correo cuando estén los videos. Si no llegan para esa fecha, te devuelvo la plata.`
+    : `La fecha de esta preventa (${dueDate}) ya pasó. No estoy cobrando hasta fijar una nueva y escribirla aquí.`
+  : 'Todavía no hay fecha. Sin fecha no cobro: la compra abre cuando fije el día en que entrego los videos, y esa fecha queda escrita en esta página.';
+
+const QUESTION_LINK = { href: '/?quiero=pregunta-sistema#contacto', label: 'Pregúntame aquí', track: 'escalon_click', trackId: 'lista' };
+const foreignFaq: Faq =
+  product.acceptsForeignCards === true
+    ? { q: '¿Puedo pagar desde fuera de Colombia?', a: 'Sí. El cobro sale en pesos colombianos y tu banco lo convierte a tu moneda.' }
+    : product.acceptsForeignCards === false
+      ? {
+          q: '¿Puedo pagar desde fuera de Colombia?',
+          a: 'Por ahora no; anótate con tu país. Así sé cuánta gente de fuera lo quiere y si vale la pena abrir otro medio de pago.',
+          link: { ...QUESTION_LINK, label: 'Anotarme con mi país' },
+        }
+      : {
+          q: '¿Puedo pagar desde fuera de Colombia?',
+          a: 'Lo estoy confirmando con Wompi; escríbeme antes de pagar. Si tu tarjeta es de otro país, mándame la pregunta y te digo si pasa.',
+          link: QUESTION_LINK,
+        };
+
+const computedFaqs: Faq[] = [
+  {
+    q: `¿En qué se diferencia del kit de ${formatCop(kit.amountCop)}?`,
+    a: `El kit (${formatCop(kit.amountCop)}) es para atender y vender: prompts, mensajes de WhatsApp, flujos y una plantilla de seguimiento. El sistema es para entregar: recepción, checklist, acta con firma y seguimiento, con los textos de Enzo, videos${guarantee ? ` y garantía de ${guarantee} días` : ''}. No necesitas el kit para usar el sistema.`,
+    link: { href: kit.page, label: 'Ver el kit', track: 'escalon_click', trackId: 'kit' },
+  },
+  { q: '¿Cuánto cuestan las herramientas al mes?', a: toolsAnswer },
+  { q: '¿Cuándo llegan los videos?', a: videosAnswer },
+  ...(guarantee
+    ? [
+        {
+          q: '¿Cómo funciona la garantía?',
+          a: `Tienes ${guarantee} días: si no te sirve, escríbeme en los ${guarantee} días siguientes a la compra y dime qué no te sirvió. Te devuelvo la plata; la devolución la hago yo a mano.`,
+        },
+      ]
+    : []),
+  foreignFaq,
+];
+// La primera pregunta del Markdown es "qué incluye"; las calculadas van justo después.
+const [firstFaq, ...restFaqs] = entry.data.faqs;
+const faqs: Faq[] = [firstFaq, ...computedFaqs, ...restFaqs];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Product',
+      '@id': `${url}#product`,
+      name: product.name,
+      description: entry.data.description,
+      url,
+      category: oficioLabel,
+      brand: { '@type': 'Brand', name: 'Omar Álvarez' },
+      offers: {
+        '@type': 'Offer',
+        price: String(product.amountCop),
+        priceCurrency: 'COP',
+        availability: product.presale ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
+        url,
+        seller: personRef(),
+      },
+    },
+    faqNode(url, faqs),
+    breadcrumb([
+      { name: 'Inicio', url: SITE },
+      { name: 'Sistemas', url: `${SITE}${sistemaPath()}` },
+      { name: product.name, url },
+    ]),
+  ],
+};
+---
+
+<SistemaShell
+  title={`${product.name} — Omar Álvarez`}
+  description={entry.data.description}
+  jsonLd={jsonLd}
+  cta={{ href: '#comprar', label: 'comprar', track: 'sistema_ir_a_comprar' }}
+>
+  <!-- 1. El problema -->
+  <section class="opening" aria-labelledby="sistema-titulo">
+    <div class="opening__copy">
+      <p class="overline">Sistema · {oficioLabel} · lo opero en Enzo Motorsport</p>
+      <h1 id="sistema-titulo">{nameMain}{nameTail && <span> · {nameTail}</span>}</h1>
+      <p class="opening__problem">{entry.data.problem}</p>
+      <div class="opening__actions">
+        <a class="btn btn--lime" href="#comprar" data-track="sistema_ir_a_comprar">
+          {onSale ? `Comprar · ${formatCop(product.amountCop)}` : `Ver precio · ${formatCop(product.amountCop)}`}
+        </a>
+        <a class="link-line" href="#piezas">Mira las 4 piezas</a>
+      </div>
+    </div>
+    <ol class="leaks" aria-label="Dónde se pierde la entrega y qué pieza lo cubre">
+      {pieces.map((piece) => (
+        <li style={`--state:${piece.state.color}`}>
+          <s>{piece.state.failure}</s>
+          <span class="leaks__fix"><b aria-hidden="true"></b>{piece.index} · {piece.title}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 2. Cómo lo resolvió Enzo -->
+  <section class="enzo" aria-labelledby="enzo-titulo">
+    <div class="enzo__head">
+      <p class="overline">Esto ya lo opero</p>
+      <h2 id="enzo-titulo">Cómo lo resolvimos en Enzo.</h2>
+      <p>{entry.data.enzoHow}</p>
+    </div>
+    <ul class="readouts">
+      {recibos.map((recibo) => (
+        <li>
+          <strong>{recibo.value}</strong>
+          <span>{recibo.label}</span>
+          <small>{recibo.origin}</small>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- 3. Las 4 piezas -->
+  <section class="pieces" id="piezas" aria-labelledby="piezas-titulo">
+    <div class="section-head">
+      <p class="overline">Las 4 piezas</p>
+      <h2 id="piezas-titulo">En el orden del trabajo.</h2>
+      <p>Del carro que llega al cliente que vuelve. Cada pieza tapa una fuga y trae sus plantillas.</p>
+    </div>
+    <ol class="track">
+      {pieces.map((piece) => (
+        <li class="piece" style={`--state:${piece.state.color};--on-state:${piece.state.ink}`}>
+          <p class="piece__index" aria-hidden="true">{piece.index}</p>
+          <div class="piece__body">
+            <h3>{piece.title}</h3>
+            <p class="piece__why">{piece.why}</p>
+            <p class="piece__meta">
+              <span>Se monta con {piece.toolNames.join(', ')}</span>
+              <span>{piece.templates.length} {piece.templates.length === 1 ? 'plantilla' : 'plantillas'}: {piece.templates.map((template) => template.title).join(' · ')}</span>
+            </p>
+            <details>
+              <summary>Los {piece.steps.length} pasos</summary>
+              <ol>
+                {piece.steps.map((step) => <li>{step}</li>)}
+              </ol>
+            </details>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 4. Con qué se monta -->
+  <section class="ledger" aria-labelledby="herramientas-titulo">
+    <div class="section-head">
+      <p class="overline">Con qué se monta</p>
+      <h2 id="herramientas-titulo">Lo que te cuesta al mes, antes de comprar.</h2>
+      <p>Elegí la mejor herramienta para cada pieza, aunque sea paga. Lo mensual se lo pagas a cada una, no a mí.</p>
+    </div>
+    <div class="ledger__sheet">
+      {tools.map((tool) => (
+        <article class="ledger__row">
+          <header>
+            <h3><a href={`/herramientas-ia/${tool.slug}`}>{tool.name}</a></h3>
+            <p class:list={['tag', { 'tag--alt': !tool.enzoUses }]}>
+              {tool.enzoUses ? 'La usa Enzo' : 'Es una alternativa a lo que usa Enzo'}
+            </p>
+          </header>
+          <p class="ledger__role">{tool.role}</p>
+          <p class="ledger__plan">{tool.plan}</p>
+          <p class="ledger__cost">{tool.cost}</p>
+          <p class="ledger__checked">
+            consultado el {tool.checked} ·{' '}
+            <a href={tool.sourceUrl} target="_blank" rel="noopener noreferrer">fuente</a>
+          </p>
+        </article>
+      ))}
+      <p class="ledger__total"><span>Total al mes</span><strong>{totalLabel}</strong></p>
+    </div>
+  </section>
+
+  <!-- 5. Qué recibes -->
+  <section class="gets" aria-labelledby="recibes-titulo">
+    <div class="section-head">
+      <p class="overline">Qué recibes</p>
+      <h2 id="recibes-titulo">Una parte hoy, otra en preventa.</h2>
+    </div>
+    <div class="gets__split">
+      <div>
+        <p class="gets__when">Al pagar</p>
+        <ul>
+          <li>La guía paso a paso en PDF: {content.setupOrder.length} pasos, en el orden para montarlo.</li>
+          <li>
+            {templates.length} plantillas:
+            <span class="gets__files">{templates.map((template) => template.file).join(' · ')}</span>
+          </li>
+          <li>Todo en un zip que descargas desde tu pedido. El enlace también te llega al correo y sirve {product.downloadDays} días.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="gets__when gets__when--later">En preventa</p>
+        <ul>
+          <li>Un video corto mío por pieza: {pieces.length} en total.</li>
+          <li>Uno de recorrido, con el sistema montado de punta a punta.</li>
+          <li>{dueDate ? `Llegan antes del ${dueDate}.` : 'La fecha de entrega todavía no está fijada.'} Te aviso por correo y los ves en la página de tu pedido.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6, 7 y 8. Precio, preventa y garantía -->
+  <section class="price" aria-labelledby="precio-titulo">
+    <div class="price__figure">
+      <p class="overline">Precio</p>
+      <h2 id="precio-titulo">{formatCop(product.amountCop)}</h2>
+      <p>aprox. USD {product.usdReference} · pago único, sin mensualidad conmigo.</p>
+    </div>
+    <dl class="price__terms">
+      <div>
+        <dt>Preventa</dt>
+        <dd>
+          {dueDate
+            ? onSale
+              ? `Los videos llegan antes del ${dueDate}. Al pagar recibes la guía y las plantillas; los videos después. Si no llegan para esa fecha, te devuelvo la plata.`
+              : `La fecha de esta preventa (${dueDate}) ya pasó. No cobro hasta fijar una nueva.`
+            : 'Todavía no fijé la fecha de los videos. Sin fecha no cobro: la compra abre cuando la fecha quede escrita aquí.'}
+        </dd>
+      </div>
+      {guarantee && (
+        <div>
+          <dt>Garantía de {guarantee} días</dt>
+          <dd>
+            Si no te sirve, escríbeme en los {guarantee} días siguientes a la compra y dime qué no te sirvió. Te devuelvo
+            la plata; la devolución la hago yo a mano.
+          </dd>
+        </div>
+      )}
+    </dl>
+  </section>
+
+  <!-- 9. Preguntas frecuentes -->
+  <section class="faq" aria-labelledby="faq-titulo">
+    <div class="faq__head">
+      <p class="overline">Sin letra pequeña</p>
+      <h2 id="faq-titulo">Preguntas frecuentes.</h2>
+    </div>
+    <div class="faq__list">
+      {faqs.map((faq) => (
+        <details>
+          <summary>{faq.q}</summary>
+          <p>{faq.a}</p>
+          {faq.link && (
+            <p>
+              <a class="link-line" href={faq.link.href} data-track={faq.link.track} data-track-id={faq.link.trackId}>
+                {faq.link.label}
+              </a>
+            </p>
+          )}
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- 10. Formulario de compra -->
+  <section class="buy" id="comprar" aria-labelledby="comprar-titulo">
+    <div class="buy__head">
+      <p class="overline">{onSale ? 'Preventa abierta' : 'Abre pronto'}</p>
+      <h2 id="comprar-titulo">{onSale ? 'Compra el sistema.' : 'Todavía no cobro.'}</h2>
+      <p>
+        {onSale
+          ? 'Pagas con Wompi. Cuando el pago queda aprobado, te llega al correo el enlace de tu pedido con la descarga.'
+          : 'La compra abre cuando fije la fecha de los videos. Si tienes una pregunta del sistema o quieres que te avise, escríbeme.'}
+      </p>
+      {guide && (
+        <p class="buy__guide">
+          ¿Prefieres empezar gratis? Lee la <a href={paraPath(guide.id)} data-track="guia_click">guía de {guide.data.title}</a>.
+        </p>
+      )}
+    </div>
+    <form class="buy__form" id="sistema-form" data-product={product.id} data-due={dueIso ?? ''} data-open={String(onSale)}>
+      <fieldset disabled={!onSale}>
+        <legend class="sr-only">Datos de la compra</legend>
+        <label>
+          <span>Nombre</span>
+          <input name="buyerName" required minlength="2" maxlength="80" autocomplete="name" />
+        </label>
+        <label>
+          <span>Correo</span>
+          <input name="email" type="email" required maxlength="254" autocomplete="email" />
+        </label>
+        <label>
+          <span>Nombre del negocio</span>
+          <input name="business" required minlength="2" maxlength="80" autocomplete="organization" />
+        </label>
+        <label>
+          <span>País</span>
+          <select name="country" required>
+            <option value="">Elige tu país</option>
+            {paises.map((pais) => <option value={pais.id}>{pais.label}</option>)}
+          </select>
+        </label>
+        <div class="hp" aria-hidden="true">
+          <label>No llenar <input name="company" tabindex="-1" autocomplete="off" /></label>
+        </div>
+      </fieldset>
+      <p class="buy__error" id="sistema-error" role="alert"></p>
+      <button type="submit" disabled={!onSale} data-track="sistema_checkout_iniciado">
+        {onSale ? `Pagar ${formatCop(product.amountCop)} con Wompi` : 'Abre pronto'}
+      </button>
+      <p class="buy__closed" id="sistema-closed" hidden={onSale}>
+        <a href="/?quiero=pregunta-sistema#contacto" data-track="escalon_click" data-track-id="lista">Pregúntame o anótate</a>
+      </p>
+      <p class="buy__fine">
+        {formatCop(product.amountCop)}, aprox. USD {product.usdReference}.{guarantee ? ` Garantía de ${guarantee} días.` : ''} Condiciones en
+        <a href="/terminos">términos</a>.
+      </p>
+    </form>
+  </section>
+</SistemaShell>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#sistema-form');
+  const errorNode = document.querySelector<HTMLElement>('#sistema-error');
+  const closedNode = document.querySelector<HTMLElement>('#sistema-closed');
+
+  function bogotaToday() {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Bogota',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
+  }
+
+  // La página se construye una vez; si la fecha de los videos vence entre deploys, se cierra aquí.
+  if (form && form.dataset.open === 'true' && form.dataset.due && form.dataset.due < bogotaToday()) {
+    form.dataset.open = 'false';
+    const fieldset = form.querySelector('fieldset');
+    const button = form.querySelector('button');
+    if (fieldset) fieldset.disabled = true;
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'Abre pronto';
+    }
+    if (closedNode) closedNode.hidden = false;
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (form.dataset.open !== 'true') return;
+    if (!form.reportValidity()) return;
+    const button = form.querySelector('button');
+    const data = new FormData(form);
+    if (errorNode) errorNode.textContent = '';
+    if (button) button.disabled = true;
+    try {
+      const response = await fetch('/api/herramientas/kit-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product: form.dataset.product,
+          buyerName: data.get('buyerName'),
+          email: data.get('email'),
+          business: data.get('business'),
+          country: data.get('country'),
+          company: data.get('company') ?? '',
+        }),
+      });
+      const body = (await response.json().catch(() => ({}))) as { checkoutUrl?: string; error?: string };
+      if (!response.ok || !body.checkoutUrl) {
+        if (errorNode) errorNode.textContent = body.error || 'No se pudo iniciar el pago.';
+        if (button) button.disabled = false;
+        return;
+      }
+      window.location.href = body.checkoutUrl;
+    } catch {
+      if (errorNode) errorNode.textContent = 'No hubo respuesta. Intenta de nuevo.';
+      if (button) button.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .overline {
+    margin: 0 0 18px;
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  h1, h2, h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-stretch: 80%;
+    font-weight: 760;
+    letter-spacing: -.05em;
+    line-height: .92;
+    overflow-wrap: break-word;
+  }
+  p { margin: 0; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 14px 22px;
+    color: var(--ink);
+    font-family: var(--data);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 999px;
+    transition: transform .25s cubic-bezier(.16, 1, .3, 1), background-color .25s ease;
+  }
+  .btn--lime { background: var(--lime); }
+  .btn--lime:hover { background: var(--bone); transform: translateY(-2px); }
+
+  .link-line {
+    color: inherit;
+    font-family: var(--data);
+    font-size: 12px;
+    letter-spacing: .04em;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+  }
+  .link-line:hover { color: var(--lime); }
+
+  .section-head { display: grid; gap: 14px; max-width: 760px; margin-bottom: clamp(32px, 5vw, 56px); }
+  .section-head h2 { font-size: clamp(40px, 7vw, 84px); }
+  .section-head > p:last-child { max-width: 560px; font-size: 17px; }
+
+  /* 1. Apertura: el problema y las cuatro fugas */
+  .opening {
+    display: grid;
+    gap: clamp(36px, 6vw, 72px);
+    padding: clamp(48px, 9vw, 120px) var(--gutter) clamp(56px, 9vw, 112px);
+    background:
+      linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px) 0 0 / 100% 96px,
+      var(--ink);
+  }
+  .opening .overline { color: var(--lime); }
+  .opening h1 { font-size: clamp(54px, 11vw, 150px); font-stretch: 76%; line-height: .84; letter-spacing: -.07em; }
+  .opening h1 span { display: block; color: var(--coral); }
+  .opening__problem { max-width: 600px; margin-top: 28px; color: rgba(255, 248, 234, .86); font-size: clamp(18px, 2vw, 22px); line-height: 1.45; }
+  .opening__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; margin-top: 34px; }
+
+  .leaks { display: grid; align-content: center; gap: 0; margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(255, 248, 234, .16); }
+  .leaks li { display: grid; gap: 8px; padding: 20px 0; border-bottom: 1px solid rgba(255, 248, 234, .16); }
+  .leaks s {
+    color: rgba(255, 248, 234, .5);
+    font-family: var(--display);
+    font-size: clamp(22px, 2.6vw, 32px);
+    font-stretch: 84%;
+    font-weight: 620;
+    letter-spacing: -.035em;
+    line-height: 1.05;
+    text-decoration-color: var(--state);
+    text-decoration-thickness: 3px;
+  }
+  .leaks__fix { display: inline-flex; align-items: center; gap: 10px; color: var(--bone); font-family: var(--data); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  .leaks__fix b { width: 10px; height: 10px; background: var(--state); border-radius: 50%; box-shadow: 0 0 0 4px color-mix(in srgb, var(--state) 22%, transparent); }
+
+  @media (min-width: 960px) {
+    .opening { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); align-items: end; }
+  }
+
+  /* 2. Enzo: lectura de recibos */
+  .enzo {
+    display: grid;
+    gap: clamp(36px, 5vw, 64px);
+    padding: clamp(56px, 8vw, 104px) var(--gutter);
+    background: var(--ink-soft);
+    border-top: 1px solid rgba(255, 248, 234, .1);
+  }
+  .enzo__head { display: grid; gap: 16px; max-width: 760px; }
+  .enzo__head .overline { color: var(--sky); }
+  .enzo__head h2 { font-size: clamp(40px, 6.5vw, 80px); }
+  .enzo__head p:last-child { color: rgba(255, 248, 234, .82); font-size: 17px; }
+  .readouts { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+  .readouts li { display: grid; gap: 8px; padding: 22px 0; border-top: 2px solid var(--sky); }
+  .readouts strong {
+    color: var(--bone);
+    font-family: var(--display);
+    font-size: clamp(34px, 4.4vw, 56px);
+    font-stretch: 78%;
+    font-weight: 760;
+    letter-spacing: -.05em;
+    line-height: .95;
+  }
+  .readouts span { max-width: 380px; color: rgba(255, 248, 234, .86); }
+  .readouts small { color: rgba(255, 248, 234, .56); font-family: var(--data); font-size: 11px; letter-spacing: .04em; }
+  @media (min-width: 720px) {
+    .readouts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(24px, 4vw, 48px); }
+  }
+  @media (min-width: 1200px) {
+    .readouts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  /* 3. Piezas: una vía con cuatro estados */
+  .pieces { padding: clamp(64px, 9vw, 120px) var(--gutter); color: var(--ink); background: var(--bone); }
+  .track { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+  .piece { display: grid; grid-template-columns: minmax(0, 1fr); border-top: 1px solid rgba(19, 17, 24, .18); }
+  .piece:last-child { border-bottom: 1px solid rgba(19, 17, 24, .18); }
+  .piece__index {
+    padding: 14px 18px;
+    color: var(--on-state);
+    background: var(--state);
+    font-family: var(--display);
+    font-size: 40px;
+    font-stretch: 76%;
+    font-weight: 780;
+    letter-spacing: -.06em;
+    line-height: 1;
+  }
+  .piece__body { display: grid; gap: 14px; padding: 22px 0 28px; }
+  .piece h3 { font-size: clamp(32px, 4.6vw, 56px); }
+  .piece__why { max-width: 720px; font-size: 17px; }
+  .piece__meta { display: grid; gap: 4px; color: rgba(19, 17, 24, .7); font-family: var(--data); font-size: 12px; line-height: 1.5; }
+  .piece details { max-width: 760px; }
+  .piece summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    cursor: pointer;
+    font-family: var(--data);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    list-style: none;
+    text-transform: uppercase;
+  }
+  .piece summary::-webkit-details-marker { display: none; }
+  .piece summary::before {
+    content: '+';
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    color: var(--on-state);
+    background: var(--state);
+    border-radius: 50%;
+  }
+  .piece details[open] summary::before { content: '−'; }
+  .piece details ol { display: grid; gap: 10px; margin: 8px 0 0; padding-left: 22px; }
+  .piece details li::marker { font-family: var(--data); font-size: 12px; }
+  @media (min-width: 840px) {
+    .piece { grid-template-columns: 150px minmax(0, 1fr); column-gap: clamp(28px, 4vw, 56px); }
+    .piece__index { padding: 26px 20px; font-size: 64px; }
+    .piece__body { padding: 28px 0 34px; }
+  }
+
+  /* 4. Herramientas: hoja de costos */
+  .ledger { padding: clamp(64px, 9vw, 120px) var(--gutter); color: var(--ink); background: var(--sky); }
+  .ledger__sheet {
+    max-width: 1100px;
+    padding: clamp(18px, 3vw, 36px);
+    background: var(--bone);
+    border: 2px solid var(--ink);
+    box-shadow: 10px 10px 0 var(--ink);
+  }
+  .ledger__row { display: grid; gap: 10px; padding: 22px 0; border-bottom: 1px dashed rgba(19, 17, 24, .4); }
+  .ledger__row:first-child { padding-top: 0; }
+  .ledger__row header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+  .ledger__row h3 { font-size: clamp(28px, 3.6vw, 40px); }
+  .ledger__row h3 a { color: inherit; text-decoration: none; }
+  .ledger__row h3 a:hover { text-decoration: underline; text-underline-offset: 6px; }
+  .tag {
+    padding: 5px 10px;
+    color: var(--ink);
+    background: var(--lime);
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+  }
+  .tag--alt { background: var(--bone); }
+  .ledger__role { max-width: 760px; }
+  .ledger__plan { max-width: 760px; color: rgba(19, 17, 24, .72); font-size: 15px; }
+  .ledger__cost { font-family: var(--data); font-size: clamp(18px, 2.2vw, 24px); font-weight: 600; }
+  .ledger__checked { color: rgba(19, 17, 24, .66); font-family: var(--data); font-size: 11px; letter-spacing: .03em; }
+  .ledger__checked a { color: inherit; text-underline-offset: 3px; }
+  .ledger__total {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 20px;
+    font-family: var(--data);
+    text-transform: uppercase;
+  }
+  .ledger__total span { font-size: 12px; letter-spacing: .1em; }
+  .ledger__total strong { font-size: clamp(22px, 3vw, 32px); }
+  @media (min-width: 900px) {
+    .ledger__row { grid-template-columns: minmax(0, 1.4fr) minmax(0, .6fr); column-gap: 40px; }
+    .ledger__row header,
+    .ledger__role,
+    .ledger__plan { grid-column: 1; }
+    .ledger__cost { grid-column: 2; grid-row: 1 / span 2; justify-self: end; text-align: right; }
+    .ledger__checked { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; text-align: right; }
+  }
+
+  /* 5. Qué recibes: hoy y después */
+  .gets { padding: clamp(64px, 9vw, 120px) var(--gutter); color: var(--ink); background: var(--bone); border-top: 1px solid rgba(19, 17, 24, .12); }
+  .gets__split { display: grid; gap: 40px; }
+  .gets__split ul { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .gets__split li { padding-left: 18px; border-left: 3px solid var(--lime); font-size: 17px; }
+  .gets__split > div:last-child li { border-left-color: var(--purple); }
+  .gets__when { margin-bottom: 20px; font-family: var(--display); font-size: clamp(30px, 4vw, 44px); font-stretch: 80%; font-weight: 760; letter-spacing: -.045em; }
+  .gets__files { display: block; margin-top: 6px; color: rgba(19, 17, 24, .7); font-family: var(--data); font-size: 12px; overflow-wrap: anywhere; }
+  @media (min-width: 840px) {
+    .gets__split { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+    .gets__split > div { padding-right: 40px; }
+    .gets__split > div:last-child { padding: 0 0 0 40px; border-left: 1px solid rgba(19, 17, 24, .2); }
+  }
+
+  /* 6–8. Precio: el bloque de reserva */
+  .price {
+    display: grid;
+    gap: clamp(32px, 5vw, 64px);
+    padding: clamp(64px, 9vw, 120px) var(--gutter);
+    color: var(--ink);
+    background: var(--purple);
+  }
+  .price__figure { min-width: 0; }
+  .price__figure h2 { font-size: clamp(64px, 17vw, 168px); font-stretch: 74%; letter-spacing: -.07em; line-height: .82; white-space: nowrap; }
+  .price__figure p:last-child { margin-top: 20px; font-family: var(--data); font-size: 14px; }
+  .price__terms { display: grid; gap: 0; margin: 0; align-content: end; }
+  .price__terms div { padding: 20px 0; border-top: 2px solid var(--ink); }
+  .price__terms dt { margin-bottom: 8px; font-family: var(--data); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+  .price__terms dd { margin: 0; font-size: 17px; }
+  @media (min-width: 960px) {
+    .price { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); align-items: end; }
+    .price__figure h2 { font-size: clamp(64px, 10.5vw, 168px); }
+  }
+
+  /* 9. Preguntas */
+  .faq { display: grid; gap: 32px; padding: clamp(64px, 9vw, 120px) var(--gutter); color: var(--bone); background: var(--ink); }
+  .faq__head h2 { font-size: clamp(40px, 6vw, 72px); }
+  .faq__head .overline { color: var(--coral); }
+  .faq__list { display: grid; border-top: 1px solid rgba(255, 248, 234, .2); }
+  .faq details { border-bottom: 1px solid rgba(255, 248, 234, .2); }
+  .faq summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 0;
+    cursor: pointer;
+    font-family: var(--display);
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-stretch: 86%;
+    font-weight: 620;
+    letter-spacing: -.025em;
+    line-height: 1.15;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; flex: none; color: var(--lime); font-family: var(--data); }
+  .faq details[open] summary::after { content: '−'; }
+  .faq details p { max-width: 720px; padding-bottom: 18px; color: rgba(255, 248, 234, .82); }
+  @media (min-width: 960px) {
+    .faq { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 56px; }
+    .faq__head { position: sticky; top: 32px; align-self: start; }
+  }
+
+  /* 10. Compra */
+  .buy {
+    display: grid;
+    gap: clamp(32px, 5vw, 64px);
+    padding: clamp(64px, 9vw, 120px) var(--gutter);
+    background: var(--ink);
+    border-top: 1px solid rgba(255, 248, 234, .14);
+  }
+  .buy__head { display: grid; gap: 16px; align-content: start; max-width: 560px; }
+  .buy__head .overline { color: var(--lime); }
+  .buy__head h2 { font-size: clamp(44px, 7vw, 92px); }
+  .buy__head > p { color: rgba(255, 248, 234, .82); font-size: 17px; }
+  .buy__guide { font-size: 15px !important; }
+  .buy__guide a { color: var(--lime); text-underline-offset: 4px; }
+
+  .buy__form {
+    display: grid;
+    gap: 16px;
+    max-width: 560px;
+    padding: clamp(20px, 3vw, 32px);
+    color: var(--ink);
+    background: var(--bone);
+    border-top: 6px solid var(--lime);
+  }
+  .buy__form fieldset { display: grid; gap: 16px; min-width: 0; margin: 0; padding: 0; border: 0; }
+  .buy__form fieldset:disabled { opacity: .55; }
+  .buy__form label { display: grid; gap: 6px; }
+  .buy__form label > span { font-family: var(--data); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .buy__form input,
+  .buy__form select {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    color: var(--ink);
+    background: #fff;
+    font: inherit;
+    border: 1px solid rgba(19, 17, 24, .45);
+    border-radius: 0;
+  }
+  .buy__form input:focus-visible,
+  .buy__form select:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 1px; }
+  .buy__form button {
+    min-height: 54px;
+    padding: 14px 20px;
+    color: var(--ink);
+    background: var(--lime);
+    font-family: var(--data);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .buy__form button:hover:not(:disabled) { background: var(--ink); color: var(--lime); }
+  .buy__form button:disabled { color: rgba(19, 17, 24, .6); background: var(--bone-muted); border-color: rgba(19, 17, 24, .3); cursor: not-allowed; }
+  .buy__form button:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; }
+  .buy__error { min-height: 1em; color: #b3261e; font-weight: 600; }
+  .buy__error:empty { display: none; }
+  .buy__closed { font-size: 17px; }
+  .buy__closed a { color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--coral); text-decoration-thickness: 3px; text-underline-offset: 5px; }
+  .buy__fine { color: rgba(19, 17, 24, .68); font-family: var(--data); font-size: 11px; }
+  .buy__fine a { color: inherit; }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  @media (min-width: 960px) {
+    .buy { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+    .btn--lime:hover { transform: none; }
+  }
+</style>

@@ -14,9 +14,11 @@ import {
   publishedNews,
   publishedPara,
   publishedPrompts,
+  publishedSistemas,
   publishedTrends,
   publishedWeeks,
   SITE,
+  sistemaPath,
   trendPath,
   weekPath,
 } from '../lib/editorial';
@@ -26,7 +28,7 @@ function line(title: string, path: string, description: string) {
 }
 
 export const GET: APIRoute = async () => {
-  const [sections, paras, news, prompts, weeks, comparisons, alternatives, cases, trends] = await Promise.all([
+  const [sections, paras, news, prompts, weeks, comparisons, alternatives, cases, trends, sistemas] = await Promise.all([
     guideSections(),
     publishedPara(),
     publishedNews(),
@@ -36,6 +38,7 @@ export const GET: APIRoute = async () => {
     publishedAlternatives(),
     publishedCases(),
     publishedTrends(),
+    publishedSistemas(),
   ]);
 
   const categories = getCategories();
@@ -43,6 +46,11 @@ export const GET: APIRoute = async () => {
   const body = `# Omar Álvarez — herramientas de IA para pymes
 
 > Directorio y guías en español. El primer párrafo de cada pieza es la respuesta directa. Las cifras citan la fuente y la fecha. No hay llamada gratuita ni paquetes de consultoría en estas páginas.
+
+## Sistemas
+
+${line('Sistemas', sistemaPath(), 'Los sistemas con los que Omar opera Enzo Motorsport, por oficio, para montarlos con herramientas que ya existen. Pago único.')}
+${sistemas.map((entry) => line(entry.data.title, sistemaPath(entry.id), entry.data.description)).join('\n')}
 
 ## Directorio
 
