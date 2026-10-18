@@ -3,6 +3,7 @@
 // `src/data/short-links.json`; `astro.config.mjs` arma los redirects con el mismo núcleo.
 import links from '../data/short-links.json';
 import {
+  allowShortLinkTrailingSlash as allowTrailingSlash,
   shortLinkDestination as destination,
   shortLinkRedirects as redirects,
 } from './short-links-core.mjs';
@@ -26,4 +27,12 @@ export function shortLinkDestination(link: Pick<ShortLink, 'slug' | 'to'>): stri
 
 export function shortLinkRedirects(list: readonly ShortLink[] = SHORT_LINKS): Record<string, ShortLinkRedirect> {
   return redirects(list);
+}
+
+/** Rutas del adaptador de Vercel con `/{slug}/` aceptado; ver `short-links-core.mjs`. */
+export function allowShortLinkTrailingSlash<Route extends Record<string, unknown>>(
+  routes: readonly Route[],
+  list: readonly Pick<ShortLink, 'slug'>[] = SHORT_LINKS,
+): { routes: Route[]; missing: string[] } {
+  return allowTrailingSlash(routes, list);
 }

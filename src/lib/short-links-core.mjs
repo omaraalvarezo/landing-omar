@@ -30,3 +30,26 @@ export function shortLinkRedirects(links) {
     links.map((link) => [`/${link.slug}`, { status: 302, destination: shortLinkDestination(link) }]),
   );
 }
+
+/**
+ * `@astrojs/vercel` escribe cada redirect como `^/{slug}$`, así que `/entregas/` no coincide.
+ * Astro no deja declarar `/entregas` y `/entregas/` a la vez (es la misma ruta), por eso la
+ * variante con barra se agrega aquí, sobre las rutas ya generadas: `^/{slug}$` -> `^/{slug}/?$`,
+ * mismo destino y mismo 302. `missing` son los slugs sin ruta: el build debe fallar si hay alguno.
+ * @template {Record<string, unknown>} Route
+ * @param {readonly Route[]} routes
+ * @param {readonly { slug: string }[]} links
+ * @returns {{ routes: Route[], missing: string[] }}
+ */
+export function allowShortLinkTrailingSlash(routes, links) {
+  const exact = new Map(links.map((link) => [`^/${link.slug}$`, link.slug]));
+  const seen = new Set();
+  const next = routes.map((route) => {
+    const src = route.src;
+    if (typeof src !== 'string' || !exact.has(src) || !route.headers || route.dest !== undefined) return route;
+    const slug = exact.get(src);
+    seen.add(slug);
+    return { ...route, src: `^/${slug}/?$` };
+  });
+  return { routes: next, missing: links.map((link) => link.slug).filter((slug) => !seen.has(slug)) };
+}

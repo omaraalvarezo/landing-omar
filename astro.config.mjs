@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import vercel from '@astrojs/vercel';
 import { readFileSync } from 'node:fs';
 import { shortLinkRedirects } from './src/lib/short-links-core.mjs';
+import { shortLinksTrailingSlash } from './src/lib/short-links-integration.mjs';
 
 // Direcciones cortas de los videos (/entregas, /prompts, /kit, /lista): una sola fuente de verdad.
 const shortLinks = JSON.parse(readFileSync(new URL('./src/data/short-links.json', import.meta.url), 'utf8'));
@@ -21,6 +22,8 @@ export default defineConfig({
   adapter: vercel({ maxDuration: 30 }),
   // 302 (no permanente): el destino de cada video puede cambiar. Llevan ?ref= para medir visitas.
   redirects: shortLinkRedirects(shortLinks),
+  // `/entregas/` (con barra) también redirige: se agrega sobre lo que escribe el adaptador.
+  integrations: [shortLinksTrailingSlash(shortLinks)],
   build: {
     inlineStylesheets: 'auto',
   },

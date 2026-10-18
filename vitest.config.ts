@@ -6,6 +6,9 @@ import type { InlineConfig } from 'vitest/node';
 const test: InlineConfig = {
   include: ['tests/**/*.test.ts'],
   environment: 'node',
+  // Las pruebas que renderizan una página con el contenedor de Astro (p. ej. /terminos) compilan la
+  // página en frío: en CI, sin caché de Vite, pasan de los 5 s por defecto.
+  testTimeout: 30_000,
 };
 
 // `@vercel/analytics/astro` publica un `.ts`/`.astro` dentro de node_modules (Layout lo importa): Node no
