@@ -6,7 +6,8 @@ import contenido from '../../data/sistema-enzo-detailing-contenido.json';
 import { bogotaToday } from '../../lib/directory';
 import { formatCop } from '../../lib/money';
 import { getProduct, isProductOnSale } from '../../lib/products';
-import type { SistemaContent, SistemaPiece } from '../../lib/sistema';
+import type { SistemaContent } from '../../lib/sistema';
+import { PIECE_STATE, guaranteeTerms, hasGuarantee, longDate, presaleTerms } from '../../lib/sistema-copy';
 
 const product = getProduct('enzo-detailing');
 if (!product) throw new Error('SISTEMA_ENZO_SIN_PRODUCTO');
@@ -14,19 +15,9 @@ const content = contenido as SistemaContent;
 
 const onSale = isProductOnSale(product, bogotaToday());
 const dueIso = product.presale?.videosDueDate ?? null;
-const dueDate = dueIso
-  ? new Intl.DateTimeFormat('es-CO', { dateStyle: 'long', timeZone: 'America/Bogota' }).format(new Date(`${dueIso}T12:00:00-05:00`))
-  : '';
-const guarantee = product.guaranteeDays;
+const dueDate = dueIso ? longDate(dueIso) : '';
+const guarantee = hasGuarantee(product.guaranteeDays) ? product.guaranteeDays : null;
 const [nameMain, nameTail] = product.name.split(' · ');
-
-// Cada pieza es un estado del trabajo: mismo color que en /sistemas/detailing.
-const PIECE_STATE: Record<SistemaPiece['id'], { color: string; ink: string; failure: string; fix: string }> = {
-  recepcion: { color: '#ff6b45', ink: '#131118', failure: 'El rayón ya estaba. Nadie lo fotografió.', fix: 'Constancia de cómo llegó el carro.' },
-  checklist: { color: '#c79aff', ink: '#131118', failure: 'Se olvidó un paso.', fix: 'Pasos que el equipo marca para que nada se olvide.' },
-  entrega: { color: '#4b5fe3', ink: '#fff8ea', failure: 'El carro salió sin firma.', fix: 'Acta que el cliente acepta y firma.' },
-  seguimiento: { color: '#c8ff3d', ink: '#131118', failure: 'Nadie le volvió a escribir.', fix: '“Ya está listo”, garantía, posventa y pedido de reseña.' },
-};
 
 const pieces = content.pieces.map((piece, index) => ({
   id: piece.id,
@@ -34,12 +25,6 @@ const pieces = content.pieces.map((piece, index) => ({
   index: String(index + 1).padStart(2, '0'),
   ...PIECE_STATE[piece.id],
 }));
-
-const presaleText = dueDate
-  ? onSale
-    ? `Al pagar recibes la guía y las plantillas. Los videos llegan antes del ${dueDate}; si no llegan, te devuelvo la plata.`
-    : `La fecha de esta preventa (${dueDate}) ya pasó. No cobro hasta fijar una nueva.`
-  : 'Todavía no fijé la fecha de los videos. Sin fecha no cobro: abre cuando la fecha quede escrita.';
 ---
 
 <section class="se" id="sistema-enzo" aria-labelledby="sistema-enzo-title">
@@ -72,12 +57,12 @@ const presaleText = dueDate
     <dl class="se__terms">
       <div>
         <dt>Preventa</dt>
-        <dd>{presaleText}</dd>
+        <dd>{presaleTerms({ dueDate, onSale, place: 'fuera' })}</dd>
       </div>
-      {guarantee && (
+      {guarantee !== null && (
         <div>
           <dt>Garantía de {guarantee} días</dt>
-          <dd>Si no te sirve, escríbeme en los {guarantee} días siguientes a la compra y dime qué no te sirvió. Te devuelvo la plata; la devolución la hago yo a mano.</dd>
+          <dd>{guaranteeTerms(guarantee)}</dd>
         </div>
       )}
     </dl>

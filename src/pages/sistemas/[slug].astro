@@ -7,13 +7,28 @@ import SistemaShell from '../../components/sistemas/SistemaShell.astro';
 import contenidoDetailing from '../../data/sistema-enzo-detailing-contenido.json';
 import oficios from '../../data/oficios.json';
 import paises from '../../data/paises.json';
-import { bogotaToday, getTool } from '../../lib/directory';
+import { bogotaToday } from '../../lib/directory';
 import { breadcrumb, faqNode, paraPath, publicEntries, publishedPara, sistemaPath, SITE, type SistemaEntry } from '../../lib/editorial';
-import { formatCop, formatUsd } from '../../lib/money';
+import { formatCop } from '../../lib/money';
 import { getProduct, isProductOnSale, type ProductId } from '../../lib/products';
 import { publicRecibo } from '../../lib/recibos';
 import { personRef } from '../../lib/schema';
-import type { SistemaContent, SistemaPiece, SistemaTool } from '../../lib/sistema';
+import type { SistemaContent } from '../../lib/sistema';
+import {
+  PIECE_STATE,
+  QUESTION_HREF,
+  costLabel,
+  foreignAnswer,
+  guaranteeAnswer,
+  guaranteeTerms,
+  hasGuarantee,
+  longDate,
+  presaleTerms,
+  toolName,
+  toolsAnswer,
+  toolsTotalLabel,
+  videosAnswer,
+} from '../../lib/sistema-copy';
 
 export async function getStaticPaths() {
   const entries = publicEntries(await getCollection('sistemas'));
@@ -28,14 +43,6 @@ const CONTENT: Partial<Record<ProductId, SistemaContent>> = {
   'enzo-detailing': contenidoDetailing as SistemaContent,
 };
 
-// Cada pieza es un estado del trabajo y conserva su color en toda la página.
-const PIECE_STATE: Record<SistemaPiece['id'], { color: string; ink: string; failure: string }> = {
-  recepcion: { color: '#ff6b45', ink: '#131118', failure: 'El rayón ya estaba. Nadie lo fotografió.' },
-  checklist: { color: '#c79aff', ink: '#131118', failure: 'Se olvidó un paso.' },
-  entrega: { color: '#4b5fe3', ink: '#fff8ea', failure: 'El carro salió sin firma.' },
-  seguimiento: { color: '#c8ff3d', ink: '#131118', failure: 'Nadie le volvió a escribir.' },
-};
-
 const { entry } = Astro.props;
 const product = getProduct(entry.data.product);
 const kit = getProduct('talleres');
@@ -45,30 +52,14 @@ if (!product || !kit || !content) throw new Error(`SISTEMA_SIN_PRODUCTO:${entry.
 const today = bogotaToday();
 const onSale = isProductOnSale(product, today);
 const dueIso = product.presale?.videosDueDate ?? null;
-const longDate = (iso: string) =>
-  new Intl.DateTimeFormat('es-CO', { dateStyle: 'long', timeZone: 'America/Bogota' }).format(new Date(`${iso}T12:00:00-05:00`));
 const dueDate = dueIso ? longDate(dueIso) : '';
-const guarantee = product.guaranteeDays;
+const guarantee = hasGuarantee(product.guaranteeDays) ? product.guaranteeDays : null;
+const presale = { dueDate, onSale, place: 'producto' as const };
 const oficioLabel = oficios.find((oficio) => oficio.id === entry.data.oficio)?.label ?? entry.data.oficio;
 const [nameMain, nameTail] = product.name.split(' · ');
 const recibos = entry.data.receipts.map((id) => publicRecibo(id));
 const guide = (await publishedPara()).find((para) => para.id === entry.data.oficio) ?? null;
 const url = `${SITE}${sistemaPath(entry.id)}`;
-
-function toolName(slug: string) {
-  const tool = getTool(slug);
-  if (!tool) throw new Error(`Herramienta ausente del directorio: ${slug}`);
-  return tool.nombre;
-}
-
-function costLabel(tool: SistemaTool) {
-  const parts: string[] = [];
-  if (tool.monthlyCostUsd) parts.push(formatUsd(tool.monthlyCostUsd));
-  if (tool.monthlyCostCop) parts.push(formatCop(tool.monthlyCostCop));
-  if (parts.length) return `${parts.join(' · ')} al mes`;
-  if (tool.monthlyCostUsd === 0 || tool.monthlyCostCop === 0) return 'Gratis';
-  return 'Sin precio publicado';
-}
 
 const tools = content.tools.map((tool) => ({
   ...tool,
@@ -76,11 +67,7 @@ const tools = content.tools.map((tool) => ({
   cost: costLabel(tool),
   checked: longDate(tool.checkedOn),
 }));
-const totalUsd = content.tools.reduce((sum, tool) => sum + (tool.monthlyCostUsd ?? 0), 0);
-const totalCop = content.tools.reduce((sum, tool) => sum + (tool.monthlyCostUsd === null ? tool.monthlyCostCop ?? 0 : 0), 0);
-const totalLabel =
-  [totalUsd ? formatUsd(totalUsd) : '', totalCop ? formatCop(totalCop) : ''].filter(Boolean).join(' + ') || 'Gratis';
-const checkedDates = [...new Set(tools.map((tool) => tool.checked))];
+const totalLabel = toolsTotalLabel(content.tools);
 
 const pieces = content.pieces.map((piece, index) => ({
   ...piece,
@@ -92,49 +79,23 @@ const templates = content.pieces.flatMap((piece) => piece.templates);
 
 type Faq = { q: string; a: string; link?: { href: string; label: string; track: string; trackId?: string } };
 
-const toolsAnswer =
-  tools.map((tool) => `${tool.name}: ${tool.cost === 'Gratis' ? 'gratis' : tool.cost}.`).join(' ') +
-  (checkedDates.length === 1 ? ` Precios consultados el ${checkedDates[0]} en la página de cada una.` : '') +
-  ` En total, ${totalLabel.toLowerCase() === 'gratis' ? 'nada' : `${totalLabel} al mes`}, y eso se lo pagas a cada herramienta, no a mí.`;
-
-const videosAnswer = dueDate
-  ? onSale
-    ? `Los videos llegan antes del ${dueDate}. Al pagar recibes la guía y las plantillas, y te aviso por correo cuando estén los videos. Si no llegan para esa fecha, te devuelvo la plata.`
-    : `La fecha de esta preventa (${dueDate}) ya pasó. No estoy cobrando hasta fijar una nueva y escribirla aquí.`
-  : 'Todavía no hay fecha. Sin fecha no cobro: la compra abre cuando fije el día en que entrego los videos, y esa fecha queda escrita en esta página.';
-
-const QUESTION_LINK = { href: '/?quiero=pregunta-sistema#contacto', label: 'Pregúntame aquí', track: 'escalon_click', trackId: 'lista' };
-const foreignFaq: Faq =
-  product.acceptsForeignCards === true
-    ? { q: '¿Puedo pagar desde fuera de Colombia?', a: 'Sí. El cobro sale en pesos colombianos y tu banco lo convierte a tu moneda.' }
-    : product.acceptsForeignCards === false
-      ? {
-          q: '¿Puedo pagar desde fuera de Colombia?',
-          a: 'Por ahora no; anótate con tu país. Así sé cuánta gente de fuera lo quiere y si vale la pena abrir otro medio de pago.',
-          link: { ...QUESTION_LINK, label: 'Anotarme con mi país' },
-        }
-      : {
-          q: '¿Puedo pagar desde fuera de Colombia?',
-          a: 'Lo estoy confirmando con Wompi; escríbeme antes de pagar. Si tu tarjeta es de otro país, mándame la pregunta y te digo si pasa.',
-          link: QUESTION_LINK,
-        };
+const QUESTION_LINK = { href: QUESTION_HREF, track: 'escalon_click', trackId: 'lista' };
+const foreign = foreignAnswer(product.acceptsForeignCards);
+const foreignFaq: Faq = {
+  q: foreign.q,
+  a: foreign.a,
+  ...(foreign.linkLabel ? { link: { ...QUESTION_LINK, label: foreign.linkLabel } } : {}),
+};
 
 const computedFaqs: Faq[] = [
   {
     q: `¿En qué se diferencia del kit de ${formatCop(kit.amountCop)}?`,
-    a: `El kit (${formatCop(kit.amountCop)}) es para atender y vender: prompts, mensajes de WhatsApp, flujos y una plantilla de seguimiento. El sistema es para entregar: recepción, checklist, acta con firma y seguimiento, con los textos de Enzo, videos${guarantee ? ` y garantía de ${guarantee} días` : ''}. No necesitas el kit para usar el sistema.`,
+    a: `El kit (${formatCop(kit.amountCop)}) es para atender y vender: prompts, mensajes de WhatsApp, flujos y una plantilla de seguimiento. El sistema es para entregar: recepción, checklist, acta con firma y seguimiento, con los textos de Enzo, videos${guarantee !== null ? ` y garantía de ${guarantee} días` : ''}. No necesitas el kit para usar el sistema.`,
     link: { href: kit.page, label: 'Ver el kit', track: 'escalon_click', trackId: 'kit' },
   },
-  { q: '¿Cuánto cuestan las herramientas al mes?', a: toolsAnswer },
-  { q: '¿Cuándo llegan los videos?', a: videosAnswer },
-  ...(guarantee
-    ? [
-        {
-          q: '¿Cómo funciona la garantía?',
-          a: `Tienes ${guarantee} días: si no te sirve, escríbeme en los ${guarantee} días siguientes a la compra y dime qué no te sirvió. Te devuelvo la plata; la devolución la hago yo a mano.`,
-        },
-      ]
-    : []),
+  { q: '¿Cuánto cuestan las herramientas al mes?', a: toolsAnswer(content.tools) },
+  { q: '¿Cuándo llegan los videos?', a: videosAnswer(presale) },
+  ...(guarantee !== null ? [{ q: '¿Cómo funciona la garantía?', a: guaranteeAnswer(guarantee) }] : []),
   foreignFaq,
 ];
 // La primera pregunta del Markdown es "qué incluye"; las calculadas van justo después.
@@ -316,21 +277,12 @@ const jsonLd = {
     <dl class="price__terms">
       <div>
         <dt>Preventa</dt>
-        <dd>
-          {dueDate
-            ? onSale
-              ? `Los videos llegan antes del ${dueDate}. Al pagar recibes la guía y las plantillas; los videos después. Si no llegan para esa fecha, te devuelvo la plata.`
-              : `La fecha de esta preventa (${dueDate}) ya pasó. No cobro hasta fijar una nueva.`
-            : 'Todavía no fijé la fecha de los videos. Sin fecha no cobro: la compra abre cuando la fecha quede escrita aquí.'}
-        </dd>
+        <dd>{presaleTerms(presale)}</dd>
       </div>
-      {guarantee && (
+      {guarantee !== null && (
         <div>
           <dt>Garantía de {guarantee} días</dt>
-          <dd>
-            Si no te sirve, escríbeme en los {guarantee} días siguientes a la compra y dime qué no te sirvió. Te devuelvo
-            la plata; la devolución la hago yo a mano.
-          </dd>
+          <dd>{guaranteeTerms(guarantee)}</dd>
         </div>
       )}
     </dl>
@@ -406,10 +358,10 @@ const jsonLd = {
         {onSale ? `Pagar ${formatCop(product.amountCop)} con Wompi` : 'Abre pronto'}
       </button>
       <p class="buy__closed" id="sistema-closed" hidden={onSale}>
-        <a href="/?quiero=pregunta-sistema#contacto" data-track="escalon_click" data-track-id="lista">Pregúntame o anótate</a>
+        <a href={QUESTION_HREF} data-track="escalon_click" data-track-id="lista">Pregúntame o anótate</a>
       </p>
       <p class="buy__fine">
-        {formatCop(product.amountCop)}, aprox. USD {product.usdReference}.{guarantee ? ` Garantía de ${guarantee} días.` : ''} Condiciones en
+        {formatCop(product.amountCop)}, aprox. USD {product.usdReference}.{guarantee !== null ? ` Garantía de ${guarantee} días.` : ''} Condiciones en
         <a href="/terminos">términos</a>.
       </p>
     </form>

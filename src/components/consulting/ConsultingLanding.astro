@@ -12,17 +12,33 @@ import Ladder from '../home/Ladder.astro';
 import SistemaEnzo from '../home/SistemaEnzo.astro';
 import contenidoDetailing from '../../data/sistema-enzo-detailing-contenido.json';
 import { SOCIALS } from '../../lib/contact';
-import { bogotaToday, getTool } from '../../lib/directory';
-import { formatCop, formatUsd } from '../../lib/money';
+import { bogotaToday } from '../../lib/directory';
 import { getProduct, isProductOnSale } from '../../lib/products';
 import { publicRecibo } from '../../lib/recibos';
-import type { SistemaContent, SistemaTool } from '../../lib/sistema';
+import type { SistemaContent } from '../../lib/sistema';
+import {
+  QUESTION_HREF,
+  foreignAnswer,
+  guaranteeAnswer,
+  hasGuarantee,
+  longDate,
+  toolsAnswer,
+  videosAnswer,
+} from '../../lib/sistema-copy';
 
 const year = new Date().getFullYear();
 
 const sistema = getProduct('enzo-detailing');
-const sistemaEntry = (await getCollection('sistemas')).find((entry) => entry.data.product === 'enzo-detailing');
-if (!sistema || !sistemaEntry) throw new Error('HOME_SIN_SISTEMA_ENZO');
+if (!sistema) throw new Error('HOME_SIN_PRODUCTO_SISTEMA_ENZO');
+// Si la página del sistema no está publicada (falta o es borrador), el home no muestra la sección
+// ni la pregunta "qué incluye", y los botones del sistema bajan a la escalera.
+const sistemaEntry =
+  (await getCollection('sistemas')).find((entry) => entry.data.product === 'enzo-detailing' && !entry.data.draft) ?? null;
+const sistemaPublished = sistemaEntry !== null;
+const includesFaq = sistemaEntry?.data.faqs[0] ?? null;
+if (sistemaEntry && !includesFaq) throw new Error('HOME_SISTEMA_ENZO_SIN_FAQ');
+const sistemaHref = sistemaPublished ? sistema.page : '#escalera';
+const sistemaAnchor = sistemaPublished ? '#sistema-enzo' : '#escalera';
 const sistemaContent = contenidoDetailing as SistemaContent;
 
 // Cifras de mis negocios con fuente registrada (wiki/sintesis/recibos-operativos.md). El origen
@@ -86,76 +102,28 @@ const PROJECTS = [
 ];
 
 // FAQ del producto y de la lista de espera. Las respuestas que dependen de datos (herramientas,
-// fecha de videos, garantía, tarjetas de fuera) usan las mismas frases que /sistemas/detailing.
-function toolName(slug: string) {
-  const tool = getTool(slug);
-  if (!tool) throw new Error(`Herramienta ausente del directorio: ${slug}`);
-  return tool.nombre;
-}
-function costLabel(tool: SistemaTool) {
-  const parts: string[] = [];
-  if (tool.monthlyCostUsd) parts.push(formatUsd(tool.monthlyCostUsd));
-  if (tool.monthlyCostCop) parts.push(formatCop(tool.monthlyCostCop));
-  if (parts.length) return `${parts.join(' · ')} al mes`;
-  if (tool.monthlyCostUsd === 0 || tool.monthlyCostCop === 0) return 'Gratis';
-  return 'Sin precio publicado';
-}
-const longDate = (iso: string) =>
-  new Intl.DateTimeFormat('es-CO', { dateStyle: 'long', timeZone: 'America/Bogota' }).format(new Date(`${iso}T12:00:00-05:00`));
-
+// fecha de videos, garantía, tarjetas de fuera) salen de `sistema-copy`, igual que en
+// /sistemas/detailing.
 const sistemaOnSale = isProductOnSale(sistema, bogotaToday());
 const dueIso = sistema.presale?.videosDueDate ?? null;
 const dueDate = dueIso ? longDate(dueIso) : '';
-const guarantee = sistema.guaranteeDays;
-const tools = sistemaContent.tools.map((tool) => ({ name: toolName(tool.slug), cost: costLabel(tool), checked: longDate(tool.checkedOn) }));
-const totalUsd = sistemaContent.tools.reduce((sum, tool) => sum + (tool.monthlyCostUsd ?? 0), 0);
-const totalCop = sistemaContent.tools.reduce((sum, tool) => sum + (tool.monthlyCostUsd === null ? tool.monthlyCostCop ?? 0 : 0), 0);
-const totalLabel = [totalUsd ? formatUsd(totalUsd) : '', totalCop ? formatCop(totalCop) : ''].filter(Boolean).join(' + ') || 'Gratis';
-const checkedDates = [...new Set(tools.map((tool) => tool.checked))];
+const guarantee = hasGuarantee(sistema.guaranteeDays) ? sistema.guaranteeDays : null;
+const foreign = foreignAnswer(sistema.acceptsForeignCards);
 
 type Faq = { q: string; a: string; link?: { href: string; label: string; trackId: string; contact?: boolean } };
 
-const QUESTION_LINK = { href: '/?quiero=pregunta-sistema#contacto', label: 'Pregúntame aquí', trackId: 'lista' };
-const [includesFaq] = sistemaEntry.data.faqs;
-
 const FAQ: Faq[] = [
-  { q: includesFaq.q, a: includesFaq.a, link: { href: sistema.page, label: 'Ver el sistema de Enzo', trackId: 'sistema-enzo' } },
-  {
-    q: '¿Qué herramientas pide y cuánto cuestan al mes?',
-    a:
-      tools.map((tool) => `${tool.name}: ${tool.cost === 'Gratis' ? 'gratis' : tool.cost}.`).join(' ') +
-      (checkedDates.length === 1 ? ` Precios consultados el ${checkedDates[0]} en la página de cada una.` : '') +
-      ` En total, ${totalLabel.toLowerCase() === 'gratis' ? 'nada' : `${totalLabel} al mes`}, y eso se lo pagas a cada herramienta, no a mí.`,
-  },
-  {
-    q: '¿Cuándo llegan los videos?',
-    a: dueDate
-      ? sistemaOnSale
-        ? `Los videos llegan antes del ${dueDate}. Al pagar recibes la guía y las plantillas, y te aviso por correo cuando estén los videos. Si no llegan para esa fecha, te devuelvo la plata.`
-        : `La fecha de esta preventa (${dueDate}) ya pasó. No estoy cobrando hasta fijar una nueva y escribirla aquí.`
-      : 'Todavía no hay fecha. Sin fecha no cobro: la compra abre cuando fije el día en que entrego los videos, y esa fecha queda escrita en la página del sistema.',
-  },
-  ...(guarantee
-    ? [
-        {
-          q: '¿Cómo funciona la garantía?',
-          a: `Tienes ${guarantee} días: si no te sirve, escríbeme en los ${guarantee} días siguientes a la compra y dime qué no te sirvió. Te devuelvo la plata; la devolución la hago yo a mano.`,
-        },
-      ]
+  ...(includesFaq
+    ? [{ q: includesFaq.q, a: includesFaq.a, link: { href: sistemaHref, label: 'Ver el sistema de Enzo', trackId: 'sistema-enzo' } }]
     : []),
-  sistema.acceptsForeignCards === true
-    ? { q: '¿Puedo pagar desde fuera de Colombia?', a: 'Sí. El cobro sale en pesos colombianos y tu banco lo convierte a tu moneda.' }
-    : sistema.acceptsForeignCards === false
-      ? {
-          q: '¿Puedo pagar desde fuera de Colombia?',
-          a: 'Por ahora no; anótate con tu país. Así sé cuánta gente de fuera lo quiere y si vale la pena abrir otro medio de pago.',
-          link: { ...QUESTION_LINK, label: 'Anotarme con mi país' },
-        }
-      : {
-          q: '¿Puedo pagar desde fuera de Colombia?',
-          a: 'Lo estoy confirmando con Wompi; escríbeme antes de pagar. Si tu tarjeta es de otro país, mándame la pregunta y te digo si pasa.',
-          link: QUESTION_LINK,
-        },
+  { q: '¿Qué herramientas pide y cuánto cuestan al mes?', a: toolsAnswer(sistemaContent.tools) },
+  { q: '¿Cuándo llegan los videos?', a: videosAnswer({ dueDate, onSale: sistemaOnSale, place: 'fuera' }) },
+  ...(guarantee !== null ? [{ q: '¿Cómo funciona la garantía?', a: guaranteeAnswer(guarantee) }] : []),
+  {
+    q: foreign.q,
+    a: foreign.a,
+    ...(foreign.linkLabel ? { link: { href: QUESTION_HREF, label: foreign.linkLabel, trackId: 'lista' } } : {}),
+  },
   {
     q: '¿Por qué no me lo instalas ni hacemos una sesión?',
     a: 'Porque mi tiempo hoy está en operar Enzo y Arkhē. Lo que vendo aquí lo montas tú solo, con la guía y las plantillas; lo que pide mi tiempo en persona queda en lista de espera. Hoy no estoy tomando instalaciones ni sesiones. Si te anotas, te escribo cuando abra cupo. Si es una pregunta del sistema, te respondo por correo.',
@@ -176,7 +144,7 @@ const FAQ: Faq[] = [
       <a href="/herramientas-ia" class="nav-shell__tools">herramientas</a>
       <a
         class="nav-shell__action"
-        href="/sistemas/detailing"
+        href={sistemaHref}
         data-track="escalon_click"
         data-track-id="sistema-enzo"
         data-track-placement="nav"
@@ -220,7 +188,7 @@ const FAQ: Faq[] = [
           <div class="hero__actions">
             <a
               class="hero__button"
-              href="#sistema-enzo"
+              href={sistemaAnchor}
               data-track="escalon_click"
               data-track-id="sistema-enzo"
               data-track-placement="hero"
@@ -310,10 +278,10 @@ const FAQ: Faq[] = [
               <span>{project.metricLabel}</span>
               {project.metricOrigin && <small>{project.metricOrigin}</small>}
             </div>
-            {project.id === 'enzo' && (
+            {project.id === 'enzo' && sistemaPublished && (
               <a
                 class="case__link"
-                href="/sistemas/detailing"
+                href={sistemaHref}
                 data-track="escalon_click"
                 data-track-id="sistema-enzo"
                 data-track-placement="rail"
@@ -326,7 +294,7 @@ const FAQ: Faq[] = [
           <div class="case__visual" aria-hidden="true">
             {project.id === 'enzo' && (
               <div class="ui ui--quote">
-                <div class="ui__bar"><i></i><i></i><i></i><span>COTIZACIÓN / ENZ-0428</span></div>
+                <div class="ui__bar"><i></i><i></i><i></i><span>COTIZACIÓN / ENZ-————</span></div>
                 <div class="quote-car"><span>BMW</span><strong>M4</strong></div>
                 <div class="quote-lines"><span>PPF frontal</span><b>$ ———</b><span>Tiempo estimado</span><b>02 días</b><span>Estado</span><b>LISTO PARA ENVIAR</b></div>
                 <div class="quote-action">GENERAR COTIZACIÓN ↗</div>
@@ -356,7 +324,7 @@ const FAQ: Faq[] = [
               <div class="ui ui--pulse">
                 <div class="ui__bar"><i></i><i></i><i></i><span>PULSO / LUNES 07:00</span></div>
                 <div class="pulse-number"><span>HOY REQUIERE ATENCIÓN</span><strong>03</strong></div>
-                <div class="pulse-bars"><span style="--bar:72%">Cotizaciones <b>72%</b></span><span style="--bar:46%">Ocupación <b>46%</b></span><span style="--bar:88%">Entregas <b>88%</b></span></div>
+                <div class="pulse-bars"><span style="--bar:72%">Cotizaciones <b>——%</b></span><span style="--bar:46%">Ocupación <b>——%</b></span><span style="--bar:88%">Entregas <b>——%</b></span></div>
                 <div class="pulse-alert">01 alerta asignada · no perseguir por chat</div>
               </div>
             )}
@@ -365,15 +333,17 @@ const FAQ: Faq[] = [
       ))}
     </div>
     <p class="systems__scroll"><span aria-hidden="true">←</span> ARRASTRA / DESLIZA <span aria-hidden="true">→</span></p>
+    {sistemaPublished && (
     <ConversionCTA
       kicker="YA VISTE QUE ESTO NO ES UNA DEMO"
       title="¿Tienes un taller y se te pierden las entregas?"
       body="Te paso las cuatro piezas con las que entregamos en Enzo: los textos, las listas y las plantillas, para montarlas con herramientas que ya existen."
       placement="systems"
     />
+    )}
   </section>
 
-  <SistemaEnzo />
+  {sistemaPublished && <SistemaEnzo />}
 
   <Ladder />
 
@@ -821,6 +791,8 @@ const FAQ: Faq[] = [
     margin: clamp(80px, 11vw, 155px) auto 0;
   }
   .receipt {
+    display: flex;
+    flex-direction: column;
     min-height: clamp(310px, 31vw, 450px);
     padding: clamp(22px, 2.6vw, 40px);
     color: var(--ink);
@@ -835,10 +807,8 @@ const FAQ: Faq[] = [
   .receipt:hover { transform: rotate(0) translateY(-10px); }
   .receipt--light { color: var(--bone); }
   .receipt > p { min-height: 42px; margin-bottom: 36px; font-family: var(--data); font-size: 9px; letter-spacing: .1em; }
-  .receipt strong { display: block; font-family: var(--display); font-size: clamp(50px, 5.6vw, 86px); font-stretch: 76%; line-height: .82; letter-spacing: -.065em; }
-  .receipt { display: flex; flex-direction: column; }
+  .receipt strong { display: block; font-family: var(--display); font-size: clamp(42px, 4.4vw, 70px); font-stretch: 76%; line-height: .82; letter-spacing: -.065em; overflow-wrap: anywhere; }
   .receipt__approx { display: block; margin-bottom: 10px; font-family: var(--data); font-size: 10px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
-  .receipt strong { font-size: clamp(42px, 4.4vw, 70px); overflow-wrap: anywhere; }
   .receipt small { display: block; margin-top: clamp(36px, 4.5vw, 70px); font-size: 14px; line-height: 1.45; }
   .receipt em { display: block; margin-top: auto; padding-top: 22px; font-family: var(--data); font-size: 9px; font-style: normal; letter-spacing: .06em; line-height: 1.5; text-transform: uppercase; opacity: .82; }
   .receipt--light em { opacity: 1; }
@@ -1129,7 +1099,7 @@ const FAQ: Faq[] = [
 
   /* Teléfonos bajos (iPhone SE, 360×640): el momento final no cabía y el CTA se cortaba.
      Se reduce el titular y, como ya pasa con la meta, la barra decorativa se retira en fase 3
-     en cualquier pantalla baja para no chocar con «ver cómo trabajo». */
+     en cualquier pantalla baja para no chocar con «ver cómo opero». */
   @media (max-width: 560px) and (max-height: 760px) {
     .hero h1 { font-size: clamp(40px, 6.6svh, 70px); }
   }
@@ -1170,7 +1140,7 @@ const FAQ: Faq[] = [
 
   const phaseContent = [
     ['trabajo suelto', 'ESTADO / SIN CONSTANCIA', 'TRABAJO SUELTO'],
-    ['recibido y revisado', 'ESTADO / FOTOS + CHECKLIST', '01 RECEPCIÓN · 02 CHECKLIST'],
+    ['recibido sin constancia', 'ESTADO / SIN FOTOS NI CHECKLIST', '01 RECEPCIÓN · 02 CHECKLIST'],
     ['entrega sin cierre', 'ESTADO / SIN FIRMA NI AVISO', '03 ENTREGA · 04 SEGUIMIENTO'],
     ['sistema en línea', 'ESTADO / 4 PIEZAS EN LÍNEA', 'RECIBIR → HACER → ENTREGAR → SEGUIR'],
   ];
