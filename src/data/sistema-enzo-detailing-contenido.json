@@ -1,39 +1,157 @@
 {
-  "intro": "PENDIENTE: el contenido real del sistema llega con la Task 8.",
-  "setupOrder": ["PENDIENTE: orden de montaje"],
+  "intro": "En Enzo la plata y la confianza no se pierden en el trabajo. Se pierden en la entrega. Un rayón que ya estaba y nadie fotografió. Un paso que se olvidó. Un carro que salió sin firma. Un cliente al que nadie volvió a escribir. Esto es lo que hacemos en Enzo para que no pase, en cuatro piezas y en el orden del trabajo. En Enzo corre en una app que construí para el taller. Aquí lo montas sin programar, con herramientas que ya existen, y te digo cuánto cuesta cada una al mes. Usa los mismos textos de Enzo y cámbiale solo lo que no aplique a tu taller.",
+  "setupOrder": [
+    "Crea la cuenta de Jotform, plan Silver: USD 49 al mes, o USD 39 al mes si pagas el año. WhatsApp Business y el perfil de Google son gratis. Precios consultados el 17 de octubre de 2026 en la página de cada uno. Instala Jotform Mobile Forms en el celular o la tablet del taller: ahí se llenan los formularios, con o sin señal.",
+    "Arma el formulario de recepción con 1-recepcion/formulario-recepcion.txt y las fotos de orden-de-fotos.txt. Pruébalo con tu propio carro antes de usarlo con un cliente.",
+    "Arma la inspección final con 2-checklist/checklist-inspeccion-final.txt. Decide quién aprueba: una persona, máximo dos.",
+    "Arma el acta con 3-entrega/acta-de-entrega.txt y activa el correo automático con el PDF adjunto. Firma tú una de prueba y revisa que te llegue.",
+    "Instala WhatsApp Business en el número del taller, llena el perfil y guarda los mensajes de 4-seguimiento/mensajes-whatsapp.txt como respuestas rápidas.",
+    "Saca el enlace para pedir reseñas de tu perfil de Google y pégalo en el mensaje /resena. Arma la encuesta con encuesta-satisfaccion.txt.",
+    "Haz una semana con todos los carros, sin excepciones. Al final, mira qué paso se saltó el equipo y por qué. Corrige ese paso; no le agregues pasos nuevos.",
+    "No hay archivos para importar: Jotform no importa un formulario desde un archivo de texto. Los campos se copian a mano desde las plantillas, en el orden en que vienen."
+  ],
   "pieces": [
     {
       "id": "recepcion",
-      "title": "Recepción",
-      "why": "PENDIENTE: por qué importa la recepción.",
-      "steps": ["PENDIENTE: paso 1", "PENDIENTE: paso 2", "PENDIENTE: paso 3"],
-      "tools": [],
-      "templates": [{ "file": "recepcion.txt", "title": "PENDIENTE: plantilla de recepción", "body": "PENDIENTE" }]
+      "title": "Recepción con fotos",
+      "why": "Si no hay foto de cómo llegó el carro, el rayón es tuyo. En Enzo nadie recibe un carro sin 8 fotos, siempre en el mismo orden: tacómetro, interior y la vuelta completa. Sin esas fotos la app no deja crear la orden. Recibir solo con la del tacómetro se puede en un servicio rápido, y quien lo hace firma que asume la responsabilidad.",
+      "steps": [
+        "Crea en Jotform el formulario \"Recepción\" con los campos de formulario-recepcion.txt, en ese orden.",
+        "Pon las 8 fotos como campos obligatorios, una por campo, con la instrucción de dónde pararse escrita debajo. El orden está en orden-de-fotos.txt.",
+        "Toma las fotos antes de tocar el carro, siempre en el mismo orden. El tacómetro va de primero.",
+        "Cada daño va con su foto de cerca y una frase: qué es y dónde está.",
+        "Anota el kilometraje, el combustible y los objetos de valor que quedan adentro. Si no hay, se escribe \"Ninguno\".",
+        "Al enviar, al cliente le llega el PDF de la recepción a su correo. Mándale también el mensaje /recibido por WhatsApp."
+      ],
+      "tools": [
+        "jotform"
+      ],
+      "templates": [
+        {
+          "file": "formulario-recepcion.txt",
+          "title": "Formulario de recepción",
+          "body": "Arma este formulario en Jotform con los campos en este orden. Lo que dice (obligatorio) se marca como obligatorio en el campo.\n\nDATOS\n1. Fecha y hora de recepción (obligatorio). Que se llene sola con la hora actual.\n2. Quién recibe (obligatorio). Lista desplegable con los nombres de tu equipo.\n3. Nombre del cliente (obligatorio).\n4. Celular del cliente (obligatorio).\n5. Correo del cliente. Si lo deja, le llega el PDF de la recepción.\n6. Vehículo: marca, línea y color (obligatorio).\n7. Placa (obligatorio).\n8. Kilometraje y nivel de combustible (obligatorio).\n9. Servicios que pidió (obligatorio). Casillas con tus servicios, más \"Otro\".\n10. Lo que le preocupa al cliente o quiere que revisemos. Texto libre.\n\nFOTOS (obligatorio, una por campo, en el orden de orden-de-fotos.txt)\n11 a 18. Las 8 fotos de la vuelta al carro. Campo de carga de archivo, una foto por campo, con la instrucción de la toma escrita debajo del campo. En el celular, ese campo abre la cámara.\n\nDAÑOS\n19. ¿El vehículo trae daños? Sí / No (obligatorio).\n20. Daños: una foto de cerca por daño y una frase de qué es y dónde está. Muestra este campo solo si la 19 es Sí (con una condición del formulario).\n    Así se escribe la frase: \"Rayón de 10 cm en la puerta trasera derecha\".\n\nOBJETOS DE VALOR\n21. Objetos de valor que quedan adentro (obligatorio). Por ejemplo: gafas en la guantera, cargador, herramienta en el baúl. Si no hay, se escribe \"Ninguno\".\n\nCIERRE\n22. Firma de quien recibe (obligatorio).\n\nAL ENVIAR\n- Activa el correo de respuesta automática al cliente con el PDF del envío adjunto.\n- Mándale también el mensaje \"Recibido\" de 4-seguimiento/mensajes-whatsapp.txt."
+        },
+        {
+          "file": "orden-de-fotos.txt",
+          "title": "Orden de las fotos de recepción",
+          "body": "Siempre las mismas 8 fotos, siempre en el mismo orden. Es la vuelta real al carro: cada toma arranca donde terminó la anterior. Así nadie se salta un lado, y cuando el cliente las ve, recorre su carro en orden.\n\n1. Tacómetro. Tablero encendido, con el kilometraje visible. Va de primera: es el kilometraje con el que entró.\n2. Interior adelante. Abre la puerta: sillas delanteras y consola.\n3. Interior atrás. Abre la puerta de atrás: sillas y piso.\n4. Lado del piloto. Bájate y aléjate del carro: el lateral completo, de punta a punta.\n5. Baúl. Sigue hasta atrás y abre el baúl: retrata lo que haya adentro.\n6. Atrás. Cierra el baúl y retrata la parte de atrás: bómper y placa.\n7. Lado del copiloto. Sigue por ese lado: el lateral completo, de punta a punta.\n8. Frente. Termina al frente: el carro completo y la placa legible.\n\nDespués de la vuelta:\n- Cada daño, de cerca, con su frase de qué es y dónde está.\n- Extras: lo que quieras dejar registrado (un rin, un vidrio, algo que el cliente señaló).\n\nLo que aprendimos en Enzo:\n- Sin las 8 fotos no se recibe el carro. La única excepción es un servicio rápido, como un lavado o un polarizado, y aun así va la foto del tacómetro. Quien decide saltarse las demás deja su nombre.\n- El baúl entró a la lista cuando vimos que sin esa foto no había con qué responder si el cliente reclamaba algo del maletero.\n- Las fotos se toman antes de tocar el carro.\n- Las fotos muestran la placa y lo que hay dentro del carro: son datos del cliente. En Enzo las fotos se borran un mes después de entregar y el acta firmada se guarda 24 meses. Revisa lo que pide la ley de datos personales de tu país."
+        }
+      ]
     },
     {
       "id": "checklist",
-      "title": "Checklist",
-      "why": "PENDIENTE: por qué importa el checklist.",
-      "steps": ["PENDIENTE: paso 1", "PENDIENTE: paso 2", "PENDIENTE: paso 3"],
-      "tools": [],
-      "templates": [{ "file": "checklist.txt", "title": "PENDIENTE: plantilla de checklist", "body": "PENDIENTE" }]
+      "title": "Checklist del trabajo",
+      "why": "En Enzo la inspección final llegó a tener 18 puntos armados por servicio. Dos no aplicaban a un polarizado, así que el equipo marcaba en falso o escribía \"no aplica\" dos veces por carro. Hoy son 5 puntos, los mismos para todo carro, y cada uno dice exactamente qué revisar. Marca quien hizo el trabajo. Aprueba una sola persona. Sin esa aprobación el carro no está listo.",
+      "steps": [
+        "Crea el formulario \"Inspección final\" con los 5 puntos de checklist-inspeccion-final.txt. Cada punto es \"Cumple\" o \"No cumple\", con su detalle debajo.",
+        "Con \"No cumple\" aparece una nota obligatoria que explica por qué. Nada se marca en falso.",
+        "Elige quién aprueba: una persona, máximo dos. Su nombre y su firma cierran el formulario.",
+        "\"Terminado\" se dice una sola vez: cuando se aprueba la inspección. No pongas checks por servicio en mitad del trabajo; en Enzo lo quitamos porque se afirmaba lo mismo tres veces.",
+        "Si durante el trabajo aparece algo, como un rayón oculto o una pieza suelta, toma la foto y avísale al cliente ese día con el mensaje /novedad.",
+        "Con la inspección aprobada, manda el mensaje /listo."
+      ],
+      "tools": [
+        "jotform"
+      ],
+      "templates": [
+        {
+          "file": "checklist-inspeccion-final.txt",
+          "title": "Inspección final: 5 puntos",
+          "body": "Los mismos 5 puntos para todo carro, del lavado al polarizado. Cada punto dice qué revisar exactamente, para que la inspección no dependa de que cada quien se acuerde.\n\nCómo se llena: cada punto es \"Cumple\" o \"No cumple\". Si no cumple, se escribe por qué (campo obligatorio que aparece solo con \"No cumple\"). Nada se marca en falso.\n\n1. Carrocería y superficies bajo luz directa\n   Panel por panel con lámpara: sin hologramas, residuos de producto, manchas de agua ni salpicaduras en plásticos y molduras.\n\n2. Vidrios por dentro y por fuera\n   Todos limpios, sin huellas, residuos ni vetas. Si hubo polarizado: sin burbujas ni partículas, bordes parejos y las ventanas suben y bajan bien.\n\n3. Interior completo\n   Tapicería, alfombras, plásticos y rincones (rieles, portavasos, bordes de puerta) sin manchas ni residuos. Volante y pedales nunca resbalosos. Sin olor fuerte a químico.\n\n4. Zonas de detalle fino\n   Emblemas, rejillas, marcos de puertas, rines, tapa de combustible y escapes: sin cera acumulada, sin polvo de pulido, sin agua atrapada.\n\n5. Funcionalidad y estado de entrega\n   Todo funciona como al recibirlo (ventanas, luces, sensores, radio) y sin testigos encendidos. Kilometraje y combustible coinciden con la recepción. Protecciones retiradas, llaves y pertenencias del cliente completas.\n\nAl final del formulario:\n- Placa u orden del carro que se inspecciona.\n- Quién hizo el trabajo (lista con tu equipo).\n- Quién aprueba (lista con una o dos personas, nada más).\n- Firma de quien aprueba, con fecha y hora.\n\nRegla: el carro está \"listo\" cuando alguien aprueba esta inspección. No antes. Ese momento es el que dispara el mensaje \"Ya está listo\"."
+        }
+      ]
     },
     {
       "id": "entrega",
-      "title": "Entrega",
-      "why": "PENDIENTE: por qué importa la entrega.",
-      "steps": ["PENDIENTE: paso 1", "PENDIENTE: paso 2", "PENDIENTE: paso 3"],
-      "tools": [],
-      "templates": [{ "file": "entrega.txt", "title": "PENDIENTE: plantilla de entrega", "body": "PENDIENTE" }]
+      "title": "Entrega con firma",
+      "why": "La firma cierra la discusión antes de que empiece. En Enzo el carro no sale sin acta firmada: qué se hizo, cómo quedó la inspección, qué objetos se devolvieron y la firma del cliente con fecha y hora. Con saldo pendiente tampoco sale, salvo que yo lo autorice.",
+      "steps": [
+        "Crea el formulario \"Acta de entrega\" con los campos de acta-de-entrega.txt. Al final va el campo de firma electrónica.",
+        "Activa el correo de respuesta automática con el PDF del envío adjunto, para que el cliente reciba el acta apenas firma.",
+        "Antes de que firme, recorre el carro con el cliente y muéstrale lo que se hizo.",
+        "Si queda saldo, el carro no sale. Si decides entregar debiendo, lo decides tú y queda escrito en observaciones.",
+        "Las fotos de salida son opcionales. En Enzo lo decidí así: con firma, pago y recorrido, ocho fotos obligatorias más son el camino directo a que el equipo empiece a saltarse cosas.",
+        "Si el servicio lleva garantía, llena garantia.txt y mándala con el mensaje /entregado.",
+        "Guarda el acta firmada. En Enzo se guarda 24 meses; las fotos de recepción, un mes después de entregar."
+      ],
+      "tools": [
+        "jotform"
+      ],
+      "templates": [
+        {
+          "file": "acta-de-entrega.txt",
+          "title": "Acta de entrega",
+          "body": "Este es el formulario \"Acta de entrega\". Cada [ ] es un campo. El cliente firma en el celular o la tablet del taller, y le llega el PDF a su correo.\n\nACTA DE ENTREGA\n[Nombre de tu negocio] · [ciudad] · [NIT o documento]\nOrden: [número]\nFecha y hora de entrega: [ ]\n\nVEHÍCULO\nMarca, línea y color: [ ]\nPlaca: [ ]\nKilometraje al entregar: [ ]\n\nCLIENTE\nNombre: [ ]\nDocumento: [ ] (opcional)\nCelular: [ ]\nCorreo: [ ]\n\nSERVICIOS REALIZADOS\n[Servicio] · [valor acordado]\n[Servicio] · [valor acordado]\nTotal acordado: $[ ]\nPagado: $[ ]   Método: [efectivo / transferencia / tarjeta]\nSaldo: $[ ]\nAsí se escribe un valor: $180.000 (ejemplo, no es un precio de Enzo).\n\nCONTROL DE CALIDAD\nInspección final aprobada por: [nombre]   Fecha y hora: [ ]\nPuntos con nota: [las notas de \"No cumple\", o \"Ninguno\"]\n\nGARANTÍA Y CUIDADOS\nGarantía: [servicio · quién la respalda · vigencia], o \"Este servicio no lleva garantía\".\nPróximo mantenimiento: [fecha], o \"No aplica\".\nCuidados de los primeros días: [lo que el cliente debe evitar].\n\nOBSERVACIONES DE LA ENTREGA\n[Lo que se habló con el cliente al entregar. El cliente lo lee: escríbelo para él.]\n\nOBJETOS DE VALOR\nDeclarados al ingreso: [los de la recepción], o \"No se declararon objetos de valor\".\n\nRECIBIDO A SATISFACCIÓN\nDeclaro que recibí el vehículo identificado en esta acta con los servicios detallados terminados a satisfacción, revisé su estado general y me fueron devueltos los objetos dejados en él.\n\nFirma del cliente: [firma electrónica]\nNombre de quien firma: [ ]\nEntregado por: [lista con tu equipo]\n\nAntes de que firme:\n- Recorre el carro con el cliente y muéstrale lo que se hizo.\n- Si queda saldo, el carro no sale. Si decides entregar debiendo, lo decides tú, el dueño, y queda escrito en observaciones.\n- Si algo cambia después de la firma, como un pago corregido o un descuento, no edites el acta firmada. Haz una nota aparte con la fecha."
+        },
+        {
+          "file": "garantia.txt",
+          "title": "Constancia de garantía",
+          "body": "Una por cada servicio que lleve garantía. Va pegada al acta o en un PDF aparte, el día de la entrega.\n\nGARANTÍA\n[Nombre de tu negocio]\nCliente: [ ]\nVehículo y placa: [ ]\nServicio: [nombre del servicio y producto o marca usada]\nFecha de instalación: [ ]\nVigencia: [lo que respalda el fabricante o tu negocio, por escrito]\nQuién respalda: [el fabricante / tu negocio]\nCubre: [lo que cubre, en frases cortas]\nNo cubre: [golpes, mal uso, químicos, lo que aplique]\nMantenimiento: [cada cuánto], o \"Sin mantenimiento\".\nSi no se hace el mantenimiento: [qué pasa con la garantía].\nCómo reclamar: escribe al [WhatsApp del taller] con una foto y esta constancia.\n\nReglas que uso en Enzo:\n- La garantía es solo para lo que la marca respalda. Lo demás se registra igual, porque el cliente quiere saber qué le hicieron al carro, pero sin prometer años.\n- Alguien de gerencia revisa cobertura y mantenimiento antes de enviarla. Quien entrega el carro no promete garantías.\n- La vigencia no se escribe de memoria: sale de la ficha del fabricante."
+        }
+      ]
     },
     {
       "id": "seguimiento",
-      "title": "Seguimiento",
-      "why": "PENDIENTE: por qué importa el seguimiento.",
-      "steps": ["PENDIENTE: paso 1", "PENDIENTE: paso 2", "PENDIENTE: paso 3"],
-      "tools": [],
-      "templates": [{ "file": "seguimiento.txt", "title": "PENDIENTE: plantilla de seguimiento", "body": "PENDIENTE" }]
+      "title": "Aviso y seguimiento",
+      "why": "En Enzo hay dos avisos durante el trabajo, no más: cuando recibimos el carro y cuando está listo. Después de entregar, el sistema recuerda y una persona envía: garantía, encuesta, reseña y mantenimiento. La encuesta no la manda quien hizo el trabajo; la manda gerencia.",
+      "steps": [
+        "Instala WhatsApp Business en el número del taller y llena el perfil: horario, dirección y servicios.",
+        "Guarda los mensajes de mensajes-whatsapp.txt como respuestas rápidas, con su atajo. Crea las etiquetas que vienen al final del archivo.",
+        "Arma la encuesta en Jotform con encuesta-satisfaccion.txt. La mandas tú o tu administrador, un día después de entregar.",
+        "Saca el enlace de reseñas de tu perfil de Google y pídela a todos los clientes entregados, no solo a los que quedaron contentos. Sin regalos a cambio.",
+        "Si alguien califica de 0 a 6 y deja su nombre, lo contactas tú con el mensaje /rescate.",
+        "Si el servicio lleva mantenimiento, escribe la fecha en el acta. Cada lunes revisa en Jotform Tables a quién le toca esa semana y mándale /mantenimiento."
+      ],
+      "tools": [
+        "whatsapp-business",
+        "jotform",
+        "google-business-profile"
+      ],
+      "templates": [
+        {
+          "file": "mensajes-whatsapp.txt",
+          "title": "Mensajes de WhatsApp: listo, garantía, posventa y reseña",
+          "body": "Guárdalos como respuestas rápidas en WhatsApp Business. El atajo va entre paréntesis: escribes \"/\" en el chat y lo eliges. Cambia todo lo que está entre corchetes antes de enviar. Nunca mandes un corchete sin llenar.\n\nDurante el trabajo van solo dos avisos: recibido y listo. En Enzo había más, y abrían conversaciones en mitad del trabajo.\n\n1. Recibido (/recibido)\nHola [nombre], recibimos tu [vehículo]. Te mando la recepción con las fotos de cómo llegó: [PDF o enlace]. Cualquier duda, escríbeme por este chat.\n\n2. Novedad durante el trabajo (/novedad). Solo si aparece algo.\nHola [nombre], trabajando en tu [vehículo] encontramos esto: [qué es y dónde está]. Te mando la foto. [Lo que proponemos]. Dime si seguimos así o prefieres que lo hablemos.\n\n3. Ya está listo (/listo)\nHola [nombre], tu [vehículo] está listo. Pasó la inspección final y ya puedes recogerlo. ¿A qué hora te queda bien? Entregamos [días y horario].\n\n4. Entregado y garantía (/entregado)\nHola [nombre], gracias por confiar en [negocio]. Te mando el acta de entrega y la garantía de tu [servicio]: [PDF o enlace]. Guárdalas: ahí están la vigencia y los cuidados.\n\n5. Posventa: cuidados (/cuidados). El mismo día de la entrega.\n[Nombre], para que tu [servicio] dure: [cuidado 1]. [cuidado 2]. Si notas algo raro, mándame una foto por aquí.\n\n6. Posventa: encuesta (/encuesta). Un día después de la entrega. La manda el dueño o el administrador, no quien hizo el trabajo.\nHola [nombre]. Te escribe [tu nombre], de la gerencia de [negocio]. ¿Cómo te fue con el servicio de tu [vehículo]? Son cuatro preguntas cortas y puedes responder sin dar tu nombre: [enlace de la encuesta]. Gracias por contarnos.\n\n7. Reseña (/resena). A todos los clientes entregados.\nHola [nombre]. Si tienes un minuto, cuenta en Google cómo te fue con tu [vehículo]: [enlace de reseñas]. Lo que escribas nos sirve, sea bueno o malo.\n\n8. Mantenimiento (/mantenimiento). Cuando toca, según la garantía.\nHola [nombre]. Te escribe [tu nombre], de [negocio]. A tu [servicio] le toca mantenimiento este mes. [Si tu garantía lo pide: con eso la garantía sigue vigente.] Responde este mensaje y te separo el cupo.\n\n9. Calificó bajo (/rescate). Lo manda el dueño, no quien hizo el trabajo.\nHola [nombre]. Soy [tu nombre], de la gerencia de [negocio]. Gracias por contarnos cómo te fue en la encuesta. Quiero entender qué pasó y revisar contigo cómo te podemos ayudar. ¿Me cuentas un poco más por aquí?\n\nReglas:\n- En el mensaje no prometas nada que no esté en el acta o en la garantía.\n- Si el cliente no llegó a una cita, no se lo reproches. Le mandas la nueva fecha y ya.\n- La reseña se le pide a todos, sin regalo, sin descuento y sin presión en el taller. Google prohíbe ofrecer algo a cambio y pedírsela solo a los que quedaron contentos.\n\nEtiquetas para crear en WhatsApp Business: Recibido · Listo · Entregado · Encuesta enviada · Mantenimiento."
+        },
+        {
+          "file": "encuesta-satisfaccion.txt",
+          "title": "Encuesta de satisfacción",
+          "body": "Arma este formulario en Jotform. Cuatro preguntas y una de cierre. Es la estructura de la encuesta de Enzo.\n\n1. Con base en tu visita, ¿qué tan probable es que nos recomiendes a un amigo o familiar? (obligatorio)\n   Escala de 0 a 10.\n\n2. Una pregunta que cambia según el puntaje (con condiciones del formulario). Selección múltiple con las mismas opciones:\n   - De 0 a 6: \"Lamentamos no estar a la altura. ¿Qué fue lo que más falló?\"\n   - 7 u 8: \"¿Qué nos habría faltado para ganarnos un 10?\"\n   - 9 o 10: \"¡Gracias! ¿Qué fue lo que más te gustó?\"\n   Opciones: Calidad y acabado · Tiempo de entrega · Comunicación y avances · Explicación y cuidado · Cómo te entregamos el vehículo · Precio vs. lo que recibiste · Otro\n\n3. ¿Cómo calificas la atención del equipo? (obligatorio) De 1 a 5 estrellas.\n\n4. ¿Quieres agregar algo más? Texto libre, opcional.\n\nCierre: ¿Quieres que sepamos que fuiste tú? No / Sí. Si dice Sí, pide nombre y celular. Si dice No, no pidas nada más.\n\nReglas que uso en Enzo:\n- La encuesta no saluda por el nombre ni guarda datos del cliente si él no lo elige.\n- Con puntaje bajo no se promete nada en la pantalla de gracias. \"Te vamos a llamar\" y no llamar hace más daño que la mala experiencia.\n- Si alguien de 0 a 6 dejó su nombre, lo contacta el dueño con el mensaje /rescate.\n\nOjo con la reseña: no pongas el botón de Google solo para los que dieron 9 o 10. Google prohíbe pedirles reseña solo a los contentos. Pídesela a todos con el mensaje /resena."
+        }
+      ]
     }
   ],
-  "tools": []
+  "tools": [
+    {
+      "slug": "jotform",
+      "role": "Recepción con fotos, inspección final, acta con firma y encuesta, en una sola cuenta. Enzo no usa Jotform: todo esto corre en una app que construí para el taller. Es lo más cercano que encontré sin programar: fotos desde el celular, firma electrónica, PDF al correo del cliente, tablas y una app que funciona sin señal.",
+      "plan": "Silver: USD 49 al mes pagando mes a mes, o USD 39 al mes si pagas el año completo. Trae 50 formularios, 2.500 envíos al mes y 10 GB para archivos. El gratis (100 MB) y el Bronze (1 GB) se quedan cortos con 8 fotos por carro. No publica precio en pesos.",
+      "monthlyCostUsd": 49,
+      "monthlyCostCop": null,
+      "checkedOn": "2026-10-17",
+      "sourceUrl": "https://www.jotform.com/pricing/",
+      "enzoUses": false
+    },
+    {
+      "slug": "whatsapp-business",
+      "role": "Los avisos al cliente: recibido, listo, entrega y garantía, encuesta, reseña y mantenimiento, con respuestas rápidas y etiquetas. Es la app que usa el número del taller de Enzo en el teléfono. Los avisos automáticos de Enzo van por la API de WhatsApp, que es paga y pide más montaje; para empezar no la necesitas.",
+      "plan": "App gratis para descargar y usar.",
+      "monthlyCostUsd": 0,
+      "monthlyCostCop": 0,
+      "checkedOn": "2026-10-17",
+      "sourceUrl": "https://whatsappbusiness.com/resources/faq/",
+      "enzoUses": true
+    },
+    {
+      "slug": "google-business-profile",
+      "role": "El enlace para pedir reseñas en Google. Enzo lo usa al final de su encuesta.",
+      "plan": "Gratis: crear el perfil y aparecer en Google no tiene costo.",
+      "monthlyCostUsd": 0,
+      "monthlyCostCop": 0,
+      "checkedOn": "2026-10-17",
+      "sourceUrl": "https://business.google.com/us/business-profile/",
+      "enzoUses": true
+    }
+  ]
 }
