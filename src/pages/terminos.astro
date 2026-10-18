@@ -2,8 +2,8 @@
 import LegalFrame from '../components/LegalFrame.astro';
 import { LEGAL, LEGAL_CITY } from '../lib/legal';
 import { formatCop } from '../lib/money';
-import { getProduct } from '../lib/products';
-import { guaranteeTerms, hasGuarantee, longDate } from '../lib/sistema-copy';
+import { getProduct, isProductOnSale } from '../lib/products';
+import { guaranteeTerms, hasGuarantee, longDate, presaleTerms } from '../lib/sistema-copy';
 
 // Aprobado por Omar el 2026-10-16 (persona natural). Reglas tomadas de lo que el sitio hace hoy:
 // directorio, kit y sistema de Enzo con pago Wompi en COP, recursos libres, y una lista de espera
@@ -14,6 +14,9 @@ const price = formatCop(product.amountCop);
 const guarantee = hasGuarantee(product.guaranteeDays) ? product.guaranteeDays : null;
 const dueIso = product.presale?.videosDueDate ?? null;
 const dueDate = dueIso ? longDate(dueIso) : '';
+const onSale = isProductOnSale(product);
+// Fecha vencida: la preventa ya no cobra, pero quien compró antes conserva la devolución.
+const pastDue = Boolean(dueDate) && !onSale;
 
 const title = 'Términos y condiciones de uso · Omar Álvarez';
 const description =
@@ -100,23 +103,23 @@ const description =
   </p>
   <ul>
     <li>
-      <strong>Preventa.</strong> Al pagar recibes la guía y las plantillas; los videos llegan después.
-      {dueDate
-        ? ` Los videos llegan antes del ${dueDate}. Si no llegan para esa fecha, te devuelvo el dinero completo.`
-        : ' Antes de cobrar fijo y publico en la página del sistema la fecha límite de los videos; sin esa fecha no cobro. Si compras y los videos no llegan para la fecha publicada, te devuelvo el dinero completo.'}
+      <strong>Preventa.</strong> {presaleTerms({ dueDate, onSale, place: 'fuera' })}
+      {pastDue && ' Si compraste antes y los videos no llegaron para esa fecha, te devuelvo el dinero completo.'}
     </li>
     {guarantee && (
       <li>
-        <strong>Garantía de {guarantee} días calendario.</strong> {guaranteeTerms(guarantee)} Escríbeme a
-        <a href={`mailto:${LEGAL.privacyEmail}`}>{LEGAL.privacyEmail}</a> con tu nombre, el correo con el que
-        compraste y qué no te sirvió. Los {guarantee} días se cuentan desde la fecha de la compra.
+        <strong>Garantía de {guarantee} días calendario.</strong> {guaranteeTerms(guarantee)} Mi correo es
+        <a href={`mailto:${LEGAL.privacyEmail}`}>{LEGAL.privacyEmail}</a>; incluye tu nombre y el correo con el
+        que compraste. Los {guarantee} días se cuentan desde la fecha de la compra.
       </li>
     )}
-    <li>
-      <strong>Retracto.</strong> Para este producto, la garantía reemplaza la excepción del retracto por archivo
-      descargado: aunque ya hayas descargado la guía y las plantillas, puedes pedir la devolución dentro del
-      plazo de la garantía.
-    </li>
+    {guarantee && (
+      <li>
+        <strong>Retracto.</strong> Para este producto, la garantía reemplaza la excepción del retracto por archivo
+        descargado: aunque ya hayas descargado la guía y las plantillas, puedes pedir la devolución dentro del
+        plazo de la garantía.
+      </li>
+    )}
     <li>
       <strong>Devolución.</strong> El dinero se devuelve por el mismo medio de pago en máximo 30 días calendario.
     </li>
