@@ -1,0 +1,14 @@
+{
+  "id": "enzo-detailing",
+  "name": "El sistema de Enzo · detailing",
+  "amountCop": 179000,
+  "usdReference": 55,
+  "downloadDays": 120,
+  "buyerEmail": true,
+  "page": "/sistemas/detailing",
+  "orderPath": "/sistemas/pedido",
+  "archiveName": "sistema-enzo-detailing.zip",
+  "guaranteeDays": 7,
+  "acceptsForeignCards": null,
+  "presale": { "videosDueDate": null, "videos": [] }
+}
