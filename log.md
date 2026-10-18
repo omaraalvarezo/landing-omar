@@ -630,3 +630,35 @@ Todavía no se carga el script de anuncios ni cambia la CSP real.
   `npm run kit:pending`.
 - Ojo: en 2026-08 `/_vercel/insights/script.js` devolvió 404 detrás del proxy de Cloudflare. Verificar en
   producción que no pase otra vez.
+
+## 2026-10-17 — v4.0: El sistema de Enzo · detailing (salida 1)
+
+- El home deja de vender la sesión de 2 horas y el Marco 4C. Muestra cómo opera Omar (hero de
+  cuatro momentos de una entrega, recibos con fuente, rail de sistemas) y lleva a la escalera
+  `src/lib/ladder.ts`: PDF gratis → kit $81.000 → **El sistema de Enzo $179.000 (aprox. USD 55)** →
+  lista de espera. Decisión y registro de decisiones en `wiki/decisiones/sistema-de-enzo.md`.
+- Producto `enzo-detailing` en `src/data/sistema-enzo-detailing.json` y `src/lib/products.ts`:
+  4 piezas (`recepcion`, `checklist`, `entrega`, `seguimiento`), garantía de 7 días, preventa con
+  `videosDueDate` y `acceptsForeignCards`. Sin fecha de videos no se cobra (botón "Abre pronto",
+  checkout 503). Página `/sistemas/detailing` (colección `src/content/sistemas/`), índice `/sistemas`
+  y pedido `/sistemas/pedido/[orderId]` (cookie o enlace `?t=` del correo).
+- Cobro sobre la infraestructura del kit: referencia `oa-kit-{producto}-q…`, liquidación por producto
+  con `MISMATCH` si producto o monto no coinciden, recibo al comprador con reintento por 503 y
+  `buyerNotifyStatus`, zip generado al vuelo, `npm run sistema:avisar-videos` para avisar los videos.
+  El kit y `npm run offers:check` no cambian.
+- El formulario `#contacto` pasa a lista de espera (`src/lib/waitlist.ts`, `oficios.json`,
+  `paises.json`, `?quiero=`), con los mismos invariantes: validación en servidor, honeypot, rate
+  limit, 503/502 con `fallbackEmail` y `mailto:`.
+- `/tiktok` y direcciones cortas `/entregas`, `/prompts`, `/kit`, `/lista` (302 con `?ref=`).
+  `/terminos` y `/privacidad` con preventa, garantía y lista de espera. OG nueva sin la sesión.
+- Vitest 4.1.12 (`npm test`, 177 pruebas en 19 archivos). CI y Vercel usan npm 10: tras cambiar
+  dependencias, `npx npm@10 ci --ignore-scripts` y `npx npm@10 audit --audit-level=moderate`.
+- `CLAUDE.md` reescrito como v4.0 (oferta, recorrido, home, lista de espera, cobros, archivos,
+  checklist). Valores reales del hero: `320svh` desktop, `330svh` ≤ 820 px, `340svh` ≤ 560 px.
+- QA local del 17 oct: `npm test`, `astro check` (0 errores), `build`, `offers:check`,
+  `content:check` y `tool:check` en verde; sin overflow a 390 y 1440 px; hero llega a la fase 3 y con
+  reduced motion arranca en ella; sin errores de consola salvo el 503 esperado del pedido falso sin
+  Upstash local. Ningún pago real.
+- Pendiente de Omar antes de vender: fijar `videosDueDate`, aprobar guía y plantillas, confirmar
+  tarjetas de fuera con Wompi y poner `acceptsForeignCards`, armar los 3 formularios de Jotform,
+  y verificar `/_vercel/insights/script.js` detrás de Cloudflare tras el deploy.
