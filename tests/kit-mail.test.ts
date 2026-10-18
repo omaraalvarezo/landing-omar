@@ -162,8 +162,20 @@ describe('sendBuyerReceipt', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("devuelve 'failed' si Resend rechaza el envío", async () => {
-    fetchMock.mockResolvedValueOnce(new Response('{}', { status: 422 }));
+  it.each([400, 403, 422])("devuelve 'failed-permanent' si Resend rechaza con %i (reintentar no lo arregla)", async (status) => {
+    fetchMock.mockResolvedValueOnce(new Response('{}', { status }));
+    const order = { ...seedOrder('enzo-detailing'), downloadToken: TOKEN };
+    await expect(sendBuyerReceipt(order, 'https://omaralvarezo.co')).resolves.toBe('failed-permanent');
+  });
+
+  it.each([429, 500, 503])("devuelve 'failed' (reintentable) si Resend responde %i", async (status) => {
+    fetchMock.mockResolvedValueOnce(new Response('{}', { status }));
+    const order = { ...seedOrder('enzo-detailing'), downloadToken: TOKEN };
+    await expect(sendBuyerReceipt(order, 'https://omaralvarezo.co')).resolves.toBe('failed');
+  });
+
+  it("devuelve 'failed' (reintentable) si la red falla", async () => {
+    fetchMock.mockRejectedValueOnce(new TypeError('fetch failed'));
     const order = { ...seedOrder('enzo-detailing'), downloadToken: TOKEN };
     await expect(sendBuyerReceipt(order, 'https://omaralvarezo.co')).resolves.toBe('failed');
   });
@@ -217,6 +229,27 @@ describe('settleKitPayment: correo al comprador', () => {
     expect(env.order!.alertedTransactionIds).toContain('buyer:tx-1');
     expect(sentTo(fetchMock, 'laura@example.com')).toHaveLength(2);
     expect(sentTo(fetchMock, 'omar@example.com')).toHaveLength(1);
+  });
+
+  it('un rechazo permanente (4xx) guarda failed y la clave: el reintento de Wompi no lo vuelve a mandar', async () => {
+    const order = seedOrder('enzo-detailing');
+    const parsed = parseProductReference(order.reference)!;
+    const tx = approved(order.reference);
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    fetchMock
+      .mockResolvedValueOnce(new Response('{}', { status: 200 }))
+      .mockResolvedValueOnce(new Response('{}', { status: 422 }));
+
+    const first = await settleKitPayment(tx, parsed);
+    expect(first.ok && first.buyerEmail).toBe('failed-permanent');
+    expect(env.order!.buyerNotifyStatus).toBe('failed');
+    expect(env.order!.alertedTransactionIds).toContain('buyer:tx-1');
+    expect(errors).toHaveBeenCalled();
+
+    const retry = await settleKitPayment(tx, parsed);
+    expect(retry.ok && retry.buyerEmail).toBe('skipped');
+    expect(sentTo(fetchMock, 'laura@example.com')).toHaveLength(1);
+    errors.mockRestore();
   });
 
   it('sin RESEND_API_KEY registra la clave del comprador igual y no lanza', async () => {

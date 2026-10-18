@@ -1,4 +1,10 @@
-import { notifyKitPayment, sendBuyerReceipt, type KitMailKind, type KitMailResult } from './kit-mail';
+import {
+  notifyKitPayment,
+  sendBuyerReceipt,
+  type BuyerMailResult,
+  type KitMailKind,
+  type KitMailResult,
+} from './kit-mail';
 import {
   claimKitMailLock,
   createKitDownloadToken,
@@ -17,7 +23,7 @@ export type KitSettlement =
       ok: true;
       order: KitOrder;
       email: KitMailResult | 'skipped';
-      buyerEmail: KitMailResult | 'skipped';
+      buyerEmail: BuyerMailResult | 'skipped';
     }
   | { ok: false; reason: 'NOT_FOUND' | 'MISMATCH' };
 
@@ -134,7 +140,7 @@ async function notifyOwner(
   return email;
 }
 
-async function notifyBuyer(order: KitOrder, transactionId: string): Promise<KitMailResult | 'skipped'> {
+async function notifyBuyer(order: KitOrder, transactionId: string): Promise<BuyerMailResult | 'skipped'> {
   const alerts = new Set(order.alertedTransactionIds || []);
   const alertKey = `buyer:${transactionId}`;
   if (alerts.has(alertKey)) return 'skipped';
@@ -144,7 +150,9 @@ async function notifyBuyer(order: KitOrder, transactionId: string): Promise<KitM
   if (!claimed) return 'skipped';
 
   const email = await sendBuyerReceipt({ ...order, transactionId });
-  order.buyerNotifyStatus = email;
+  // Un rechazo permanente queda como `failed` en la orden, pero con su clave: el reintento de Wompi
+  // no lo vuelve a mandar y el webhook no responde 503 para siempre. Omar lo ve en la orden.
+  order.buyerNotifyStatus = email === 'failed-permanent' ? 'failed' : email;
   if (email === 'failed') {
     // Sin la clave de alerta, el reintento de Wompi (el evento responde 503) lo vuelve a intentar.
     await releaseKitMailLock(lockKey);

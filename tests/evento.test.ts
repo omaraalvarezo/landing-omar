@@ -59,6 +59,11 @@ describe('evento de Wompi: reintento por correos fallidos', () => {
     expect(await response.json()).toEqual({ error: 'aviso' });
   });
 
+  it('responde 200 si el recibo del comprador falló de forma permanente (4xx): reintentar no lo arregla', async () => {
+    mocks.settleKitPayment.mockResolvedValueOnce({ ok: true, order, email: 'sent', buyerEmail: 'failed-permanent' });
+    expect((await post()).status).toBe(200);
+  });
+
   it('responde 503 aviso si falla el aviso a Omar', async () => {
     mocks.settleKitPayment.mockResolvedValueOnce({ ok: true, order, email: 'failed', buyerEmail: 'sent' });
     expect((await post()).status).toBe(503);

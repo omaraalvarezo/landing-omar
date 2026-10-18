@@ -7,6 +7,16 @@ import type { KitOrder } from './kit-orders';
 
 export type KitMailKind = 'approved' | 'voided' | 'double';
 export type KitMailResult = 'sent' | 'unconfigured' | 'failed';
+/**
+ * Recibo del comprador. `failed` se puede reintentar (red, 429, 5xx); `failed-permanent` no: Resend
+ * rechazó el correo (400, 403, 422…) y repetirlo daría el mismo rechazo.
+ */
+export type BuyerMailResult = KitMailResult | 'failed-permanent';
+
+/** 4xx que no cambian con un reintento. 408, 409 (idempotencia en curso) y 429 sí se reintentan. */
+function isPermanentRejection(status: number): boolean {
+  return status >= 400 && status < 500 && status !== 408 && status !== 409 && status !== 429;
+}
 
 const DEFAULT_NOTIFY_EMAIL = 'omaraalvarezo@gmail.com';
 
@@ -139,7 +149,7 @@ function buyerMessage(order: KitOrder, siteUrl: string): { subject: string; text
 }
 
 /** Recibo al comprador con el enlace que funciona sin cookie. Lo manda la liquidación del pago. */
-export async function sendBuyerReceipt(order: KitOrder, siteUrl: string = siteOrigin()): Promise<KitMailResult> {
+export async function sendBuyerReceipt(order: KitOrder, siteUrl: string = siteOrigin()): Promise<BuyerMailResult> {
   const apiKey = env('RESEND_API_KEY');
   const from = env('DIRECTORY_NOTIFY_FROM');
   if (!apiKey || !from || !order.email) return 'unconfigured';
@@ -162,8 +172,13 @@ export async function sendBuyerReceipt(order: KitOrder, siteUrl: string = siteOr
       signal: AbortSignal.timeout(8_000),
     });
     if (!response.ok) {
-      console.error('[kit] Resend rechazó el recibo del comprador', response.status);
-      return 'failed';
+      const permanent = isPermanentRejection(response.status);
+      console.error(
+        `[kit] Resend rechazó el recibo del comprador${permanent ? ' (permanente, no se reintenta)' : ''}`,
+        response.status,
+        order.id,
+      );
+      return permanent ? 'failed-permanent' : 'failed';
     }
     return 'sent';
   } catch (error) {

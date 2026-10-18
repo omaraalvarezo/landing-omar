@@ -74,7 +74,8 @@ export const POST: APIRoute = async ({ request }) => {
     // webhook): `purchaseTrackedAt` y un candado evitan contarla dos veces. El tope de tiempo acota la respuesta.
     if (kitReference && 'product' in settled.order) await trackSistemaSale(settled.order);
     // 503 hace que Wompi reintente. El aviso a Omar y el del comprador tienen cada uno su clave,
-    // así que el reintento solo reenvía el que falló.
+    // así que el reintento solo reenvía el que falló. Un rechazo permanente del recibo
+    // (`failed-permanent`, un 4xx de Resend) no se reintenta: ya quedó registrado en la orden.
     if (settled.email === 'failed' || ('buyerEmail' in settled && settled.buyerEmail === 'failed')) {
       return json(503, { error: 'aviso' });
     }

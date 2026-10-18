@@ -36,9 +36,5 @@ export function kitDownloadPath(orderId: string, token: string): string {
   return `/api/herramientas/kit-archivo?pedido=${encodeURIComponent(orderId)}&t=${encodeURIComponent(token)}`;
 }
 
-export const KIT_BUSINESSES = ['taller', 'detailing', 'ambos', 'otra'] as const;
-export type KitBusiness = (typeof KIT_BUSINESSES)[number];
-
-export function isKitBusiness(value: string): value is KitBusiness {
-  return (KIT_BUSINESSES as readonly string[]).includes(value);
-}
+// Viven en `kit-businesses.ts` (sin dependencias) para que `products.ts` no importe este módulo.
+export { KIT_BUSINESSES, isKitBusiness, type KitBusiness } from './kit-businesses';

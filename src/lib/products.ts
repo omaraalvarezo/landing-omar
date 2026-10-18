@@ -2,7 +2,7 @@ import kitData from '../data/kit.json';
 import enzoData from '../data/sistema-enzo-detailing.json';
 import paises from '../data/paises.json';
 import { bogotaToday } from './directory';
-import { isKitBusiness } from './kit';
+import { isKitBusiness } from './kit-businesses';
 
 export type ProductId = 'talleres' | 'enzo-detailing';
 
