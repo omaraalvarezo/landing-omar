@@ -35,6 +35,7 @@
     "content:new:casos": "node scripts/content-new.mjs --type casos",
     "content:new:tendencias": "node scripts/content-new.mjs --type tendencias",
     "content:check": "node scripts/check-content.mjs",
+    "test": "vitest run",
     "offers:check": "node --experimental-strip-types scripts/check-offers.mjs",
     "lead:list": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-leads.mjs",
     "kit:pending": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-kit-orders.mjs",
@@ -64,7 +65,8 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "gitleaks": "^1.0.0",
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "vitest": "3.2.4"
   },
   "overrides": {
     "@vercel/routing-utils": {
