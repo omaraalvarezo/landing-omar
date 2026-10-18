@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { validateWaitlist, wantFromQuery, WAITLIST_WANTS } from '../src/lib/waitlist';
+import { validateWaitlist, wantFromQuery, WAITLIST_WANTS, WAITLIST_WANT_LABELS } from '../src/lib/waitlist';
 
 const valid = {
   name: 'Ana Pérez',
   email: 'ana@example.com',
+  business: 'Detailing Ana',
   want: 'instalacion',
   oficio: 'detailing',
   country: 'CO',
@@ -24,7 +25,7 @@ describe('validateWaitlist', () => {
         name: 'Ana Pérez',
         email: 'ana@example.com',
         phone: '',
-        business: '',
+        business: 'Detailing Ana',
         want: 'instalacion',
         oficio: 'detailing',
         oficioOtro: '',
@@ -98,6 +99,23 @@ describe('validateWaitlist', () => {
     expect(failure({ email: 'no-es-correo' }).field).toBe('email');
     expect(failure({ phone: 'abc' }).field).toBe('phone');
     expect(failure({ business: 'x'.repeat(121) }).field).toBe('business');
+  });
+
+  it('exige el negocio (2 a 120 caracteres)', () => {
+    const { business: _business, ...rest } = valid;
+    const missing = validateWaitlist(rest);
+    expect(!missing.ok && missing.field).toBe('business');
+    expect(failure({ business: '   ' }).field).toBe('business');
+    expect(failure({ business: 'A' }).field).toBe('business');
+    expect(validateWaitlist({ ...valid, business: 'x'.repeat(120) }).ok).toBe(true);
+  });
+
+  it('revisa primero qué quiere, que es lo primero del formulario', () => {
+    expect(failure({ want: undefined, name: '', email: 'x' }).field).toBe('want');
+  });
+
+  it('tiene una etiqueta en español para cada opción', () => {
+    for (const want of WAITLIST_WANTS) expect(WAITLIST_WANT_LABELS[want]).toMatch(/\S/);
   });
 
   it('quita < y > de los campos de una línea', () => {

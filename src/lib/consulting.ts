@@ -12,8 +12,6 @@ export const CONTACT_LIMITS = {
   email: 254,
   phone: 24,
   business: 120,
-  problemMin: 20,
-  problemMax: 1200,
   oficioOtro: 60,
   message: 600,
 } as const;

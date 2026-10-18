@@ -1,11 +1,18 @@
 // Validación de la lista de espera. La usan el navegador y el endpoint con las mismas reglas.
-// Los helpers de texto se exportan para que `/api/contacto` los use cuando se reemplace el
-// formulario de consultoría (hoy conserva sus propias copias privadas).
+// Los helpers de texto (`singleLine`, `multiLine`) los usa también `/api/contacto`.
 import oficios from '../data/oficios.json';
 import paises from '../data/paises.json';
 import { CONTACT_LIMITS, isContactEmail, isContactPhone } from './consulting';
 
 export const WAITLIST_WANTS = ['instalacion', 'sesion', 'otro-oficio', 'pregunta-sistema'] as const;
+
+// Etiqueta de cada opción: va en el asunto y en la tabla del correo a Omar.
+export const WAITLIST_WANT_LABELS: Record<(typeof WAITLIST_WANTS)[number], string> = {
+  instalacion: 'Instalación',
+  sesion: 'Sesión privada',
+  'otro-oficio': 'Sistema para otro oficio',
+  'pregunta-sistema': 'Pregunta del sistema',
+};
 
 export interface WaitlistInput {
   name: string;
@@ -64,6 +71,8 @@ export function validateWaitlist(
   const country = singleLine(text(body, 'country'));
   const message = stripAngles(multiLine(text(body, 'message')));
 
+  // Primero lo primero del formulario: qué quiere.
+  if (!isWant(want)) return fail('want', 'Elige qué quieres de mí.');
   if (name.length < 2) return fail('name', 'Escribe tu nombre.');
   if (name.length > CONTACT_LIMITS.name) {
     return fail('name', `Tu nombre es muy largo (máximo ${CONTACT_LIMITS.name} caracteres).`);
@@ -75,10 +84,10 @@ export function validateWaitlist(
   if (phone.length > CONTACT_LIMITS.phone) {
     return fail('phone', 'Revisa tu WhatsApp: es muy largo.');
   }
+  if (business.length < 2) return fail('business', 'Cuéntame qué negocio operas.');
   if (business.length > CONTACT_LIMITS.business) {
     return fail('business', `El nombre del negocio es muy largo (máximo ${CONTACT_LIMITS.business} caracteres).`);
   }
-  if (!isWant(want)) return fail('want', 'Elige qué quieres de mí.');
   if (!oficios.some((item) => item.id === oficio)) return fail('oficio', 'Elige tu oficio.');
 
   let oficioOtro = '';

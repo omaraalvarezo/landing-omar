@@ -1,6 +1,16 @@
 ---
 import { CONTACT_LIMITS } from '../../lib/consulting';
-import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
+import { WAITLIST_WANTS, WAITLIST_WANT_LABELS, QUESTION_MESSAGE_MIN } from '../../lib/waitlist';
+import oficios from '../../data/oficios.json';
+import paises from '../../data/paises.json';
+
+// Qué muestra cada opción: la etiqueta corta y una línea para decidir.
+const wantCopy: Record<(typeof WAITLIST_WANTS)[number], { tag: string; hint: string }> = {
+  instalacion: { tag: 'INSTALAR', hint: 'Que el sistema de Enzo quede montado en tu negocio.' },
+  sesion: { tag: 'SESIÓN', hint: 'Una sesión privada para decidir qué construir primero.' },
+  'otro-oficio': { tag: 'OTRO OFICIO', hint: 'El mismo sistema, pensado para un oficio distinto al detailing.' },
+  'pregunta-sistema': { tag: 'PREGUNTA', hint: 'Tienes una duda de El sistema de Enzo y quieres respuesta por correo.' },
+};
 ---
 
 <form class="contact-form" id="contacto-consultoria" tabindex="-1" novalidate>
@@ -10,23 +20,24 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
 
   <div class="contact-form__heading">
     <div>
-      <p class="contact-form__kicker">CONSULTORÍA PRIVADA · CON OMAR</p>
-      <h3>Cuéntame el cuello de botella.<br /><span>Te respondo yo.</span></h3>
+      <p class="contact-form__kicker">LISTA DE ESPERA · EL SISTEMA DE ENZO</p>
+      <h3>Anótate.<br /><span>Te escribo yo.</span></h3>
     </div>
-    <p class="contact-form__folio">OA—2H / {new Date().getFullYear()}</p>
+    <p class="contact-form__folio">OA—ESPERA / {new Date().getFullYear()}</p>
   </div>
 
+  <p class="contact-form__lead">Hoy no estoy tomando instalaciones ni sesiones. Si te anotas, te escribo cuando abra cupo. Si es una pregunta del sistema, te respondo por correo.</p>
+
   <fieldset class="contact-form__stage contact-form__field--wide">
-    <legend><span>01</span> ¿Dónde se está trabando tu negocio?</legend>
-    <p class="contact-form__stage-intro">Elige el frente que más te está costando hoy. Si dudas, escoge el más cercano.</p>
+    <legend><span>01</span> ¿Qué quieres de mí?</legend>
     <div class="contact-form__stage-grid">
-      {SERVICE_SYSTEM_STAGES.map((stage) => (
-        <label class={`contact-form__stage-option contact-form__stage-option--${stage.id}`}>
-          <input type="radio" name="frameworkStage" value={stage.id} required />
+      {WAITLIST_WANTS.map((want) => (
+        <label class={`contact-form__stage-option contact-form__stage-option--${want}`}>
+          <input type="radio" name="want" value={want} required />
           <span class="contact-form__stage-copy">
-            <small>{stage.number}</small>
-            <strong>{stage.name}</strong>
-            <span>{stage.promise}</span>
+            <small>{wantCopy[want].tag}</small>
+            <strong>{WAITLIST_WANT_LABELS[want]}</strong>
+            <span>{wantCopy[want].hint}</span>
           </span>
           <span class="contact-form__stage-arrow" aria-hidden="true">↗</span>
         </label>
@@ -37,7 +48,7 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
   <section class="contact-form__details" aria-labelledby="contact-details-title">
     <div class="contact-form__section-heading">
       <span>02</span>
-      <p id="contact-details-title">Ponme dentro del negocio</p>
+      <p id="contact-details-title">Dime quién eres y qué operas</p>
     </div>
 
     <div class="contact-form__field contact-form__field--wide">
@@ -56,31 +67,56 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
     </div>
 
     <div class="contact-form__field contact-form__field--wide">
-      <label for="contact-business">Qué negocio operas y qué vende</label>
+      <label for="contact-business">Cómo se llama tu negocio</label>
       <input
         id="contact-business"
         name="business"
         type="text"
         autocomplete="organization"
         maxlength={CONTACT_LIMITS.business}
-        placeholder="Ej. firma contable que atiende pymes"
+        placeholder="Ej. Detailing Ana"
         required
       />
     </div>
 
+    <div class="contact-form__field">
+      <label for="contact-oficio">Tu oficio</label>
+      <select id="contact-oficio" name="oficio" required>
+        <option value="" selected disabled>Elige uno</option>
+        {oficios.map((item) => <option value={item.id}>{item.label}</option>)}
+      </select>
+    </div>
+
+    <div class="contact-form__field">
+      <label for="contact-country">Tu país</label>
+      <select id="contact-country" name="country" autocomplete="country" required>
+        <option value="" selected disabled>Elige uno</option>
+        {paises.map((item) => <option value={item.id}>{item.label}</option>)}
+      </select>
+    </div>
+
+    <div class="contact-form__field contact-form__field--wide" data-oficio-otro hidden>
+      <label for="contact-oficio-otro">Cuál es tu oficio</label>
+      <input
+        id="contact-oficio-otro"
+        name="oficioOtro"
+        type="text"
+        maxlength={CONTACT_LIMITS.oficioOtro}
+        placeholder="Ej. lavado de tapetes"
+      />
+    </div>
+
     <div class="contact-form__field contact-form__field--wide">
-      <label for="contact-problem">Qué está pasando de verdad</label>
+      <label for="contact-message">Tu mensaje <small data-message-need>(opcional)</small></label>
       <textarea
-        id="contact-problem"
-        name="problem"
-        rows="5"
-        minlength={CONTACT_LIMITS.problemMin}
-        maxlength={CONTACT_LIMITS.problemMax}
-        placeholder="Dónde se pierde tiempo o dinero, qué ya intentaste y qué necesitas decidir."
-        aria-describedby="contact-problem-hint"
-        required
+        id="contact-message"
+        name="message"
+        rows="4"
+        maxlength={CONTACT_LIMITS.message}
+        placeholder="Lo que quieras contarme. Si es una pregunta, escríbela completa."
+        aria-describedby="contact-message-hint"
       ></textarea>
-      <p class="contact-form__hint" id="contact-problem-hint">No escribas bonito. Con contexto suficiente te digo si la sesión tiene sentido para tu caso.</p>
+      <p class="contact-form__hint" id="contact-message-hint">Máximo {CONTACT_LIMITS.message} caracteres. Si es una pregunta del sistema, mínimo {QUESTION_MESSAGE_MIN}.</p>
     </div>
 
     <div class="contact-form__honeypot" aria-hidden="true">
@@ -92,28 +128,29 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
   <label class="contact-form__accept">
     <input name="accepted" type="checkbox" required />
     <span>
-      Autorizo a Omar Álvarez a usar estos datos solo para responder mi solicitud de consultoría, según la
-      <a href="/privacidad" target="_blank" rel="noopener">política de privacidad</a>.
+      Autorizo a Omar Álvarez a usar estos datos solo para responder mi solicitud, según la
+      <a href="/privacidad" target="_blank" rel="noopener">política de privacidad</a> y los
+      <a href="/terminos" target="_blank" rel="noopener">términos</a>.
     </span>
   </label>
 
-  <button class="contact-form__submit" type="submit">
-    <span data-contact-submit-label>enviar a Omar</span>
+  <button class="contact-form__submit" type="submit" data-track="lista_espera_enviada">
+    <span data-contact-submit-label>anotarme en la lista</span>
     <span class="contact-form__submit-arrow" aria-hidden="true">↗</span>
   </button>
 
   <p class="contact-form__security">
     <span aria-hidden="true">◎</span>
-    <span>Tu mensaje me llega directo al correo. Lo leo yo y te respondo con el siguiente paso: si la sesión
-    encaja, cómo la agendamos; si no, te lo digo sin rodeos.</span>
+    <span>Tu mensaje me llega directo al correo. Lo leo yo. Cuando abra cupo te escribo; si era una pregunta, te
+    respondo por correo.</span>
   </p>
 
   <p class="contact-form__error" id="contact-error" role="alert"></p>
 
   <div class="contact-form__success" data-contact-success hidden tabindex="-1" aria-labelledby="contact-success-title">
-    <p class="contact-form__kicker">MENSAJE ENVIADO</p>
+    <p class="contact-form__kicker">YA ESTÁS EN LA LISTA</p>
     <h3 id="contact-success-title">Listo. Ya lo tengo.</h3>
-    <p>Te escribo al correo que dejaste. Si no ves mi respuesta, revisa la carpeta de spam.</p>
+    <p>Te escribo al correo que dejaste cuando abra cupo. Si era una pregunta, te respondo por ahí. Si no ves mi respuesta, revisa la carpeta de spam.</p>
   </div>
 </form>
 
@@ -181,6 +218,7 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
   .contact-form__spectrum span:nth-child(4) { background: var(--contact-form-lime); }
 
   .contact-form__heading,
+  .contact-form__lead,
   .contact-form__stage,
   .contact-form__details,
   .contact-form__accept,
@@ -281,11 +319,13 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
     vertical-align: 4px;
   }
 
-  .contact-form__stage-intro {
-    max-width: 58ch;
-    margin: 13px 0 20px;
-    color: var(--contact-form-bone-dim);
-    font-size: 14px;
+  .contact-form__stage legend { margin-bottom: 20px; }
+
+  .contact-form__lead {
+    max-width: 62ch;
+    margin: 0;
+    color: var(--contact-form-bone);
+    font-size: clamp(16px, 1.8vw, 19px);
     line-height: 1.55;
   }
 
@@ -303,7 +343,7 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
     display: grid;
     grid-template-columns: 22px 1fr auto;
     gap: 13px;
-    min-height: 138px;
+    min-height: 128px;
     padding: 18px;
     color: var(--contact-form-bone-dim);
     background: rgba(243, 239, 228, .045);
@@ -328,22 +368,22 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
     transition: transform .28s cubic-bezier(.16, 1, .3, 1);
   }
 
-  .contact-form__stage-option--captar {
+  .contact-form__stage-option--instalacion {
     --stage-color: var(--contact-form-coral);
     --stage-wash: rgba(255, 113, 84, .12);
   }
 
-  .contact-form__stage-option--convertir {
+  .contact-form__stage-option--sesion {
     --stage-color: var(--contact-form-purple);
     --stage-wash: rgba(199, 154, 255, .13);
   }
 
-  .contact-form__stage-option--cumplir {
+  .contact-form__stage-option--otro-oficio {
     --stage-color: var(--contact-form-cobalt);
     --stage-wash: rgba(93, 114, 255, .13);
   }
 
-  .contact-form__stage-option--continuar {
+  .contact-form__stage-option--pregunta-sistema {
     --stage-color: var(--contact-form-lime);
     --stage-wash: rgba(200, 255, 61, .10);
   }
@@ -463,6 +503,7 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
   }
 
   .contact-form__field input,
+  .contact-form__field select,
   .contact-form__field textarea {
     width: 100%;
     border: 1px solid var(--contact-form-line);
@@ -476,12 +517,27 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
     transition: border-color .22s ease, background-color .22s ease, box-shadow .22s ease;
   }
 
-  .contact-form__field textarea { min-height: 138px; resize: vertical; }
+  .contact-form__field textarea { min-height: 120px; resize: vertical; }
+
+  .contact-form__field select {
+    appearance: none;
+    padding-right: 42px;
+    color-scheme: dark;
+    cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--contact-form-bone-dim) 50%),
+      linear-gradient(135deg, var(--contact-form-bone-dim) 50%, transparent 50%);
+    background-position: calc(100% - 21px) 53%, calc(100% - 15px) 53%;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+  }
+
+  .contact-form__field select option { color: var(--contact-form-bone); background: var(--contact-form-ink-2); }
 
   .contact-form__field input::placeholder,
   .contact-form__field textarea::placeholder { color: #77796f; }
 
   .contact-form__field input:focus,
+  .contact-form__field select:focus,
   .contact-form__field textarea:focus {
     outline: 0;
     background: rgba(90, 114, 255, .08);
@@ -684,57 +740,77 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
 </style>
 
 <script>
+  import { CONTACT_EMAIL } from '../../lib/consulting';
   import {
-    CONTACT_EMAIL,
-    CONTACT_LIMITS,
-    isContactEmail,
-    isContactPhone,
-  } from '../../lib/consulting';
-  import { serviceSystemStageLabel } from '../../lib/framework';
+    OTHER_OFICIO_ID,
+    QUESTION_MESSAGE_MIN,
+    WAITLIST_WANT_LABELS,
+    validateWaitlist,
+    wantFromQuery,
+    type WaitlistInput,
+  } from '../../lib/waitlist';
+  import oficios from '../../data/oficios.json';
+  import paises from '../../data/paises.json';
 
   const form = document.querySelector<HTMLFormElement>('#contacto-consultoria');
   const errorNode = document.querySelector<HTMLElement>('#contact-error');
   const successNode = form?.querySelector<HTMLElement>('[data-contact-success]');
-  const DEFAULT_LABEL = 'enviar a Omar';
+  const otroWrap = form?.querySelector<HTMLElement>('[data-oficio-otro]');
+  const messageNeed = form?.querySelector<HTMLElement>('[data-message-need]');
+  const DEFAULT_LABEL = 'anotarme en la lista';
   const REQUEST_TIMEOUT_MS = 20_000;
   // Algunos clientes de correo cortan los enlaces mailto largos; dejamos margen.
   const MAILTO_MAX_LENGTH = 1_900;
   const ERROR_ID = 'contact-error';
   let inFlight = false;
 
-  interface Intake {
-    name: string;
-    email: string;
-    phone: string;
-    business: string;
-    frameworkStage: string;
-    problem: string;
+  type Control = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+  type FieldName = keyof WaitlistInput | 'accepted';
+
+  function fieldControl(name: FieldName): Control | null {
+    return form?.querySelector<Control>(`[name="${name}"]`) ?? null;
   }
 
-  type FieldName = keyof Intake | 'accepted';
-
-  function fieldControl(name: FieldName): HTMLInputElement | HTMLTextAreaElement | null {
-    return form?.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${name}"]`) ?? null;
+  // Lee el formulario tal como está, sin sanear: el saneo y las reglas son de `validateWaitlist`.
+  function readFields(data: FormData) {
+    const get = (key: string) => String(data.get(key) || '').trim();
+    return {
+      name: get('name'),
+      email: get('email'),
+      phone: get('phone'),
+      business: get('business'),
+      want: get('want'),
+      oficio: get('oficio'),
+      oficioOtro: get('oficioOtro'),
+      country: get('country'),
+      message: get('message'),
+    };
   }
 
-  function mailtoFor(intake: Intake) {
+  function mailtoFor(value: WaitlistInput) {
     // Recortes por punto de código: partir un emoji deja un surrogate suelto y encodeURIComponent lanza.
-    const subject = Array.from(`Consultoría · ${intake.name} · ${intake.business}`).slice(0, 160).join('');
+    const subject = Array.from(`Lista de espera · ${WAITLIST_WANT_LABELS[value.want]} · ${value.business}`)
+      .slice(0, 160)
+      .join('');
+    const oficioLabel = oficios.find((item) => item.id === value.oficio)?.label ?? value.oficio;
+    const countryLabel = paises.find((item) => item.id === value.country)?.label ?? value.country;
     const head = [
-      `Nombre: ${intake.name}`,
-      `WhatsApp: ${intake.phone || '—'}`,
-      `Negocio: ${intake.business}`,
-      `Dónde se traba: ${serviceSystemStageLabel(intake.frameworkStage) || 'sin elegir'}`,
+      `Qué quiero: ${WAITLIST_WANT_LABELS[value.want]}`,
+      `Oficio: ${value.oficio === OTHER_OFICIO_ID ? `Otro: ${value.oficioOtro}` : oficioLabel}`,
+      `País: ${countryLabel}`,
+      `Negocio: ${value.business}`,
+      `Nombre: ${value.name}`,
+      `WhatsApp: ${value.phone || '—'}`,
       '',
       '',
     ].join('\n');
     const base = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=`;
-    let problem = Array.from(intake.problem);
-    let href = base + encodeURIComponent(`${head}${problem.join('')}`);
+    let message = Array.from(value.message);
+    let href = base + encodeURIComponent(`${head}${message.join('')}`);
     // Recorta el texto libre hasta que el enlace quepa; el formulario conserva el original.
-    while (href.length > MAILTO_MAX_LENGTH && problem.length > 0) {
-      problem = problem.slice(0, Math.max(0, problem.length - 80));
-      href = base + encodeURIComponent(`${head}${problem.join('')}… (sigue en el formulario: pega el resto aquí)`);
+    while (href.length > MAILTO_MAX_LENGTH && message.length > 0) {
+      message = message.slice(0, Math.max(0, message.length - 80));
+      href = base + encodeURIComponent(`${head}${message.join('')}… (sigue en el formulario: pega el resto aquí)`);
     }
     return href;
   }
@@ -763,11 +839,11 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
     }
   }
 
-  function showFallback(intake: Intake, reason?: string) {
+  function showFallback(value: WaitlistInput, reason?: string) {
     if (!errorNode) return;
     errorNode.textContent = reason ? `${reason} ` : 'No pude enviar el formulario desde aquí. ';
     const link = document.createElement('a');
-    link.href = mailtoFor(intake);
+    link.href = mailtoFor(value);
     link.textContent = `Escríbeme directo a ${CONTACT_EMAIL}`;
     errorNode.append(link, ' — tu mensaje ya va escrito y lo que pusiste aquí sigue en el formulario.');
   }
@@ -781,70 +857,34 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
     if (label) label.textContent = busy ? 'enviando…' : DEFAULT_LABEL;
   }
 
-  function readIntake(data: FormData): Intake {
-    return {
-      name: String(data.get('name') || '').trim(),
-      email: String(data.get('email') || '').trim(),
-      phone: String(data.get('phone') || '').trim(),
-      business: String(data.get('business') || '').trim(),
-      frameworkStage: String(data.get('frameworkStage') || '').trim(),
-      problem: String(data.get('problem') || '').trim(),
-    };
-  }
-
-  // Mismas reglas y mensajes que `/api/contacto`, en español y sin depender del idioma del navegador.
-  function validationMessage(field: FieldName, intake: Intake, accepted: boolean): string {
-    switch (field) {
-      case 'frameworkStage':
-        return intake.frameworkStage ? '' : 'Elige dónde se está trabando tu negocio.';
-      case 'name':
-        return intake.name ? '' : 'Escribe tu nombre.';
-      case 'email':
-        if (!intake.email) return 'Escribe tu correo para poder responderte.';
-        return isContactEmail(intake.email) ? '' : 'Revisa tu correo: no parece válido.';
-      case 'phone':
-        return !intake.phone || isContactPhone(intake.phone)
-          ? ''
-          : 'Revisa tu WhatsApp: usa solo números, espacios o guiones (7 a 15 dígitos).';
-      case 'business':
-        return intake.business ? '' : 'Cuéntame qué negocio operas.';
-      case 'problem':
-        return intake.problem.length >= CONTACT_LIMITS.problemMin
-          ? ''
-          : `Cuéntame el problema con un poco más de contexto (mínimo ${CONTACT_LIMITS.problemMin} caracteres).`;
-      case 'accepted':
-        return accepted ? '' : 'Necesito tu autorización para usar estos datos y responderte.';
+  // "Cuál es tu oficio" solo aparece con "Otro oficio"; el texto de ayuda del mensaje cambia con la pregunta.
+  function syncConditional() {
+    if (!form) return;
+    const oficio = form.querySelector<HTMLSelectElement>('[name="oficio"]')?.value;
+    if (otroWrap) otroWrap.hidden = oficio !== OTHER_OFICIO_ID;
+    const want = form.querySelector<HTMLInputElement>('[name="want"]:checked')?.value;
+    if (messageNeed) {
+      messageNeed.textContent =
+        want === 'pregunta-sistema' ? `(obligatorio, mínimo ${QUESTION_MESSAGE_MIN} caracteres)` : '(opcional)';
     }
   }
 
-  const FIELD_ORDER: FieldName[] = ['frameworkStage', 'name', 'email', 'phone', 'business', 'problem', 'accepted'];
-
-  function applyValidity(intake: Intake, accepted: boolean): boolean {
-    let firstInvalid: HTMLInputElement | HTMLTextAreaElement | null = null;
-    for (const field of FIELD_ORDER) {
-      const control = fieldControl(field);
-      if (!control) continue;
-      const message = validationMessage(field, intake, accepted);
-      control.setCustomValidity(message);
-      if (message && !firstInvalid) firstInvalid = control;
-    }
-    if (firstInvalid) {
-      firstInvalid.reportValidity();
-      return false;
-    }
-    return true;
+  // `?quiero=` preselecciona la opción; si no es una de las cuatro, no se toca nada.
+  function preselectWant() {
+    if (!form) return;
+    const want = wantFromQuery(new URLSearchParams(window.location.search).get('quiero'));
+    if (!want) return;
+    const radio = form.querySelector<HTMLInputElement>(`input[name="want"][value="${want}"]`);
+    if (radio) radio.checked = true;
   }
 
-  // Al corregir un campo se limpia su error para que el navegador no lo siga bloqueando.
-  form?.addEventListener('input', (event) => {
-    const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
-    if (!target || !('setCustomValidity' in target)) return;
-    if (target.type === 'radio') {
-      form.querySelectorAll<HTMLInputElement>('input[name="frameworkStage"]').forEach((radio) => radio.setCustomValidity(''));
-    } else {
-      target.setCustomValidity('');
+  // Al corregir un campo se limpia su error.
+  form?.addEventListener('input', () => {
+    if (errorNode && form.querySelector('[aria-invalid="true"]')) {
+      clearFieldErrors();
+      errorNode.textContent = '';
     }
-    if (target.getAttribute('aria-invalid') === 'true') clearFieldErrors();
+    syncConditional();
   });
 
   form?.addEventListener('submit', async (event) => {
@@ -854,9 +894,16 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
     clearFieldErrors();
 
     const data = new FormData(form);
-    const intake = readIntake(data);
+    const fields = readFields(data);
     const accepted = data.get('accepted') === 'on';
-    if (!applyValidity(intake, accepted)) return;
+
+    // Las mismas reglas y mensajes que `/api/contacto`: es la misma función.
+    const result = validateWaitlist({ ...fields, accepted });
+    if (!result.ok) {
+      showError(result.error, result.field);
+      return;
+    }
+    const value = result.value;
 
     setBusy(true);
     const controller = new AbortController();
@@ -867,7 +914,7 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          ...intake,
+          ...fields,
           website: String(data.get('website') || ''),
           accepted,
         }),
@@ -893,16 +940,19 @@ import { SERVICE_SYSTEM_STAGES } from '../../lib/framework';
       if (response.status === 400 && payload.field && payload.error) {
         showError(payload.error, payload.field);
       } else if (payload.fallbackEmail || response.status >= 500 || !payload.error) {
-        showFallback(intake);
+        showFallback(value);
       } else {
         // 403, 413, 415, 429: mensaje del servidor y el correo como salida para no perder el contacto.
-        showFallback(intake, payload.error);
+        showFallback(value, payload.error);
       }
     } catch {
-      showFallback(intake);
+      showFallback(value);
     } finally {
       window.clearTimeout(timer);
       if (!successNode || successNode.hidden) setBusy(false);
     }
   });
+
+  preselectWant();
+  syncConditional();
 </script>
