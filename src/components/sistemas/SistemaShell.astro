@@ -12,14 +12,15 @@ interface Props {
   title: string;
   description: string;
   jsonLd?: unknown;
+  noIndex?: boolean;
   cta?: { href: string; label: string; track: string };
 }
 
-const { title, description, jsonLd, cta } = Astro.props;
+const { title, description, jsonLd, noIndex = false, cta } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<Layout title={title} description={description} showNav={false} minimal themeColor="#131118" jsonLd={jsonLd}>
+<Layout title={title} description={description} showNav={false} minimal themeColor="#131118" jsonLd={jsonLd} noIndex={noIndex}>
   <div class="sx">
     <header class="sx-top">
       <a class="sx-wordmark" href="/" aria-label="Omar Álvarez, inicio">

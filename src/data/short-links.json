@@ -1,0 +1,6 @@
+[
+  { "slug": "entregas", "to": "/sistemas/detailing", "label": "El sistema de Enzo" },
+  { "slug": "prompts", "to": "/herramientas-ia/prompts-gratis", "label": "PDF de prompts gratis" },
+  { "slug": "kit", "to": "/herramientas-ia/kit", "label": "Kit de $81.000" },
+  { "slug": "lista", "to": "/#contacto", "label": "Lista de espera" }
+]
