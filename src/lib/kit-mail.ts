@@ -112,10 +112,10 @@ function buyerMessage(order: KitOrder, siteUrl: string): { subject: string; text
   const amount = formatCop(order.amountInCents / 100);
   const due = product.presale?.videosDueDate;
   const videos = due
-    ? `Los videos los publico antes del ${longDate(due)}. Cuando estén, te aviso por este mismo correo y los ves desde el mismo enlace.`
+    ? `Los videos los publico antes del ${longDate(due)}. Cuando estén, te aviso por este mismo correo y los ves desde el mismo enlace. Si no llegan para esa fecha, te devuelvo la plata.`
     : 'Los videos van llegando después. Cuando estén, te aviso por este mismo correo y los ves desde el mismo enlace.';
   const guarantee = product.guaranteeDays
-    ? `Tienes ${product.guaranteeDays} días de garantía escribiendo a este correo.`
+    ? `Garantía de ${product.guaranteeDays} días: si no te sirve, escríbeme a este correo en los ${product.guaranteeDays} días siguientes a la compra y dime qué no te sirvió. Te devuelvo la plata, yo mismo hago la devolución a mano.`
     : null;
   const name = order.buyerName.trim().split(/\s+/)[0] || 'hola';
 

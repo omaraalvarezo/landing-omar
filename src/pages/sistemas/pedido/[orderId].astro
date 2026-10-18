@@ -13,6 +13,7 @@ import {
   isKitOrderId,
   kitAccessCookieName,
   type KitOrder,
+  type KitPaymentStatus,
 } from '../../../lib/kit-orders';
 import { canViewProductOrder } from '../../../lib/order-access';
 import { getProduct, parseProductReference } from '../../../lib/products';
@@ -86,6 +87,14 @@ const dueDate = presale?.videosDueDate
       new Date(`${presale.videosDueDate}T12:00:00-05:00`),
     )
   : '';
+const STATUS_LABEL: Record<KitPaymentStatus, string> = {
+  CREATED: 'Pendiente',
+  PENDING: 'Pendiente',
+  APPROVED: 'Aprobado',
+  DECLINED: 'Rechazado',
+  VOIDED: 'Anulado',
+  ERROR: 'Error',
+};
 const title = allowed ? 'Tu sistema de Enzo' : 'Pedido no disponible';
 ---
 
@@ -107,7 +116,7 @@ const title = allowed ? 'Tu sistema de Enzo' : 'Pedido no disponible';
         {note && <p class="form-error">{note}</p>}
         <div class="receipt">
           <dl>
-            <div><dt>Estado</dt><dd>{order.status}</dd></div>
+            <div><dt>Estado</dt><dd>{STATUS_LABEL[order.status]}</dd></div>
             <div><dt>Monto</dt><dd>{formatCop(order.amountInCents / 100)}</dd></div>
             <div><dt>Referencia</dt><dd>{order.reference}</dd></div>
           </dl>
@@ -130,7 +139,10 @@ const title = allowed ? 'Tu sistema de Enzo' : 'Pedido no disponible';
                 ))}
               </ul>
             ) : dueDate ? (
-              <p>Los videos llegan antes del {dueDate}. Te aviso por correo cuando estén.</p>
+              <p>
+                Los videos llegan antes del {dueDate}. Te aviso por correo cuando estén. Si no llegan para esa fecha,
+                te devuelvo la plata.
+              </p>
             ) : (
               <p>Te aviso por correo cuando estén los videos.</p>
             )}
@@ -138,8 +150,8 @@ const title = allowed ? 'Tu sistema de Enzo' : 'Pedido no disponible';
         )}
         {product.guaranteeDays && (
           <p>
-            Tienes {product.guaranteeDays} días de garantía desde el pago. Si algo no te sirve, escríbeme con el
-            correo con el que pagaste.
+            Garantía de {product.guaranteeDays} días: si no te sirve, escríbeme en los {product.guaranteeDays} días
+            siguientes a la compra y dime qué no te sirvió. Te devuelvo la plata; la devolución la hago yo a mano.
           </p>
         )}
         {!approved && !failed && (

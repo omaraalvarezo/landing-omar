@@ -127,7 +127,8 @@ describe('sendBuyerReceipt', () => {
     const text = String(call.body.text);
     expect(text).toContain('$179.000');
     expect(text).toContain(`/sistemas/pedido/${ORDER_ID}?t=${TOKEN}`);
-    expect(text).toContain('7 días de garantía escribiendo a este correo');
+    expect(text).toContain('Garantía de 7 días: si no te sirve, escríbeme a este correo en los 7 días siguientes a la compra');
+    expect(text).toContain('Te devuelvo la plata');
     // Sin fecha de videos en el catálogo, avisa por correo.
     expect(text).toContain('te aviso por este mismo correo');
     expect(call.headers['Idempotency-Key']).toBe(`buyer-receipt-${ORDER_ID}-tx-1`);
@@ -141,6 +142,7 @@ describe('sendBuyerReceipt', () => {
       const order = { ...seedOrder('enzo-detailing'), downloadToken: TOKEN };
       await sendBuyerReceipt(order, 'https://omaralvarezo.co');
       expect(String(sent(fetchMock)[0].body.text)).toContain('antes del 30 de noviembre de 2026');
+      expect(String(sent(fetchMock)[0].body.text)).toContain('Si no llegan para esa fecha, te devuelvo la plata.');
     } finally {
       presale.videosDueDate = previous;
     }
