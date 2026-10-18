@@ -1,0 +1,39 @@
+{
+  "intro": "Contenido mínimo de prueba.",
+  "setupOrder": ["Primero la recepción", "Después el checklist"],
+  "pieces": [
+    {
+      "id": "recepcion",
+      "title": "Recepción",
+      "why": "Porque el carro llega y hay que dejar constancia.",
+      "steps": ["Paso uno", "Paso dos", "Paso tres"],
+      "tools": [],
+      "templates": [{ "file": "recepcion.txt", "title": "Plantilla de recepción", "body": "Cliente: [nombre]" }]
+    },
+    {
+      "id": "checklist",
+      "title": "Checklist",
+      "why": "Para no depender de la memoria.",
+      "steps": ["Paso uno", "Paso dos", "Paso tres"],
+      "tools": [],
+      "templates": [{ "file": "checklist.txt", "title": "Plantilla de checklist", "body": "[ ] Lavado" }]
+    },
+    {
+      "id": "entrega",
+      "title": "Entrega",
+      "why": "Para entregar con evidencia.",
+      "steps": ["Paso uno", "Paso dos", "Paso tres"],
+      "tools": [],
+      "templates": [{ "file": "entrega.txt", "title": "Plantilla de entrega", "body": "Entregado: [fecha]" }]
+    },
+    {
+      "id": "seguimiento",
+      "title": "Seguimiento",
+      "why": "Para que el cliente vuelva.",
+      "steps": ["Paso uno", "Paso dos", "Paso tres"],
+      "tools": [],
+      "templates": [{ "file": "seguimiento.txt", "title": "Plantilla de seguimiento", "body": "Hola [nombre], ¿cómo va el carro?" }]
+    }
+  ],
+  "tools": []
+}

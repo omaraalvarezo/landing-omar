@@ -1,0 +1,39 @@
+{
+  "intro": "PENDIENTE: el contenido real del sistema llega con la Task 8.",
+  "setupOrder": ["PENDIENTE: orden de montaje"],
+  "pieces": [
+    {
+      "id": "recepcion",
+      "title": "Recepción",
+      "why": "PENDIENTE: por qué importa la recepción.",
+      "steps": ["PENDIENTE: paso 1", "PENDIENTE: paso 2", "PENDIENTE: paso 3"],
+      "tools": [],
+      "templates": [{ "file": "recepcion.txt", "title": "PENDIENTE: plantilla de recepción", "body": "PENDIENTE" }]
+    },
+    {
+      "id": "checklist",
+      "title": "Checklist",
+      "why": "PENDIENTE: por qué importa el checklist.",
+      "steps": ["PENDIENTE: paso 1", "PENDIENTE: paso 2", "PENDIENTE: paso 3"],
+      "tools": [],
+      "templates": [{ "file": "checklist.txt", "title": "PENDIENTE: plantilla de checklist", "body": "PENDIENTE" }]
+    },
+    {
+      "id": "entrega",
+      "title": "Entrega",
+      "why": "PENDIENTE: por qué importa la entrega.",
+      "steps": ["PENDIENTE: paso 1", "PENDIENTE: paso 2", "PENDIENTE: paso 3"],
+      "tools": [],
+      "templates": [{ "file": "entrega.txt", "title": "PENDIENTE: plantilla de entrega", "body": "PENDIENTE" }]
+    },
+    {
+      "id": "seguimiento",
+      "title": "Seguimiento",
+      "why": "PENDIENTE: por qué importa el seguimiento.",
+      "steps": ["PENDIENTE: paso 1", "PENDIENTE: paso 2", "PENDIENTE: paso 3"],
+      "tools": [],
+      "templates": [{ "file": "seguimiento.txt", "title": "PENDIENTE: plantilla de seguimiento", "body": "PENDIENTE" }]
+    }
+  ],
+  "tools": []
+}

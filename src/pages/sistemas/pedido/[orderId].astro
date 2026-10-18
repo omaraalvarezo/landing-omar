@@ -1,0 +1,165 @@
+---
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro';
+import DirectoryChrome from '../../../components/directory/DirectoryChrome.astro';
+import { formatCop } from '../../../lib/money';
+import { kitDownloadPath } from '../../../lib/kit';
+import { settleKitPayment } from '../../../lib/kit-payment';
+import {
+  getKitOrderById,
+  hasKitOrderAccess,
+  isKitDownloadToken,
+  isKitOrderId,
+  kitAccessCookieName,
+  type KitOrder,
+} from '../../../lib/kit-orders';
+import { canViewProductOrder } from '../../../lib/order-access';
+import { getProduct, parseProductReference } from '../../../lib/products';
+import { fetchTransaction } from '../../../lib/wompi';
+
+const product = getProduct('enzo-detailing');
+const orderId = Astro.params.orderId || '';
+const linkToken = Astro.url.searchParams.get('t');
+let order: KitOrder | null = null;
+let allowed = false;
+let note = '';
+
+if (product && isKitOrderId(orderId)) {
+  try {
+    const found = await getKitOrderById(orderId);
+    // Un pedido de otro producto se trata igual que uno que no existe.
+    if (found && found.product === product.id) {
+      order = found;
+      const cookieToken = Astro.cookies.get(kitAccessCookieName(orderId))?.value || '';
+      const cookieMatches = await hasKitOrderAccess(found, cookieToken);
+      allowed = canViewProductOrder(found, { cookieMatches, linkToken });
+    }
+  } catch (error) {
+    console.error('[sistema] no se pudo leer el pedido', error);
+    note = 'El registro de pagos no está disponible en este momento.';
+  }
+}
+
+if (allowed && order && product) {
+  const transactionId = Astro.url.searchParams.get('id') || '';
+  if (/^[A-Za-z0-9-]{4,80}$/.test(transactionId)) {
+    try {
+      const transaction = await fetchTransaction(transactionId);
+      const parsed = transaction ? parseProductReference(transaction.reference) : null;
+      if (!transaction || transaction.reference !== order.reference || !parsed || parsed.product !== product.id) {
+        note = 'Esa transacción no corresponde a este pago.';
+      } else {
+        const settled = await settleKitPayment(transaction, parsed);
+        if (settled.ok) order = settled.order;
+      }
+    } catch (error) {
+      console.warn('[sistema] se muestra el estado guardado mientras Wompi no responde', error);
+      note = 'Wompi no respondió ahora. Este es el estado que ya teníamos guardado.';
+    }
+  }
+}
+
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+Astro.response.headers.set('Referrer-Policy', 'no-referrer');
+if (!allowed) Astro.response.status = note ? 503 : 404;
+
+const failed = order?.status === 'DECLINED' || order?.status === 'VOIDED' || order?.status === 'ERROR';
+const approved = order?.status === 'APPROVED';
+const downloadReady =
+  allowed &&
+  approved &&
+  isKitDownloadToken(order?.downloadToken) &&
+  Boolean(order?.downloadExpiresAt) &&
+  Date.parse(order?.downloadExpiresAt || '') > Date.now();
+const expiry =
+  downloadReady && order?.downloadExpiresAt
+    ? new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Bogota' }).format(
+        new Date(order.downloadExpiresAt),
+      )
+    : '';
+const presale = product?.presale ?? null;
+const videos = presale?.videos ?? [];
+const dueDate = presale?.videosDueDate
+  ? new Intl.DateTimeFormat('es-CO', { dateStyle: 'long', timeZone: 'America/Bogota' }).format(
+      new Date(`${presale.videosDueDate}T12:00:00-05:00`),
+    )
+  : '';
+const title = allowed ? 'Tu sistema de Enzo' : 'Pedido no disponible';
+---
+
+<Layout title={title} description="Estado privado de tu pedido del sistema de Enzo." showNav={false} minimal noIndex privatePage themeColor="#FFF8EA">
+  <DirectoryChrome consultCta={false}>
+    <p class="dir-kicker">El sistema de Enzo · pedido</p>
+    {allowed && order && product ? (
+      <>
+        <h1>
+          {approved ? 'Pago registrado.' : failed ? 'Ese pago no quedó aprobado.' : 'Todavía no hay confirmación.'}
+        </h1>
+        <p class="dir-lead">
+          {approved
+            ? 'Abajo tienes la descarga y los videos. Este enlace también te llegó al correo: ábrelo desde cualquier dispositivo.'
+            : failed
+              ? 'No se cobró nada. Si quieres intentarlo de nuevo, vuelve a la página del sistema.'
+              : 'Un redirect de Wompi no alcanza para entregarte el sistema. Esta página se actualiza cuando el pago queda aprobado.'}
+        </p>
+        {note && <p class="form-error">{note}</p>}
+        <div class="receipt">
+          <dl>
+            <div><dt>Estado</dt><dd>{order.status}</dd></div>
+            <div><dt>Monto</dt><dd>{formatCop(order.amountInCents / 100)}</dd></div>
+            <div><dt>Referencia</dt><dd>{order.reference}</dd></div>
+          </dl>
+        </div>
+        {downloadReady && order.downloadToken && (
+          <p class="download-ready">
+            <a href={kitDownloadPath(order.id, order.downloadToken)} rel="noreferrer">Descargar el sistema</a>
+            Vence el {expiry}, hora de Bogotá.
+          </p>
+        )}
+        {approved && (
+          <section aria-labelledby="videos-title">
+            <h2 id="videos-title">Los videos</h2>
+            {videos.length > 0 ? (
+              <ul>
+                {videos.map((video) => (
+                  <li>
+                    <a href={video.url} target="_blank" rel="noopener">{video.title}</a>
+                  </li>
+                ))}
+              </ul>
+            ) : dueDate ? (
+              <p>Los videos llegan antes del {dueDate}. Te aviso por correo cuando estén.</p>
+            ) : (
+              <p>Te aviso por correo cuando estén los videos.</p>
+            )}
+          </section>
+        )}
+        {product.guaranteeDays && (
+          <p>
+            Tienes {product.guaranteeDays} días de garantía desde el pago. Si algo no te sirve, escríbeme con el
+            correo con el que pagaste.
+          </p>
+        )}
+        {!approved && !failed && (
+          <script is:inline>
+            const key = 'oa-sistema-refresh';
+            const tries = Number(sessionStorage.getItem(key) || '0');
+            if (tries < 8) {
+              sessionStorage.setItem(key, String(tries + 1));
+              setTimeout(() => location.reload(), 8000);
+            }
+          </script>
+        )}
+      </>
+    ) : (
+      <>
+        <h1>No hay un pedido para mostrar.</h1>
+        <p class="dir-lead">
+          {note || 'Abre el enlace que te llegó al correo, o vuelve desde el mismo navegador donde pagaste.'}
+        </p>
+      </>
+    )}
+  </DirectoryChrome>
+</Layout>
