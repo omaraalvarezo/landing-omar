@@ -198,51 +198,20 @@ describe('settleKitPayment por producto', () => {
   });
 });
 
-describe('firstApproval (la usa el webhook para medir la venta)', () => {
-  async function settle(product: ProductId, overrides: Record<string, unknown> = {}) {
-    const reference = (state.order?.reference as string | undefined) ?? referenceFor(product);
-    return settleKitPayment(transactionFor(reference, overrides), parseProductReference(reference)!);
-  }
-  const first = (result: Awaited<ReturnType<typeof settle>>) => (result.ok ? result.firstApproval : undefined);
-
-  it('true en la primera aprobación del sistema', async () => {
-    seedOrder('enzo-detailing');
-    expect(first(await settle('enzo-detailing'))).toBe(true);
-  });
-
-  it('false en los reintentos del mismo APPROVED', async () => {
-    seedOrder('enzo-detailing');
-    await settle('enzo-detailing');
-    expect(first(await settle('enzo-detailing'))).toBe(false);
-    expect(first(await settle('enzo-detailing'))).toBe(false);
-  });
-
-  it('false en un cobro doble (otra transacción aprobada)', async () => {
-    seedOrder('enzo-detailing');
-    await settle('enzo-detailing');
-    expect(first(await settle('enzo-detailing', { id: 'tx-2' }))).toBe(false);
-  });
-
-  it('false si el correo falla: el reintento no cuenta otra venta', async () => {
-    const { sendBuyerReceipt } = await import('../src/lib/kit-mail');
-    vi.mocked(sendBuyerReceipt).mockResolvedValueOnce('failed' as never);
-    seedOrder('enzo-detailing');
-    expect(first(await settle('enzo-detailing'))).toBe(true);
-    expect(first(await settle('enzo-detailing'))).toBe(false);
-  });
-
-  it('false con DECLINED, PENDING y para el kit de talleres', async () => {
-    seedOrder('enzo-detailing');
-    expect(first(await settle('enzo-detailing', { status: 'DECLINED' }))).toBe(false);
-    expect(first(await settle('enzo-detailing', { status: 'PENDING' }))).toBe(false);
-    seedOrder('talleres');
-    expect(first(await settle('talleres'))).toBe(false);
-  });
-
-  it('kit-payment ya no mide: no importa el SDK de analítica', () => {
+describe('medición fuera de la liquidación', () => {
+  it('kit-payment no mide: no importa el SDK de analítica', () => {
     const sources = import.meta.glob('../src/lib/kit-payment.ts', { query: '?raw', import: 'default', eager: true });
     const [source] = Object.values(sources) as string[];
     expect(source).toBeTruthy();
     expect(source).not.toMatch(/@vercel\/analytics/);
+  });
+
+  it('una liquidación posterior conserva purchaseTrackedAt', async () => {
+    const order = seedOrder('enzo-detailing', { purchaseTrackedAt: '2026-10-17T01:00:00.000Z' });
+    const reference = order.reference as string;
+    const parsed = parseProductReference(reference)!;
+    await settleKitPayment(transactionFor(reference), parsed);
+    await settleKitPayment(transactionFor(reference), parsed);
+    expect(state.order!.purchaseTrackedAt).toBe('2026-10-17T01:00:00.000Z');
   });
 });

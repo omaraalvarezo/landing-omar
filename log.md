@@ -621,9 +621,10 @@ Todavía no se carga el script de anuncios ni cambia la CSP real.
   formulario del boletín (el proveedor es otro origen: no hay confirmación que leer); el PDF de prompts
   no tiene casilla de boletín y no dispara nada.
 - Servidor: `sistema_comprado { product }` sale SOLO del webhook `/api/herramientas/evento`
-  (`src/lib/track-server.ts`), con `firstApproval` que devuelve `settleKitPayment` (primera aprobación del
-  sistema), `headers: {}` explícito (sin cookie, IP ni user-agent) y tope de 2,5 s. Nunca desde las páginas
-  de pedido: su URL lleva el id del pedido y a veces el token, y el SDK copia URL y cookie de la petición.
+  (`trackSistemaSale` en `src/lib/track-server.ts`), cuando la orden liquidada es `enzo-detailing`,
+  APPROVED y no trae `purchaseTrackedAt` (lo escribe el webhook tras medir), sin importar quién liquidó
+  primero. Candado NX `track:{orderId}`, user-agent fijo `omaralvarezo-webhook` (sin cookie, IP ni URL de
+  pedido) y tope de 2,5 s. Nunca desde las páginas de pedido: su URL lleva el id y a veces el token.
 - No se pudo comprobar con el MCP de Vercel si el plan recoge eventos personalizados; se implementó el
   bloque completo. Si el plan no los recoge, el envío es inofensivo y las ventas se cuentan con
   `npm run kit:pending`.

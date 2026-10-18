@@ -4,9 +4,19 @@ const mocks = vi.hoisted(() => ({
   settleKitPayment: vi.fn(),
   track: vi.fn(async (..._args: unknown[]) => undefined),
   reference: '',
+  store: null as Record<string, unknown> | null,
+  lockHeld: false,
 }));
 
 vi.mock('@vercel/analytics/server', () => ({ track: mocks.track }));
+vi.mock('../src/lib/kit-orders', () => ({
+  claimKitMailLock: vi.fn(async () => !mocks.lockHeld),
+  releaseKitMailLock: vi.fn(async () => undefined),
+  getKitOrderByReference: vi.fn(async () => (mocks.store ? { ...mocks.store } : null)),
+  saveKitOrder: vi.fn(async (value: Record<string, unknown>) => {
+    mocks.store = { ...value };
+  }),
+}));
 vi.mock('../src/lib/kit-payment', () => ({ settleKitPayment: mocks.settleKitPayment }));
 vi.mock('../src/lib/directory-payment', () => ({ settleDirectoryPayment: vi.fn() }));
 vi.mock('../src/lib/wompi-events', () => ({
@@ -30,8 +40,15 @@ async function post(): Promise<Response> {
 
 const order = { status: 'APPROVED' };
 
+function approvedOrder(overrides: Record<string, unknown> = {}) {
+  return { id: 'o-1', reference: REFERENCE, product: 'enzo-detailing', status: 'APPROVED', ...overrides };
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
+  mocks.store = null;
+  mocks.lockHeld = false;
+  mocks.track.mockImplementation(async () => undefined);
 });
 
 describe('evento de Wompi: reintento por correos fallidos', () => {
@@ -56,15 +73,52 @@ describe('evento de Wompi: reintento por correos fallidos', () => {
 });
 
 describe('evento de Wompi: medición de la venta', () => {
-  it('con firstApproval llama track una vez, con solo { product } y headers vacíos (sin cookie, IP ni URL de pedido)', async () => {
-    mocks.settleKitPayment.mockResolvedValueOnce({ ok: true, order, email: 'sent', buyerEmail: 'sent', firstApproval: true });
+  const settledWith = (value: Record<string, unknown>) => ({ ok: true, order: value, email: 'skipped', buyerEmail: 'skipped' });
+
+  it('la página de pedido liquidó primero y luego llega el webhook: mide una vez, con { product } y solo el user-agent neutro', async () => {
+    const stored = approvedOrder({ approvedAt: '2026-10-17T00:00:00.000Z' });
+    mocks.store = stored;
+    mocks.settleKitPayment.mockResolvedValueOnce(settledWith(stored));
     expect((await post()).status).toBe(200);
     expect(mocks.track).toHaveBeenCalledTimes(1);
-    expect(mocks.track).toHaveBeenCalledWith('sistema_comprado', { product: 'enzo-detailing' }, { headers: {} });
+    expect(mocks.track).toHaveBeenCalledWith(
+      'sistema_comprado',
+      { product: 'enzo-detailing' },
+      { headers: { 'user-agent': 'omaralvarezo-webhook' } },
+    );
+    expect(typeof mocks.store!.purchaseTrackedAt).toBe('string');
   });
 
-  it('sin firstApproval (reintento, cobro doble, kit) no llama track', async () => {
-    mocks.settleKitPayment.mockResolvedValueOnce({ ok: true, order, email: 'skipped', buyerEmail: 'skipped', firstApproval: false });
+  it('un reintento de Wompi después de medida no vuelve a medir', async () => {
+    mocks.store = approvedOrder();
+    mocks.settleKitPayment.mockResolvedValueOnce(settledWith(mocks.store));
+    await post();
+    mocks.settleKitPayment.mockResolvedValueOnce(settledWith({ ...mocks.store }));
+    await post();
+    mocks.settleKitPayment.mockResolvedValueOnce(settledWith({ ...mocks.store }));
+    await post();
+    expect(mocks.track).toHaveBeenCalledTimes(1);
+  });
+
+  it('con el candado tomado por otro webhook no mide', async () => {
+    mocks.lockHeld = true;
+    mocks.store = approvedOrder();
+    mocks.settleKitPayment.mockResolvedValueOnce(settledWith(mocks.store));
+    expect((await post()).status).toBe(200);
+    expect(mocks.track).not.toHaveBeenCalled();
+    expect(mocks.store!.purchaseTrackedAt).toBeUndefined();
+  });
+
+  it('el kit de talleres nunca se mide', async () => {
+    mocks.store = approvedOrder({ product: 'talleres' });
+    mocks.settleKitPayment.mockResolvedValueOnce(settledWith(mocks.store));
+    await post();
+    expect(mocks.track).not.toHaveBeenCalled();
+  });
+
+  it('una orden que no está APPROVED no se mide', async () => {
+    mocks.store = approvedOrder({ status: 'DECLINED' });
+    mocks.settleKitPayment.mockResolvedValueOnce(settledWith(mocks.store));
     await post();
     expect(mocks.track).not.toHaveBeenCalled();
   });
@@ -75,14 +129,21 @@ describe('evento de Wompi: medición de la venta', () => {
     expect(mocks.track).not.toHaveBeenCalled();
   });
 
-  it('si track lanza, el webhook responde 200 igual', async () => {
+  it('si track lanza, el webhook responde 200 y la orden queda sin marcar para que el reintento pruebe otra vez', async () => {
+    mocks.store = approvedOrder();
     mocks.track.mockRejectedValueOnce(new Error('analytics caído'));
-    mocks.settleKitPayment.mockResolvedValueOnce({ ok: true, order, email: 'sent', buyerEmail: 'sent', firstApproval: true });
+    mocks.settleKitPayment.mockResolvedValueOnce(settledWith(mocks.store));
     expect((await post()).status).toBe(200);
+    expect(mocks.store!.purchaseTrackedAt).toBeUndefined();
+    mocks.settleKitPayment.mockResolvedValueOnce(settledWith(mocks.store));
+    await post();
+    expect(mocks.track).toHaveBeenCalledTimes(2);
+    expect(typeof mocks.store!.purchaseTrackedAt).toBe('string');
   });
 
-  it('si el correo falló mide igual la primera aprobación y responde 503 para el reintento de Wompi', async () => {
-    mocks.settleKitPayment.mockResolvedValueOnce({ ok: true, order, email: 'sent', buyerEmail: 'failed', firstApproval: true });
+  it('si el correo falló mide igual y responde 503 para el reintento de Wompi', async () => {
+    mocks.store = approvedOrder();
+    mocks.settleKitPayment.mockResolvedValueOnce({ ...settledWith(mocks.store), buyerEmail: 'failed' });
     expect((await post()).status).toBe(503);
     expect(mocks.track).toHaveBeenCalledTimes(1);
   });
@@ -99,7 +160,7 @@ describe('las páginas de pedido nunca miden', () => {
     expect(Object.keys(pages)).toHaveLength(2);
   });
 
-  it.each(Object.entries(pages))('%s no importa track ni usa firstApproval', (_file, source) => {
-    expect(source).not.toMatch(/track-server|@vercel\/analytics\/server|trackSistemaPurchase|firstApproval/);
+  it.each(Object.entries(pages))('%s no importa track ni purchaseTrackedAt', (_file, source) => {
+    expect(source).not.toMatch(/track-server|@vercel\/analytics\/server|trackSistemaSale|purchaseTrackedAt/);
   });
 });

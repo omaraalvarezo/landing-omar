@@ -5,7 +5,7 @@ import { parseDirectoryReference } from '../../../lib/directory';
 import { settleDirectoryPayment } from '../../../lib/directory-payment';
 import { settleKitPayment } from '../../../lib/kit-payment';
 import { parseProductReference } from '../../../lib/products';
-import { trackSistemaPurchase } from '../../../lib/track-server';
+import { trackSistemaSale } from '../../../lib/track-server';
 import { verifyWompiEvent } from '../../../lib/wompi-events';
 import { fetchTransaction } from '../../../lib/wompi';
 
@@ -69,11 +69,10 @@ export const POST: APIRoute = async ({ request }) => {
       console.error(`[${channel}] evento sin orden aplicable`, settled.reason, reference);
       return json(200, { ignored: settled.reason });
     }
-    // La venta se mide aquí y no en `settleKitPayment`: esta URL no lleva secretos. Va después de
-    // liquidar (los correos ya salieron) y su tope de tiempo acota la respuesta al webhook.
-    if (kitReference && 'firstApproval' in settled && settled.firstApproval) {
-      await trackSistemaPurchase(kitReference.product);
-    }
+    // La venta se mide aquí y no en `settleKitPayment` ni en las páginas de pedido: esta URL no lleva
+    // secretos. Da igual quién liquidó primero (el regreso del comprador casi siempre llega antes que el
+    // webhook): `purchaseTrackedAt` y un candado evitan contarla dos veces. El tope de tiempo acota la respuesta.
+    if (kitReference) await trackSistemaSale(settled.order);
     // 503 hace que Wompi reintente. El aviso a Omar y el del comprador tienen cada uno su clave,
     // así que el reintento solo reenvía el que falló.
     if (settled.email === 'failed' || ('buyerEmail' in settled && settled.buyerEmail === 'failed')) {

@@ -37,6 +37,8 @@ export interface KitOrder {
   downloadExpiresAt?: string;
   /** Cuándo se le avisó al comprador que los videos ya están (script sistema:avisar-videos). */
   videosNotifiedAt?: string;
+  /** Cuándo se midió la venta (`sistema_comprado`). Solo la escribe el webhook; evita medirla dos veces. */
+  purchaseTrackedAt?: string;
 }
 
 const ACCESS_TOKEN = /^[a-f0-9]{64}$/;

@@ -18,8 +18,6 @@ export type KitSettlement =
       order: KitOrder;
       email: KitMailResult | 'skipped';
       buyerEmail: KitMailResult | 'skipped';
-      /** Primera aprobación de una orden del sistema (no de un reintento, un cobro doble ni el kit). Solo la usa el webhook para medir la venta. */
-      firstApproval: boolean;
     }
   | { ok: false; reason: 'NOT_FOUND' | 'MISMATCH' };
 
@@ -92,15 +90,6 @@ export async function settleKitPayment(
 
   await saveKitOrder(order);
 
-  // Primera aprobación del sistema: la orden guardada aún no tenía `approvedAt`. Los reintentos de
-  // Wompi y los pedidos que se vuelven a leer ya la traen. Quién la mide es el webhook, no esta función.
-  const firstApproval =
-    transaction.status === 'APPROVED' &&
-    !existing.approvedAt &&
-    order.status === 'APPROVED' &&
-    order.transactionId === transaction.id &&
-    product.buyerEmail;
-
   const email = emailKind ? await notifyOwner(order, transaction.id, emailKind, now) : 'skipped';
 
   // Correo al comprador: independiente del aviso a Omar, para que un reintento de Wompi
@@ -112,7 +101,7 @@ export async function settleKitPayment(
     product.buyerEmail;
   const buyerEmail = buyerDue ? await notifyBuyer(order, transaction.id) : 'skipped';
 
-  return { ok: true, order, email, buyerEmail, firstApproval };
+  return { ok: true, order, email, buyerEmail };
 }
 
 async function notifyOwner(
