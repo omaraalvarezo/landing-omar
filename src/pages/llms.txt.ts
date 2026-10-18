@@ -45,7 +45,7 @@ export const GET: APIRoute = async () => {
   const tools = getTools();
   const body = `# Omar Álvarez — herramientas de IA para pymes
 
-> Directorio y guías en español. El primer párrafo de cada pieza es la respuesta directa. Las cifras citan la fuente y la fecha. No hay llamada gratuita ni paquetes de consultoría en estas páginas.
+> Directorio y guías en español. El primer párrafo de cada pieza es la respuesta directa. Las cifras citan la fuente y la fecha. No hay llamada gratuita ni paquetes de consultoría en estas páginas; hoy no se ofrecen sesiones ni instalaciones, solo una lista de espera.
 
 ## Sistemas
 
@@ -80,7 +80,7 @@ ${trends.map((entry) => line(entry.data.title, trendPath(entry.id), entry.data.d
 ## Opcional
 
 - [RSS](${SITE}/herramientas-ia/rss.xml): novedades de las guías.
-- [Consultoría](${SITE}/#contacto): sesión privada de 120 minutos, aparte del directorio.
+- [Lista de espera](${SITE}/#contacto): instalaciones y sesiones no están abiertas hoy; anotarse no tiene costo ni compromiso.
 `;
 
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

@@ -25,7 +25,7 @@ const year = new Date().getFullYear();
       <a href="/herramientas-ia" aria-current={active === 'directorio' ? 'page' : undefined}>herramientas</a>
       <a href="/herramientas-ia/guias" aria-current={active === 'guias' ? 'page' : undefined}>guías</a>
       <a href="/herramientas-ia/destacar" data-nav="destacar" aria-current={active === 'destacar' ? 'page' : undefined}>destacar</a>
-      <a href="/#contacto">sesión 2h</a>
+      <a href="/sistemas/detailing">sistema de Enzo</a>
     </nav>
   </header>
 
@@ -33,8 +33,8 @@ const year = new Date().getFullYear();
     <slot />
     {consultCta && (
       <aside class="dir-cta">
-        <p>Si ya viste la lista y el problema sigue siendo cuál pieza construir primero.</p>
-        <a href="/#contacto">Sesión privada de 120 minutos <span aria-hidden="true">↘</span></a>
+        <p>Si ya viste la lista y lo que te falta es un sistema armado para tu taller, mira el que uso en Enzo.</p>
+        <a href="/sistemas/detailing">Ver el sistema de Enzo <span aria-hidden="true">↘</span></a>
       </aside>
     )}
   </main>
@@ -51,7 +51,7 @@ const year = new Date().getFullYear();
       <a href="/herramientas-ia/kit">Kit</a>
       <a href="/herramientas-ia/destacar">Destacar</a>
       <a href="/recursos">Recursos</a>
-      <a href="/#contacto">Consultoría</a>
+      <a href="/sistemas/detailing">Sistema de Enzo</a>
       <a href={SOCIALS.tiktok} target="_blank" rel="noopener noreferrer">TikTok</a>
       <a href={SOCIALS.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
       <a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>

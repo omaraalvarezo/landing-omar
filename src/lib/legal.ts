@@ -22,7 +22,7 @@ export interface LegalData {
 
 export const LEGAL: LegalData = {
   draft: false,
-  updated: '2026-10-16',
+  updated: '2026-10-17',
   controllerName: 'Omar Álvarez',
   controllerType: 'persona natural',
   privacyEmail: 'omaraalvarezo@gmail.com',
