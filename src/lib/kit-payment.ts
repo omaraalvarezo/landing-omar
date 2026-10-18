@@ -1,4 +1,3 @@
-import { KIT } from './kit';
 import { notifyKitPayment, type KitMailKind, type KitMailResult } from './kit-mail';
 import {
   claimKitMailLock,
@@ -10,6 +9,7 @@ import {
   type KitOrder,
   type KitPaymentStatus,
 } from './kit-orders';
+import { getProduct, productAmountInCents, type ProductId } from './products';
 import type { WompiTransaction } from './wompi';
 
 export type KitSettlement =
@@ -21,30 +21,40 @@ function statusFromTransaction(status: WompiTransaction['status']): KitPaymentSt
   return 'PENDING';
 }
 
-function grantDownload(order: KitOrder, now: string): void {
+function grantDownload(order: KitOrder, now: string, downloadDays: number): void {
   if (!isKitDownloadToken(order.downloadToken) || !order.downloadExpiresAt) {
     order.downloadToken = createKitDownloadToken();
-    order.downloadExpiresAt = new Date(Date.parse(now) + KIT.downloadDays * 24 * 60 * 60 * 1_000).toISOString();
+    order.downloadExpiresAt = new Date(Date.parse(now) + downloadDays * 24 * 60 * 60 * 1_000).toISOString();
   }
 }
 
 export async function settleKitPayment(
   transaction: WompiTransaction,
-  amountInCents: number,
+  parsed: { product: ProductId; amountInCents: number },
 ): Promise<KitSettlement> {
-  if (transaction.currency !== 'COP' || transaction.amount_in_cents !== amountInCents) {
+  const { amountInCents } = parsed;
+  const product = getProduct(parsed.product);
+  if (
+    !product ||
+    amountInCents !== productAmountInCents(product.id) ||
+    transaction.currency !== 'COP' ||
+    transaction.amount_in_cents !== amountInCents
+  ) {
     return { ok: false, reason: 'MISMATCH' };
   }
 
   const existing = await getKitOrderByReference(transaction.reference);
   if (!existing) return { ok: false, reason: 'NOT_FOUND' };
-  if (existing.amountInCents !== amountInCents || existing.product !== 'talleres') {
+  // Una orden anterior a los productos múltiples no trae `product`: era del kit.
+  const orderProduct = existing.product === undefined ? 'talleres' : getProduct(existing.product)?.id;
+  if (existing.amountInCents !== amountInCents || orderProduct !== product.id) {
     return { ok: false, reason: 'MISMATCH' };
   }
 
   const now = new Date().toISOString();
   const order: KitOrder = {
     ...existing,
+    product: product.id,
     updatedAt: now,
     paymentMethod: String(transaction.payment_method_type || '').slice(0, 60) || existing.paymentMethod,
     statusMessage: String(transaction.status_message || '').slice(0, 240) || existing.statusMessage,
@@ -60,7 +70,7 @@ export async function settleKitPayment(
     order.status = 'APPROVED';
     if (!double) order.transactionId = transaction.id;
     order.approvedAt = order.approvedAt || now;
-    grantDownload(order, now);
+    grantDownload(order, now, product.downloadDays);
     if (double) emailKind = 'double';
     else if (!order.notifiedAt) emailKind = 'approved';
   } else if (transaction.status === 'VOIDED' && order.transactionId === transaction.id && approvedIds.has(transaction.id)) {

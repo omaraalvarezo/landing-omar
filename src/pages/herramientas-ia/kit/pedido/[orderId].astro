@@ -42,7 +42,7 @@ if (allowed && order) {
       if (!transaction || transaction.reference !== order.reference || !parsed) {
         note = 'Esa transacción no corresponde a este pago.';
       } else {
-        const settled = await settleKitPayment(transaction, parsed.amountInCents);
+        const settled = await settleKitPayment(transaction, parsed);
         if (settled.ok) order = settled.order;
       }
     } catch (error) {

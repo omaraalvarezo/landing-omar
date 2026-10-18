@@ -1,5 +1,6 @@
 import { getSecret } from 'astro:env/server';
 import { Redis } from '@upstash/redis';
+import { getProduct, type ProductId } from './products';
 
 export type KitPaymentStatus = 'CREATED' | 'PENDING' | 'APPROVED' | 'DECLINED' | 'VOIDED' | 'ERROR';
 
@@ -8,7 +9,9 @@ export interface KitOrder {
   id: string;
   environment: 'test' | 'production';
   reference: string;
-  product: 'talleres';
+  product: ProductId;
+  /** Código de país del comprador (lo llena el checkout del sistema). Opcional. */
+  country?: string;
   amountInCents: number;
   currency: 'COP';
   buyerName: string;
@@ -72,10 +75,11 @@ function asOrder(value: unknown): KitOrder | null {
   const parsed = typeof value === 'string' ? (JSON.parse(value) as unknown) : value;
   if (!parsed || typeof parsed !== 'object') return null;
   const order = parsed as KitOrder;
-  if (order.version !== 1 || order.product !== 'talleres' || !isKitOrderId(order.id) || order.environment !== STORE_ENVIRONMENT) {
-    return null;
-  }
-  return order;
+  if (order.version !== 1 || !isKitOrderId(order.id) || order.environment !== STORE_ENVIRONMENT) return null;
+  // Las órdenes anteriores a los productos múltiples no traen `product`: eran del kit.
+  const product = order.product === undefined ? 'talleres' : getProduct(order.product)?.id;
+  if (!product) return null;
+  return { ...order, product };
 }
 
 export function createKitAccessToken(): string {
@@ -123,6 +127,7 @@ export async function consumeKitRateLimit(ip: string): Promise<boolean> {
 export async function createKitOrder(args: {
   id: string;
   reference: string;
+  product: ProductId;
   amountInCents: number;
   buyerName: string;
   email: string;
@@ -132,6 +137,7 @@ export async function createKitOrder(args: {
   if (!isKitOrderId(args.id)) throw new Error('KIT_ORDER_ID_INVALID');
   if (!isKitAccessToken(args.accessToken)) throw new Error('KIT_ACCESS_TOKEN_INVALID');
   if (!Number.isSafeInteger(args.amountInCents) || args.amountInCents <= 0) throw new Error('KIT_ORDER_AMOUNT_INVALID');
+  if (!getProduct(args.product)) throw new Error('KIT_ORDER_PRODUCT_INVALID');
 
   const now = new Date().toISOString();
   const order: KitOrder = {
@@ -139,7 +145,7 @@ export async function createKitOrder(args: {
     id: args.id,
     environment: STORE_ENVIRONMENT,
     reference: args.reference,
-    product: 'talleres',
+    product: args.product,
     amountInCents: args.amountInCents,
     currency: 'COP',
     buyerName: args.buyerName,
@@ -172,7 +178,7 @@ export async function getKitOrderByReference(reference: string): Promise<KitOrde
 }
 
 export async function saveKitOrder(order: KitOrder): Promise<void> {
-  if (!isKitOrderId(order.id) || order.environment !== STORE_ENVIRONMENT || order.product !== 'talleres') {
+  if (!isKitOrderId(order.id) || order.environment !== STORE_ENVIRONMENT || !getProduct(order.product)) {
     throw new Error('KIT_ORDER_INVALID');
   }
   await redis().set(`${storePrefix()}:order:${order.id}`, order);

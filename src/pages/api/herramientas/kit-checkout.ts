@@ -82,6 +82,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     await createKitOrder({
       id: orderId,
       reference,
+      product: 'talleres',
       amountInCents,
       buyerName,
       email,
