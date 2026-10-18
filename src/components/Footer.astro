@@ -6,12 +6,11 @@ import { LEGAL_PAGES } from '../lib/legal';
 const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
 const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
 
-// Secciones vigentes del home: #inicio, #taller, #marco, #sistemas, #sesion, #contacto.
+// Secciones vigentes del home: #inicio, #taller, #sistemas, #sistema-enzo, #escalera, #contacto.
 const NAV_LINKS = [
   { href: anchor('#taller'), label: 'taller' },
-  { href: anchor('#marco'), label: 'marco 4C' },
-  { href: anchor('#sistemas'), label: 'sistemas' },
-  { href: anchor('#sesion'), label: 'sesión' },
+  { href: anchor('#sistemas'), label: 'lo que construí' },
+  { href: '/sistemas', label: 'sistemas' },
   { href: '/recursos', label: 'recursos' },
   { href: '/herramientas-ia', label: 'herramientas' },
   { href: anchor('#contacto'), label: 'contacto' },

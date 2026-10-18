@@ -1,12 +1,13 @@
-// JSON-LD compartido. El grafo completo de Persona/Servicio/WebSite vive solo en el home;
-// las demás páginas apuntan a la persona por su @id con `personRef()`.
+// JSON-LD compartido. El grafo completo de Persona/WebSite vive solo en el home; las demás
+// páginas apuntan a la persona por su @id con `personRef()`. El producto se describe completo en
+// su página de venta; el home solo lo referencia por @id.
 
 import { SOCIALS } from './contact';
 
 export const SITE = 'https://omaralvarezo.co';
 export const PERSON_ID = `${SITE}/#persona`;
-export const SERVICE_ID = `${SITE}/#servicio`;
 export const WEBSITE_ID = `${SITE}/#website`;
+export const SISTEMA_ENZO_PRODUCT_ID = `${SITE}/sistemas/detailing#product`;
 export const SITE_NAME = 'Omar Álvarez';
 export const DEFAULT_OG_IMAGE = '/og-image.png';
 
@@ -31,9 +32,9 @@ export function homeGraph() {
         '@type': 'Person',
         '@id': PERSON_ID,
         name: SITE_NAME,
-        jobTitle: 'Operador y consultor de sistemas para empresas de servicios',
+        jobTitle: 'Operador de Enzo Motorsport y Arkhē',
         description:
-          'Sesiones privadas de 120 minutos para dueños y socios que quieren mejorar captación, CRM, operación o postventa con sistemas e inteligencia artificial.',
+          'Opera Enzo Motorsport y Arkhē con sistemas que construyó, y vende El sistema de Enzo para que un detailing entregue sin olvidos.',
         url: `${SITE}/`,
         image: `${SITE}${DEFAULT_OG_IMAGE}`,
         sameAs: [SOCIALS.tiktok, SOCIALS.instagram, SOCIALS.linkedin],
@@ -48,27 +49,7 @@ export function homeGraph() {
           { '@type': 'EducationalOrganization', name: 'Universidad Pontificia Bolivariana' },
           { '@type': 'EducationalOrganization', name: 'La Salle Barcelona' },
         ],
-      },
-      {
-        '@type': 'ProfessionalService',
-        '@id': SERVICE_ID,
-        name: 'Omar Álvarez · Sistemas e IA para empresas de servicios',
-        url: `${SITE}/`,
-        image: `${SITE}${DEFAULT_OG_IMAGE}`,
-        founder: { '@id': PERSON_ID },
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: 'Cúcuta',
-          addressRegion: 'Norte de Santander',
-          addressCountry: 'CO',
-        },
-        areaServed: ['CO', 'MX', 'PE', 'CL', 'ES'],
-        contactPoint: {
-          '@type': 'ContactPoint',
-          contactType: 'consultoría',
-          url: `${SITE}/#contacto`,
-          availableLanguage: ['es'],
-        },
+        makesOffer: { '@type': 'Offer', itemOffered: { '@id': SISTEMA_ENZO_PRODUCT_ID } },
       },
     ],
   };

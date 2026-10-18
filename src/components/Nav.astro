@@ -10,11 +10,10 @@ const isHome = currentPath === '/' || currentPath === '';
 // Anchors a secciones del home: si estamos en /, usar hash. Si no, prefijar con /.
 const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
 
-// Secciones vigentes del home (#servicios, #casos y #metodo ya no existen).
+// Secciones vigentes del home (#marco, #sesion, #servicios, #casos y #metodo ya no existen).
 const NAV_LINKS = [
-  { href: anchor('#sesion'), label: 'sesión', match: null },
-  { href: anchor('#sistemas'), label: 'sistemas', match: null },
-  { href: anchor('#marco'), label: 'marco 4C', match: null },
+  { href: anchor('#sistemas'), label: 'lo que construí', match: null },
+  { href: '/sistemas', label: 'sistemas', match: '/sistemas' },
   { href: '/recursos', label: 'recursos', match: '/recursos' },
   { href: '/herramientas-ia', label: 'herramientas', match: '/herramientas-ia' },
 ];

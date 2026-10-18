@@ -1,0 +1,322 @@
+---
+// "El sistema de Enzo" en el home: qué resuelve, las 4 piezas en el orden del trabajo y el talón
+// con precio, preventa y garantía. El botón siempre lleva a la página de venta; si no está a la
+// venta, esa página explica "Abre pronto". Aquí no se cobra nada.
+import contenido from '../../data/sistema-enzo-detailing-contenido.json';
+import { bogotaToday } from '../../lib/directory';
+import { formatCop } from '../../lib/money';
+import { getProduct, isProductOnSale } from '../../lib/products';
+import type { SistemaContent, SistemaPiece } from '../../lib/sistema';
+
+const product = getProduct('enzo-detailing');
+if (!product) throw new Error('SISTEMA_ENZO_SIN_PRODUCTO');
+const content = contenido as SistemaContent;
+
+const onSale = isProductOnSale(product, bogotaToday());
+const dueIso = product.presale?.videosDueDate ?? null;
+const dueDate = dueIso
+  ? new Intl.DateTimeFormat('es-CO', { dateStyle: 'long', timeZone: 'America/Bogota' }).format(new Date(`${dueIso}T12:00:00-05:00`))
+  : '';
+const guarantee = product.guaranteeDays;
+const [nameMain, nameTail] = product.name.split(' · ');
+
+// Cada pieza es un estado del trabajo: mismo color que en /sistemas/detailing.
+const PIECE_STATE: Record<SistemaPiece['id'], { color: string; ink: string; failure: string; fix: string }> = {
+  recepcion: { color: '#ff6b45', ink: '#131118', failure: 'El rayón ya estaba. Nadie lo fotografió.', fix: 'Constancia de cómo llegó el carro.' },
+  checklist: { color: '#c79aff', ink: '#131118', failure: 'Se olvidó un paso.', fix: 'Pasos que el equipo marca para que nada se olvide.' },
+  entrega: { color: '#4b5fe3', ink: '#fff8ea', failure: 'El carro salió sin firma.', fix: 'Acta que el cliente acepta y firma.' },
+  seguimiento: { color: '#c8ff3d', ink: '#131118', failure: 'Nadie le volvió a escribir.', fix: '“Ya está listo”, garantía, posventa y pedido de reseña.' },
+};
+
+const pieces = content.pieces.map((piece, index) => ({
+  id: piece.id,
+  title: piece.title,
+  index: String(index + 1).padStart(2, '0'),
+  ...PIECE_STATE[piece.id],
+}));
+
+const presaleText = dueDate
+  ? onSale
+    ? `Al pagar recibes la guía y las plantillas. Los videos llegan antes del ${dueDate}; si no llegan, te devuelvo la plata.`
+    : `La fecha de esta preventa (${dueDate}) ya pasó. No cobro hasta fijar una nueva.`
+  : 'Todavía no fijé la fecha de los videos. Sin fecha no cobro: abre cuando la fecha quede escrita.';
+---
+
+<section class="se" id="sistema-enzo" aria-labelledby="sistema-enzo-title">
+  <header class="se__head">
+    <p class="overline">{nameMain} · {nameTail} · lo opero en Enzo Motorsport</p>
+    <h2 id="sistema-enzo-title">Entregas<br /><span>sin olvidos.</span></h2>
+    <div class="se__text">
+      <p>En Enzo la plata y la confianza no se pierden en el trabajo. Se pierden en la entrega.</p>
+      <p>Esto es lo que hacemos para que no pase, en cuatro piezas y en el orden del trabajo. Lo montas en tu taller sin programar, con herramientas que ya existen.</p>
+    </div>
+  </header>
+
+  <ol class="se__line" aria-label="Las 4 piezas del sistema, en el orden del trabajo">
+    {pieces.map((piece) => (
+      <li class="se__piece" style={`--piece:${piece.color}; --on-piece:${piece.ink}`}>
+        <span class="se__index" aria-hidden="true">{piece.index}</span>
+        <s class="se__failure">{piece.failure}</s>
+        <h3>{piece.title}</h3>
+        <p>{piece.fix}</p>
+      </li>
+    ))}
+  </ol>
+
+  <div class="se__stub">
+    <div class="se__price">
+      <p class="se__label">{onSale ? 'PREVENTA ABIERTA' : 'PREVENTA · ABRE PRONTO'}</p>
+      <strong>{formatCop(product.amountCop)}</strong>
+      <span>aprox. USD {product.usdReference} · pago único, sin mensualidad conmigo.</span>
+    </div>
+    <dl class="se__terms">
+      <div>
+        <dt>Preventa</dt>
+        <dd>{presaleText}</dd>
+      </div>
+      {guarantee && (
+        <div>
+          <dt>Garantía de {guarantee} días</dt>
+          <dd>Si no te sirve, escríbeme en los {guarantee} días siguientes a la compra y dime qué no te sirvió. Te devuelvo la plata; la devolución la hago yo a mano.</dd>
+        </div>
+      )}
+    </dl>
+    <a
+      class="se__button"
+      href={product.page}
+      data-track="escalon_click"
+      data-track-id="sistema-enzo"
+      data-track-placement="sistema-enzo"
+    >
+      <span>
+        <small>{onSale ? 'GUÍA, PLANTILLAS Y VIDEOS' : 'MIRA QUÉ TRAE'}</small>
+        <strong>ver el sistema de Enzo</strong>
+      </span>
+      <i aria-hidden="true">↗</i>
+    </a>
+  </div>
+</section>
+
+<style>
+  .se {
+    padding: clamp(110px, 14vw, 210px) clamp(20px, 5vw, 80px);
+    overflow: hidden;
+    color: var(--ink);
+    background: var(--bone);
+  }
+  /* Los estilos del home son locales a ConsultingLanding: esta sección trae su propia base. */
+  .se *,
+  .se *::before,
+  .se *::after { box-sizing: border-box; }
+  .se h2,
+  .se h3,
+  .se p { margin-top: 0; }
+  .se a { color: inherit; text-decoration: none; }
+  .overline {
+    font-family: var(--data);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .se__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, .7fr);
+    gap: clamp(40px, 8vw, 130px);
+    align-items: end;
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+  .se__head .overline { grid-column: 1 / -1; margin-bottom: 0; color: #7b6f65; }
+  .se__head h2 {
+    margin-bottom: 0;
+    font-family: var(--display);
+    font-size: clamp(54px, 8vw, 122px);
+    font-stretch: 78%;
+    font-weight: 760;
+    line-height: .83;
+    letter-spacing: -.07em;
+  }
+  /* Cobalto profundo: sobre bone da contraste AA para un titular. */
+  .se__head h2 span { color: var(--cobalt); }
+  .se__text { max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; }
+  .se__text p:last-child { margin-bottom: 0; }
+
+  /* Una sola cinta: el carro entra por la izquierda y sale por la derecha. Los cortes entre
+     piezas son el único borde interno; no son tarjetas sueltas. */
+  .se__line {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 1440px;
+    margin: clamp(80px, 10vw, 140px) auto 0;
+    padding: 0;
+    list-style: none;
+    border: 2px solid var(--ink);
+    box-shadow: 10px 10px 0 var(--ink);
+    transform: rotate(-.8deg);
+  }
+  .se__piece {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: clamp(340px, 30vw, 440px);
+    padding: clamp(22px, 2.6vw, 38px);
+    color: var(--on-piece);
+    background: var(--piece);
+  }
+  .se__piece + .se__piece { border-left: 2px solid var(--ink); }
+  .se__piece:nth-child(even) { padding-top: clamp(56px, 5vw, 84px); }
+  .se__piece + .se__piece::before {
+    content: '→';
+    position: absolute;
+    top: 50%;
+    left: -15px;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    color: var(--bone);
+    background: var(--ink);
+    border-radius: 50%;
+    font-family: var(--data);
+    font-size: 12px;
+    transform: translateY(-50%);
+  }
+  .se__index {
+    font-family: var(--display);
+    font-size: clamp(64px, 7vw, 110px);
+    font-stretch: 76%;
+    font-weight: 780;
+    line-height: .8;
+    letter-spacing: -.07em;
+  }
+  .se__failure {
+    margin-top: auto;
+    padding-top: 28px;
+    font-family: var(--data);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: .02em;
+    text-decoration-thickness: 1px;
+  }
+  .se__piece h3 {
+    margin: 14px 0 10px;
+    font-family: var(--display);
+    font-size: clamp(30px, 2.9vw, 44px);
+    font-stretch: 80%;
+    font-weight: 750;
+    line-height: .92;
+    letter-spacing: -.045em;
+  }
+  .se__piece p { margin-bottom: 0; font-size: 15px; line-height: 1.45; }
+
+  /* El talón: lo que cuesta, cuándo llega y qué pasa si no sirve. */
+  .se__stub {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: clamp(28px, 4vw, 64px);
+    align-items: end;
+    max-width: 1300px;
+    margin: clamp(56px, 7vw, 96px) auto 0;
+    padding: clamp(28px, 4vw, 54px) clamp(24px, 4vw, 54px) clamp(28px, 4vw, 54px) clamp(36px, 5vw, 70px);
+    color: var(--bone);
+    background: var(--ink);
+    transform: rotate(.5deg);
+  }
+  .se__stub::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 14px;
+    width: 2px;
+    background: repeating-linear-gradient(var(--bone) 0 6px, transparent 6px 14px);
+    opacity: .35;
+  }
+  .se__label { margin-bottom: 18px; color: var(--lime); font-family: var(--data); font-size: 10px; font-weight: 600; letter-spacing: .14em; }
+  .se__price strong {
+    display: block;
+    font-family: var(--display);
+    font-size: clamp(52px, 5.4vw, 88px);
+    font-stretch: 76%;
+    font-weight: 780;
+    line-height: .82;
+    letter-spacing: -.065em;
+  }
+  .se__price span { display: block; max-width: 30ch; margin-top: 14px; color: rgba(255, 248, 234, .72); font-size: 14px; line-height: 1.45; }
+  .se__terms { margin: 0; }
+  .se__terms div { padding: 14px 0; border-top: 1px solid rgba(255, 248, 234, .2); }
+  .se__terms dt { margin-bottom: 6px; color: var(--sky); font-family: var(--data); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+  .se__terms dd { margin: 0; color: rgba(255, 248, 234, .82); font-size: 14px; line-height: 1.5; }
+
+  .se__button {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+    min-width: 270px;
+    min-height: 84px;
+    padding: 16px 16px 16px 20px;
+    color: var(--ink) !important;
+    background: var(--lime);
+    border: 2px solid var(--ink);
+    border-radius: 18px 18px 18px 4px;
+    box-shadow: 6px 6px 0 var(--coral);
+    transition: transform .26s cubic-bezier(.16, 1, .3, 1), box-shadow .26s ease, background-color .26s ease;
+  }
+  .se__button > span { display: grid; gap: 6px; }
+  .se__button small { font-family: var(--data); font-size: 9px; font-weight: 600; letter-spacing: .1em; }
+  .se__button strong { font-family: var(--display); font-size: clamp(19px, 1.9vw, 24px); line-height: 1; letter-spacing: -.03em; }
+  .se__button i {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--bone);
+    background: var(--ink);
+    border-radius: 50%;
+    font-style: normal;
+    transition: transform .26s cubic-bezier(.16, 1, .3, 1);
+  }
+  .se__button:hover { background: var(--bone); box-shadow: 9px 9px 0 var(--purple); transform: translate(-2px, -2px); }
+  .se__button:hover i { transform: translate(3px, -3px); }
+  .se__button:active { transform: scale(.985); }
+  .se__button:focus-visible { outline: 3px solid var(--lime); outline-offset: 5px; }
+
+  @media (max-width: 1050px) {
+    .se__line { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .se__piece:nth-child(3) { border-left: 0; }
+    .se__piece:nth-child(n + 3) { border-top: 2px solid var(--ink); }
+    .se__piece:nth-child(3)::before { display: none; }
+    .se__piece:nth-child(even) { padding-top: clamp(22px, 2.6vw, 38px); }
+    .se__stub { grid-template-columns: 1fr 1fr; }
+    .se__button { grid-column: 1 / -1; justify-self: start; }
+  }
+
+  @media (max-width: 820px) {
+    .se__head { grid-template-columns: 1fr; align-items: start; }
+    .se__head .overline { grid-column: auto; }
+  }
+
+  @media (max-width: 560px) {
+    .se__head h2 { font-size: clamp(50px, 16vw, 78px); }
+    .se__line { grid-template-columns: 1fr; box-shadow: 6px 6px 0 var(--ink); transform: none; }
+    .se__piece { min-height: 0; }
+    .se__piece + .se__piece { border-left: 0; border-top: 2px solid var(--ink); }
+    .se__piece + .se__piece::before { display: grid; top: -15px; left: 22px; content: '↓'; transform: none; }
+    .se__piece:nth-child(3)::before { display: grid; }
+    .se__failure { margin-top: 18px; padding-top: 0; }
+    .se__stub { grid-template-columns: 1fr; padding-left: 36px; transform: none; }
+    .se__button { justify-self: stretch; min-width: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .se__line,
+    .se__stub { transform: none; }
+    .se__button,
+    .se__button i { transition: none; }
+  }
+</style>
