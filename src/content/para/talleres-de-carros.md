@@ -69,6 +69,8 @@ faqs:
     a: "Mejor no. CapCut sirve para el corte, no para decidir el permiso. Si el cliente no autorizó la pieza, no publiques la placa completa ni su rostro."
 related:
   - detailing
+  - lavaderos-de-carros
+  - venta-de-repuestos
   - responder-whatsapp
 ---
 
@@ -106,4 +108,4 @@ La lista mínima es el repuesto, cuántos hay y a partir de qué número se comp
 
 ## Lo que no está en el directorio
 
-No hay aquí un programa de taller que una la orden, el repuesto y la factura. Si el taller ya tiene uno, estas herramientas no lo botan: cubren el texto, el WhatsApp, el tablero y el recordatorio. El detalle de un negocio de estética está en la [guía de detailing](/herramientas-ia/para/detailing).
+No hay aquí un programa de taller que una la orden, el repuesto y la factura. Si el taller ya tiene uno, estas herramientas no lo botan: cubren el texto, el WhatsApp, el tablero y el recordatorio. El detalle de un negocio de estética está en la [guía de detailing](/herramientas-ia/para/detailing). Si el negocio es un lavadero, sigue en la [guía de lavaderos](/herramientas-ia/para/lavaderos-de-carros). Si vendes la pieza en el mostrador, sigue en la [guía de repuestos](/herramientas-ia/para/venta-de-repuestos).

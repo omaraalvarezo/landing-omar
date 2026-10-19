@@ -62,7 +62,7 @@
   {
     "slug": "notebooklm",
     "nombre": "Gemini Notebook",
-    "url": "https://notebook.google",
+    "url": "https://notebook.google.com",
     "categoria": "investigacion",
     "desc": "Antes NotebookLM. Responde sobre tus propios documentos y cita la fuente.",
     "featured": false,
@@ -418,5 +418,29 @@
     "sponsor": false,
     "sponsorUntil": null,
     "added": "2026-10-17"
+  },
+  {
+    "slug": "photoroom",
+    "nombre": "Photoroom",
+    "url": "https://www.photoroom.com",
+    "categoria": "diseno",
+    "desc": "Editor de fotos de producto con IA: quita el fondo, aplica la marca y exporta la imagen de una ficha o de un anuncio.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-10-19"
+  },
+  {
+    "slug": "higgsfield",
+    "nombre": "Higgsfield",
+    "url": "https://higgsfield.ai",
+    "categoria": "video",
+    "desc": "Suite para generar imagen y video con IA. La portada muestra modelos de video corto, cine y un agente creativo.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-10-19"
   }
 ]

@@ -6,7 +6,7 @@ tags: [directorio, contenido, newsletter, seo]
 fuentes:
   - "[[wiki/decisiones/directorio-herramientas-ia]]"
 creado: 2026-10-16
-actualizado: 2026-10-16
+actualizado: 2026-10-19
 ---
 
 # Rutina editorial del directorio de IA
@@ -38,6 +38,22 @@ el cuerpo y pasar `npm run content:check`.
 - Una noticia enlaza la guía “para” que le corresponde. La ficha de la herramienta muestra esas notas al revés.
 - Precios de un tercero se fechan. Si la fuente no trae el precio, el campo dice que no está publicado.
 - No se publica en TikTok, Instagram, X ni LinkedIn de Omar sin un pedido explícito de esa pieza.
+
+## Fuentes de la edición del 19 oct 2026
+
+Esas notas están en el repositorio. La siguiente edición vuelve a abrir la página, no el resumen:
+
+- Google, 15 oct 2026: `https://blog.google/products-and-platforms/products/search/updates-ai-mode-overviews-explore-web/`
+- Notion, 16 oct 2026: `https://www.notion.com/blog/how-we-connected-notion-ai-to-160-new-apps-in-three-weeks`
+- Google, 13 oct 2026: `https://blog.google/innovation-and-ai/products/gemini-app/gemini-4-argon-availability/`
+- Google, 16 oct 2026: `https://blog.google/innovation-and-ai/products/gemini-notebook/three-tips-study-gemini-notebook/`
+- OpenAI, 13 oct 2026: `https://openai.com/index/higgsfield-longer-videos-voice`
+- OpenAI, 16 oct 2026: `https://openai.com/index/itau-generative-ai`
+- HubSpot, Agent Hub, consultada el 19 oct 2026: `https://www.hubspot.com/products/artificial-intelligence`
+- Photoroom, precios consultados el 19 oct 2026: `https://www.photoroom.com/pricing`
+- Higgsfield, portada consultada el 19 oct 2026: `https://higgsfield.ai/`
+
+Gemini Notebook en el directorio apunta a `https://notebook.google.com`. `https://notebook.google` responde sin título de producto y no es la URL canónica.
 
 ## Fuentes de la edición del 16 oct 2026
 

@@ -71,6 +71,7 @@ faqs:
     a: "El seguimiento y la cotización sí. El antes y después pesa más en detailing. La guía de talleres de carros está armada para bahía, repuesto y mantenimiento, no para estética."
 related:
   - talleres-de-carros
+  - lavaderos-de-carros
   - contenido-para-redes
 ---
 
@@ -106,4 +107,4 @@ La lista es el producto, cuántas unidades hay y el mínimo para comprar. Notion
 
 ## Lo que no hace esta página
 
-No elige química, no mide pintura y no llena la agenda por arte de magia. Si el negocio es un taller mecánico y el cuello de botella es el repuesto o la bahía, sigue en la [guía de talleres de carros](/herramientas-ia/para/talleres-de-carros).
+No elige química, no mide pintura y no llena la agenda por arte de magia. Si el negocio es un taller mecánico y el cuello de botella es el repuesto o la bahía, sigue en la [guía de talleres de carros](/herramientas-ia/para/talleres-de-carros). Si es un lavadero y el cuello de botella es la fila, sigue en la [guía de lavaderos](/herramientas-ia/para/lavaderos-de-carros).

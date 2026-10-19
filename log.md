@@ -662,3 +662,9 @@ Todavía no se carga el script de anuncios ni cambia la CSP real.
 - Pendiente de Omar antes de vender: fijar `videosDueDate`, aprobar guía y plantillas, confirmar
   tarjetas de fuera con Wompi y poner `acceptsForeignCards`, armar los 3 formularios de Jotform,
   y verificar `/_vercel/insights/script.js` detrás de Cloudflare tras el deploy.
+
+---
+
+## 2026-10-19 — Tanda editorial del directorio
+
+Edición semanal de `/herramientas-ia`. Cinco noticias (búsqueda de Google del 15 oct, conexiones de Notion del 16 oct, tareas de Gemini del 13 oct, Gemini Notebook del 16 oct, Higgsfield en OpenAI del 13 oct), cinco guías (lavaderos, repuestos, barberías, restaurantes, cobrar), herramienta de la semana Gemini, comparativa Notion frente a HubSpot, caso Itaú y prompts del 19 oct. Entran Photoroom y Higgsfield, con ficha. La URL de Gemini Notebook pasa de `https://notebook.google` a `https://notebook.google.com`.

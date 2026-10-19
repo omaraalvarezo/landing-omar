@@ -10,7 +10,7 @@ Catálogo plano del conocimiento del proyecto. Una línea por página `wiki/` y 
 
 - [[wiki/decisiones/sistema-de-enzo]] — 2026-10-17 — v4.0: el sistema de Enzo, escalera, lista de espera y §11.
 - [[wiki/decisiones/ofertas-directorio-herramientas-ia]] — 2026-10-16 — PDF de prompts, kit de talleres y calculadoras.
-- [[wiki/decisiones/rutina-editorial-herramientas-ia]] — 2026-10-16 — cómo el agente publica guías, noticias y prompts del directorio.
+- [[wiki/decisiones/rutina-editorial-herramientas-ia]] — 2026-10-19 — cómo el agente publica guías, noticias y prompts del directorio.
 - [[wiki/decisiones/directorio-herramientas-ia]] — 2026-10-16 — directorio, planes COP, Wompi y activación por datos.
 - [[wiki/decisiones/sistema-vivo-control-room]] — 2026-08-20 — dirección de arte, voz, color y motion vigentes del home.
 - [[wiki/decisiones/tipografia-3-familias-landing]] — 2026-05-11 — sistema editorial histórico; superado para el home en v3.3.
