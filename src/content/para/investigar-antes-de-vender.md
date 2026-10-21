@@ -1,6 +1,6 @@
 ---
 title: IA para investigar antes de vender
-description: "Antes de una llamada comercial, Perplexity y Gemini Notebook (antes NotebookLM) sirven para leer fuentes, y Apollo.io y HubSpot para ordenar el prospecto en el directorio. La ficha que salga hay que contrastarla: ninguna de estas herramientas verifica sola al cliente."
+description: "Antes de una llamada, Perplexity y Gemini Notebook (antes NotebookLM) sirven para leer fuentes. Apollo.io y HubSpot ordenan el prospecto. La ficha hay que contrastarla: ninguna verifica sola al cliente."
 published: 2026-10-16
 tools:
   - perplexity

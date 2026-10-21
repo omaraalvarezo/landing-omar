@@ -1,14 +1,14 @@
 ---
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import DirectoryTaskLinks from '../../../components/directory/DirectoryTaskLinks.astro';
 import NewsletterSlot from '../../../components/directory/NewsletterSlot.astro';
 import { collectionNode, newsPath, publishedNews, SITE } from '../../../lib/editorial';
 import { formatDirectoryDate } from '../../../lib/directory';
+import { hubSeo } from '../../../lib/directory-seo';
 
 const entries = await publishedNews();
 const editions = [...new Set(entries.map((entry) => entry.data.edition))].sort((a, b) => b.localeCompare(a));
-const description =
-  'Noticias de IA para pymes, en una nota semanal. Cada una trae un resumen propio, qué significa para el negocio y el enlace a la fuente.';
-const title = 'Noticias de IA para pymes';
+const { title, lead: description } = hubSeo('noticias');
 const jsonLd = collectionNode({
   url: `${SITE}${newsPath()}`,
   name: title,
@@ -24,6 +24,7 @@ const jsonLd = collectionNode({
   crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Noticias' }]}
   jsonLd={jsonLd}
 >
+  <DirectoryTaskLinks current="/herramientas-ia/noticias" />
   {editions.map((edition) => (
     <section>
       <h2 class="block-title">Edición del {formatDirectoryDate(edition)}</h2>

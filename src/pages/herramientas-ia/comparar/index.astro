@@ -2,11 +2,10 @@
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
 import { collectionNode, comparePath, publishedComparisons, SITE, toolsOf } from '../../../lib/editorial';
 import { formatDirectoryDate } from '../../../lib/directory';
+import { hubSeo } from '../../../lib/directory-seo';
 
 const entries = await publishedComparisons();
-const description =
-  'Comparativas de dos herramientas del directorio. La tabla usa solo lo que dice la fuente oficial en la fecha marcada. Sin puntajes inventados.';
-const title = 'Comparar herramientas de IA';
+const { title, lead: description } = hubSeo('comparar');
 const jsonLd = collectionNode({
   url: `${SITE}${comparePath()}`,
   name: title,

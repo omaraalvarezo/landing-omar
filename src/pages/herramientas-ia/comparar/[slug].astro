@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
 import { articleNode, breadcrumb, comparePath, publicEntries, SITE, softwareNodes, toolsOf, type CompareEntry } from '../../../lib/editorial';
+import { pageTitle } from '../../../lib/directory-seo';
 import { formatDirectoryDate } from '../../../lib/directory';
 
 export async function getStaticPaths() {
@@ -17,7 +18,7 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const [left, right] = toolsOf([entry.data.left, entry.data.right]);
 const url = `${SITE}${comparePath(entry.id)}`;
-const documentTitle = `${entry.data.title} — comparativa`;
+const documentTitle = pageTitle(entry.data.title, ' — comparativa');
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [

@@ -1,6 +1,6 @@
 ---
 title: ChatGPT frente a Claude
-description: "ChatGPT y Claude no se comparan aquí con un puntaje. Al 16 oct 2026, la diferencia usable es esta: ChatGPT acaba de anunciar respuestas visuales en el chat, y Anthropic publicó precios de API para Haiku 5.5. Cada ficha está en el directorio."
+description: "Al 16 oct 2026 ChatGPT anuncia respuestas visuales y Anthropic publicó el precio de API de Haiku 5.5. Aquí no hay puntaje: cada ficha está en el directorio."
 published: 2026-10-16
 checked: 2026-10-16
 left: chatgpt

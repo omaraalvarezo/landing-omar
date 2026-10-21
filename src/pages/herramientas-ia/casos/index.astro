@@ -1,12 +1,12 @@
 ---
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import DirectoryTaskLinks from '../../../components/directory/DirectoryTaskLinks.astro';
 import { casePath, collectionNode, publishedCases, SITE } from '../../../lib/editorial';
 import { formatDirectoryDate } from '../../../lib/directory';
+import { hubSeo } from '../../../lib/directory-seo';
 
 const entries = await publishedCases();
-const description =
-  'Casos de uso reales de IA en un negocio, contados con palabras propias y con la fuente enlazada. Si una cifra no está en la fuente, no aparece.';
-const title = 'Casos de uso de IA en negocios';
+const { title, lead: description } = hubSeo('casos');
 const jsonLd = collectionNode({
   url: `${SITE}${casePath()}`,
   name: title,
@@ -22,6 +22,7 @@ const jsonLd = collectionNode({
   crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Casos' }]}
   jsonLd={jsonLd}
 >
+  <DirectoryTaskLinks current="/herramientas-ia/casos" />
   <nav class="entries" aria-label="Casos">
     {entries.map((entry) => (
       <a class="entry" href={casePath(entry.id)}>

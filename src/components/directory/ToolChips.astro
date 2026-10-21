@@ -1,13 +1,22 @@
 ---
-import type { Tool } from '../../lib/directory';
+import { categoryLabel, categoryPath, type Tool } from '../../lib/directory';
 
 interface Props {
   tools: Tool[];
+  showCategories?: boolean;
 }
-const { tools } = Astro.props;
+const { tools, showCategories = true } = Astro.props;
+const categories = [...new Map(tools.map((tool) => [tool.categoria, categoryLabel(tool.categoria)])).entries()];
 ---
 <ul class="chips">
   {tools.map((tool) => (
     <li><a href={`/herramientas-ia/${tool.slug}`}>{tool.nombre}</a></li>
   ))}
 </ul>
+{showCategories && categories.length > 0 && (
+  <ul class="chips">
+    {categories.map(([slug, label]) => (
+      <li><a href={categoryPath(slug)}>{label}</a></li>
+    ))}
+  </ul>
+)}

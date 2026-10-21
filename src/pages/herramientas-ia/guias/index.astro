@@ -1,11 +1,11 @@
 ---
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import DirectoryTaskLinks from '../../../components/directory/DirectoryTaskLinks.astro';
 import { collectionNode, guideSections, SITE } from '../../../lib/editorial';
+import { hubSeo } from '../../../lib/directory-seo';
 
 const sections = await guideSections();
-const description =
-  'Guías en español para usar IA en una pyme: tareas, noticias con fuente, prompts, comparativas, casos y la herramienta de la semana. Cada pieza enlaza el directorio.';
-const title = 'Guías de IA para pymes — Omar Álvarez';
+const { title, lead: description } = hubSeo('guias');
 const jsonLd = collectionNode({
   url: `${SITE}/herramientas-ia/guias`,
   name: title,
@@ -22,6 +22,7 @@ const jsonLd = collectionNode({
   jsonLd={jsonLd}
   newsletter
 >
+  <DirectoryTaskLinks current="/herramientas-ia/guias" />
   <nav class="entries" aria-label="Secciones">
     {sections.map((section) => (
       <a class="entry" href={section.href}>

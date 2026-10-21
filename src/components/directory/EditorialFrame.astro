@@ -4,6 +4,7 @@ import DirectoryChrome from './DirectoryChrome.astro';
 import JsonLd from './JsonLd.astro';
 import NewsletterSlot from './NewsletterSlot.astro';
 import { formatDirectoryDate } from '../../lib/directory';
+import { clipMeta } from '../../lib/directory-seo';
 
 interface Crumb {
   href?: string;
@@ -24,7 +25,7 @@ interface Props {
 
 const { documentTitle, description, kicker, heading, published, sourceDate, crumbs, jsonLd, newsletter = false } = Astro.props;
 ---
-<Layout title={documentTitle} description={description} showNav={false} minimal themeColor="#FFF8EA" rss>
+<Layout title={documentTitle} description={clipMeta(description)} showNav={false} minimal themeColor="#FFF8EA" rss>
   <DirectoryChrome active="guias">
     <nav class="crumb" aria-label="Miga de pan">
       <a href="/herramientas-ia">Herramientas</a>

@@ -15,6 +15,7 @@ import {
   toolsOf,
   type CaseEntry,
 } from '../../../lib/editorial';
+import { pageTitle } from '../../../lib/directory-seo';
 
 export async function getStaticPaths() {
   const entries = publicEntries(await getCollection('casos'));
@@ -30,7 +31,7 @@ const { Content } = await render(entry);
 const tools = toolsOf(entry.data.tools);
 const paras = requireRelated(entry.data.para, await publishedPara(), entry.id);
 const url = `${SITE}${casePath(entry.id)}`;
-const documentTitle = `${entry.data.title} — caso de uso`;
+const documentTitle = pageTitle(entry.data.title, ' — caso de uso');
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [

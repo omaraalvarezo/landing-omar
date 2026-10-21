@@ -23,6 +23,7 @@ import {
   toolsOf,
   type ParaEntry,
 } from '../../../lib/editorial';
+import { pageTitle } from '../../../lib/directory-seo';
 
 export async function getStaticPaths() {
   const entries = publicEntries(await getCollection('para'));
@@ -47,7 +48,7 @@ const news = await newsForPara(entry.id);
 const sistema = (await publishedSistemas()).find((item) => item.data.oficio === entry.id) ?? null;
 const sistemaProduct = sistema ? getProduct(sistema.data.product) : null;
 const url = `${SITE}${paraPath(entry.id)}`;
-const documentTitle = `${entry.data.title} — guía para pymes`;
+const documentTitle = pageTitle(entry.data.title, ' — guía para pymes');
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [

@@ -12,6 +12,7 @@ import {
   weekPath,
   type WeekEntry,
 } from '../../../lib/editorial';
+import { pageTitle } from '../../../lib/directory-seo';
 
 export async function getStaticPaths() {
   const entries = publicEntries(await getCollection('semana'));
@@ -28,7 +29,7 @@ const tool = toolsOf([entry.data.tool])[0];
 const alternatives = toolsOf(entry.data.alternatives);
 const sponsor = entry.data.sponsorName.trim() && entry.data.sponsorUrl.startsWith('https://');
 const url = `${SITE}${weekPath(entry.id)}`;
-const documentTitle = `${entry.data.title} — herramienta de la semana`;
+const documentTitle = pageTitle(entry.data.title, ' — herramienta de la semana');
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -70,7 +71,7 @@ const jsonLd = {
   <h2 class="block-title">Veredicto</h2>
   <p class="prose">{entry.data.verdict}</p>
   <h2 class="block-title">Alternativas en el directorio</h2>
-  <ToolChips tools={alternatives} />
+  <ToolChips tools={alternatives} showCategories={false} />
   {sponsor ? (
     <aside class="sponsor sponsor--live">
       <h2 class="block-title">Patrocinador</h2>

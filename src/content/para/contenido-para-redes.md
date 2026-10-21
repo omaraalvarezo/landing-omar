@@ -1,6 +1,6 @@
 ---
 title: IA para contenido de redes
-description: "Un video o una pieza para redes sale con cuatro herramientas de este directorio: CapCut para editar, Canva para la pieza gráfica, ChatGPT para el texto y Gamma si el mismo tema tiene que volver como documento. Ninguna publica sola."
+description: "Un video o una pieza para redes sale con cuatro herramientas de este directorio. CapCut edita, Canva arma la pieza, ChatGPT escribe el texto y Gamma lo vuelve documento. Ninguna publica sola."
 published: 2026-10-16
 tools:
   - capcut
