@@ -2,11 +2,10 @@
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
 import { collectionNode, publishedWeeks, SITE, toolsOf, weekPath } from '../../../lib/editorial';
 import { formatDirectoryDate } from '../../../lib/directory';
+import { hubSeo } from '../../../lib/directory-seo';
 
 const entries = await publishedWeeks();
-const description =
-  'Una herramienta del directorio por semana, con cinco pasos para probarla en una tarea real y un espacio para el patrocinador.';
-const title = 'Herramienta de la semana — IA para pymes';
+const { title, lead: description } = hubSeo('semana');
 const jsonLd = collectionNode({
   url: `${SITE}${weekPath()}`,
   name: title,

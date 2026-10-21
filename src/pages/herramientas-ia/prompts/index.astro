@@ -1,14 +1,14 @@
 ---
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
+import DirectoryTaskLinks from '../../../components/directory/DirectoryTaskLinks.astro';
 import GuideOffers from '../../../components/directory/GuideOffers.astro';
 import NewsletterSlot from '../../../components/directory/NewsletterSlot.astro';
 import { collectionNode, promptsPath, publishedPrompts, SITE } from '../../../lib/editorial';
 import { formatDirectoryDate } from '../../../lib/directory';
+import { hubSeo } from '../../../lib/directory-seo';
 
 const entries = await publishedPrompts();
-const description =
-  'Prompts listos para adaptar en ventas, atención, contenido y finanzas. Cada uno se copia con un botón. Son borradores de trabajo, no una promesa de resultado.';
-const title = 'Prompts de IA por rol para pymes';
+const { title, lead: description } = hubSeo('prompts');
 const jsonLd = collectionNode({
   url: `${SITE}${promptsPath()}`,
   name: title,
@@ -24,6 +24,7 @@ const jsonLd = collectionNode({
   crumbs={[{ href: '/herramientas-ia/guias', label: 'Guías' }, { label: 'Prompts' }]}
   jsonLd={jsonLd}
 >
+  <DirectoryTaskLinks current="/herramientas-ia/prompts" />
   <nav class="entries" aria-label="Paquetes de prompts">
     {entries.map((entry) => (
       <a class="entry" href={promptsPath(entry.id)}>

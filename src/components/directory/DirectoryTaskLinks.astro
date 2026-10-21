@@ -1,0 +1,21 @@
+---
+import { TASK_LINKS } from '../../lib/directory-seo';
+
+interface Props {
+  current?: string;
+}
+
+const { current } = Astro.props;
+const links = TASK_LINKS.filter((link) => link.href !== current);
+---
+
+<nav aria-label="Para elegir">
+  <div class="tool-group">
+    <h2>Para elegir</h2>
+  </div>
+  <ul class="chips">
+    {links.map((link) => (
+      <li><a href={link.href}>{link.label}</a></li>
+    ))}
+  </ul>
+</nav>

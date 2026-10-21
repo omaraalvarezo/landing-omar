@@ -668,3 +668,9 @@ Todavía no se carga el script de anuncios ni cambia la CSP real.
 ## 2026-10-19 — Tanda editorial del directorio
 
 Edición semanal de `/herramientas-ia`. Cinco noticias (búsqueda de Google del 15 oct, conexiones de Notion del 16 oct, tareas de Gemini del 13 oct, Gemini Notebook del 16 oct, Higgsfield en OpenAI del 13 oct), cinco guías (lavaderos, repuestos, barberías, restaurantes, cobrar), herramienta de la semana Gemini, comparativa Notion frente a HubSpot, caso Itaú y prompts del 19 oct. Entran Photoroom y Higgsfield, con ficha. La URL de Gemini Notebook pasa de `https://notebook.google` a `https://notebook.google.com`.
+
+---
+
+## 2026-10-21 — SEO y respuestas citables del directorio
+
+Títulos y metas únicos en el índice, las 12 categorías y las secciones de guías. FAQ con `FAQPage` en el índice y en cada categoría. Párrafo de respuesta al inicio (qué es, para quién, cuál elegir). Enlaces entre categorías, guías y fichas. `llms.txt` describe el directorio y lista las páginas para elegir. La meta de las piezas largas usa las primeras frases completas; el párrafo visible no se recorta. No se tocó Wompi, `/admin` ni la consultoría.

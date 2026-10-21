@@ -6,7 +6,7 @@ tags: [directorio, contenido, newsletter, seo]
 fuentes:
   - "[[wiki/decisiones/directorio-herramientas-ia]]"
 creado: 2026-10-16
-actualizado: 2026-10-19
+actualizado: 2026-10-21
 ---
 
 # Rutina editorial del directorio de IA
@@ -30,7 +30,7 @@ el cuerpo y pasar `npm run content:check`.
 
 ## Cómo se escribe
 
-- El primer párrafo es la respuesta. En estas plantillas ese párrafo es `description`.
+- El primer párrafo visible es la respuesta. En estas plantillas ese párrafo es `description`. Si pasa de 160 caracteres, la meta description usa las primeras frases completas que quepan; el párrafo de la página no se recorta.
 - Cada pieza lleva `published`. Si hay un anuncio, `sourceDate` es el día de la fuente, no el día en que el agente la leyó.
 - Una cifra solo entra si está en la página enlazada. Al lado va de quién es. No se convierte en una promesa para otra empresa.
 - Se resume con palabras propias. Una cita corta alcanza. No se copian imágenes ni párrafos.

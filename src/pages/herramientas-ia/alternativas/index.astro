@@ -2,11 +2,10 @@
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
 import { alternativesPath, collectionNode, publishedAlternatives, SITE, toolsOf } from '../../../lib/editorial';
 import { formatDirectoryDate } from '../../../lib/directory';
+import { hubSeo } from '../../../lib/directory-seo';
 
 const entries = await publishedAlternatives();
-const description =
-  'Páginas de alternativas a una herramienta del directorio. Cada opción es otra ficha real, con la fecha en que se armó la lista.';
-const title = 'Alternativas a herramientas de IA';
+const { title, lead: description } = hubSeo('alternativas');
 const jsonLd = collectionNode({
   url: `${SITE}${alternativesPath()}`,
   name: title,

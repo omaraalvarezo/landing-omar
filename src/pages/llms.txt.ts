@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
-import { getCategories, getTools } from '../lib/directory';
+import { categoryPath, getCategories, getTools } from '../lib/directory';
+import { categorySeo, DIRECTORY_INDEX, hubSeo, TASK_LINKS } from '../lib/directory-seo';
 import {
   alternativesPath,
   casePath,
@@ -43,9 +44,23 @@ export const GET: APIRoute = async () => {
 
   const categories = getCategories();
   const tools = getTools();
+  const hubLead = new Map<string, string>([
+    [paraPath(), hubSeo('para').lead],
+    [newsPath(), hubSeo('noticias').lead],
+    [promptsPath(), hubSeo('prompts').lead],
+    [weekPath(), hubSeo('semana').lead],
+    [comparePath(), hubSeo('comparar').lead],
+    [alternativesPath(), hubSeo('alternativas').lead],
+    [casePath(), hubSeo('casos').lead],
+    [trendPath(), hubSeo('tendencias').lead],
+  ]);
   const body = `# Omar Álvarez — herramientas de IA para pymes
 
-> Directorio y guías en español. El primer párrafo de cada pieza es la respuesta directa. Las cifras citan la fuente y la fecha. No hay llamada gratuita ni paquetes de consultoría en estas páginas; hoy no se ofrecen sesiones ni instalaciones, solo una lista de espera.
+> ${DIRECTORY_INDEX.lead} El primer párrafo de cada pieza es la respuesta directa. Las cifras citan la fuente y la fecha. No hay llamada gratuita ni paquetes de consultoría en estas páginas; hoy no se ofrecen sesiones ni instalaciones, solo una lista de espera.
+
+## Para elegir
+
+${TASK_LINKS.map((link) => line(link.label, link.href, link.note)).join('\n')}
 
 ## Sistemas
 
@@ -54,7 +69,7 @@ ${sistemas.map((entry) => line(entry.data.title, sistemaPath(entry.id), entry.da
 
 ## Directorio
 
-${line('Herramientas de IA', '/herramientas-ia', 'Lista de herramientas para pymes, con buscador y destacados primero.')}
+${line('Herramientas de IA', '/herramientas-ia', DIRECTORY_INDEX.lead)}
 ${line('PDF de prompts', '/herramientas-ia/prompts-gratis', 'Cuarenta prompts para talleres, detailing y pymes. El PDF se entrega después del correo.')}
 ${line('Kit de IA', '/herramientas-ia/kit', 'Prompts, mensajes de WhatsApp, flujos y CSV. Pago único en COP.')}
 ${line('Calculadoras', '/herramientas-ia/recursos', 'Ahorro, reseñas y cotizador de detailing. Los números los escribe el visitante.')}
@@ -62,12 +77,13 @@ ${line('Calculadora de ahorro', '/herramientas-ia/recursos/ahorro', 'Tiempo y di
 ${line('Respuestas a reseñas', '/herramientas-ia/recursos/resenas', 'Plantillas en el navegador. No usan una API de modelo.')}
 ${line('Cotizador de detailing', '/herramientas-ia/recursos/cotizador-detailing', 'Suma de precios escritos por el visitante. Sin tarifas precargadas.')}
 ${line('Destacar una herramienta', '/herramientas-ia/destacar', 'Planes de listado en COP. El pago no publica solo.')}
-${categories.map((category) => line(category.label, `/herramientas-ia/categoria/${category.slug}`, `Categoría ${category.label}.`)).join('\n')}
+${categories.map((category) => line(category.label, categoryPath(category.slug), categorySeo(category.slug).lead)).join('\n')}
 ${tools.map((tool) => line(tool.nombre, `/herramientas-ia/${tool.slug}`, tool.desc)).join('\n')}
 
 ## Guías
 
-${sections.map((section) => line(section.label, section.href, section.text)).join('\n')}
+${line('Guías', '/herramientas-ia/guias', hubSeo('guias').lead)}
+${sections.map((section) => line(section.label, section.href, hubLead.get(section.href) ?? section.text)).join('\n')}
 ${paras.map((entry) => line(entry.data.title, paraPath(entry.id), entry.data.description)).join('\n')}
 ${news.map((entry) => line(entry.data.title, newsPath(entry.id), entry.data.description)).join('\n')}
 ${prompts.map((entry) => line(entry.data.title, promptsPath(entry.id), entry.data.description)).join('\n')}

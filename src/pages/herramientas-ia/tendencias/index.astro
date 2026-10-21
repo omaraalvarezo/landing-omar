@@ -2,11 +2,10 @@
 import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
 import { collectionNode, publishedTrends, SITE, trendPath } from '../../../lib/editorial';
 import { formatDirectoryDate } from '../../../lib/directory';
+import { hubSeo } from '../../../lib/directory-seo';
 
 const entries = await publishedTrends();
-const description =
-  'Tendencias del mes para una pyme que usa IA. Salen de las fuentes enlazadas. No hay conteos de redes ni de foros si nadie los midió aquí.';
-const title = 'Tendencias de IA del mes para pymes';
+const { title, lead: description } = hubSeo('tendencias');
 const jsonLd = collectionNode({
   url: `${SITE}${trendPath()}`,
   name: title,

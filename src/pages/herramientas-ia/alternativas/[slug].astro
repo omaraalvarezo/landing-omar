@@ -13,6 +13,7 @@ import {
   type AlternativeEntry,
 } from '../../../lib/editorial';
 import { formatDirectoryDate } from '../../../lib/directory';
+import { pageTitle } from '../../../lib/directory-seo';
 
 export async function getStaticPaths() {
   const entries = publicEntries(await getCollection('alternativas'));
@@ -28,7 +29,7 @@ const { Content } = await render(entry);
 const instead = toolsOf([entry.data.insteadOf])[0];
 const alternatives = toolsOf(entry.data.alternatives);
 const url = `${SITE}${alternativesPath(entry.id)}`;
-const documentTitle = `${entry.data.title} — alternativas`;
+const documentTitle = pageTitle(entry.data.title, ' — alternativas');
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -64,5 +65,5 @@ const jsonLd = {
   <h2 class="block-title">En vez de {instead.nombre}</h2>
   <ToolChips tools={[instead]} />
   <h2 class="block-title">Otras fichas</h2>
-  <ToolChips tools={alternatives} />
+  <ToolChips tools={alternatives} showCategories={false} />
 </EditorialFrame>

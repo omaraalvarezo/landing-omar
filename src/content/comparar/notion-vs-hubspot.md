@@ -1,6 +1,6 @@
 ---
 title: Notion frente a HubSpot
-description: "Notion y HubSpot no se comparan aquí con un puntaje. Al 19 oct 2026, Notion dice que HubSpot es una de sus conexiones nuevas, y HubSpot describe Agent Hub como agentes sobre el CRM, incluido en Starter, Professional y Enterprise."
+description: "Al 19 oct 2026 Notion cuenta a HubSpot entre sus conexiones nuevas. HubSpot describe Agent Hub como agentes sobre el CRM, en Starter, Professional y Enterprise. Aquí no hay puntaje."
 published: 2026-10-19
 checked: 2026-10-19
 left: notion

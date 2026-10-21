@@ -1,6 +1,6 @@
 ---
 title: Gemini 4 Argon sale con precio de entrada fechado
-description: El 13 oct 2026 Google abrió Gemini 4 Argon en la API de pago. Hasta el 30 nov 2026 el precio de entrada es USD 2 por millón de tokens de entrada y USD 10 de salida. Después, USD 4 y USD 20.
+description: "El 13 oct 2026 Google abrió Gemini 4 Argon en la API de pago, con un precio de entrada fechado. Hasta el 30 nov 2026 son USD 2 por millón de tokens de entrada y USD 10 de salida. Después, USD 4 y USD 20."
 published: 2026-10-16
 edition: 2026-10-16
 sourceDate: 2026-10-13

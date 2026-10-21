@@ -15,6 +15,7 @@ import {
   type Tool,
 } from '../../lib/directory';
 import { piecesForTool } from '../../lib/editorial';
+import { toolMeta } from '../../lib/directory-seo';
 
 export function getStaticPaths() {
   return getTools().map((tool) => ({ params: { slug: tool.slug }, props: { tool } }));
@@ -38,7 +39,7 @@ const featured = isLiveFeatured(tool);
 const site = 'https://omaralvarezo.co';
 const pageUrl = `${site}/herramientas-ia/${tool.slug}`;
 const title = `${tool.nombre}: IA para ${label.toLowerCase()} en pymes`;
-const description = `${tool.desc} Ficha del directorio de herramientas de IA para pymes de Omar Álvarez.`;
+const description = toolMeta(tool.desc, label);
 
 const jsonLd = {
   '@context': 'https://schema.org',

@@ -3,11 +3,14 @@ import Layout from '../../../layouts/Layout.astro';
 import DirectoryChrome from '../../../components/directory/DirectoryChrome.astro';
 import ToolList from '../../../components/directory/ToolList.astro';
 import {
+  categoryLabel,
   categoryPath,
   getCategories,
   getToolsByCategory,
   type ToolCategory,
 } from '../../../lib/directory';
+import { faqNode, guidesForCategory } from '../../../lib/editorial';
+import { categorySeo, clipMeta } from '../../../lib/directory-seo';
 
 export function getStaticPaths() {
   return getCategories()
@@ -22,10 +25,12 @@ interface Props {
 const { category } = Astro.props;
 const tools = getToolsByCategory(category.slug);
 const others = getCategories().filter((item) => item.slug !== category.slug);
+const seo = categorySeo(category.slug);
+const guides = await guidesForCategory(category.slug);
 const site = 'https://omaralvarezo.co';
 const pageUrl = `${site}${categoryPath(category.slug)}`;
-const title = `IA para ${category.label.toLowerCase()} en pymes — herramientas`;
-const description = `${tools.length} herramientas de IA para ${category.label.toLowerCase()} en pymes. Directorio en español de Omar Álvarez, con destacados primero.`;
+const title = seo.title;
+const description = clipMeta(seo.lead);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -33,7 +38,7 @@ const jsonLd = {
     {
       '@type': 'CollectionPage',
       name: title,
-      description,
+      description: seo.lead,
       inLanguage: 'es',
       url: pageUrl,
       isPartOf: { '@type': 'WebSite', name: 'Omar Álvarez', url: site },
@@ -56,6 +61,7 @@ const jsonLd = {
         { '@type': 'ListItem', position: 3, name: category.label, item: pageUrl },
       ],
     },
+    faqNode(pageUrl, seo.faqs),
   ],
 };
 ---
@@ -69,9 +75,19 @@ const jsonLd = {
     </nav>
     <p class="dir-kicker">Categoría · {tools.length}</p>
     <h1>IA para {category.label.toLowerCase()}.</h1>
-    <p class="dir-lead">
-      Herramientas de {category.label.toLowerCase()} que una pyme puede probar sin armar un proyecto de seis meses. Las que pagan destacado salen primero.
-    </p>
+    <p class="dir-lead">{seo.lead}</p>
+    {guides.length > 0 && (
+      <nav aria-label="Guías de esta categoría">
+        <div class="tool-group">
+          <h2>Guías y fichas relacionadas</h2>
+        </div>
+        <ul class="chips">
+          {guides.map((guide) => (
+            <li><a href={guide.href}>{guide.title}</a></li>
+          ))}
+        </ul>
+      </nav>
+    )}
     <label class="dir-search">
       <span>Buscar en {category.label}</span>
       <input type="search" data-tool-search placeholder="Nombre o tarea" autocomplete="off" />
@@ -85,6 +101,27 @@ const jsonLd = {
     </nav>
     <ToolList tools={tools} grouped as="h3" />
     <p class="tool-empty" data-tool-empty hidden>Ninguna herramienta de esta categoría coincide.</p>
+    <nav aria-label="Si esta no es la tarea">
+      <div class="tool-group">
+        <h2>Si esta no es la tarea</h2>
+      </div>
+      <ul class="chips">
+        {seo.related.map((slug) => (
+          <li><a href={categoryPath(slug)}>{categoryLabel(slug)}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="tool-group">
+      <h2>Preguntas frecuentes</h2>
+    </div>
+    <div class="faq">
+      {seo.faqs.map((faq) => (
+        <>
+          <h3>{faq.q}</h3>
+          <p>{faq.a}</p>
+        </>
+      ))}
+    </div>
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
   </DirectoryChrome>
 </Layout>

@@ -1,5 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { getTool, type Tool } from './directory';
+import { getTool, getToolsByCategory, type Tool } from './directory';
 import { personRef } from './schema';
 
 export const SITE = 'https://omaralvarezo.co';
@@ -155,6 +155,30 @@ export async function piecesForTool(slug: string): Promise<ToolMention[]> {
     if (entry.data.tools.includes(slug)) mentions.push({ href: trendPath(entry.id), title: entry.data.title, kind: 'Tendencia' });
   }
   return mentions;
+}
+
+export async function guidesForCategory(categorySlug: string): Promise<{ href: string; title: string }[]> {
+  const slugs = new Set(getToolsByCategory(categorySlug).map((tool) => tool.slug));
+  const [paras, comparisons, cases] = await Promise.all([publishedPara(), publishedComparisons(), publishedCases()]);
+  const items = [
+    ...paras
+      .filter((entry) => entry.data.tools.some((slug) => slugs.has(slug)))
+      .map((entry) => ({ href: paraPath(entry.id), title: entry.data.title })),
+    ...comparisons
+      .filter((entry) => slugs.has(entry.data.left) || slugs.has(entry.data.right))
+      .map((entry) => ({ href: comparePath(entry.id), title: entry.data.title })),
+    ...cases
+      .filter((entry) => entry.data.tools.some((slug) => slugs.has(slug)))
+      .map((entry) => ({ href: casePath(entry.id), title: entry.data.title })),
+  ];
+  const seen = new Set<string>();
+  return items
+    .filter((item) => {
+      if (seen.has(item.href)) return false;
+      seen.add(item.href);
+      return true;
+    })
+    .slice(0, 6);
 }
 
 export async function newsForPara(slug: string) {

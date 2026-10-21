@@ -1,6 +1,6 @@
 ---
 title: Itaú deja un chat con personas detrás
-description: "OpenAI contó el 16 oct 2026 que ia.i, el chat de Itaú, llegó a unos 300.000 clientes en una primera fase y que el banco quiere llevarlo a toda la base a fines de 2026. Las cifras son del artículo. Este sitio no las auditó."
+description: "OpenAI contó el 16 oct 2026 que ia.i, el chat de Itaú, llegó a unos 300.000 clientes en una primera fase. El banco quiere llevarlo a toda la base a fines de 2026. Las cifras son del artículo y este sitio no las auditó."
 published: 2026-10-19
 sourceDate: 2026-10-16
 sourceName: OpenAI

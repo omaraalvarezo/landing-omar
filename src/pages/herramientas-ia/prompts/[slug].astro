@@ -4,6 +4,7 @@ import EditorialFrame from '../../../components/directory/EditorialFrame.astro';
 import GuideOffers from '../../../components/directory/GuideOffers.astro';
 import PromptCard from '../../../components/directory/PromptCard.astro';
 import { articleNode, breadcrumb, promptsPath, publicEntries, SITE, type PromptEntry } from '../../../lib/editorial';
+import { pageTitle } from '../../../lib/directory-seo';
 
 export async function getStaticPaths() {
   const entries = publicEntries(await getCollection('prompts'));
@@ -17,7 +18,7 @@ interface Props {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const url = `${SITE}${promptsPath(entry.id)}`;
-const documentTitle = `${entry.data.title} — prompts para pymes`;
+const documentTitle = pageTitle(entry.data.title, ' — prompts para pymes');
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
