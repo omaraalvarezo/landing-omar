@@ -67,6 +67,7 @@ faqs:
 related:
   - detailing
   - talleres-de-carros
+  - llanterias
   - contenido-para-redes
 ---
 
@@ -90,4 +91,4 @@ Canva arma la pieza con una foto del trabajo, no con un carro generado. Si el ne
 
 ## Lo que no hace esta página
 
-No elige química, no mide la pintura y no administra un taller mecánico. Si el cuello de botella es el repuesto o la bahía, sigue en la [guía de talleres](/herramientas-ia/para/talleres-de-carros).
+No elige química, no mide la pintura y no administra un taller mecánico. Si el cuello de botella es el repuesto o la bahía, sigue en la [guía de talleres](/herramientas-ia/para/talleres-de-carros). Si el trabajo es la llanta y no el lavado, sigue en la [guía de llanterías](/herramientas-ia/para/llanterias).

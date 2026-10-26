@@ -151,12 +151,12 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
   diseno: {
     title: 'Herramientas de IA para diseño en pymes',
     lead:
-      'El diseño con IA sirve para armar una pieza, quitar un fondo o probar una imagen sin un estudio. Es para quien publica en redes o en una ficha de producto. Canva y Firefly cubren la pieza; Photoroom, la foto; Midjourney explora, no deja el logo.',
+      'El diseño con IA sirve para armar una pieza, quitar un fondo o probar una imagen sin un estudio. Es para quien publica en redes o en una ficha de producto. Canva y Firefly cubren la pieza; Photoroom, remove.bg y Pixelcut, la foto; Midjourney explora, no deja el logo.',
     related: ['video', 'e-commerce', 'escritura'],
     faqs: [
       {
         q: '¿Qué herramienta de diseño miro primero?',
-        a: 'Canva, si necesitas la pieza del día; Photoroom, si la foto es de un producto; Adobe Firefly, si ya trabajas en Adobe. Midjourney explora una imagen y no deja el logo ni la marca listos.',
+        a: 'Canva, si necesitas la pieza del día; Photoroom, remove.bg o Pixelcut, si la foto es de un producto; Adobe Firefly, si ya trabajas en Adobe. Midjourney explora una imagen y no deja el logo ni la marca listos.',
       },
       {
         q: '¿Puedo publicar la imagen tal como sale?',
@@ -231,12 +231,12 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
   'atencion-al-cliente': {
     title: 'IA para atención al cliente en pymes',
     lead:
-      'La atención con IA sirve para contestar lo que ya está escrito: horario, dirección, estado. Es para el negocio cuyo chat repite la misma pregunta. En el sitio, Tidio o Intercom Fin; en WhatsApp, ManyChat, Respond.io o WhatsApp Business.',
+      'La atención con IA sirve para contestar lo que ya está escrito: horario, dirección, estado. Es para el negocio cuyo chat repite la misma pregunta. En el sitio, Tidio o Intercom Fin; en WhatsApp, ManyChat, Respond.io, WhatsApp Business o Treble.',
     related: ['ventas-y-crm', 'automatizacion'],
     faqs: [
       {
         q: '¿Qué herramienta uso para atender clientes?',
-        a: 'Tidio o Intercom Fin, si escriben en el sitio; ManyChat, Respond.io o WhatsApp Business, si escriben por WhatsApp u otra red. Empieza por uno solo.',
+        a: 'Tidio o Intercom Fin, si escriben en el sitio; ManyChat, Respond.io, WhatsApp Business o Treble, si escriben por WhatsApp. Empieza por uno solo. Treble es la API, no la app gratis.',
       },
       {
         q: '¿El bot puede cerrar una queja o un precio?',
@@ -271,12 +271,12 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
   productividad: {
     title: 'IA de productividad para una pyme',
     lead:
-      'Productividad con IA es dejar por escrito lo que hoy vive en la memoria: una nota, un formulario, una propuesta. Notion guarda; Jotform recoge; Gamma presenta; Otter.ai y Fireflies.ai transcriben. Elige el hueco, no las cinco.',
+      'Productividad con IA es dejar por escrito lo que hoy vive en la memoria: una nota, un formulario, una propuesta. Notion guarda; Jotform recoge; Gamma presenta; Otter.ai, Fireflies.ai y Fathom transcriben. Elige el hueco, no todas.',
     related: ['asistentes', 'automatizacion', 'escritura'],
     faqs: [
       {
         q: '¿Qué herramienta de productividad abro primero?',
-        a: 'La del hueco que ya te cuesta: Notion si se pierde el documento, Jotform si el dato no queda anotado, Gamma si hay que presentar, y Otter.ai o Fireflies.ai si la reunión no deja acta.',
+        a: 'La del hueco que ya te cuesta: Notion si se pierde el documento, Jotform si el dato no queda anotado, Gamma si hay que presentar, y Otter.ai, Fireflies.ai o Fathom si la reunión no deja acta.',
       },
       {
         q: '¿Una nota de IA reemplaza el criterio?',
