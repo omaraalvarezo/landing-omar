@@ -38,7 +38,7 @@
   {
     "slug": "microsoft-copilot",
     "nombre": "Microsoft Copilot",
-    "url": "https://copilot.microsoft.com",
+    "url": "https://copilot.com",
     "categoria": "asistentes",
     "desc": "Asistente de Microsoft integrado con Office 365.",
     "featured": false,
@@ -278,7 +278,7 @@
   {
     "slug": "notion",
     "nombre": "Notion",
-    "url": "https://www.notion.so",
+    "url": "https://www.notion.com",
     "categoria": "productividad",
     "desc": "Espacio de trabajo con IA para notas y documentación.",
     "featured": false,
@@ -442,5 +442,53 @@
     "sponsor": false,
     "sponsorUntil": null,
     "added": "2026-10-19"
+  },
+  {
+    "slug": "remove-bg",
+    "nombre": "remove.bg",
+    "url": "https://www.remove.bg",
+    "categoria": "diseno",
+    "desc": "Quita el fondo de una foto. La portada habla de fichas de comercio, avisos de carros y retratos. El 26 oct 2026 la página de precios muestra planes por créditos.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-10-26"
+  },
+  {
+    "slug": "fathom",
+    "nombre": "Fathom",
+    "url": "https://www.fathom.ai",
+    "categoria": "productividad",
+    "desc": "Notas de reuniones en Google Meet y Microsoft Teams, con resumen. La página de precios del 26 oct 2026 muestra un plan gratis y planes de pago.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-10-26"
+  },
+  {
+    "slug": "pixelcut",
+    "nombre": "Pixelcut",
+    "url": "https://www.pixelcut.ai",
+    "categoria": "diseno",
+    "desc": "Editor de fotos con IA para producto y piezas. La página de precios del 26 oct 2026 muestra un plan gratis y créditos de IA en los planes de pago.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-10-26"
+  },
+  {
+    "slug": "treble",
+    "nombre": "Treble",
+    "url": "https://treble.ai",
+    "categoria": "atencion-al-cliente",
+    "desc": "WhatsApp con flujos, varios agentes y funciones de IA. Treble dice ser proveedor oficial de la API, no la app gratis. El soporte que anuncian está en español, portugués e inglés.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-10-26"
   }
 ]

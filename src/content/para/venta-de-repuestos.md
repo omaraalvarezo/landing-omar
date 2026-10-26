@@ -67,7 +67,8 @@ faqs:
 related:
   - talleres-de-carros
   - lavaderos-de-carros
-  - armar-una-propuesta
+  - ferreterias
+  - venta-de-carros-usados
 ---
 
 El mostrador pierde la venta en dos frases: “creo que aplica” y “te mando una foto parecida”. Las dos se pueden escribir con una herramienta. También se pueden prohibir. La ficha manda: código, unidades, precio y para qué vehículo ya está confirmado.
@@ -86,4 +87,4 @@ Canva arma la publicación con esa foto ya revisada. El perfil de Google dice qu
 
 ## Lo que no hace esta página
 
-No cruza un catálogo mundial de aplicaciones ni reemplaza el programa del taller. Si el trabajo es instalar, diagnosticar y devolver el carro, sigue en la [guía de talleres](/herramientas-ia/para/talleres-de-carros).
+No cruza un catálogo mundial de aplicaciones ni reemplaza el programa del taller. Si el trabajo es instalar, diagnosticar y devolver el carro, sigue en la [guía de talleres](/herramientas-ia/para/talleres-de-carros). remove.bg está en el directorio para quitar el fondo de otra foto, con la misma regla del código. Si el mostrador es de ferretería, sigue en la [guía de ferreterías](/herramientas-ia/para/ferreterias). Si vendes el carro y no la pieza, sigue en la [guía de carros usados](/herramientas-ia/para/venta-de-carros-usados).

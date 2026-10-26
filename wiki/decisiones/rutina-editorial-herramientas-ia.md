@@ -6,7 +6,7 @@ tags: [directorio, contenido, newsletter, seo]
 fuentes:
   - "[[wiki/decisiones/directorio-herramientas-ia]]"
 creado: 2026-10-16
-actualizado: 2026-10-21
+actualizado: 2026-10-26
 ---
 
 # Rutina editorial del directorio de IA
@@ -38,6 +38,23 @@ el cuerpo y pasar `npm run content:check`.
 - Una noticia enlaza la guía “para” que le corresponde. La ficha de la herramienta muestra esas notas al revés.
 - Precios de un tercero se fechan. Si la fuente no trae el precio, el campo dice que no está publicado.
 - No se publica en TikTok, Instagram, X ni LinkedIn de Omar sin un pedido explícito de esa pieza.
+
+## Fuentes de la edición del 26 oct 2026
+
+Esas notas están en el repositorio. La siguiente edición vuelve a abrir la página, no el resumen:
+
+- Google, 20 oct 2026: `https://blog.google/innovation-and-ai/products/gemini-app/new-tools-small-business-owners/`
+- Notion, 19 oct 2026: `https://www.notion.com/blog/notion-ai-more-for-less`
+- OpenAI, 22 oct 2026: `https://openai.com/index/decisions-api/`
+- Anthropic, 22 oct 2026: `https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation`
+- Meta, 22 oct 2026: `https://about.fb.com/ltam/news/2026/10/estudio-muestra-como-la-ia-puede-impulsar-las-ventas-de-las-pymes-mexicanas-en-temporada-de-fin-de-ano/`
+- OpenAI, caso Uber, 22 oct 2026: `https://openai.com/index/uber-chatgpt-work-rollout`
+- remove.bg, precios consultados el 26 oct 2026: `https://www.remove.bg/pricing`
+- Fathom, precios consultados el 26 oct 2026: `https://www.fathom.ai/pricing`
+- Pixelcut, precios consultados el 26 oct 2026: `https://www.pixelcut.ai/pricing`
+- Treble, portada consultada el 26 oct 2026: `https://treble.ai/`
+
+La página de precios de Treble (`https://treble.ai/treble-pricing/`) pidió contraseña ese día. No se publicó un monto del plan. Microsoft Copilot en el directorio apunta a `https://copilot.com`. `https://copilot.microsoft.com` redirige ahí y agrega parámetros de sesión. Notion apunta a `https://www.notion.com`. `https://www.notion.so` redirige a esa URL.
 
 ## Fuentes de la edición del 19 oct 2026
 

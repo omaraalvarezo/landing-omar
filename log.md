@@ -674,3 +674,9 @@ Edición semanal de `/herramientas-ia`. Cinco noticias (búsqueda de Google del 
 ## 2026-10-21 — SEO y respuestas citables del directorio
 
 Títulos y metas únicos en el índice, las 12 categorías y las secciones de guías. FAQ con `FAQPage` en el índice y en cada categoría. Párrafo de respuesta al inicio (qué es, para quién, cuál elegir). Enlaces entre categorías, guías y fichas. `llms.txt` describe el directorio y lista las páginas para elegir. La meta de las piezas largas usa las primeras frases completas; el párrafo visible no se recorta. No se tocó Wompi, `/admin` ni la consultoría.
+
+---
+
+## 2026-10-26 — Tanda editorial del directorio
+
+Edición semanal de `/herramientas-ia`. Cinco noticias (página de negocio de Gemini del 20 oct, agentes y créditos de Notion del 19 oct, Decisions API de OpenAI del 22 oct, Agent Skills de Anthropic del 22 oct, estudio de Ipsos publicado por Meta el 22 oct), cuatro guías (llanterías, talleres de motos, carros usados, ferreterías), herramienta de la semana Gemini, comparativa Gemini frente a Notion, alternativas a Gemini, caso Uber y prompts del 26 oct. Entran remove.bg, Fathom, Pixelcut y Treble, con ficha. Copilot pasa a `https://copilot.com` y Notion a `https://www.notion.com`. La página de precios de Treble pidió contraseña: no hay monto del plan.
