@@ -680,3 +680,9 @@ Títulos y metas únicos en el índice, las 12 categorías y las secciones de gu
 ## 2026-10-26 — Tanda editorial del directorio
 
 Edición semanal de `/herramientas-ia`. Cinco noticias (página de negocio de Gemini del 20 oct, agentes y créditos de Notion del 19 oct, Decisions API de OpenAI del 22 oct, Agent Skills de Anthropic del 22 oct, estudio de Ipsos publicado por Meta el 22 oct), cuatro guías (llanterías, talleres de motos, carros usados, ferreterías), herramienta de la semana Gemini, comparativa Gemini frente a Notion, alternativas a Gemini, caso Uber y prompts del 26 oct. Entran remove.bg, Fathom, Pixelcut y Treble, con ficha. Copilot pasa a `https://copilot.com` y Notion a `https://www.notion.com`. La página de precios de Treble pidió contraseña: no hay monto del plan.
+
+---
+
+## 2026-10-28 — `npm audit` vuelve a verde
+
+El check «npm audit» de `security.yml` fallaba en `main` desde el 21-oct con 7 avisos (1 moderado, 6 altos), todos en dependencias transitivas: vite ≤ 6.4.3 (con launch-editor), fast-uri ≤ 3.1.8 y zod < 4.6.6. `npm audit fix` sin `--force` (con npm 10) sacó vite 6.4.3 del árbol (`@tailwindcss/vite` y vitest ya aceptaban vite 8, que ahora es 8.3.5 en todo el árbol), subió fast-uri a 3.1.9 y movió parches dentro de rango (`@astrojs/vercel` 11.0.17, `@vercel/functions` 3.10.4). Zod llegaba por `@astrojs/vercel` → `@vercel/functions` → `@vercel/oidc` → `@vercel/cli-config`, que fija `zod@4.1.11` exacto incluso en su última versión (0.3.4); se resolvió con el override `"@vercel/cli-config": { "zod": "4.6.7" }` (misma mayor, la que ya usa Astro). No se usó `--force` ni se bajó el adaptador. Con vite 6 fuera, el lock ya no tiene esbuild; la regla del lockfile en `CLAUDE.md` se actualizó. Verificado: `npx npm@10 ci` y `npm audit --audit-level=moderate` en 0, 202 tests, build y `astro check` con los mismos 3 errores previos de `tests/directory-seo.test.ts`.
