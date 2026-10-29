@@ -40,7 +40,8 @@
     "lead:list": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-leads.mjs",
     "kit:pending": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/list-kit-orders.mjs",
     "sistema:avisar-videos": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/notify-sistema-videos.mjs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "zernio:accounts": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/zernio-accounts.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
@@ -57,6 +58,7 @@
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
     "@vercel/analytics": "2.0.1",
+    "@zernio/node": "^0.2.1376",
     "astro": "^7.4.0",
     "bcryptjs": "^3.0.3",
     "lenis": "^1.1.20",

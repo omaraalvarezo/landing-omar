@@ -106,8 +106,19 @@ const year = new Date().getFullYear();
         area.style.opacity = '0';
         document.body.appendChild(area);
         area.select();
-        mark(document.execCommand('copy'));
+        const copied = document.execCommand('copy');
         area.remove();
+        mark(copied);
+        // Navegadores internos (TikTok, Instagram) a veces bloquean el portapapeles:
+        // se deja el prompt seleccionado para copiarlo a mano.
+        const pre = card?.querySelector('[data-prompt-text]');
+        if (!copied && pre && status) {
+          const range = document.createRange();
+          range.selectNodeContents(pre);
+          window.getSelection()?.removeAllRanges();
+          window.getSelection()?.addRange(range);
+          status.textContent = 'Texto seleccionado: mantén presionado y elige Copiar';
+        }
       }
     });
   });

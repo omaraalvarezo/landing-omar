@@ -3,7 +3,8 @@
   "redirects": [
     { "source": "/consultoria/agendar", "destination": "/#contacto", "permanent": false },
     { "source": "/consultoria/agendar/", "destination": "/#contacto", "permanent": false },
-    { "source": "/consultoria/agenda/:path*", "destination": "/#contacto", "permanent": false }
+    { "source": "/consultoria/agenda/:path*", "destination": "/#contacto", "permanent": false },
+    { "source": "/prompt", "destination": "/", "permanent": false }
   ],
   "headers": [
     {

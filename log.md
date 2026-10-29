@@ -686,3 +686,16 @@ Edición semanal de `/herramientas-ia`. Cinco noticias (página de negocio de Ge
 ## 2026-10-28 — `npm audit` vuelve a verde
 
 El check «npm audit» de `security.yml` fallaba en `main` desde el 21-oct con 7 avisos (1 moderado, 6 altos), todos en dependencias transitivas: vite ≤ 6.4.3 (con launch-editor), fast-uri ≤ 3.1.8 y zod < 4.6.6. `npm audit fix` sin `--force` (con npm 10) sacó vite 6.4.3 del árbol (`@tailwindcss/vite` y vitest ya aceptaban vite 8, que ahora es 8.3.5 en todo el árbol), subió fast-uri a 3.1.9 y movió parches dentro de rango (`@astrojs/vercel` 11.0.17, `@vercel/functions` 3.10.4). Zod llegaba por `@astrojs/vercel` → `@vercel/functions` → `@vercel/oidc` → `@vercel/cli-config`, que fija `zod@4.1.11` exacto incluso en su última versión (0.3.4); se resolvió con el override `"@vercel/cli-config": { "zod": "4.6.7" }` (misma mayor, la que ya usa Astro). No se usó `--force` ni se bajó el adaptador. Con vite 6 fuera, el lock ya no tiene esbuild; la regla del lockfile en `CLAUDE.md` se actualizó. Verificado: `npx npm@10 ci` y `npm audit --audit-level=moderate` en 0, 202 tests, build y `astro check` con los mismos 3 errores previos de `tests/directory-seo.test.ts`.
+
+## 2026-10-28 — Prompts por link para TikTok y conexión con Zernio
+
+Omar promete prompts en sus videos («comenta WEB») y quiere mandar un link que muestre **solo** el
+prompt de ese video. Nace la colección `tiktok` (`src/content/tiktok/{slug}.md`, el cuerpo es el
+prompt tal cual) y la ruta `/prompt/{slug}`: tarjeta con botón Copiar, `noindex`, fuera del sitemap
+y sin índice (`/prompt` redirige al home). Con `draft: true` la página solo existe en local.
+
+- El botón Copiar compartido ahora deja el texto seleccionado si el navegador bloquea el
+  portapapeles (pasa en navegadores internos de apps).
+- Zernio: SDK `@zernio/node`, `ZERNIO_API_KEY` en `.env.local` (ignorado por git) y
+  `npm run zernio:accounts` (solo lectura). La key responde; aún no hay cuentas conectadas.
+- Límite conocido: Zernio no hace comentario→DM en TikTok (solo IG y Facebook).
