@@ -1,0 +1,29 @@
+---
+// Un prompt por link, para los videos de TikTok. Sin índice, sin sitemap y en noindex:
+// quien llega solo ve el prompt del video que vio.
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import DirectoryChrome from '../../components/directory/DirectoryChrome.astro';
+import PromptCard from '../../components/directory/PromptCard.astro';
+import { SOCIALS } from '../../lib/contact';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('tiktok', (entry) => !(import.meta.env.PROD && entry.data.draft));
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const text = (entry.body ?? '').trim();
+---
+
+<Layout title={`${entry.data.title} · Omar Álvarez`} description={entry.data.intro} showNav={false} minimal noIndex themeColor="#FFF8EA">
+  <DirectoryChrome consultCta={false}>
+    <p class="dir-kicker">Del video de TikTok</p>
+    <h1 class="dir-title">{entry.data.title}</h1>
+    <p class="dir-lead">{entry.data.intro}</p>
+    <PromptCard title="Prompt completo" text={text} />
+    <p class="dir-meta">
+      ¿Te sirvió? Sígueme en <a href={SOCIALS.tiktok} target="_blank" rel="noopener noreferrer">TikTok</a> para el siguiente.
+    </p>
+  </DirectoryChrome>
+</Layout>

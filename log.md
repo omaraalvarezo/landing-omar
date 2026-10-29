@@ -680,3 +680,16 @@ Títulos y metas únicos en el índice, las 12 categorías y las secciones de gu
 ## 2026-10-26 — Tanda editorial del directorio
 
 Edición semanal de `/herramientas-ia`. Cinco noticias (página de negocio de Gemini del 20 oct, agentes y créditos de Notion del 19 oct, Decisions API de OpenAI del 22 oct, Agent Skills de Anthropic del 22 oct, estudio de Ipsos publicado por Meta el 22 oct), cuatro guías (llanterías, talleres de motos, carros usados, ferreterías), herramienta de la semana Gemini, comparativa Gemini frente a Notion, alternativas a Gemini, caso Uber y prompts del 26 oct. Entran remove.bg, Fathom, Pixelcut y Treble, con ficha. Copilot pasa a `https://copilot.com` y Notion a `https://www.notion.com`. La página de precios de Treble pidió contraseña: no hay monto del plan.
+
+## 2026-10-28 — Prompts por link para TikTok y conexión con Zernio
+
+Omar promete prompts en sus videos («comenta WEB») y quiere mandar un link que muestre **solo** el
+prompt de ese video. Nace la colección `tiktok` (`src/content/tiktok/{slug}.md`, el cuerpo es el
+prompt tal cual) y la ruta `/prompt/{slug}`: tarjeta con botón Copiar, `noindex`, fuera del sitemap
+y sin índice (`/prompt` redirige al home). Con `draft: true` la página solo existe en local.
+
+- El botón Copiar compartido ahora deja el texto seleccionado si el navegador bloquea el
+  portapapeles (pasa en navegadores internos de apps).
+- Zernio: SDK `@zernio/node`, `ZERNIO_API_KEY` en `.env.local` (ignorado por git) y
+  `npm run zernio:accounts` (solo lectura). La key responde; aún no hay cuentas conectadas.
+- Límite conocido: Zernio no hace comentario→DM en TikTok (solo IG y Facebook).

@@ -257,9 +257,22 @@ const sistemas = defineCollection({
     }),
 });
 
+// Prompts prometidos en un video de TikTok. Cada uno vive solo en su link
+// (/prompt/{archivo}); no hay índice ni entran al sitemap. El cuerpo del .md es el prompt tal cual.
+const tiktok = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/tiktok' }),
+  schema: z.object({
+    title: z.string().min(4).max(90),
+    intro: z.string().min(20).max(280),
+    published: isoDate,
+    draft: z.boolean().optional(),
+  }),
+});
+
 export const collections = {
   fichas,
   sistemas,
+  tiktok,
   para,
   noticias,
   prompts,
