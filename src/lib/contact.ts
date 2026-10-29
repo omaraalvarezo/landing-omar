@@ -10,7 +10,7 @@ export const LOCATION = 'Colombia';
 export const TIMEZONE = 'GMT-5';
 
 export const SOCIALS = {
-  instagram: 'https://www.instagram.com/omaraalvarezo',
+  instagram: 'https://www.instagram.com/omaralvarezo.co',
   tiktok: 'https://www.tiktok.com/@omaraalvarezo',
   linkedin: 'https://www.linkedin.com/in/omaraalvarezo',
 } as const;

@@ -699,3 +699,9 @@ y sin índice (`/prompt` redirige al home). Con `draft: true` la página solo ex
 - Zernio: SDK `@zernio/node`, `ZERNIO_API_KEY` en `.env.local` (ignorado por git) y
   `npm run zernio:accounts` (solo lectura). La key responde; aún no hay cuentas conectadas.
 - Límite conocido: Zernio no hace comentario→DM en TikTok (solo IG y Facebook).
+
+## 2026-10-28 — Instagram pasa a @omaralvarezo.co
+
+El usuario `omaraalvarezo` no estaba disponible en Instagram, así que Omar eligió **@omaralvarezo.co**,
+igual al dominio del sitio. `SOCIALS.instagram` en `src/lib/contact.ts` apunta ahí; de esa constante lo
+toman el home, el footer, el directorio y `/sobre-mi`. TikTok y LinkedIn siguen en `omaraalvarezo`.
