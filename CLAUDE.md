@@ -391,17 +391,21 @@ Fuentes locales clave para decisiones del home:
 
 ### Regla del lockfile (npm 10)
 
-CI (`.github/workflows/security.yml`) y Vercel instalan con **npm 10**. Un `npm install` con npm 11
-reescribe `package-lock.json` y quita los bloques anidados `node_modules/astro/node_modules/esbuild`
-(0.28.2) y `@esbuild/*`, y entonces `npm ci` falla en npm 10. Después de cualquier cambio de
-dependencias, verificar en un directorio aparte:
+CI (`.github/workflows/security.yml`) y Vercel instalan con **npm 10**. Cambiar dependencias siempre
+con `npx npm@10 install` (no con el npm 11 local): un lock escrito por npm 11 puede no pasar `npm ci`
+en npm 10. Después de cualquier cambio de dependencias, verificar en un directorio aparte:
 
 ```bash
 npx npm@10 ci --ignore-scripts
 npx npm@10 audit --audit-level=moderate
 ```
 
-Los dos tienen que salir con código 0 y los bloques anidados de esbuild tienen que seguir en el lock.
+Los dos tienen que salir con código 0.
+
+Desde el 2026-10-28 todo el árbol usa vite 8 y ya no hay esbuild en el lock (lo traían vite 6 y el
+peer opcional de vite 8). El override `"@vercel/cli-config": { "zod": "4.6.7" }` existe porque
+`@vercel/cli-config` fija `zod@4.1.11` exacto, con un aviso alto; quitarlo cuando Vercel publique una
+versión que traiga zod ≥ 4.6.6 (revisar con `npm view @vercel/cli-config dependencies`).
 
 ## Comandos
 
@@ -426,7 +430,7 @@ npm run sistema:avisar-videos [-- --send]
 - [ ] `npm run build` exitoso.
 - [ ] `npm run offers:check`, `npm run content:check` y `npm run tool:check` en verde.
 - [ ] Si cambió `package-lock.json`: `npx npm@10 ci --ignore-scripts` y `npx npm@10 audit
-  --audit-level=moderate` en verde, con los bloques anidados de esbuild.
+  --audit-level=moderate` en verde.
 - [ ] Hero llega a `data-phase="3"` con scroll y muestra el estado final con reduced motion.
 - [ ] Sin overflow horizontal a 390 px y 1440 px en `/`, `/sistemas`, `/sistemas/detailing`,
   `/tiktok`, `/terminos` y `/privacidad`.
