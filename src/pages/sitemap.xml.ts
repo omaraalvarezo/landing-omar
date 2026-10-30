@@ -77,6 +77,7 @@ export const GET: APIRoute = async () => {
   const urls = [
     { loc: `${SITE}/`, changefreq: 'monthly', priority: '1.0' },
     { loc: `${SITE}/sobre-mi`, changefreq: 'yearly', priority: '0.5' },
+    { loc: `${SITE}/taller-chatgpt-codex`, changefreq: 'monthly', priority: '0.5' },
     { loc: `${SITE}${sistemaPath()}`, changefreq: 'monthly', priority: '0.8' },
     ...sistemas.map((entry) => ({ loc: `${SITE}${sistemaPath(entry.id)}`, changefreq: 'weekly', priority: '0.9' })),
     // Las páginas legales entran al sitemap cuando Omar apruebe el borrador (LEGAL.draft).

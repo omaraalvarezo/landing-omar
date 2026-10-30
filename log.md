@@ -705,3 +705,13 @@ y sin índice (`/prompt` redirige al home). Con `draft: true` la página solo ex
 El usuario `omaraalvarezo` no estaba disponible en Instagram, así que Omar eligió **@omaralvarezo.co**,
 igual al dominio del sitio. `SOCIALS.instagram` en `src/lib/contact.ts` apunta ahí; de esa constante lo
 toman el home, el footer, el directorio y `/sobre-mi`. TikTok y LinkedIn siguen en `omaraalvarezo`.
+
+## 2026-10-30 — Descarga del taller ChatGPT y Codex
+
+Omar dará el taller «ChatGPT y Codex para el trabajo diario» y quiere que los asistentes descarguen
+la presentación. Nace `/taller-chatgpt-codex`: una pantalla con el botón de descarga del PDF y los tres
+retos (página web con referentes, tienda desde facturas, tablero de clientes con Gmail). Se publica
+**solo el PDF** (`public/resources/omar-alvarez-chatgpt-codex-trabajo-diario.pdf`, 32 diapositivas,
+3,6 MB): el PPTX lleva las notas del orador y no sale del computador de Omar. El clic se mide con
+`escalon_click` (`id: taller-chatgpt-codex-pdf`, `placement: taller`). La página entra al sitemap.
+Los datos de modelos del PDF se verificaron en la documentación de OpenAI el 30-oct-2026.

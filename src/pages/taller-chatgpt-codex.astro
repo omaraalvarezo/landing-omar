@@ -1,0 +1,181 @@
+---
+// Descarga de la presentación del taller "ChatGPT y Codex para el trabajo diario".
+// Solo el PDF: el PPTX lleva las notas del orador y no se publica.
+import SistemaShell from '../components/sistemas/SistemaShell.astro';
+
+const pdf = {
+  href: '/resources/omar-alvarez-chatgpt-codex-trabajo-diario.pdf',
+  meta: 'PDF · 32 diapositivas · 3,6 MB',
+};
+
+const retos = [
+  { n: '1', name: 'Tu página web con referentes', where: 'Codex', crosses: '3 páginas que te gustan + tu negocio' },
+  { n: '2', name: 'Tu tienda desde tus facturas', where: 'Codex', crosses: 'Tus facturas + las fichas de internet' },
+  { n: '3', name: 'Tu tablero de clientes', where: 'Work con Gmail', crosses: 'Tu correo + tu hoja de cotizaciones' },
+];
+
+const title = 'Taller ChatGPT y Codex — Omar Álvarez';
+const description =
+  'Descarga la presentación del taller ChatGPT y Codex para el trabajo diario: modelos, modos, contexto, conectores y tres retos con sus prompts.';
+---
+
+<SistemaShell title={title} description={description}>
+  <section class="tl" aria-labelledby="tl-titulo">
+    <p class="tl__eyebrow">Taller práctico · ChatGPT y Codex</p>
+    <h1 id="tl-titulo">La presentación del taller, para descargar.</h1>
+    <p class="tl__lede">
+      El modelo es el motor y ChatGPT es el carro. Qué motor escoger, en qué modo manejarlo, cómo
+      cargar el contexto y para qué sirven los conectores. Al final, tres retos con sus prompts.
+    </p>
+
+    <a
+      class="tl__main"
+      href={pdf.href}
+      download
+      data-track="escalon_click"
+      data-track-id="taller-chatgpt-codex-pdf"
+      data-track-placement="taller"
+    >
+      <span class="tl__tag">{pdf.meta}</span>
+      <strong>Descargar la presentación</strong>
+      <span class="tl__text">Incluye los prompts de los tres retos, listos para copiar.</span>
+      <span class="tl__go">descargar <i aria-hidden="true">↓</i></span>
+    </a>
+
+    <h2 class="tl__sub">Escoge un reto para tu negocio</h2>
+    <ol class="tl__list">
+      {retos.map((reto) => (
+        <li>
+          <span class="tl__n" aria-hidden="true">{reto.n}</span>
+          <div>
+            <strong>{reto.name}</strong>
+            <span class="tl__text">{reto.crosses}</span>
+            <span class="tl__tag tl__tag--soft">Dónde · {reto.where}</span>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <p class="tl__note">
+      Los datos de modelos y planes se verificaron el 30 de octubre de 2026 y cambian seguido: confírmalos
+      en el selector de tu cuenta.
+    </p>
+    <p class="tl__note">¿Quieres el sistema de tu empresa? <a href="/#contacto">Anótate en la lista</a>.</p>
+  </section>
+</SistemaShell>
+
+<style>
+  .tl {
+    width: min(100%, 600px);
+    margin: 0 auto;
+    padding: clamp(36px, 8vw, 72px) var(--gutter) clamp(48px, 9vw, 88px);
+  }
+  .tl h1,
+  .tl h2,
+  .tl p { margin-top: 0; }
+  .tl a { color: inherit; }
+
+  .tl__eyebrow,
+  .tl__tag {
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .tl__eyebrow { margin-bottom: 14px; color: var(--lime); }
+
+  .tl h1 {
+    margin-bottom: 12px;
+    font-family: var(--display);
+    font-size: clamp(34px, 9vw, 52px);
+    font-stretch: 78%;
+    font-weight: 780;
+    letter-spacing: -.035em;
+    line-height: .98;
+  }
+  .tl__lede { margin-bottom: 28px; color: var(--bone-muted); }
+
+  .tl .tl__main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    color: var(--ink);
+    text-decoration: none;
+    background: var(--lime);
+    border: 2px solid var(--lime);
+    border-radius: 6px;
+  }
+  .tl__main strong,
+  .tl__list strong {
+    font-family: var(--display);
+    font-stretch: 84%;
+    font-weight: 740;
+    letter-spacing: -.02em;
+    line-height: 1.08;
+  }
+  .tl__main strong { font-size: clamp(24px, 6.4vw, 30px); }
+  .tl__main .tl__text { color: rgba(19, 17, 24, .82); }
+  .tl__go {
+    margin-top: 6px;
+    font-family: var(--data);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .tl .tl__main:hover { background: var(--bone); border-color: var(--bone); }
+
+  .tl .tl__sub {
+    margin: 40px 0 14px;
+    font-family: var(--display);
+    font-size: 24px;
+    font-stretch: 84%;
+    font-weight: 740;
+    letter-spacing: -.02em;
+  }
+  .tl__list {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tl__list li {
+    display: flex;
+    gap: 16px;
+    padding: 18px 20px;
+    color: var(--bone);
+    background: var(--ink-soft);
+    border: 1px solid rgba(255, 248, 234, .18);
+    border-radius: 6px;
+  }
+  .tl__list li div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .tl__list strong { font-size: 20px; }
+  .tl__list .tl__text { color: var(--bone-muted); font-size: 15px; }
+  .tl__n {
+    flex: 0 0 auto;
+    font-family: var(--display);
+    font-size: 40px;
+    font-weight: 780;
+    line-height: .9;
+  }
+  .tl__list li:nth-child(1) .tl__n { color: var(--coral); }
+  .tl__list li:nth-child(2) .tl__n { color: var(--purple); }
+  .tl__list li:nth-child(3) .tl__n { color: var(--lime); }
+  .tl__tag--soft { color: var(--purple); }
+
+  .tl__note {
+    margin: 24px 0 0;
+    color: rgba(255, 248, 234, .72);
+    font-size: 14px;
+  }
+  .tl__note + .tl__note { margin-top: 10px; }
+  .tl__note a { text-decoration: underline; text-underline-offset: 3px; }
+  .tl__note a:hover { color: var(--lime); }
+</style>
