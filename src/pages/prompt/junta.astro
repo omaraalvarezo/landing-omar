@@ -20,6 +20,15 @@ const intro =
     <p class="dir-lead">{intro}</p>
 
     <div class="junta">
+      <aside class="junta-model" aria-label="Modelo recomendado">
+        <p class="junta-model__label">Antes de empezar</p>
+        <p class="junta-model__text">
+          Úsalo en Claude con <strong>Opus 5.5</strong> y el esfuerzo en <strong>alto</strong>.
+          La junta tiene que leer números, discutir y votar: con un modelo más pequeño o en esfuerzo
+          bajo, el resultado sale más flojo.
+        </p>
+      </aside>
+
       <section class="junta-step" aria-labelledby="paso-1">
         <p class="junta-step__n">Paso 1 · Para decidir</p>
         <h2 id="paso-1">¿Tienes estado de resultados?</h2>
@@ -46,7 +55,7 @@ const intro =
 
         <div class="junta-panel" data-panel="con" id="con">
           <ol class="junta-howto">
-            <li>Abre una conversación nueva en Claude.</li>
+            <li>Abre una conversación nueva en Claude con Opus 5.5 en esfuerzo alto.</li>
             <li>Adjunta el estado de resultados. Mejor si trae este mes y el anterior.</li>
             <li>Copia el prompt, cambia lo que está entre [corchetes] y envía.</li>
           </ol>
@@ -55,7 +64,7 @@ const intro =
 
         <div class="junta-panel" data-panel="sin" id="sin">
           <ol class="junta-howto">
-            <li>Abre una conversación nueva en Claude.</li>
+            <li>Abre una conversación nueva en Claude con Opus 5.5 en esfuerzo alto.</li>
             <li>Copia el prompt y llena los cinco números del último mes. Si no sabes uno exacto, pon un aproximado.</li>
             <li>Cambia lo demás que está entre [corchetes] y envía.</li>
           </ol>
@@ -100,6 +109,37 @@ const intro =
 
 <style>
   .junta { max-width: 860px; margin-top: 48px; }
+
+  .junta-model {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 18px;
+    align-items: baseline;
+    margin: 0 0 44px;
+    padding: 16px 18px;
+    color: var(--bone);
+    background: var(--ink);
+    border-left: 6px solid var(--lime);
+  }
+
+  .junta-model__label {
+    margin: 0;
+    color: var(--lime);
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .junta-model__text {
+    margin: 0;
+    max-width: 62ch;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .junta-model strong { color: var(--lime); }
 
   .junta-step + .junta-step {
     margin-top: 56px;
@@ -269,6 +309,7 @@ const intro =
 
   @media (max-width: 640px) {
     .junta { margin-top: 36px; }
+    .junta-model { grid-template-columns: 1fr; }
     .junta-choice { grid-template-columns: 1fr; }
     .junta-option__title { font-size: 23px; }
   }
