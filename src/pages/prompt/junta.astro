@@ -1,0 +1,279 @@
+---
+// Prompt del video «Tu junta directiva con IA» (11 nov 2026, palabra JUNTA).
+// Como los demás /prompt/*: sin índice, sin sitemap y en noindex.
+// Tiene su propia página porque son tres prompts y el visitante elige el suyo:
+// con estado de resultados, sin estado de resultados, y el seguimiento para los dos.
+import Layout from '../../layouts/Layout.astro';
+import DirectoryChrome from '../../components/directory/DirectoryChrome.astro';
+import PromptCard from '../../components/directory/PromptCard.astro';
+import { SOCIALS } from '../../lib/contact';
+import { PROMPT_CON_ESTADO, PROMPT_SIN_ESTADO, PROMPT_SEGUIMIENTO } from '../../data/prompt-junta';
+
+const intro =
+  'Cinco asesores leen tus números, discuten tu decisión, votan y te dejan un acta. Uno de ellos te lleva la contraria a propósito.';
+---
+
+<Layout title="Tu junta directiva con IA · Omar Álvarez" description={intro} showNav={false} minimal noIndex themeColor="#FFF8EA">
+  <DirectoryChrome consultCta={false}>
+    <p class="dir-kicker">Del video de TikTok · Junta directiva v2</p>
+    <h1 class="dir-title">Tu junta directiva con IA</h1>
+    <p class="dir-lead">{intro}</p>
+
+    <div class="junta">
+      <section class="junta-step" aria-labelledby="paso-1">
+        <p class="junta-step__n">Paso 1 · Para decidir</p>
+        <h2 id="paso-1">¿Tienes estado de resultados?</h2>
+        <p class="junta-step__help">
+          Es el informe que te arma el contador cada mes: ventas, costos, gastos y utilidad.
+          Si no sabes si lo tienes, escoge «No».
+        </p>
+
+        <fieldset class="junta-choice">
+          <legend class="sr-only">Escoge tu caso</legend>
+          <label class="junta-option">
+            <input type="radio" name="caso" value="con" id="caso-con" checked />
+            <span class="junta-option__mark" aria-hidden="true"></span>
+            <span class="junta-option__title">Sí, tengo</span>
+            <span class="junta-option__text">Lo adjuntas tal cual: PDF, Excel o foto. Es el que uso yo.</span>
+          </label>
+          <label class="junta-option">
+            <input type="radio" name="caso" value="sin" id="caso-sin" />
+            <span class="junta-option__mark" aria-hidden="true"></span>
+            <span class="junta-option__title">No, no tengo</span>
+            <span class="junta-option__text">Llenas cinco números que sí sabes y la junta arma la tabla.</span>
+          </label>
+        </fieldset>
+
+        <div class="junta-panel" data-panel="con" id="con">
+          <ol class="junta-howto">
+            <li>Abre una conversación nueva en Claude.</li>
+            <li>Adjunta el estado de resultados. Mejor si trae este mes y el anterior.</li>
+            <li>Copia el prompt, cambia lo que está entre [corchetes] y envía.</li>
+          </ol>
+          <PromptCard title="Prompt 1A · Tengo estado de resultados" text={PROMPT_CON_ESTADO} />
+        </div>
+
+        <div class="junta-panel" data-panel="sin" id="sin">
+          <ol class="junta-howto">
+            <li>Abre una conversación nueva en Claude.</li>
+            <li>Copia el prompt y llena los cinco números del último mes. Si no sabes uno exacto, pon un aproximado.</li>
+            <li>Cambia lo demás que está entre [corchetes] y envía.</li>
+          </ol>
+          <PromptCard title="Prompt 1B · No tengo estado de resultados" text={PROMPT_SIN_ESTADO} />
+        </div>
+
+        <p class="junta-tip">
+          <strong>Guarda el acta</strong> que te deja la junta al final. La necesitas para el paso 2.
+          Y si vas a mostrar la respuesta a alguien, pon <code>MODO PANTALLA: SÍ</code>: habla en
+          porcentajes y no escribe pesos ni nombres.
+        </p>
+      </section>
+
+      <section class="junta-step" aria-labelledby="paso-2">
+        <p class="junta-step__n">Paso 2 · El día de la revisión</p>
+        <h2 id="paso-2">La junta se vuelve a reunir</h2>
+        <p class="junta-step__help">
+          Sirve para los dos casos. El acta trae una fecha de revisión: ese día pegas el acta, los
+          números nuevos y lo que pasó. La junta te dice si se mantiene, se ajusta o se reversa.
+        </p>
+        <ol class="junta-howto">
+          <li>Sirve en la misma conversación o en una nueva: el prompt ya trae a la junta.</li>
+          <li>Copia este prompt, pega el acta y los números de ahora, y envía.</li>
+        </ol>
+        <PromptCard title="Prompt 2 · Seguimiento" text={PROMPT_SEGUIMIENTO} />
+      </section>
+    </div>
+
+    <p class="dir-meta">
+      ¿Te sirvió? Sígueme en <a href={SOCIALS.tiktok} target="_blank" rel="noopener noreferrer">TikTok</a> para el siguiente.
+    </p>
+  </DirectoryChrome>
+</Layout>
+
+<script>
+  // Quien llega con /prompt/junta#sin ve directo el prompt sin estado de resultados.
+  if (location.hash === '#sin') {
+    const sin = document.querySelector<HTMLInputElement>('#caso-sin');
+    if (sin) sin.checked = true;
+  }
+</script>
+
+<style>
+  .junta { max-width: 860px; margin-top: 48px; }
+
+  .junta-step + .junta-step {
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: 2px solid var(--ink);
+  }
+
+  .junta-step__n {
+    margin: 0 0 10px;
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cobalt);
+  }
+
+  .junta h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(32px, 4.4vw, 48px);
+    font-stretch: 80%;
+    font-weight: 740;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+  }
+
+  .junta-step__help {
+    max-width: 58ch;
+    margin: 14px 0 0;
+    font-size: 17px;
+    line-height: 1.5;
+    color: #3b362f;
+  }
+
+  .junta-choice {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 26px 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .junta-option {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 12px;
+    align-items: center;
+    padding: 18px 18px 20px;
+    border: 2px solid var(--ink);
+    background: #fff;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .junta-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .junta-option__mark {
+    width: 22px;
+    height: 22px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+  }
+
+  .junta-option__title {
+    font-family: var(--display);
+    font-size: 26px;
+    font-stretch: 82%;
+    font-weight: 740;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .junta-option__text {
+    grid-column: 2;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .junta-option:hover { background: #f3ecdc; }
+
+  .junta-option:has(input:checked) {
+    color: var(--bone);
+    background: var(--ink);
+  }
+
+  .junta-option:has(input:checked) .junta-option__mark {
+    border-color: var(--lime);
+    background: radial-gradient(circle, var(--lime) 0 45%, transparent 50%);
+  }
+
+  .junta-option:has(input:focus-visible) {
+    outline: 3px solid var(--cobalt);
+    outline-offset: 3px;
+  }
+
+  .junta-panel { margin-top: 26px; }
+
+  /* Sin :has() (navegadores viejos) se ven los dos prompts, uno debajo del otro. */
+  .junta:has(#caso-con:checked) [data-panel='sin'],
+  .junta:has(#caso-sin:checked) [data-panel='con'] { display: none; }
+
+  .junta-howto {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: paso;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .junta-howto li {
+    position: relative;
+    padding-left: 38px;
+    counter-increment: paso;
+  }
+
+  .junta-howto li::before {
+    content: counter(paso);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    color: var(--bone);
+    background: var(--cobalt);
+    font-family: var(--data);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .junta-howto li + li { margin-top: 10px; }
+
+  .junta-step > .junta-howto { margin-top: 22px; }
+
+  .junta-tip {
+    max-width: 68ch;
+    margin: 22px 0 0;
+    padding: 16px 18px;
+    background: var(--lime);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .junta-tip code {
+    font-family: var(--data);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .junta { margin-top: 36px; }
+    .junta-choice { grid-template-columns: 1fr; }
+    .junta-option__title { font-size: 23px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .junta-option { transition: none; }
+  }
+</style>

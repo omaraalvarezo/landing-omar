@@ -715,3 +715,14 @@ retos (página web con referentes, tienda desde facturas, tablero de clientes co
 3,6 MB): el PPTX lleva las notas del orador y no sale del computador de Omar. El clic se mide con
 `escalon_click` (`id: taller-chatgpt-codex-pdf`, `placement: taller`). La página entra al sitemap.
 Los datos de modelos del PDF se verificaron en la documentación de OpenAI el 30-oct-2026.
+
+## 2026-11-10 — Prompt de la junta directiva v2 en /prompt/junta
+
+Página propia para el video del 11 nov (palabra JUNTA), fuera de la colección `tiktok` porque son tres
+prompts: el visitante responde «¿Tienes estado de resultados?» (radios, sin JS gracias a `:has()`; sin
+soporte se ven los dos) y copia el 1A (con estado, el que usa Omar) o el 1B (cinco números y la junta arma
+la tabla). Abajo, el prompt 2 de seguimiento para los dos casos. `#sin` abre directo el 1B.
+
+- Textos en `src/data/prompt-junta.ts`; espejo en `tiktok/2026-11-10-serie-18-videos/videos/01-junta-directiva-v2/prompt-junta-v2.md`.
+- Atajo `/junta` → `/prompt/junta` en `src/data/short-links.json`.
+- noindex y fuera del sitemap, como los demás `/prompt/*`. Build y 202 pruebas en verde.
