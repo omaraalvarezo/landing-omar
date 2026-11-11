@@ -726,3 +726,8 @@ la tabla). Abajo, el prompt 2 de seguimiento para los dos casos. `#sin` abre dir
 - Textos en `src/data/prompt-junta.ts`; espejo en `tiktok/2026-11-10-serie-18-videos/videos/01-junta-directiva-v2/prompt-junta-v2.md`.
 - Atajo `/junta` → `/prompt/junta` en `src/data/short-links.json`.
 - noindex y fuera del sitemap, como los demás `/prompt/*`. Build y 202 pruebas en verde.
+- CI del PR: `npm audit` cayó por dos avisos nuevos (glob GHSA-3g3m-2fjr-6pw4 y minimatch GHSA-g3hv-75wg-m249)
+  que entran por `@astrojs/vercel` → `@vercel/nft`. Se corrige con un override acotado
+  `"@vercel/nft": { "glob": "14.0.4" }` (trae minimatch 11.0.7). nft solo usa `glob()`, que no cambia. El
+  `npm install` local (npm 11) borraba del lock `rollup` y sus binarios: el lock se armó a mano con solo las
+  cuatro entradas que cambian.
