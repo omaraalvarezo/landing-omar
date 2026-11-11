@@ -115,3 +115,91 @@ CÓMO VA LA REVISIÓN:
 REGLAS:
 - No me den la razón por haber tomado la decisión. Si salió mal, díganlo.
 - Si los números no alcanzan para saber si funcionó, díganlo y digan qué dato falta.`;
+
+// Ejemplo de referencia: negocio FICTICIO, números inventados que cuadran entre sí.
+// Margen bruto 55% (sep 56,1%), operacional 15,3% (sep 16,1%), ventas +6%, arriendo y servicios +18%.
+// Decisión: gastos fijos +$4.050.000/mes → equilibrio en $7.360.000 de ventas extra al mes.
+export const EJEMPLO = {
+  negocio: 'Una panadería de barrio en Cúcuta',
+  empresa:
+    'Panadería de barrio en Cúcuta. Vendemos pan, tortas y desayunos a las familias del sector. Somos 6 personas y llevamos 4 años abiertos.',
+  decision:
+    'Comprar un horno de $28.000.000 a crédito (cuota de $1.050.000 al mes por 36 meses) para abrir un turno de tarde, de 2 a 7 p. m. Necesito un panadero más: $2.400.000 al mes con prestaciones. Creo que la tarde puede vender $12.000.000 al mes. Lo quiero funcionando en enero.',
+  pantalla: 'NO',
+  estado: {
+    nota: 'Adjunto el estado de resultados de septiembre y octubre de 2026.',
+    columnas: ['Septiembre', 'Octubre'],
+    filas: [
+      { cuenta: 'Ventas', valores: ['$58.500.000', '$62.000.000'] },
+      { cuenta: 'Costo de lo vendido', valores: ['$25.700.000', '$27.900.000'] },
+      { cuenta: 'Utilidad bruta', valores: ['$32.800.000', '$34.100.000'], total: true },
+      { cuenta: 'Nómina', valores: ['$14.800.000', '$14.800.000'] },
+      { cuenta: 'Arriendo y servicios', valores: ['$6.100.000', '$7.200.000'] },
+      { cuenta: 'Otros gastos', valores: ['$2.500.000', '$2.600.000'] },
+      { cuenta: 'Utilidad operacional', valores: ['$9.400.000', '$9.500.000'], total: true },
+    ],
+  },
+  numeros: [
+    { campo: 'Cuánto vendí', valor: '$62.000.000' },
+    { campo: 'Cuánto me costó lo que vendí', valor: '$27.900.000' },
+    { campo: 'Nómina, incluido lo mío', valor: '$14.800.000' },
+    { campo: 'Arriendo, servicios y otros gastos fijos', valor: '$9.800.000' },
+    { campo: 'Deudas', valor: 'Debo $21.000.000 y pago $1.800.000 al mes' },
+  ],
+  respuesta: {
+    lectura: [
+      'Margen bruto de 55%. En septiembre era 56,1%: los insumos subieron más rápido que tus precios.',
+      'Margen operacional de 15,3%, contra 16,1% en septiembre.',
+      'No cuadra: arriendo y servicios subieron 18% y las ventas solo 6%.',
+    ],
+    cuentas:
+      'El horno y el turno te suben los gastos fijos en $4.050.000 al mes: cuota de $1.050.000, panadero de $2.400.000 y unos $600.000 más de gas y energía. Con margen bruto de 55%, la tarde tiene que vender $7.400.000 al mes solo para no perder.',
+    abogado:
+      'Los $12.000.000 de la tarde no tienen ni un dato detrás. Si la tarde vende la mitad, pierdes unos $750.000 al mes y quedas pagando 36 cuotas por un horno que no se llena.',
+    choque: [
+      { quien: 'Operación', texto: 'El horno viejo ya trabaja al 100% en la mañana. Sin otro horno no hay tarde.' },
+      { quien: 'Abogado del diablo', texto: 'Entonces prueba la tarde con el horno viejo, horneando a las 2 p. m., antes de firmar 36 cuotas.' },
+    ],
+    votos: [
+      { miembro: 'Presidenta', voto: 'SÍ CON CONDICIÓN', tipo: 'condicion', razon: 'Solo si una prueba demuestra la venta de la tarde.' },
+      { miembro: 'Finanzas', voto: 'NO', tipo: 'no', razon: 'Todavía no hay un solo dato de la tarde.' },
+      { miembro: 'Operación', voto: 'SÍ', tipo: 'si', razon: 'El horno viejo no da para dos turnos.' },
+      { miembro: 'Comercial', voto: 'SÍ CON CONDICIÓN', tipo: 'condicion', razon: 'Primero cuatro semanas de prueba.' },
+      { miembro: 'Abogado del diablo', voto: 'NO', tipo: 'no', razon: 'El supuesto de ventas es un deseo.' },
+    ],
+    resultado: '3 a 2 · Aprobada con condición',
+    acta: [
+      { campo: 'Decisión', texto: 'Aprobada con condición. Primero, cuatro semanas de prueba de la tarde con el horno actual y un panadero de medio tiempo.' },
+      { campo: 'Condición', texto: 'El horno se compra solo si la tarde vende $2.000.000 o más por semana. Cuota máxima: $1.100.000.' },
+      { campo: 'Número a vigilar', texto: 'Ventas de la tarde por semana. Alarma: dos semanas seguidas por debajo de $1.500.000.' },
+      { campo: 'Revisión', texto: '15 de diciembre.' },
+      { campo: 'Se reversa si', texto: 'El margen bruto baja de 53%.' },
+    ],
+    pregunta: '¿Por qué los servicios subieron 18% si vendiste solo 6% más? ¿No será el horno viejo gastando más gas?',
+  },
+  seguimiento: {
+    campos: [
+      { campo: 'El acta anterior', valor: 'La pegó completa (la de arriba).' },
+      { campo: 'Los números de ahora', valor: 'La tarde vendió $2.100.000, $2.300.000, $2.400.000 y $2.400.000 en las cuatro semanas. Margen bruto de noviembre: 54,6%.' },
+      { campo: 'Qué pasó desde entonces', valor: 'Contraté un panadero de medio tiempo. La última semana ya cayó en diciembre.' },
+    ],
+    revision: [
+      { campo: 'Número vigilado', texto: 'Promedio de $2.300.000 por semana. Nunca sonó la alarma.' },
+      { campo: '¿Se cumplió la condición?', texto: 'SÍ: pasó de $2.000.000 por semana las cuatro semanas.' },
+      { campo: 'Abogado del diablo', texto: 'Ojo: la última semana ya es diciembre, la mejor temporada del año. Enero va a decir la verdad.' },
+    ],
+    votos: [
+      { miembro: 'Presidenta', voto: 'MANTENER', tipo: 'si', razon: 'Se cumplió lo que pedimos.' },
+      { miembro: 'Finanzas', voto: 'AJUSTAR', tipo: 'condicion', razon: 'Comprar, pero con la cuota más baja que dé el banco.' },
+      { miembro: 'Operación', voto: 'MANTENER', tipo: 'si', razon: 'El horno viejo ya no aguanta los dos turnos.' },
+      { miembro: 'Comercial', voto: 'MANTENER', tipo: 'si', razon: 'La tarde creció las cuatro semanas.' },
+      { miembro: 'Abogado del diablo', voto: 'AJUSTAR', tipo: 'condicion', razon: 'Comprar sí, pero mirar enero antes de contratar tiempo completo.' },
+    ],
+    resultado: '3 a 2 · Se mantiene',
+    acta: [
+      { campo: 'Qué se hace ahora', texto: 'Se compra el horno con cuota máxima de $1.100.000. El panadero sigue de medio tiempo hasta ver enero.' },
+      { campo: 'Número a vigilar', texto: 'Ventas de la tarde en enero. Alarma: por debajo de $1.700.000 por semana.' },
+      { campo: 'Próxima revisión', texto: '15 de febrero.' },
+    ],
+  },
+} as const;

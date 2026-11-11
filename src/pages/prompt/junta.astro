@@ -7,7 +7,10 @@ import Layout from '../../layouts/Layout.astro';
 import DirectoryChrome from '../../components/directory/DirectoryChrome.astro';
 import PromptCard from '../../components/directory/PromptCard.astro';
 import { SOCIALS } from '../../lib/contact';
-import { PROMPT_CON_ESTADO, PROMPT_SIN_ESTADO, PROMPT_SEGUIMIENTO } from '../../data/prompt-junta';
+import { PROMPT_CON_ESTADO, PROMPT_SIN_ESTADO, PROMPT_SEGUIMIENTO, EJEMPLO } from '../../data/prompt-junta';
+
+const R = EJEMPLO.respuesta;
+const S = EJEMPLO.seguimiento;
 
 const intro =
   'Cinco asesores leen tus números, discuten tu decisión, votan y te dejan un acta. Uno de ellos te lleva la contraria a propósito.';
@@ -28,6 +31,12 @@ const intro =
           bajo, el resultado sale más flojo.
         </p>
       </aside>
+
+      <nav class="junta-index" aria-label="En esta página">
+        <a href="#paso-1"><span>1</span> Decide</a>
+        <a href="#ejemplo"><span>Ej.</span> Mira un ejemplo</a>
+        <a href="#paso-2"><span>2</span> Revisa</a>
+      </nav>
 
       <section class="junta-step" aria-labelledby="paso-1">
         <p class="junta-step__n">Paso 1 · Para decidir</p>
@@ -60,6 +69,34 @@ const intro =
             <li>Copia el prompt, cambia lo que está entre [corchetes] y envía.</li>
           </ol>
           <PromptCard title="Prompt 1A · Tengo estado de resultados" text={PROMPT_CON_ESTADO} />
+          <details class="junta-fill">
+            <summary>Ver cómo lo llenó la panadería del ejemplo</summary>
+            <dl class="junta-fields">
+              <div><dt>Mi empresa</dt><dd>{EJEMPLO.empresa}</dd></div>
+              <div>
+                <dt>Estado de resultados</dt>
+                <dd>
+                  {EJEMPLO.estado.nota}
+                  <table class="junta-pyg">
+                    <caption class="sr-only">Estado de resultados del ejemplo</caption>
+                    <thead>
+                      <tr><th scope="col">Cuenta</th>{EJEMPLO.estado.columnas.map((c) => <th scope="col">{c}</th>)}</tr>
+                    </thead>
+                    <tbody>
+                      {EJEMPLO.estado.filas.map((f) => (
+                        <tr class={'total' in f && f.total ? 'is-total' : undefined}>
+                          <th scope="row">{f.cuenta}</th>
+                          {f.valores.map((v) => <td>{v}</td>)}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </dd>
+              </div>
+              <div><dt>La decisión</dt><dd>{EJEMPLO.decision}</dd></div>
+              <div><dt>Modo pantalla</dt><dd>{EJEMPLO.pantalla}</dd></div>
+            </dl>
+          </details>
         </div>
 
         <div class="junta-panel" data-panel="sin" id="sin">
@@ -69,6 +106,22 @@ const intro =
             <li>Cambia lo demás que está entre [corchetes] y envía.</li>
           </ol>
           <PromptCard title="Prompt 1B · No tengo estado de resultados" text={PROMPT_SIN_ESTADO} />
+          <details class="junta-fill">
+            <summary>Ver cómo lo llenó la panadería del ejemplo</summary>
+            <dl class="junta-fields">
+              <div><dt>Mi empresa</dt><dd>{EJEMPLO.empresa}</dd></div>
+              <div>
+                <dt>Mis números del último mes</dt>
+                <dd>
+                  <ol class="junta-numbers">
+                    {EJEMPLO.numeros.map((n) => <li><span>{n.campo}</span> <strong>{n.valor}</strong></li>)}
+                  </ol>
+                </dd>
+              </div>
+              <div><dt>La decisión</dt><dd>{EJEMPLO.decision}</dd></div>
+              <div><dt>Modo pantalla</dt><dd>{EJEMPLO.pantalla}</dd></div>
+            </dl>
+          </details>
         </div>
 
         <p class="junta-tip">
@@ -76,6 +129,58 @@ const intro =
           Y si vas a mostrar la respuesta a alguien, pon <code>MODO PANTALLA: SÍ</code>: habla en
           porcentajes y no escribe pesos ni nombres.
         </p>
+      </section>
+
+      <section class="junta-step" id="ejemplo" aria-labelledby="ejemplo-titulo">
+        <p class="junta-step__n">Ejemplo · Negocio ficticio</p>
+        <h2 id="ejemplo-titulo">Así responde la junta</h2>
+        <p class="junta-step__help">
+          {EJEMPLO.negocio} quiere comprar un horno a crédito para abrir un turno de tarde. Llenó el
+          prompt como ves arriba y esta es la respuesta, resumida. Los números son inventados.
+        </p>
+
+        <article class="junta-acta">
+          <section>
+            <h3><span>01</span> Lectura de números · Finanzas</h3>
+            <ul>{R.lectura.map((l) => <li>{l}</li>)}</ul>
+            <p>{R.cuentas}</p>
+          </section>
+
+          <section>
+            <h3><span>02</span> Abogado del diablo</h3>
+            <blockquote>{R.abogado}</blockquote>
+          </section>
+
+          <section>
+            <h3><span>03</span> Choque</h3>
+            <dl class="junta-talk">
+              {R.choque.map((c) => <div><dt>{c.quien}</dt><dd>{c.texto}</dd></div>)}
+            </dl>
+          </section>
+
+          <section>
+            <h3><span>04</span> Votación</h3>
+            <ul class="junta-votes">
+              {R.votos.map((v) => (
+                <li>
+                  <span class="junta-votes__who">{v.miembro}</span>
+                  <span class={`junta-vote junta-vote--${v.tipo}`}>{v.voto}</span>
+                  <span class="junta-votes__why">{v.razon}</span>
+                </li>
+              ))}
+            </ul>
+            <p class="junta-result">{R.resultado}</p>
+          </section>
+
+          <section>
+            <h3><span>05</span> Acta · Presidenta</h3>
+            <dl class="junta-fields junta-fields--acta">
+              {R.acta.map((a) => <div><dt>{a.campo}</dt><dd>{a.texto}</dd></div>)}
+            </dl>
+          </section>
+
+          <p class="junta-question"><strong>La pregunta que no te habías hecho:</strong> {R.pregunta}</p>
+        </article>
       </section>
 
       <section class="junta-step" aria-labelledby="paso-2">
@@ -90,6 +195,30 @@ const intro =
           <li>Copia este prompt, pega el acta y los números de ahora, y envía.</li>
         </ol>
         <PromptCard title="Prompt 2 · Seguimiento" text={PROMPT_SEGUIMIENTO} />
+        <details class="junta-fill">
+          <summary>Ver la revisión de la panadería del ejemplo</summary>
+          <p class="junta-fill__label">Lo que pegó el 15 de diciembre</p>
+          <dl class="junta-fields">
+            {S.campos.map((c) => <div><dt>{c.campo}</dt><dd>{c.valor}</dd></div>)}
+          </dl>
+          <p class="junta-fill__label">Lo que respondió la junta, resumido</p>
+          <dl class="junta-fields">
+            {S.revision.map((r) => <div><dt>{r.campo}</dt><dd>{r.texto}</dd></div>)}
+          </dl>
+          <ul class="junta-votes">
+            {S.votos.map((v) => (
+              <li>
+                <span class="junta-votes__who">{v.miembro}</span>
+                <span class={`junta-vote junta-vote--${v.tipo}`}>{v.voto}</span>
+                <span class="junta-votes__why">{v.razon}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="junta-result">{S.resultado}</p>
+          <dl class="junta-fields junta-fields--acta">
+            {S.acta.map((a) => <div><dt>{a.campo}</dt><dd>{a.texto}</dd></div>)}
+          </dl>
+        </details>
       </section>
     </div>
 
@@ -140,6 +269,42 @@ const intro =
   }
 
   .junta-model strong { color: var(--lime); }
+
+  .junta-index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: -24px 0 44px;
+  }
+
+  .junta-index a {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 14px 0 6px;
+    border: 1px solid rgba(19, 17, 24, 0.3);
+    color: var(--ink);
+    font-family: var(--data);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .junta-index a span {
+    display: grid;
+    place-items: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 4px;
+    color: var(--bone);
+    background: var(--ink);
+  }
+
+  .junta-index a:hover { border-color: var(--ink); background: #fff; }
+
+  .junta-step { scroll-margin-top: 96px; }
 
   .junta-step + .junta-step {
     margin-top: 56px;
@@ -298,6 +463,218 @@ const intro =
     white-space: nowrap;
   }
 
+  /* Ejemplo lleno (plegable) */
+  .junta-fill {
+    margin-top: 12px;
+    border: 1px solid rgba(19, 17, 24, 0.16);
+    background: #fff;
+  }
+
+  .junta-fill summary {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 16px;
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .junta-fill summary::-webkit-details-marker { display: none; }
+
+  .junta-fill summary::before {
+    content: '+';
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    color: var(--bone);
+    background: var(--cobalt);
+    font-size: 14px;
+  }
+
+  .junta-fill[open] summary::before { content: '−'; }
+  .junta-fill[open] summary { border-bottom: 1px solid rgba(19, 17, 24, 0.12); }
+  .junta-fill > :not(summary) { margin-left: 16px; margin-right: 16px; }
+  .junta-fill > :last-child { margin-bottom: 18px; }
+
+  .junta-fill__label {
+    margin-top: 18px;
+    margin-bottom: 0;
+    color: var(--cobalt);
+    font-family: var(--data);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .junta-fields { margin: 14px 0 0; }
+
+  .junta-fields > div {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 4px 18px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(19, 17, 24, 0.1);
+  }
+
+  .junta-fields > div:first-child { border-top: 0; padding-top: 0; }
+
+  .junta-fields dt {
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.6;
+  }
+
+  .junta-fields dd { margin: 0; font-size: 15px; line-height: 1.5; }
+
+  .junta-pyg {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 10px;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .junta-pyg th,
+  .junta-pyg td {
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(19, 17, 24, 0.1);
+    text-align: right;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .junta-pyg th[scope='row'],
+  .junta-pyg thead th:first-child { text-align: left; white-space: normal; padding-left: 0; }
+
+  .junta-pyg thead th {
+    font-family: var(--data);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .junta-pyg td { font-family: var(--data); font-size: 13px; }
+  .junta-pyg .is-total th,
+  .junta-pyg .is-total td { font-weight: 700; border-bottom-color: var(--ink); }
+
+  .junta-numbers { margin: 0; padding: 0; list-style: none; }
+  .junta-numbers li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2px 16px;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(19, 17, 24, 0.18);
+  }
+  .junta-numbers strong { font-family: var(--data); font-size: 13px; }
+
+  /* Respuesta de ejemplo */
+  .junta-acta {
+    margin-top: 26px;
+    padding: 6px 24px 24px;
+    background: #fff;
+    border: 2px solid var(--ink);
+  }
+
+  .junta-acta > section { padding: 20px 0; border-bottom: 1px solid rgba(19, 17, 24, 0.12); }
+
+  .junta-acta h3 {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 0 0 12px;
+    font-family: var(--data);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .junta-acta h3 span { color: var(--cobalt); }
+
+  .junta-acta ul:not(.junta-votes) { margin: 0; padding-left: 20px; list-style: square; }
+  .junta-acta ul:not(.junta-votes) li::marker { color: var(--cobalt); }
+  .junta-acta li { line-height: 1.5; }
+  .junta-acta ul:not(.junta-votes) li + li { margin-top: 6px; }
+  .junta-acta section > p { margin: 12px 0 0; line-height: 1.5; }
+
+  .junta-acta blockquote {
+    margin: 0;
+    padding: 4px 0 4px 16px;
+    border-left: 4px solid var(--coral);
+    font-family: var(--display);
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-stretch: 86%;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .junta-talk { margin: 0; }
+  .junta-talk > div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 4px 16px; }
+  .junta-talk > div + div { margin-top: 10px; }
+  .junta-talk dt { font-weight: 600; }
+  .junta-talk dd { margin: 0; line-height: 1.5; }
+
+  .junta-votes { margin: 0; padding: 0; list-style: none; }
+
+  .junta-votes li {
+    display: grid;
+    grid-template-columns: 150px 140px minmax(0, 1fr);
+    gap: 4px 14px;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(19, 17, 24, 0.08);
+  }
+
+  .junta-votes__who { font-weight: 600; }
+  .junta-votes__why { font-size: 15px; line-height: 1.4; }
+
+  .junta-vote {
+    justify-self: start;
+    padding: 4px 8px;
+    border: 1px solid var(--ink);
+    font-family: var(--data);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .junta-vote--si { background: var(--lime); }
+  .junta-vote--no { color: var(--ink); background: var(--coral); }
+  .junta-vote--condicion { background: var(--bone); }
+
+  .junta-result {
+    margin: 14px 0 0;
+    font-family: var(--display);
+    font-size: 24px;
+    font-stretch: 82%;
+    font-weight: 740;
+    letter-spacing: -0.03em;
+  }
+
+  .junta-fill .junta-votes { margin-top: 14px; }
+  .junta-fill .junta-result { margin-top: 12px; }
+
+  .junta-question {
+    margin: 20px 0 0;
+    padding: 14px 16px;
+    background: var(--sky);
+    line-height: 1.5;
+  }
+
   .sr-only {
     position: absolute;
     width: 1px;
@@ -312,6 +689,13 @@ const intro =
     .junta-model { grid-template-columns: 1fr; }
     .junta-choice { grid-template-columns: 1fr; }
     .junta-option__title { font-size: 23px; }
+    .junta-index { margin-top: -16px; }
+    .junta-fields > div,
+    .junta-talk > div { grid-template-columns: 1fr; }
+    .junta-votes li { grid-template-columns: 1fr auto; }
+    .junta-votes__why { grid-column: 1 / -1; }
+    .junta-acta { padding: 4px 16px 18px; }
+    .junta-pyg th, .junta-pyg td { padding: 6px 4px; }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -731,3 +731,17 @@ la tabla). Abajo, el prompt 2 de seguimiento para los dos casos. `#sin` abre dir
   `"@vercel/nft": { "glob": "14.0.4" }` (trae minimatch 11.0.7). nft solo usa `glob()`, que no cambia. El
   `npm install` local (npm 11) borraba del lock `rollup` y sus binarios: el lock se armó a mano con solo las
   cuatro entradas que cambian.
+
+## 2026-11-10 — Ejemplo de referencia en /prompt/junta
+
+Ejemplo con una panadería FICTICIA de Cúcuta que quiere comprar un horno a crédito para abrir un turno de
+tarde. Los números son inventados pero cuadran: margen bruto 55% (sep 56,1%), operacional 15,3% (sep
+16,1%), arriendo y servicios +18% contra ventas +6%; la decisión suma $4.050.000 de gastos fijos al mes y
+necesita $7.400.000 de ventas extra para no perder.
+
+- Índice arriba: Decide · Mira un ejemplo · Revisa.
+- Bajo cada prompt (1A, 1B, 2), un plegable «Ver cómo lo llenó la panadería» con los campos llenos
+  (1A con su estado de resultados en tabla; 1B con los cinco números).
+- Entre el paso 1 y el 2, «Así responde la junta»: lectura, abogado del diablo, choque, votación 3 a 2 y
+  acta. El paso 2 trae la revisión del 15 de diciembre (3 a 2, se mantiene).
+- Datos en `EJEMPLO` de `src/data/prompt-junta.ts`.
