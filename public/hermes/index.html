@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Hermes personal de Omar: asistente privado para organizar correo, agenda y tareas, con acciones aprobadas por su titular.">
+  <link rel="canonical" href="https://omaralvarezo.co/hermes/">
+  <title>Hermes personal de Omar</title>
+  <style>
+    :root{color-scheme:light;--paper:#f7f6f0;--ink:#183e33;--muted:#52625a;--line:#d5ddd4}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:inherit;text-underline-offset:4px}a:focus-visible{outline:3px solid #ad570e;outline-offset:5px}header,main,footer{max-width:980px;margin:auto;padding:30px 28px}
+    header{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);font-size:14px}header a{font-weight:650}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.13em;font-weight:650;color:var(--muted)}
+    h1{font-size:clamp(38px,7vw,68px);line-height:1.08;letter-spacing:-.045em;max-width:760px;margin:20px 0 28px}h2{font-size:25px;line-height:1.3;letter-spacing:-.025em}p{max-width:720px}.lead{font-size:21px;color:var(--muted)}
+    .hero{padding:35px 0 42px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0}.cards p{font-size:16px;color:var(--muted)}
+    .privacy{padding:30px 0 12px}.button{display:inline-block;padding:12px 18px;border:1px solid var(--ink);border-radius:5px;text-decoration:none;font-weight:600;margin-top:12px}.button:hover{background:var(--ink);color:var(--paper)}footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}
+    @media(max-width:620px){header,main,footer{padding-left:22px;padding-right:22px}.cards{grid-template-columns:1fr;gap:0}.hero{padding-top:15px}.lead{font-size:19px}header{flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+  <header><a href="https://omaralvarezo.co/">Omar Álvarez</a><span>Herramienta de uso personal</span></header>
+  <main>
+    <section class="hero" aria-labelledby="titulo">
+      <p class="eyebrow">Correo · Agenda · Tareas</p>
+      <h1 id="titulo">Hermes personal de Omar</h1>
+      <p class="lead">Un asistente privado para revisar lo importante, organizar el día y ejecutar las acciones que le solicito.</p>
+      <p>Esta es la instalación personal de Hermes Agent administrada por Omar. Funciona en su Mac y permite conversar desde Hermes o un bot privado de Telegram. No ofrece registro ni acceso al correo a visitantes de esta página.</p>
+    </section>
+    <section class="cards" aria-label="Funciones del asistente">
+      <article><h2>Correo</h2><p>Consulta Gmail, resume mensajes y detecta posibles asuntos pendientes. Prepara borradores y envía correos tras la aprobación concreta de Omar.</p></article>
+      <article><h2>Agenda</h2><p>Consulta el calendario personal de Apple y crea compromisos solicitados, con avisos antes de cada evento.</p></article>
+      <article><h2>Tareas</h2><p>Organiza prioridades y permite crear, editar y completar tareas en Recordatorios de Apple por instrucción de Omar.</p></article>
+    </section>
+    <section class="privacy" aria-labelledby="datos">
+      <h2 id="datos">Cómo se utilizan los datos</h2>
+      <p>Gmail se conecta mediante la autorización de Google. Los correos consultados pueden procesarse con Claude mediante la API de Anthropic; Qwen local es el modelo de respaldo. Los avisos configurados se entregan en el Telegram privado de Omar. El historial y los informes se conservan en el Mac.</p>
+      <p>Los seguimientos automáticos generan avisos para Omar. El envío de un correo exige aprobar su destinatario, asunto y texto.</p>
+      <a class="button" href="/hermes/privacidad/">Leer la política de privacidad</a>
+    </section>
+    <section aria-labelledby="contacto"><h2 id="contacto">Contacto y asistencia</h2><p>Omar · <a href="mailto:omaraalvarezo@gmail.com">omaraalvarezo@gmail.com</a></p></section>
+  </main>
+  <footer>Hermes personal de Omar · <a href="/hermes/privacidad/">Privacidad</a></footer>
+</body>
+</html>

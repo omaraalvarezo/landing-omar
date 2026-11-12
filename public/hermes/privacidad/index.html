@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cómo Hermes personal de Omar accede, utiliza, conserva y comparte los datos de Gmail, calendario y tareas.">
+  <link rel="canonical" href="https://omaralvarezo.co/hermes/privacidad/">
+  <title>Política de privacidad · Hermes personal de Omar</title>
+  <style>
+    :root{color-scheme:light;--paper:#f7f6f0;--ink:#183e33;--muted:#52625a;--line:#d5ddd4}*{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.7 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    header,main,footer{max-width:850px;margin:auto;padding:28px}header,footer{font-size:14px}header{border-bottom:1px solid var(--line)}
+    a{color:inherit;text-underline-offset:4px}a:focus-visible{outline:3px solid #ad570e;outline-offset:5px}h1{font-size:clamp(34px,6vw,54px);line-height:1.12;letter-spacing:-.035em;margin:22px 0}h2{font-size:23px;line-height:1.35;margin:36px 0 12px}
+    p,li{color:var(--muted)}li+li{margin-top:10px}strong{color:var(--ink)}.label{font-size:12px;letter-spacing:.11em;text-transform:uppercase}.intro{border-left:3px solid var(--ink);padding-left:20px;margin:28px 0}footer{border-top:1px solid var(--line);margin-top:25px}
+    @media(max-width:620px){header,main,footer{padding-left:22px;padding-right:22px}ul{padding-left:22px}}
+  </style>
+</head>
+<body>
+  <header><a href="/hermes/">← Hermes personal de Omar</a></header>
+  <main>
+    <p class="label">Actualizada el 12 de noviembre de 2026</p>
+    <h1>Política de privacidad</h1>
+    <p class="intro"><strong>Hermes personal de Omar</strong> es una instalación privada de Hermes Agent, administrada por Omar para organizar su correo, calendario y tareas. Esta política describe esa instalación y sus conexiones; no un servicio abierto al público.</p>
+
+    <h2>Responsable y contacto</h2>
+    <p>Omar administra esta instalación. Para consultas sobre el acceso o la eliminación de datos: <a href="mailto:omaraalvarezo@gmail.com">omaraalvarezo@gmail.com</a>.</p>
+
+    <h2>Datos a los que accede</h2>
+    <ul>
+      <li><strong>Gmail:</strong> dirección de la cuenta autorizada, remitentes, destinatarios, asuntos, fechas, etiquetas, identificadores de mensajes e hilos, fragmentos y texto de los correos consultados. También accede a los borradores solicitados por Omar. El adaptador actual no descarga adjuntos.</li>
+      <li><strong>Autorización:</strong> credenciales OAuth que permiten acceder a Gmail y renovar la conexión. Hermes no solicita ni guarda la contraseña de Google.</li>
+      <li><strong>Agenda y tareas:</strong> eventos del calendario personal y tareas de Recordatorios de Apple que se consultan o gestionan, junto con las instrucciones y conversaciones del titular.</li>
+    </ul>
+
+    <h2>Para qué se utilizan</h2>
+    <p>Para buscar y resumir correos, identificar asuntos que podrían requerir respuesta, preparar borradores, enviar mensajes aprobados, organizar prioridades y gestionar compromisos y tareas solicitados. Los informes y avisos automáticos se dirigen al titular.</p>
+    <p>El permiso de Google solicitado es <code>gmail.modify</code>, que permite lectura y escritura de correo. El envío requiere la aprobación del destinatario, asunto y texto concretos. La revisión programada de correo utiliza herramientas de lectura y no envía correos por sí sola.</p>
+
+    <h2>Procesamiento y destinatarios de los datos</h2>
+    <ul>
+      <li><strong>Google:</strong> proporciona Gmail y procesa la autorización, las consultas, los borradores y los envíos.</li>
+      <li><strong>Anthropic:</strong> Claude es el modelo predeterminado mediante su API. El contenido consultado y el contexto necesario de la conversación pueden enviarse a Anthropic para producir respuestas y resúmenes. La configuración dispone de Qwen local como respaldo; utilizarlo no elimina los datos que se hayan enviado previamente a otros servicios.</li>
+      <li><strong>Telegram:</strong> las conversaciones y los avisos configurados pasan por Telegram y se entregan al chat privado autorizado de Omar.</li>
+      <li><strong>Apple:</strong> Calendario y Recordatorios gestionan los datos y su sincronización según las cuentas y ajustes del dispositivo.</li>
+      <li><strong>Destinatarios de correo:</strong> reciben los mensajes cuyo contenido y destinatario ha aprobado Omar.</li>
+    </ul>
+    <p>Esta integración no implementa venta de datos ni funciones de entrenamiento de modelos. El tratamiento realizado por los proveedores externos está sujeto a sus propias condiciones y políticas; esta instalación no controla su retención.</p>
+
+    <h2>Almacenamiento y conservación</h2>
+    <p>El Mac conserva credenciales de conexión, conversaciones, resultados de herramientas, memoria del asistente, informes y registros operativos. Las credenciales se guardan en archivos locales con permisos restringidos. No se ha establecido un plazo único de eliminación automática para todo el historial, la memoria y los informes.</p>
+    <p>Los datos se mantienen mientras el titular los conserve o sean necesarios para estas funciones. Las copias existentes en Gmail, Telegram, iCloud o los proveedores de modelos siguen sus respectivos controles de conservación. Revocar una conexión no borra automáticamente el historial ni las copias anteriores.</p>
+
+    <h2>Control, revocación y eliminación</h2>
+    <p>Omar puede detener los bots y las revisiones programadas, desactivar las conexiones y retirar el acceso de Hermes desde los permisos de aplicaciones de su cuenta de Google. También puede solicitar o realizar la eliminación de las credenciales, historial, memoria e informes locales. El contenido enviado a otros servicios debe gestionarse además mediante las opciones de esos servicios.</p>
+
+    <h2>Uso de los datos de Google</h2>
+    <p>Los datos obtenidos de Google se destinan a las funciones personales descritas en esta política. Su uso y transferencia están sujetos a la <a href="https://developers.google.com/terms/api-services-user-data-policy">Política de Datos de Usuario de los Servicios de API de Google</a>, incluidos sus requisitos de uso limitado.</p>
+
+    <h2>Este sitio y los cambios de configuración</h2>
+    <p>Estas páginas informativas no muestran el correo, el calendario, las tareas ni las credenciales. El alojamiento del sitio puede procesar datos técnicos de las visitas. Si cambian las conexiones, los fines o la forma de compartir datos de Hermes, esta política debe actualizarse y el titular debe autorizar los cambios correspondientes.</p>
+  </main>
+  <footer><a href="/hermes/">Hermes personal de Omar</a> · <a href="mailto:omaraalvarezo@gmail.com">Contacto</a></footer>
+</body>
+</html>
