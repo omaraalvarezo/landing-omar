@@ -745,3 +745,9 @@ necesita $7.400.000 de ventas extra para no perder.
 - Entre el paso 1 y el 2, «Así responde la junta»: lectura, abogado del diablo, choque, votación 3 a 2 y
   acta. El paso 2 trae la revisión del 15 de diciembre (3 a 2, se mantiene).
 - Datos en `EJEMPLO` de `src/data/prompt-junta.ts`.
+
+---
+
+## 2026-11-16 — Tanda editorial del directorio
+
+Edición semanal de `/herramientas-ia`. Cinco noticias (negocios en ChatGPT del 10 nov, ChatGPT Wallet del 13 nov, Gemini 4 Hydrogen del 12 nov, Claude Fable 5.2 del 9 nov, Gemini 4 Carbon del 10 nov), cinco guías (pintura automotriz, polarizado, grúas, aire acondicionado de carros, panaderías), herramienta de la semana ChatGPT, comparativa ChatGPT frente a Gemini y prompts del 16 nov. Entran LanguageTool, VEED y Recraft, con ficha. La ayuda de datos de Perplexity pasa de `intercom.help` (404) a la URL del centro de ayuda con el mismo artículo. La de VEED y la de Recraft no dejaron un monto de plan en el texto leído. Los euros de LanguageTool salen de su ayuda del 24 mar 2026.
