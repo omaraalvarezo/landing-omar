@@ -6,7 +6,7 @@ tags: [directorio, contenido, newsletter, seo]
 fuentes:
   - "[[wiki/decisiones/directorio-herramientas-ia]]"
 creado: 2026-10-16
-actualizado: 2026-10-26
+actualizado: 2026-11-16
 ---
 
 # Rutina editorial del directorio de IA
@@ -38,6 +38,25 @@ el cuerpo y pasar `npm run content:check`.
 - Una noticia enlaza la guía “para” que le corresponde. La ficha de la herramienta muestra esas notas al revés.
 - Precios de un tercero se fechan. Si la fuente no trae el precio, el campo dice que no está publicado.
 - No se publica en TikTok, Instagram, X ni LinkedIn de Omar sin un pedido explícito de esa pieza.
+
+## Fuentes de la edición del 16 nov 2026
+
+Esas notas están en el repositorio. La siguiente edición vuelve a abrir la página, no el resumen:
+
+- OpenAI, 10 nov 2026: `https://openai.com/index/introducing-businesses-chatgpt`
+- OpenAI, ayuda de Business Hub, abierta el 16 nov 2026: `https://help.openai.com/en/articles/20001635-setting-up-your-business-on-chatgpt`
+- OpenAI, 13 nov 2026: `https://openai.com/index/introducing-chatgpt-wallet`
+- Google, 12 nov 2026: `https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/`
+- Google, 10 nov 2026: `https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/`
+- Anthropic, 9 nov 2026: `https://www.anthropic.com/claude-fable-and-mythos-5-2`
+- LanguageTool, portada y premium abiertas el 16 nov 2026: `https://languagetool.org/` y `https://languagetool.org/premium`
+- LanguageTool, ayuda de suscripciones con fecha 24 mar 2026: `https://help.languagetool.org/hc/en-us/articles/39254510973335-What-subscriptions-does-LanguageTool-offer`
+- VEED, portada y precios abiertos el 16 nov 2026: `https://www.veed.io/` y `https://www.veed.io/pricing`
+- Recraft, portada y precios abiertos el 16 nov 2026: `https://www.recraft.ai/` y `https://www.recraft.ai/pricing`
+
+La ayuda de datos de Perplexity ya no vive en `intercom.help`. El mismo artículo responde en `https://www.perplexity.ai/help-center/en/articles/11564572-data-collection-at-perplexity`. Esa URL devolvió 403 a un cliente automático (bloqueo de bot). La de Intercom respondió 404. `https://gemini.google.com` responde 200. Los 403 de Canva, Adobe, Gamma, ManyChat, Midjourney, Perplexity, Make y centros de ayuda similares se trataron como bloqueo de bot, no como enlace roto.
+
+La página de precios de VEED no dejó un monto de plan en el texto leído ese día. La de Recraft tampoco dejó el precio en dólares; sí dijo que los precios mostrados van sin IVA. Los euros de LanguageTool salen de la ayuda del 24 mar 2026, no del checkout.
 
 ## Fuentes de la edición del 26 oct 2026
 

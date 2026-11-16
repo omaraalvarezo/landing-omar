@@ -490,5 +490,41 @@
     "sponsor": false,
     "sponsorUntil": null,
     "added": "2026-10-26"
+  },
+  {
+    "slug": "languagetool",
+    "nombre": "LanguageTool",
+    "url": "https://languagetool.org",
+    "categoria": "escritura",
+    "desc": "Corrector con IA para español y otros idiomas. La versión gratis marca ortografía y puntuación simple. La ayuda del 24 mar 2026 lista el Premium en euros.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-11-16"
+  },
+  {
+    "slug": "veed",
+    "nombre": "VEED",
+    "url": "https://www.veed.io",
+    "categoria": "video",
+    "desc": "Editor de video con IA para piezas de redes: subtítulos, marca y generación. El 16 nov 2026 la página de precios deja empezar gratis y cobra los planes de pago por asiento.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-11-16"
+  },
+  {
+    "slug": "recraft",
+    "nombre": "Recraft",
+    "url": "https://www.recraft.ai",
+    "categoria": "diseno",
+    "desc": "Generador de imágenes y vectores. El 16 nov 2026 el plan gratis deja las imágenes públicas y sin uso comercial. En los planes de pago, Recraft dice que conservas la imagen.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-11-16"
   }
 ]

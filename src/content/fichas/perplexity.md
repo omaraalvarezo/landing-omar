@@ -31,7 +31,7 @@ sources:
   - name: la ayuda sobre planes
     url: https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you
   - name: la ayuda sobre datos
-    url: https://intercom.help/perplexity-ai/en/articles/11564572-data-collection-at-perplexity
+    url: https://www.perplexity.ai/help-center/en/articles/11564572-data-collection-at-perplexity
   - name: la ayuda sobre respuestas incorrectas
     url: https://www.perplexity.ai/help-center/en/articles/10354902-how-can-i-report-incorrect-or-inaccurate-answers
 ---
