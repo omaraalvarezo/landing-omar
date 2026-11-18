@@ -1,7 +1,8 @@
 ---
-title: IA para barberías
+title: "IA para barberías: citas y WhatsApp"
 description: "En una barbería, la cita, el recordatorio y la foto del corte son lo que el cliente vuelve a pedir. Esta guía usa ManyChat, WhatsApp Business, ChatGPT, Canva, CapCut y el perfil de Google. No publica un rostro sin permiso."
 published: 2026-10-19
+updated: 2026-11-18
 tools:
   - manychat
   - whatsapp-business

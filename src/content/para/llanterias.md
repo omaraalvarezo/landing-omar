@@ -1,7 +1,8 @@
 ---
-title: IA para llanterías
+title: "IA para llanterías: medida y WhatsApp"
 description: "En una llantería, la medida del costado y el aviso de que el trabajo está listo son lo que se repite. Esta guía usa WhatsApp, ChatGPT, Photoroom, Notion, el perfil de Google y Treble. No adivina una medida ni un precio."
 published: 2026-10-26
+updated: 2026-11-18
 tools:
   - whatsapp-business
   - chatgpt
@@ -69,6 +70,7 @@ related:
   - venta-de-repuestos
   - lavaderos-de-carros
   - venta-de-carros-usados
+  - gruas
 ---
 
 La llantería se traba en la medida y en el «¿ya quedó?». Si la medida se contesta de memoria, se manda la pieza que no es. Si el aviso de listo sale en un audio, cada cliente escucha una hora distinta.

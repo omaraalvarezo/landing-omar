@@ -1,7 +1,8 @@
 ---
-title: La búsqueda de Google sube los enlaces dentro de la respuesta
+title: "Google sube los enlaces dentro de la respuesta"
 description: "El 15 oct 2026 Google anunció más enlaces dentro de AI Mode y de AI Overviews, y más arriba en la respuesta. También dice que Preferred Sources creció más de 7 veces desde que empezó el año. Esa cifra es de Google."
 published: 2026-10-19
+updated: 2026-11-18
 edition: 2026-10-19
 sourceDate: 2026-10-15
 sourceName: Google

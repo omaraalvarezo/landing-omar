@@ -1,7 +1,8 @@
 ---
-title: ChatGPT frente a Gemini
+title: "ChatGPT o Gemini: cuál usar en una pyme"
 description: "Al 16 nov 2026 ChatGPT anunció reclamar el negocio y una billetera en Estados Unidos. Gemini anunció Hydrogen para la app y la búsqueda, y Carbon para Ultra y la API de pago. Ningún post trae un precio de asiento en pesos. Aquí no hay puntaje."
 published: 2026-11-16
+updated: 2026-11-18
 checked: 2026-11-16
 left: chatgpt
 right: gemini

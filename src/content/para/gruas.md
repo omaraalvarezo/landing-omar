@@ -1,7 +1,8 @@
 ---
-title: IA para grúas y auxilio en carretera
+title: "IA para grúas: punto, hora y precio"
 description: "En una grúa, la dirección y la hora las confirma quien va en camino. Esta guía usa WhatsApp, ChatGPT, Notion, el perfil de Google y Jotform. No calcula un tiempo de llegada ni un precio de kilómetro que no escribiste."
 published: 2026-11-16
+updated: 2026-11-18
 tools:
   - whatsapp-business
   - chatgpt

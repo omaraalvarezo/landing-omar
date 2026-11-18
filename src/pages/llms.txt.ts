@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { categoryPath, getCategories, getTools } from '../lib/directory';
-import { categorySeo, DIRECTORY_INDEX, hubSeo, TASK_LINKS } from '../lib/directory-seo';
+import { categorySeo, CITABLE_ANSWERS, DIRECTORY_INDEX, hubSeo, TASK_LINKS } from '../lib/directory-seo';
 import {
   alternativesPath,
   casePath,
@@ -56,7 +56,18 @@ export const GET: APIRoute = async () => {
   ]);
   const body = `# Omar Álvarez — herramientas de IA para pymes
 
-> ${DIRECTORY_INDEX.lead} El primer párrafo de cada pieza es la respuesta directa. Las cifras citan la fuente y la fecha. No hay llamada gratuita ni paquetes de consultoría en estas páginas; hoy no se ofrecen sesiones ni instalaciones, solo una lista de espera.
+> ${DIRECTORY_INDEX.lead} El primer párrafo de cada guía es la respuesta directa, en 40 a 60 palabras. Las cifras citan la fuente y la fecha. No hay llamada gratuita ni paquetes de consultoría en estas páginas; hoy no se ofrecen sesiones ni instalaciones, solo una lista de espera. Las fichas de LanguageTool, VEED y Recraft se revisaron el 16 nov 2026.
+
+## Respuestas directas
+
+${CITABLE_ANSWERS.map((item) => `- **${item.q}** ${item.a} Página: ${SITE}${item.href}.`).join('\n')}
+
+## Fichas revisadas el 16 nov 2026
+
+${tools
+  .filter((tool) => tool.added === '2026-11-16')
+  .map((tool) => line(tool.nombre, `/herramientas-ia/${tool.slug}`, tool.desc))
+  .join('\n')}
 
 ## Para elegir
 

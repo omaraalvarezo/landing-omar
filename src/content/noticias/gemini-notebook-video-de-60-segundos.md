@@ -1,7 +1,8 @@
 ---
-title: Gemini Notebook arma un video de 60 segundos con tus archivos
+title: "Gemini Notebook: un video de 60 segundos"
 description: "El 16 oct 2026 Google sumó en Gemini Notebook un video de 60 segundos, un repaso armado con tus materiales y nuevos formatos de examen. El anuncio está escrito para estudiar. No publica un precio ni un plan."
 published: 2026-10-19
+updated: 2026-11-18
 edition: 2026-10-19
 sourceDate: 2026-10-16
 sourceName: Google

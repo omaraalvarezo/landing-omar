@@ -1,7 +1,8 @@
 ---
-title: IA para talleres de carros
+title: "IA para talleres de carros, sin memoria"
 description: "Un taller deja de depender de la memoria cuando la cotización, el WhatsApp y el recordatorio salen de un dato escrito. Esta guía usa ChatGPT, ManyChat, Notion, n8n, CapCut y HubSpot. No diagnostica el carro ni reemplaza un programa de taller."
 published: "2026-10-16"
+updated: 2026-11-18
 priority: 2
 tools:
   - chatgpt
@@ -73,6 +74,9 @@ related:
   - venta-de-repuestos
   - talleres-de-motos
   - llanterias
+  - aire-acondicionado
+  - gruas
+  - polarizado
 ---
 
 Un taller se atasca en lo mismo todos los días. La cita vive en un chat. La cotización sale en un audio. El cliente pregunta cómo va el carro y hay que reconstruir la respuesta. El repuesto se promete de memoria. El carro sale y nadie escribe cuando toca volver. La reseña se pide tarde. La foto del trabajo se queda en el teléfono.
@@ -109,4 +113,4 @@ La lista mínima es el repuesto, cuántos hay y a partir de qué número se comp
 
 ## Lo que no está en el directorio
 
-No hay aquí un programa de taller que una la orden, el repuesto y la factura. Si el taller ya tiene uno, estas herramientas no lo botan: cubren el texto, el WhatsApp, el tablero y el recordatorio. El detalle de un negocio de estética está en la [guía de detailing](/herramientas-ia/para/detailing). Si el negocio es un lavadero, sigue en la [guía de lavaderos](/herramientas-ia/para/lavaderos-de-carros). Si vendes la pieza en el mostrador, sigue en la [guía de repuestos](/herramientas-ia/para/venta-de-repuestos). Si el banco es de motos, sigue en la [guía de talleres de motos](/herramientas-ia/para/talleres-de-motos). Si el trabajo es la llanta, sigue en la [guía de llanterías](/herramientas-ia/para/llanterias).
+No hay aquí un programa de taller que una la orden, el repuesto y la factura. Si el taller ya tiene uno, estas herramientas no lo botan: cubren el texto, el WhatsApp, el tablero y el recordatorio. El detalle de un negocio de estética está en la [guía de detailing](/herramientas-ia/para/detailing). Si el negocio es un lavadero, sigue en la [guía de lavaderos](/herramientas-ia/para/lavaderos-de-carros). Si vendes la pieza en el mostrador, sigue en la [guía de repuestos](/herramientas-ia/para/venta-de-repuestos). Si el banco es de motos, sigue en la [guía de talleres de motos](/herramientas-ia/para/talleres-de-motos). Si el trabajo es la llanta, sigue en la [guía de llanterías](/herramientas-ia/para/llanterias). Si es el clima del carro, sigue en la [guía de aire acondicionado](/herramientas-ia/para/aire-acondicionado). Si es el auxilio en la vía, sigue en la [guía de grúas](/herramientas-ia/para/gruas). Si es el vidrio, sigue en la [guía de polarizado](/herramientas-ia/para/polarizado).

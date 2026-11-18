@@ -1,7 +1,8 @@
 ---
-title: OpenAI cobra la decisión corta por token de entrada
+title: "La Decisions API se cobra por token de entrada"
 description: "El 22 oct 2026 OpenAI dejó en disponibilidad general la Decisions API, con GPT-6 Luna. Publica USD 0,10 por millón de tokens de entrada y no cobra tokens de salida. Sirve para una respuesta acotada dentro de una app, no para el mostrador."
 published: 2026-10-26
+updated: 2026-11-18
 edition: 2026-10-26
 sourceDate: 2026-10-22
 sourceName: OpenAI

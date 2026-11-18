@@ -1,7 +1,8 @@
 ---
-title: IA para restaurantes pequeños
+title: "IA para restaurantes: carta y reservas"
 description: "En un restaurante chico, el menú del día, la reserva y la foto del plato se pierden en el chat. Esta guía usa ChatGPT, Canva, Photoroom, WhatsApp Business, el perfil de Google y Notion. No inventa un plato que no está en la carta."
 published: 2026-10-19
+updated: 2026-11-18
 tools:
   - chatgpt
   - canva

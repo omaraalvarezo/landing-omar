@@ -1,7 +1,8 @@
 ---
-title: Darla’s Downtown y las descripciones con Shopify Magic
+title: "Darla’s Downtown: fichas con Shopify Magic"
 description: Shopify contó el 22 abr 2025 que Darla’s Downtown, en Suffolk, Virginia, usó Shopify Magic para escribir descripciones con un tono definido. Los USD 6.000 de la noche de prelanzamiento son de ese artículo; aquí no se auditaron.
 published: 2026-10-16
+updated: 2026-11-18
 sourceDate: 2025-04-22
 sourceName: Shopify
 sourceUrl: https://www.shopify.com/news/journey-to-first-sale

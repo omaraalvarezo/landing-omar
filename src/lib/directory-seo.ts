@@ -98,7 +98,7 @@ export const DIRECTORY_INDEX: DirectoryPageSeo = {
     },
     {
       q: '¿Esto reemplaza una capacitación de IA para pymes?',
-      a: 'No hay curso ni diploma. Hay fichas para elegir y guías para probar una herramienta en una tarea. Los prompts se copian y se adaptan con el equipo.',
+      a: 'No hay curso ni diploma en este sitio: hay fichas para elegir y guías para probar una tarea. Los talleres gratuitos los convocan universidades, cámaras de comercio y, en España, también diputaciones; en Chile y en Venezuela, quien los anuncia publica la fecha. Las ayudas para pymes y autónomos, incluido lo que en España se llama bono de IA, se leen en https://www.acelerapyme.gob.es/ y no en un monto de esta página.',
     },
     {
       q: '¿Puedo automatizar la atención y el seguimiento de leads?',
@@ -125,6 +125,14 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
       {
         q: '¿El asistente atiende solo a los clientes?',
         a: 'Deja el borrador, no la decisión: el precio, la queja y el dato que no está escrito los cierra una persona. Para el chat con el cliente, sigue en atención al cliente.',
+      },
+      {
+        q: '¿Usar IA en una pyme es solo abrir un chat?',
+        a: 'No: el chat redacta o resume, y también hay correctores, video, imagen, CRM y flujos que pasan un dato de una app a otra. La prueba es una tarea de esta semana, no cuatro cuentas abiertas.',
+      },
+      {
+        q: '¿Crear agentes de IA es un oficio que una pyme debe contratar?',
+        a: 'Hay pymes que buscan a alguien para armar un agente de una tarea repetida. Aquí un agente es una herramienta del directorio con reglas que tú escribiste. No cierra el precio ni la queja, y no sustituye leer la ficha.',
       },
     ],
   },
@@ -226,6 +234,14 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
         q: '¿La automatización contesta sola al cliente?',
         a: 'Puede enviar un aviso que ya aprobaste. La queja, el precio y lo que no está escrito siguen con una persona, en atención al cliente.',
       },
+      {
+        q: '¿Hay plataformas con IA que conectan pymes que compran y pymes que venden?',
+        a: 'Existen plataformas que ofrecen emparejar a quien compra con quien vende. Este directorio no las ficha si no están en la lista, y ninguna herramienta de aquí cierra la compra sola. Antes de cargar precios, confirma quién ve el dato y quién cobra la comisión.',
+      },
+      {
+        q: '¿Sirve la herramienta de IA que lanzó una agencia de mi ciudad?',
+        a: 'Sirve si resuelve una tarea que ya haces, igual que cualquier ficha de esta lista. Lee qué no hace, quién guarda los datos y qué pasa si la agencia deja de operarla. El nombre IA no alcanza para elegirla.',
+      },
     ],
   },
   'atencion-al-cliente': {
@@ -245,6 +261,10 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
       {
         q: '¿Atiendo y hago seguimiento con la misma herramienta?',
         a: 'La atención contesta y el seguimiento del contacto está en ventas y CRM. Si hay que pasar un dato de una app a otra, mira automatización.',
+      },
+      {
+        q: '¿La IA hace más rápidos los ataques a una pyme?',
+        a: 'Un correo, un WhatsApp o una factura falsa se pueden redactar más rápido con un modelo. Este sitio no publica una cifra de incidentes. Confirma por otro canal un cambio de cuenta y no pegues claves ni datos de clientes en el chat.',
       },
     ],
   },
@@ -451,6 +471,55 @@ export const TASK_LINKS: TaskLink[] = [
     note: 'Textos para adaptar en ventas, atención, contenido y finanzas. No son un curso.',
   },
 ];
+
+export interface AnswerPart {
+  text: string;
+  href?: string;
+}
+
+/** Vuelve clicable una URL https dentro de una respuesta. El texto del schema no cambia. */
+export function answerParts(text: string): AnswerPart[] {
+  const parts: AnswerPart[] = [];
+  const re = /https:\/\/[^\s)]+/g;
+  let last = 0;
+  for (const match of text.matchAll(re)) {
+    const index = match.index ?? 0;
+    if (index > last) parts.push({ text: text.slice(last, index) });
+    parts.push({ text: match[0], href: match[0] });
+    last = index + match[0].length;
+  }
+  if (last < text.length) parts.push({ text: text.slice(last) });
+  if (!parts.length) parts.push({ text });
+  return parts;
+}
+
+export interface CitableAnswer {
+  q: string;
+  a: string;
+  href: string;
+}
+
+const CITABLE_SOURCES: { href: string; q: string }[] = [
+  { href: '/herramientas-ia', q: '¿Esto reemplaza una capacitación de IA para pymes?' },
+  { href: categoryPath('asistentes'), q: '¿Usar IA en una pyme es solo abrir un chat?' },
+  { href: categoryPath('asistentes'), q: '¿Crear agentes de IA es un oficio que una pyme debe contratar?' },
+  { href: categoryPath('automatizacion'), q: '¿Hay plataformas con IA que conectan pymes que compran y pymes que venden?' },
+  { href: categoryPath('automatizacion'), q: '¿Sirve la herramienta de IA que lanzó una agencia de mi ciudad?' },
+  { href: categoryPath('atencion-al-cliente'), q: '¿La IA hace más rápidos los ataques a una pyme?' },
+];
+
+function faqAnswer(href: string, q: string): string {
+  const pool = href === '/herramientas-ia' ? (DIRECTORY_INDEX.faqs ?? []) : (CATEGORY_SEO[href.replace('/herramientas-ia/categoria/', '')]?.faqs ?? []);
+  const found = pool.find((item) => item.q === q);
+  if (!found) throw new Error(`FAQ citable ausente: ${q}`);
+  return found.a;
+}
+
+export const CITABLE_ANSWERS: CitableAnswer[] = CITABLE_SOURCES.map((item) => ({
+  q: item.q,
+  a: faqAnswer(item.href, item.q),
+  href: item.href,
+}));
 
 export function categorySeo(slug: string): CategorySeo {
   const seo = CATEGORY_SEO[slug];

@@ -1,7 +1,8 @@
 ---
-title: Gemini frente a Notion
+title: "Gemini o Notion: chat o documentos de pyme"
 description: "Al 26 oct 2026 Gemini anunció una página de negocio en la app y Notion, agentes de hasta 24 horas con créditos nuevos. Ninguno de los dos posts publica el precio del asiento en dólares. Aquí no hay puntaje."
 published: 2026-10-26
+updated: 2026-11-18
 checked: 2026-10-26
 left: gemini
 right: notion

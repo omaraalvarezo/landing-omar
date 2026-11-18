@@ -1,7 +1,8 @@
 ---
-title: IA para vender carros usados
-description: "Vender un carro usado se daña cuando el kilometraje, el precio o la foto no son de ese carro. Esta guía usa ChatGPT, remove.bg, WhatsApp, Notion, Canva y el perfil de Google. Una persona confirma el dato."
+title: "IA para vender carros usados con foto real"
+description: "Vender un carro usado se daña cuando el kilometraje, el precio o la foto no son de ese carro. ChatGPT redacta la ficha con lo que pegas, remove.bg limpia la foto real y Notion guarda el dato. Una persona confirma el número antes de publicarlo. No inventa un dueño ni un historial."
 published: 2026-10-26
+updated: 2026-11-18
 tools:
   - chatgpt
   - remove-bg

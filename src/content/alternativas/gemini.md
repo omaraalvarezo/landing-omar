@@ -1,7 +1,8 @@
 ---
-title: Alternativas a Gemini
+title: "Alternativas a Gemini para una pyme"
 description: "Si Gemini no muestra la página de negocio, en este directorio están ChatGPT, Claude, Notion y Microsoft Copilot. No son equivalentes. La lista se armó el 26 oct 2026 con los anuncios de esa semana y las fichas ya publicadas."
 published: 2026-10-26
+updated: 2026-11-18
 checked: 2026-10-26
 insteadOf: gemini
 alternatives:
