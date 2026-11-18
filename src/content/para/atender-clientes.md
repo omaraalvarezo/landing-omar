@@ -1,7 +1,8 @@
 ---
-title: IA para atender clientes
+title: "Mejor IA para atender clientes de pyme"
 description: Atender clientes con IA sirve para las preguntas que ya tienen respuesta escrita. Tidio e Intercom Fin cubren el chat de soporte; Respond.io y ManyChat entran cuando el mensaje llega por WhatsApp u otra red. Alguien del equipo sigue cerrando lo demás.
 published: 2026-10-16
+updated: 2026-11-18
 tools:
   - tidio
   - intercom-fin

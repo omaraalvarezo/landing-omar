@@ -1,7 +1,8 @@
 ---
-title: IA para ferreterías
-description: "En una ferretería, la unidad, la foto del producto y el precio de hoy evitan el pedido mal armado. Esta guía usa ChatGPT, Pixelcut, WhatsApp, Notion, Canva y el perfil de Google. No convierte metros en unidades."
+title: "IA para ferreterías: stock y WhatsApp"
+description: "En una ferretería, la unidad, la foto del producto y el precio de hoy evitan el pedido mal armado. Esta guía usa ChatGPT, Pixelcut, WhatsApp, Notion, Canva y el perfil de Google para el texto, la foto y el stock. No convierte metros en unidades ni inventa una existencia."
 published: 2026-10-26
+updated: 2026-11-18
 tools:
   - chatgpt
   - pixelcut

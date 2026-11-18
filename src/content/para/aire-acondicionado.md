@@ -1,7 +1,8 @@
 ---
-title: IA para aire acondicionado de carros
-description: "En el aire acondicionado del carro, la falla la confirma el taller, no el chat. Esta guía usa WhatsApp, ChatGPT, Photoroom, Notion y el perfil de Google. No diagnostica una fuga ni inventa un gas."
+title: "IA para aire acondicionado: la revisión"
+description: "En el aire acondicionado del carro, la falla la confirma quien midió en el taller, no el chat. WhatsApp pide el síntoma, ChatGPT redacta la revisión con el dato que ya anotaste y Notion guarda la autorización. No diagnostica una fuga, no nombra un gas y no inventa el precio de la reparación."
 published: 2026-11-16
+updated: 2026-11-18
 tools:
   - whatsapp-business
   - chatgpt

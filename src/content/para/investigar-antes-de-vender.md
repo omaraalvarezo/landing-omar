@@ -1,7 +1,8 @@
 ---
-title: IA para investigar antes de vender
-description: "Antes de una llamada, Perplexity y Gemini Notebook (antes NotebookLM) sirven para leer fuentes. Apollo.io y HubSpot ordenan el prospecto. La ficha hay que contrastarla: ninguna verifica sola al cliente."
+title: "IA para investigar al cliente antes de vender"
+description: "Antes de una llamada, investigar es leer fuentes y marcar lo que no está confirmado. Perplexity cita páginas públicas y Gemini Notebook trabaja sobre archivos que tú cargas. Apollo.io y HubSpot ordenan el prospecto. Ninguna verifica sola que el cliente exista o pueda pagar."
 published: 2026-10-16
+updated: 2026-11-18
 tools:
   - perplexity
   - notebooklm
@@ -30,3 +31,5 @@ related:
 La llamada empieza con “cuéntame de tu empresa” porque nadie leyó nada antes. El prospecto lo nota. Investigar no es pedirle al chat una biografía. Es salir con fuentes y con los huecos marcados.
 
 Perplexity apunta a lo público. Gemini Notebook se queda en tus documentos. Apollo.io y HubSpot guardan el contacto. Ninguno cierra la venta.
+
+Si la búsqueda es una ayuda o un taller gratuito, la convocatoria no vive en esta guía. En España, el portal para pymes y autónomos es [Acelera Pyme](https://www.acelerapyme.gob.es/). El monto, el plazo y si hay cupo se leen ahí. En Chile y en Venezuela, la fecha la publica la universidad, la cámara o el organismo que invita. Este sitio no tramita el bono ni confirma que una convocatoria esté abierta.

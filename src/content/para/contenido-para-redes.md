@@ -1,7 +1,8 @@
 ---
-title: IA para contenido de redes
-description: "Un video o una pieza para redes sale con cuatro herramientas de este directorio. CapCut edita, Canva arma la pieza, ChatGPT escribe el texto y Gamma lo vuelve documento. Ninguna publica sola."
+title: "IA para contenido de redes de una pyme"
+description: "Una pieza de redes para una pyme empieza por un hecho real, no por un chat vacío. CapCut edita el video que ya grabaste, Canva arma la imagen, ChatGPT escribe el texto y Gamma lo vuelve documento. Ninguna publica sola ni sustituye la foto del trabajo."
 published: 2026-10-16
+updated: 2026-11-18
 tools:
   - capcut
   - canva
@@ -30,4 +31,6 @@ related:
 
 La red pide una pieza y el equipo abre el chat a ver qué sale. Sale un texto genérico, se publica, y a la semana nadie recuerda qué se dijo.
 
-La pieza útil arranca en un hecho de la operación: un cuello de botella, una entrega, una herramienta que ya se usa. El chat ordena las frases. Canva o CapCut la vuelven publicable.
+La pieza útil arranca en un hecho de la operación: un cuello de botella, una entrega, una herramienta que ya se usa. El chat ordena las frases. Canva o CapCut la vuelven publicable. Eso no es abrir un chat y publicar lo que salga.
+
+Si el video ya está grabado y solo faltan subtítulos, la ficha de [VEED](/herramientas-ia/veed) dice hasta dónde llega el plan gratis. [Recraft](/herramientas-ia/recraft) genera una pieza gráfica: el 16 nov 2026 el plan gratis no tiene uso comercial y no reemplaza la foto del producto. El texto en español se puede pasar por [LanguageTool](/herramientas-ia/languagetool) antes de publicar. Los prompts de esa semana están en la [tanda del 16 nov](/herramientas-ia/prompts/roles-2026-11-16). La [guía de panaderías](/herramientas-ia/para/panaderias) y la de [pintura automotriz](/herramientas-ia/para/pintura-automotriz) usan la misma regla: la foto o el video son del trabajo que sí existe.

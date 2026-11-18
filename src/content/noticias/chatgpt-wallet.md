@@ -1,7 +1,8 @@
 ---
-title: ChatGPT Wallet paga con un agente, y solo en Estados Unidos
+title: "ChatGPT Wallet: el agente paga solo en EE. UU."
 description: "El 13 nov 2026 OpenAI presentó ChatGPT Wallet para que un agente pague sin ver el número de la tarjeta. Empieza para suscriptores Pro, mayores de 18, en Estados Unidos y con tarjeta emitida allá. El anuncio no trae un precio del servicio."
 published: 2026-11-16
+updated: 2026-11-18
 edition: 2026-11-16
 sourceDate: 2026-11-13
 sourceName: OpenAI

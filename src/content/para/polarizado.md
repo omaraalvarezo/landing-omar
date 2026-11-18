@@ -1,7 +1,8 @@
 ---
-title: IA para polarizado de carros
-description: "En el polarizado, la lámina y el porcentaje los dice el local, no el chat. Esta guía usa WhatsApp, ChatGPT, Jotform, Notion y el perfil de Google. No promete un porcentaje legal ni un vidrio que no instalaste."
+title: "IA para polarizado: lámina, cita y foto"
+description: "En el polarizado, la lámina, el vidrio y el precio los dice la lista del local, no el chat. Esta guía usa WhatsApp, ChatGPT, Jotform, Notion y el perfil de Google para el pedido, la cita y la foto. No promete un porcentaje que no esté en tu lista ni un vidrio que no instalaste."
 published: 2026-11-16
+updated: 2026-11-18
 tools:
   - whatsapp-business
   - chatgpt

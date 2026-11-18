@@ -1,7 +1,8 @@
 ---
-title: ChatGPT frente a Claude
+title: "ChatGPT o Claude: cuál usar en una pyme"
 description: "Al 16 oct 2026 ChatGPT anuncia respuestas visuales y Anthropic publicó el precio de API de Haiku 5.5. Aquí no hay puntaje: cada ficha está en el directorio."
 published: 2026-10-16
+updated: 2026-11-18
 checked: 2026-10-16
 left: chatgpt
 right: claude
@@ -23,4 +24,4 @@ recommendation: Usa ChatGPT si esta semana necesitas que el equipo vea una compa
 
 La tabla sale de dos páginas oficiales leídas para esta edición: el anuncio de GPT-6 de OpenAI y el de Haiku 5.5 de Anthropic, ambos del 7 oct 2026. No hay una prueba de velocidad hecha en este sitio.
 
-Si la duda es “qué otra cosa existe”, la [página de alternativas a ChatGPT](/herramientas-ia/alternativas/chatgpt) lista más fichas del directorio.
+Si la duda es “qué otra cosa existe”, la [página de alternativas a ChatGPT](/herramientas-ia/alternativas/chatgpt) lista más fichas del directorio. Fable 5.2, publicado el 9 nov, no cambia esta tabla de octubre: la [nota](/herramientas-ia/noticias/claude-fable-5-2) dice que Anthropic lo deja para el trabajo técnico más abierto y pide empezar el día a día por Opus 5.5.

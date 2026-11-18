@@ -1,7 +1,8 @@
 ---
-title: IA para armar una propuesta
-description: Una propuesta comercial se puede armar con ChatGPT o Claude para el borrador, Gamma para presentarla y Notion para dejarla guardada. Esto no factura, no calcula impuestos y no reemplaza el precio que tú decides.
+title: "IA para armar una propuesta de pyme"
+description: "Una propuesta comercial se arma con datos que tú pegas: ChatGPT o Claude dejan el borrador, Gamma lo presenta y Notion lo guarda. El precio, el alcance y la fecha los decides tú. Esto no factura, no calcula impuestos y no reemplaza el criterio de esa venta."
 published: 2026-10-16
+updated: 2026-11-18
 tools:
   - chatgpt
   - claude
@@ -31,3 +32,5 @@ related:
 La propuesta sale tarde porque hay que pasar de una conversación suelta a un papel que el cliente pueda leer. El chat acorta esa redacción. No decide el alcance ni el precio.
 
 Si el documento promete una entrega que no cabe en el trabajo, el problema no era la herramienta. Era el encargo.
+
+El borrador en español se puede revisar con [LanguageTool](/herramientas-ia/languagetool) antes de enviarlo: una sugerencia no puede cambiar el precio ni la fecha. Si el modelo de moda es Fable, la [nota del 9 nov](/herramientas-ia/noticias/claude-fable-5-2) dice para qué lo recomienda Anthropic y para qué no. La diferencia con ChatGPT, según los anuncios de octubre, está en la [comparativa](/herramientas-ia/comparar/chatgpt-vs-claude).

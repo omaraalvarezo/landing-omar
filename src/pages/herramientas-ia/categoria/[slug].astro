@@ -10,7 +10,7 @@ import {
   type ToolCategory,
 } from '../../../lib/directory';
 import { faqNode, guidesForCategory } from '../../../lib/editorial';
-import { categorySeo, clipMeta } from '../../../lib/directory-seo';
+import { answerParts, categorySeo, clipMeta } from '../../../lib/directory-seo';
 
 export function getStaticPaths() {
   return getCategories()
@@ -118,7 +118,15 @@ const jsonLd = {
       {seo.faqs.map((faq) => (
         <>
           <h3>{faq.q}</h3>
-          <p>{faq.a}</p>
+          <p>
+            {answerParts(faq.a).map((part) =>
+              part.href ? (
+                <a href={part.href} target="_blank" rel="noopener noreferrer">{part.text}</a>
+              ) : (
+                part.text
+              ),
+            )}
+          </p>
         </>
       ))}
     </div>

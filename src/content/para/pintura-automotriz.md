@@ -1,7 +1,8 @@
 ---
-title: IA para talleres de pintura
+title: "IA para talleres de pintura automotriz"
 description: "En un taller de pintura, el color y el antes y después se traban si salen de memoria. Esta guía usa WhatsApp, ChatGPT, Photoroom, VEED, Notion y el perfil de Google. No iguala un color ni publica un carro que no pintaste."
 published: 2026-11-16
+updated: 2026-11-18
 tools:
   - whatsapp-business
   - chatgpt
@@ -79,7 +80,7 @@ WhatsApp pide la foto y, si existe, el código. ChatGPT redacta con el precio qu
 
 ## La foto y el video
 
-Photoroom limpia el fondo de una foto real. Si el tono cambió, no sirve. VEED subtitula un video que grabaste, no un carro generado. Recraft, en este directorio, genera imágenes: en el plan gratis, leído el 16 nov 2026, no tienen uso comercial. No lo uses para mostrar un trabajo que no hiciste.
+Photoroom limpia el fondo de una foto real. Si el tono cambió, no sirve. [VEED](/herramientas-ia/veed) subtitula un video que grabaste, no un carro generado. [Recraft](/herramientas-ia/recraft) genera imágenes: en el plan gratis, leído el 16 nov 2026, no tienen uso comercial. No lo uses para mostrar un trabajo que no hiciste.
 
 ## El aviso
 

@@ -1,7 +1,8 @@
 ---
-title: OpenAI cuenta videos de más de diez minutos en Higgsfield
+title: "Higgsfield: videos de más de diez minutos"
 description: "El 13 oct 2026 OpenAI escribió que, según el CEO de Higgsfield, los videos pasaron de cerca de un minuto a más de diez con GPT-6 Astra. La portada de Higgsfield, abierta el 19 oct, muestra un modelo de hasta 30 segundos. No son la misma cifra."
 published: 2026-10-19
+updated: 2026-11-18
 edition: 2026-10-19
 sourceDate: 2026-10-13
 sourceName: OpenAI

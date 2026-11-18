@@ -1,7 +1,8 @@
 ---
-title: IA para talleres de motos
+title: "IA para talleres de motos: la orden"
 description: "En un taller de motos, la cita, la pieza y el aviso de listo se pierden en el chat. Esta guía usa WhatsApp, ManyChat, ChatGPT, Notion, n8n y el perfil de Google. No calcula un kilometraje ni afirma que una pieza aplica."
 published: 2026-10-26
+updated: 2026-11-18
 tools:
   - whatsapp-business
   - manychat

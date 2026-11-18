@@ -1,7 +1,8 @@
 ---
-title: IA para cobrar
-description: "Cobrar una factura vencida es un mensaje con el monto que ya está escrito, no un descuento inventado. Esta guía usa ChatGPT, Notion, WhatsApp Business, n8n, HubSpot y Jotform. No calcula intereses ni promete un plazo que no diste."
+title: "IA para cobrar facturas de una pyme"
+description: "Cobrar una factura vencida es un mensaje con el monto, el número y la fecha que ya están escritos, no un descuento inventado. Esta guía usa ChatGPT, Notion, WhatsApp Business, n8n, HubSpot y Jotform para el texto y el recordatorio. No calcula intereses ni promete un plazo que no diste."
 published: 2026-10-19
+updated: 2026-11-18
 tools:
   - chatgpt
   - notion

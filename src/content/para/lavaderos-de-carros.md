@@ -1,7 +1,8 @@
 ---
-title: IA para lavaderos de carros
+title: "IA para lavaderos: turno, fila y cobro"
 description: "En un lavadero, la fila, el aviso de que el carro está listo y la reseña del día son el trabajo que se repite. Esta guía usa WhatsApp Business, ManyChat, ChatGPT, el perfil de Google, Canva y Notion. No promete un tiempo de espera que no mediste."
 published: 2026-10-19
+updated: 2026-11-18
 tools:
   - whatsapp-business
   - manychat

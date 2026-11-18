@@ -1,7 +1,8 @@
 ---
-title: IA para vender repuestos
+title: "IA para vender repuestos con stock real"
 description: "Vender un repuesto por chat se daña cuando la foto no es de esa pieza o la compatibilidad se inventa. Esta guía usa ChatGPT, Photoroom, Notion, WhatsApp Business, Canva y el perfil de Google. El precio y la aplicación los confirma una persona."
 published: 2026-10-19
+updated: 2026-11-18
 tools:
   - chatgpt
   - photoroom

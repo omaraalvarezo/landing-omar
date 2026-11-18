@@ -1,7 +1,8 @@
 ---
-title: Claude Fable 5.2 sale para el trabajo técnico difícil
+title: "Claude Fable 5.2 para el trabajo técnico"
 description: "El 9 nov 2026 Anthropic publicó Claude Fable 5.2, el mismo modelo que Mythos 5.2 con más resguardos. La API cuesta 8 dólares por millón de tokens de entrada y 40 de salida. Para el día a día, Anthropic recomienda empezar por Opus 5.5."
 published: 2026-11-16
+updated: 2026-11-18
 edition: 2026-11-16
 sourceDate: 2026-11-09
 sourceName: Anthropic

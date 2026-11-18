@@ -1,7 +1,8 @@
 ---
-title: WhatsApp cobra el mensaje de servicio desde octubre
+title: "WhatsApp cobra el mensaje de servicio en 2026"
 description: "Desde el 1 oct 2026, la FAQ oficial de WhatsApp Business cobra los mensajes de servicio por mensaje. Cada número de negocio tiene 1.000 gratis al mes. Esta nota no publica la tarifa por país: la FAQ consultada no trae esa tabla."
 published: 2026-10-16
+updated: 2026-11-18
 edition: 2026-10-16
 sourceDate: 2026-10-01
 sourceName: WhatsApp Business

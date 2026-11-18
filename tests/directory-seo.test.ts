@@ -8,6 +8,8 @@ import {
   HUBS,
   TASK_LINKS,
   categorySeo,
+  answerParts,
+  CITABLE_ANSWERS,
   clipMeta,
   pageTitle,
   sentences,
@@ -137,8 +139,28 @@ describe('SEO del directorio', () => {
         expect(meta.endsWith('…'), `${file}: ${meta}`).toBe(false);
         expect(data.description.length, file).toBeGreaterThanOrEqual(80);
         expect(data.description.length, file).toBeLessThanOrEqual(320);
+        if (column === 'para') {
+          const count = data.description.trim().split(/\s+/).filter(Boolean).length;
+          expect(count, `${file}: ${count} palabras`).toBeGreaterThanOrEqual(40);
+          expect(count, `${file}: ${count} palabras`).toBeLessThanOrEqual(60);
+        }
       }
     }
+  });
+
+  it('las respuestas citables salen de las preguntas del índice y de tres categorías', () => {
+    expect(CITABLE_ANSWERS.length).toBeGreaterThanOrEqual(4);
+    expect(CITABLE_ANSWERS.length).toBeLessThanOrEqual(8);
+    expect(new Set(CITABLE_ANSWERS.map((item) => item.q)).size).toBe(CITABLE_ANSWERS.length);
+    for (const item of CITABLE_ANSWERS) {
+      expect(item.href.startsWith('/herramientas-ia')).toBe(true);
+      expect(item.a).not.toMatch(/%|por ciento/i);
+      expect(sentences(item.a).length).toBeGreaterThanOrEqual(1);
+      expect(sentences(item.a).length).toBeLessThanOrEqual(3);
+      const parts = answerParts(item.a);
+      expect(parts.map((part) => part.text).join('')).toBe(item.a);
+    }
+    expect(CITABLE_ANSWERS.some((item) => item.a.includes('https://www.acelerapyme.gob.es/'))).toBe(true);
   });
 });
 

@@ -1,7 +1,8 @@
 ---
-title: IA para panaderías
-description: "En una panadería, el encargo y la foto tienen que ser de lo que sí se horneó hoy. Esta guía usa WhatsApp, ChatGPT, LanguageTool, Photoroom, Notion y el perfil de Google. No inventa una producción ni un precio."
+title: "IA para panaderías: encargos del día"
+description: "En una panadería, el encargo y la foto tienen que ser de lo que sí se horneó hoy. WhatsApp, ChatGPT y LanguageTool arman y revisan el mensaje; Photoroom limpia la foto real; Notion guarda la lista y el precio. No inventa una producción, un pan que no salió ni un precio distinto."
 published: 2026-11-16
+updated: 2026-11-18
 tools:
   - whatsapp-business
   - chatgpt
@@ -75,11 +76,11 @@ La panadería se traba en el «¿todavía hay?» y en la foto de algo que ya no 
 
 ## La lista de hoy
 
-WhatsApp responde con esa lista. ChatGPT redacta el encargo y el aviso. Notion marca el cero. Sin cantidad escrita, no se promete. LanguageTool revisa el español del mensaje y no toca el precio.
+WhatsApp responde con esa lista. ChatGPT redacta el encargo y el aviso. Notion marca el cero. Sin cantidad escrita, no se promete. [LanguageTool](/herramientas-ia/languagetool) revisa el español del mensaje y no toca el precio.
 
 ## La foto
 
-Photoroom limpia el fondo de lo que sí salió del horno. El precio no va pegado en la imagen. El nombre de un cliente en una torta no se publica sin permiso. La [guía de contenido](/herramientas-ia/para/contenido-para-redes) usa la misma regla para una pieza de redes.
+Photoroom limpia el fondo de lo que sí salió del horno. El precio no va pegado en la imagen. El nombre de un cliente en una torta no se publica sin permiso. Una imagen generada con [Recraft](/herramientas-ia/recraft) es otro producto: el plan gratis, leído el 16 nov 2026, no tiene uso comercial. La [guía de contenido](/herramientas-ia/para/contenido-para-redes) usa la misma regla para una pieza de redes. Los prompts para no ofrecer lo que no está en la lista están en la [tanda del 16 nov](/herramientas-ia/prompts/roles-2026-11-16).
 
 ## El cobro
 

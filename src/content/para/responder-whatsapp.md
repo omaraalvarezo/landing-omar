@@ -1,7 +1,8 @@
 ---
-title: IA para responder WhatsApp
+title: "IA para responder el WhatsApp de una pyme"
 description: Responder WhatsApp con IA exige la API de WhatsApp Business y a una persona para lo que el bot no cierra. En este directorio, ManyChat y Respond.io cubren ese canal; Tidio e Intercom Fin entran si el cliente también escribe en la web.
 published: 2026-10-16
+updated: 2026-11-18
 tools:
   - manychat
   - respond-io

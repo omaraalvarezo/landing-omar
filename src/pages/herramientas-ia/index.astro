@@ -5,7 +5,7 @@ import DirectoryTaskLinks from '../../components/directory/DirectoryTaskLinks.as
 import ToolList from '../../components/directory/ToolList.astro';
 import { categoryPath, getCategories, getTools } from '../../lib/directory';
 import { faqNode } from '../../lib/editorial';
-import { clipMeta, DIRECTORY_INDEX } from '../../lib/directory-seo';
+import { answerParts, clipMeta, DIRECTORY_INDEX } from '../../lib/directory-seo';
 
 const tools = getTools();
 const categories = getCategories();
@@ -100,7 +100,15 @@ const jsonLd = {
       {faqs.map((faq) => (
         <>
           <h3>{faq.q}</h3>
-          <p>{faq.a}</p>
+          <p>
+            {answerParts(faq.a).map((part) =>
+              part.href ? (
+                <a href={part.href} target="_blank" rel="noopener noreferrer">{part.text}</a>
+              ) : (
+                part.text
+              ),
+            )}
+          </p>
         </>
       ))}
     </div>
