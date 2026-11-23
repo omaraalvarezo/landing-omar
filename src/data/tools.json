@@ -526,5 +526,41 @@
     "sponsor": false,
     "sponsorUntil": null,
     "added": "2026-11-16"
+  },
+  {
+    "slug": "ideogram",
+    "nombre": "Ideogram",
+    "url": "https://ideogram.ai",
+    "categoria": "diseno",
+    "desc": "Genera imágenes con texto legible. El 23 nov 2026 el plan gratis deja lo generado en público. Plus, Pro y Team no dejaron su monto en el texto leído.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-11-23"
+  },
+  {
+    "slug": "opus-clip",
+    "nombre": "OpusClip",
+    "url": "https://www.opus.pro",
+    "categoria": "video",
+    "desc": "Recorta un video largo en clips. El 23 nov 2026 el plan gratis cuesta 0 dólares, con 60 créditos al mes y marca de agua. Starter sale a 15 dólares al mes.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-11-23"
+  },
+  {
+    "slug": "runway",
+    "nombre": "Runway",
+    "url": "https://runway.com",
+    "categoria": "video",
+    "desc": "Genera video, imagen y audio. El 23 nov 2026 el plan gratis da 125 créditos una sola vez. Standard, cobrado al año, sale a 12 dólares al mes.",
+    "featured": false,
+    "featuredUntil": null,
+    "sponsor": false,
+    "sponsorUntil": null,
+    "added": "2026-11-23"
   }
 ]

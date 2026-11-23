@@ -2,7 +2,7 @@
 title: "IA para llanterías: medida y WhatsApp"
 description: "En una llantería, la medida del costado y el aviso de que el trabajo está listo son lo que se repite. Esta guía usa WhatsApp, ChatGPT, Photoroom, Notion, el perfil de Google y Treble. No adivina una medida ni un precio."
 published: 2026-10-26
-updated: 2026-11-18
+updated: 2026-11-23
 tools:
   - whatsapp-business
   - chatgpt
@@ -71,6 +71,7 @@ related:
   - lavaderos-de-carros
   - venta-de-carros-usados
   - gruas
+  - alineacion-y-balanceo
 ---
 
 La llantería se traba en la medida y en el «¿ya quedó?». Si la medida se contesta de memoria, se manda la pieza que no es. Si el aviso de listo sale en un audio, cada cliente escucha una hora distinta.
@@ -93,4 +94,4 @@ Treble entra cuando el negocio usa la API, con respuestas escritas y pase a una 
 
 ## Lo que no hace esta página
 
-No alinea, no balancea y no lee un DOT por ti. Si el cuello de botella es la bahía del taller, sigue en la [guía de talleres](/herramientas-ia/para/talleres-de-carros). Si vendes el carro y no la llanta, sigue en la [guía de carros usados](/herramientas-ia/para/venta-de-carros-usados).
+No alinea, no balancea y no lee un DOT por ti. Si el trabajo es la rampa, sigue en la [guía de alineación](/herramientas-ia/para/alineacion-y-balanceo). Si el cuello de botella es la bahía del taller, sigue en la [guía de talleres](/herramientas-ia/para/talleres-de-carros). Si vendes el carro y no la llanta, sigue en la [guía de carros usados](/herramientas-ia/para/venta-de-carros-usados).

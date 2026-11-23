@@ -6,7 +6,7 @@ tags: [directorio, contenido, newsletter, seo]
 fuentes:
   - "[[wiki/decisiones/directorio-herramientas-ia]]"
 creado: 2026-10-16
-actualizado: 2026-11-16
+actualizado: 2026-11-23
 ---
 
 # Rutina editorial del directorio de IA
@@ -38,6 +38,25 @@ el cuerpo y pasar `npm run content:check`.
 - Una noticia enlaza la guía “para” que le corresponde. La ficha de la herramienta muestra esas notas al revés.
 - Precios de un tercero se fechan. Si la fuente no trae el precio, el campo dice que no está publicado.
 - No se publica en TikTok, Instagram, X ni LinkedIn de Omar sin un pedido explícito de esa pieza.
+
+## Fuentes de la edición del 23 nov 2026
+
+Esas notas están en el repositorio. La siguiente edición vuelve a abrir la página, no el resumen:
+
+- Google, 16 nov 2026: `https://blog.google/innovation-and-ai/products/gemini-app/updated-controls/`
+- OpenAI, notas de lanzamiento abiertas el 23 nov 2026, entradas del 18 y del 20 nov: `https://help.openai.com/en/articles/6825453-chatgpt-release-notes`
+- Google, 18 nov 2026: `https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/`
+- Google, 19 nov 2026: `https://blog.google/innovation-and-ai/products/gemini-app/computer-use-mac/`
+- Anthropic, 20 nov 2026, abierto y no usado como nota de pyme porque no cambia el chat: `https://www.anthropic.com/news/ipo-close`
+- Anthropic, 9 nov 2026, reabierto para la comparativa: `https://www.anthropic.com/claude-fable-and-mythos-5-2`
+- Claude, ayuda de idioma con fecha 23 oct 2026, abierta el 23 nov 2026: `https://support.claude.com/en/articles/10769299-how-to-use-claude-in-your-preferred-language`
+- Ideogram, portada abierta el 23 nov 2026: `https://ideogram.ai/`
+- OpusClip, portada y precios abiertos el 23 nov 2026: `https://www.opus.pro/` y `https://www.opus.pro/pricing`
+- Runway, portada y precios abiertos el 23 nov 2026: `https://runway.com/` y `https://runway.com/pricing`
+
+`https://ideogram.ai/pricing` respondió 403 a un cliente automático (bloqueo de bot). No se publicó el monto de Plus, Pro ni Team. Las tarifas de video por segundo salen de la portada, que las fecha al 23 nov 2026. `https://klingai.com/pricing` respondió 200, pero el texto visible no dejó un plan de suscripción claro: no se agregó Kling. `https://runwayml.com/pricing` redirige a `https://runway.com/pricing`.
+
+Enlaces que seguían respondiendo y quedaron en la URL de destino: la ayuda de idioma de Claude, Lyro de Tidio (`/ai-agent/`), Copilot para personas, el alojamiento de n8n, el español de ElevenLabs (`/languages` caía en la página general) y las dos ayudas de Sidekick. La ayuda de Sidekick del 23 nov 2026 ya incluye el navegador del celular. Los 403 de Canva, Adobe, Gamma, ManyChat, Midjourney, Perplexity, Make, Claude.ai y centros de ayuda similares se trataron como bloqueo de bot, no como enlace roto. `https://business.google.com` sigue abriendo el perfil.
 
 ## Fuentes de la edición del 16 nov 2026
 

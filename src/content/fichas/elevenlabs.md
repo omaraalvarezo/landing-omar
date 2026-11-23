@@ -1,6 +1,6 @@
 ---
-checked: 2026-10-16
-task: "ElevenLabs sirve para voz sintética: leer un texto con una voz natural, doblar un audio a otro idioma o clonar una voz. Su sitio también ofrece agentes de voz para teléfono, chat, correo y WhatsApp. En una pyme la tarea de entrada es la voz en off: el audio de un video o una explicación que hoy grabas tú cada vez. Su página de idiomas lista español con acentos latinoamericanos."
+checked: 2026-11-23
+task: "ElevenLabs sirve para voz sintética: leer un texto con una voz natural, doblar un audio a otro idioma o clonar una voz. Su sitio también ofrece agentes de voz para teléfono, chat, correo y WhatsApp. En una pyme la tarea de entrada es la voz en off: el audio de un video o una explicación que hoy grabas tú cada vez. La página de español, abierta el 23 nov 2026, habla de voces de España y de América Latina. La dirección vieja /languages ahora cae en la página general de texto a voz."
 useCase:
   sector: taller
   title: Los cuidados después de un cerámico, en un audio
@@ -33,5 +33,5 @@ sources:
   - name: los precios de ElevenLabs
     url: https://elevenlabs.io/pricing
   - name: la página de idiomas
-    url: https://elevenlabs.io/languages
+    url: https://elevenlabs.io/text-to-speech/spanish
 ---

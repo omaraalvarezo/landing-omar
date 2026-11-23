@@ -1,5 +1,5 @@
 ---
-checked: 2026-10-16
+checked: 2026-11-23
 task: "Tidio sirve para atender el chat de tu sitio web y juntar en una sola bandeja los mensajes de correo, Instagram, Messenger y WhatsApp. Su agente de IA, Lyro, responde con el contenido de tu sitio y de tu centro de ayuda y, cuando no está seguro, pasa la conversación a tu equipo. La tarea en una pyme: contestar las preguntas repetidas del sitio sin tener a alguien pegado al chat."
 useCase:
   sector: coworking
@@ -33,5 +33,5 @@ sources:
   - name: los precios de Tidio
     url: https://www.tidio.com/pricing/
   - name: la página de Lyro
-    url: https://www.tidio.com/lyro/
+    url: https://www.tidio.com/ai-agent/
 ---
