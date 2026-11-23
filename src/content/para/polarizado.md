@@ -2,7 +2,7 @@
 title: "IA para polarizado: lámina, cita y foto"
 description: "En el polarizado, la lámina, el vidrio y el precio los dice la lista del local, no el chat. Esta guía usa WhatsApp, ChatGPT, Jotform, Notion y el perfil de Google para el pedido, la cita y la foto. No promete un porcentaje que no esté en tu lista ni un vidrio que no instalaste."
 published: 2026-11-16
-updated: 2026-11-18
+updated: 2026-11-23
 tools:
   - whatsapp-business
   - chatgpt
@@ -63,6 +63,7 @@ related:
   - detailing
   - pintura-automotriz
   - venta-de-carros-usados
+  - vidrios-automotrices
 ---
 
 El polarizado se traba cuando el porcentaje se contesta de oído. El cliente pide un número, el chat repite otro y en el local no hay esa lámina. La lista escrita corta eso.
@@ -77,4 +78,4 @@ El formulario no agenda. Notion recibe el pedido cuando una persona confirmó pr
 
 ## Lo que no hace esta página
 
-No corta vidrio, no elige una lámina legal por ti y no mide el calor del carro. Si el trabajo es pintar la pieza, sigue en la [guía de pintura](/herramientas-ia/para/pintura-automotriz). Si es lavar y proteger, sigue en [detailing](/herramientas-ia/para/detailing).
+No corta vidrio, no elige una lámina legal por ti y no mide el calor del carro. Si el trabajo es cambiar el parabrisas, sigue en la [guía de vidrios](/herramientas-ia/para/vidrios-automotrices). Si el trabajo es pintar la pieza, sigue en la [guía de pintura](/herramientas-ia/para/pintura-automotriz). Si es lavar y proteger, sigue en [detailing](/herramientas-ia/para/detailing).

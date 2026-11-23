@@ -1,5 +1,5 @@
 ---
-checked: 2026-10-16
+checked: 2026-11-23
 task: "Sidekick es el asistente de IA dentro de Shopify. Lo que antes se presentaba como Shopify Magic quedó bajo su nombre: la página vieja hoy lleva a la de Sidekick. Redacta descripciones de producto, blogs y correos dentro del editor, sugiere respuestas en la bandeja de mensajes, crea bloques del tema desde una instrucción y ayuda con alertas de inventario bajo y campañas. La tarea en una pyme: tener el catálogo descrito y al día sin escribir cada ficha a mano."
 useCase:
   sector: taller
@@ -13,7 +13,7 @@ useCase:
 limits:
   - "Solo funciona dentro de Shopify. Si tu tienda está en otra plataforma, no aplica."
   - "Sidekick no habla con tus clientes ni atiende conversaciones de soporte por ti, según la ayuda oficial."
-  - "La disponibilidad cambia según el plan, el dispositivo y el idioma, y en el navegador del celular no funciona: hay que usar la app."
+  - "La disponibilidad cambia según el plan, el dispositivo y el idioma. La ayuda abierta el 23 nov 2026 dice que Sidekick está en el escritorio, en el navegador del celular y en la app."
   - "La propia ayuda de Shopify dice que los resultados de IA pueden tener errores. Revisa todo lo que cree o cambie."
 alternatives:
   - tool: chatgpt
@@ -25,13 +25,13 @@ alternatives:
 beforePaying:
   - "No hay que pagar Sidekick aparte: según Shopify, viene incluido en el plan. Lo que pagas es Shopify."
   - "Revisa qué funciones trae tu plan; la página dice que funciones y límites varían por plan."
-  - "Confirma que tu equipo usa el admin en computador o en la app, no en el navegador del celular."
+  - "Prueba Sidekick en el computador y, si el equipo trabaja desde el teléfono, ábrelo en la app o en el navegador. La ayuda del 23 nov 2026 ya lo incluye en los tres."
   - "Haz cinco fichas con Sidekick y compáralas con las que escribirías tú en el mismo tiempo."
 sources:
   - name: la página de Sidekick
     url: https://www.shopify.com/co/sidekick
   - name: la ayuda de IA de Shopify
-    url: https://help.shopify.com/en/manual/shopify-admin/productivity-tools/shopify-magic
+    url: https://help.shopify.com/en/manual/ai-powered-tools
   - name: la ayuda para configurar Sidekick
-    url: https://help.shopify.com/en/manual/shopify-admin/productivity-tools/sidekick/set-up
+    url: https://help.shopify.com/en/manual/ai-powered-tools/sidekick/set-up
 ---

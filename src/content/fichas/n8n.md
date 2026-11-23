@@ -1,5 +1,5 @@
 ---
-checked: 2026-10-16
+checked: 2026-11-23
 task: "n8n sirve para automatizar procesos entre aplicaciones con flujos visuales y agentes de IA, y escribir código en JavaScript o Python cuando hace falta. Se usa en su nube o alojado en tu propio servidor; según su documentación, sin llave de licencia corre como la edición Community gratuita. La tarea en una pyme: los avisos y las tareas repetidas que hoy dependen de que alguien se acuerde."
 useCase:
   sector: taller
@@ -31,7 +31,7 @@ sources:
   - name: los precios de n8n
     url: https://n8n.io/pricing/
   - name: la documentación de alojamiento
-    url: https://docs.n8n.io/hosting/
+    url: https://docs.n8n.io/deploy/host-n8n
   - name: el nodo de WhatsApp Business Cloud
     url: https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.whatsapp/
 ---

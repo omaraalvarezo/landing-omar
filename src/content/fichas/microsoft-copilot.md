@@ -1,5 +1,5 @@
 ---
-checked: 2026-10-16
+checked: 2026-11-23
 task: "Microsoft Copilot sirve para usar IA donde ya trabajas si tu empresa está en Office. La versión gratuita, con una cuenta Microsoft, responde, resume, busca en la web, redacta y crea imágenes en web, escritorio y móvil. Con Microsoft 365, según su página, entra a Word, Excel, PowerPoint y Outlook: primer borrador, análisis de datos, presentaciones desde una instrucción y resumen de la bandeja de entrada."
 useCase:
   sector: servicios
@@ -31,5 +31,5 @@ sources:
   - name: copilot.com
     url: https://copilot.com/
   - name: la página de Copilot para personas
-    url: https://www.microsoft.com/en-us/microsoft-copilot/for-individuals
+    url: https://www.microsoft.com/en-us/copilot/solutions/individuals
 ---

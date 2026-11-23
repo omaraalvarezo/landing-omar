@@ -2,7 +2,7 @@
 title: "IA para detailing: cotizar y entregar"
 description: "En detailing, la cita, la cotización del paquete y la foto de antes y después son el trabajo que el cliente ve. Esta guía usa CapCut, Canva, ChatGPT, ManyChat, Notion y n8n. No inventa reseñas ni publica un antes que no fotografiaste."
 published: "2026-10-16"
-updated: 2026-11-18
+updated: 2026-11-23
 priority: 1
 tools:
   - capcut
@@ -76,6 +76,7 @@ related:
   - llanterias
   - contenido-para-redes
   - polarizado
+  - tapiceria-automotriz
 ---
 
 El detailing se vende con lo que el cliente puede ver: la hora de la cita, el paquete por escrito y la diferencia entre el antes y el después. Lo demás es adorno. Si el paquete no está definido, el chat inventa uno. Si no hay foto del antes, la pieza miente.
@@ -110,4 +111,4 @@ La lista es el producto, cuántas unidades hay y el mínimo para comprar. Notion
 
 ## Lo que no hace esta página
 
-No elige química, no mide pintura y no llena la agenda por arte de magia. Si el negocio es un taller mecánico y el cuello de botella es el repuesto o la bahía, sigue en la [guía de talleres de carros](/herramientas-ia/para/talleres-de-carros). Si es un lavadero y el cuello de botella es la fila, sigue en la [guía de lavaderos](/herramientas-ia/para/lavaderos-de-carros). Si el trabajo es la llanta, sigue en la [guía de llanterías](/herramientas-ia/para/llanterias).
+No elige química, no mide pintura y no llena la agenda por arte de magia. Si el trabajo es desarmar y volver a tapizar, sigue en la [guía de tapicería](/herramientas-ia/para/tapiceria-automotriz). Si el negocio es un taller mecánico y el cuello de botella es el repuesto o la bahía, sigue en la [guía de talleres de carros](/herramientas-ia/para/talleres-de-carros). Si es un lavadero y el cuello de botella es la fila, sigue en la [guía de lavaderos](/herramientas-ia/para/lavaderos-de-carros). Si el trabajo es la llanta, sigue en la [guía de llanterías](/herramientas-ia/para/llanterias).

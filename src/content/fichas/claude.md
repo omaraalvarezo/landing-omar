@@ -1,5 +1,5 @@
 ---
-checked: 2026-10-16
+checked: 2026-11-23
 task: "Claude sirve para leer y escribir con cuidado: revisar un contrato, resumir un documento largo, redactar una propuesta o armar un análisis desde una hoja. Su página de planes describe chat en web, escritorio y móvil, búsqueda web, creación de archivos con ejecución de código y conexión con otras apps. La interfaz está en español. En una pyme la tarea típica es la propuesta comercial: juntar lo que sabes del cliente y entregarlo ordenado."
 useCase:
   sector: servicios
@@ -33,5 +33,5 @@ sources:
   - name: el anuncio sobre uso de datos
     url: https://www.anthropic.com/news/updates-to-our-consumer-terms
   - name: la ayuda de idiomas
-    url: https://support.claude.com/en/articles/10769299-using-claude-in-your-preferred-language
+    url: https://support.claude.com/en/articles/10769299-how-to-use-claude-in-your-preferred-language
 ---

@@ -2,7 +2,7 @@
 title: "IA para aire acondicionado: la revisión"
 description: "En el aire acondicionado del carro, la falla la confirma quien midió en el taller, no el chat. WhatsApp pide el síntoma, ChatGPT redacta la revisión con el dato que ya anotaste y Notion guarda la autorización. No diagnostica una fuga, no nombra un gas y no inventa el precio de la reparación."
 published: 2026-11-16
-updated: 2026-11-18
+updated: 2026-11-23
 tools:
   - whatsapp-business
   - chatgpt
@@ -63,6 +63,7 @@ related:
   - talleres-de-motos
   - venta-de-repuestos
   - pintura-automotriz
+  - electricidad-automotriz
 ---
 
 El aire acondicionado se traba cuando el primer mensaje ya trae la causa. El cliente dijo que no enfría y el chat nombró un gas, una fuga o un compresor que nadie midió.
@@ -77,4 +78,4 @@ Photoroom solo limpia el fondo de una pieza real. Una etiqueta cambiada no se pu
 
 ## Lo que no hace esta página
 
-No carga gas, no mide presión y no autoriza el gasto. Si el trabajo es el motor y no el clima, sigue en la [guía de talleres](/herramientas-ia/para/talleres-de-carros). Si es la moto, sigue en la [guía de motos](/herramientas-ia/para/talleres-de-motos).
+No carga gas, no mide presión y no autoriza el gasto. Si el trabajo es el banco eléctrico y no el clima, sigue en la [guía de electricidad](/herramientas-ia/para/electricidad-automotriz). Si el trabajo es el motor y no el clima, sigue en la [guía de talleres](/herramientas-ia/para/talleres-de-carros). Si es la moto, sigue en la [guía de motos](/herramientas-ia/para/talleres-de-motos).
