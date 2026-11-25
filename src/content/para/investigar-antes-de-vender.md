@@ -1,5 +1,5 @@
 ---
-title: "IA para investigar al cliente antes de vender"
+title: "Mejor IA para investigar antes de vender"
 description: "Antes de una llamada, investigar es leer fuentes y marcar lo que no está confirmado. Perplexity cita páginas públicas y Gemini Notebook trabaja sobre archivos que tú cargas. Apollo.io y HubSpot ordenan el prospecto. Ninguna verifica sola que el cliente exista o pueda pagar."
 published: 2026-10-16
 updated: 2026-11-18

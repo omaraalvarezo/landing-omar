@@ -103,7 +103,7 @@ Se piden al entregar, con la foto del después y el enlace. El cliente escribe l
 
 ## Antes y después
 
-CapCut para el video corto. Canva para las dos fotos juntas. Si el video ya está grabado y solo faltan subtítulos, la ficha de [VEED](/herramientas-ia/veed) dice qué no hace: no genera el carro. Mismo carro, mismo ángulo, trabajo nombrado. La [guía de contenido para redes](/herramientas-ia/para/contenido-para-redes) sirve si después quieres el formato de la publicación, no para reemplazar la foto.
+CapCut para el video corto. Canva para las dos fotos juntas. Si el video ya está grabado y solo faltan subtítulos, la ficha de [VEED](/herramientas-ia/veed) dice qué no hace: no genera el carro. Si la toma es larga, [OpusClip](/herramientas-ia/opus-clip) saca clips y, en el plan gratis leído el 23 nov 2026, deja marca de agua. Un letrero con texto se puede probar en [Ideogram](/herramientas-ia/ideogram); no reemplaza las dos fotos. Mismo carro, mismo ángulo, trabajo nombrado. La [guía de contenido para redes](/herramientas-ia/para/contenido-para-redes) sirve si después quieres el formato de la publicación, no para reemplazar la foto.
 
 ## Inventario
 

@@ -1,5 +1,5 @@
 ---
-title: "Gemini o Claude: qué cambió el 23 nov"
+title: "Gemini o Claude, cuál para pymes"
 description: "Al 23 nov 2026 Gemini anunció el historial, Neon para Pro y Ultra, y el uso de computadora en un Mac de Estados Unidos. Claude no publicó un modelo nuevo esta semana. El cierre bursátil del 20 nov no trae un precio de chat."
 published: 2026-11-23
 checked: 2026-11-23

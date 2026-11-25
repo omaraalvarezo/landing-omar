@@ -1,5 +1,5 @@
 ---
-title: "IA para electricidad del carro"
+title: "Mejor IA para electricidad del carro"
 description: "En la electricidad del carro, el fallo lo confirma quien midió en el banco, no un audio. Esta guía usa WhatsApp, ChatGPT, Notion, LanguageTool y el perfil de Google. No nombra una pieza que no está en tu lista ni publica un diagnóstico que no hiciste."
 published: 2026-11-23
 tools:
@@ -72,7 +72,7 @@ WhatsApp pide el síntoma y da el precio de la revisión, el de tu lista. ChatGP
 
 ## El mensaje
 
-[LanguageTool](/herramientas-ia/languagetool) revisa el español del texto que ya escribiste. No lee un multímetro. El 16 nov 2026 la ayuda de suscripciones, fechada el 24 mar 2026, lista el Premium en euros. Esta página no los convierte en pesos.
+[LanguageTool](/herramientas-ia/languagetool) revisa el español del texto que ya escribiste. No lee un multímetro. El corrector está en [escritura](/herramientas-ia/categoria/escritura) y el WhatsApp de la revisión, en [atención al cliente](/herramientas-ia/categoria/atencion-al-cliente). El 16 nov 2026 la ayuda de suscripciones, fechada el 24 mar 2026, lista el Premium en euros. Esta página no los convierte en pesos.
 
 ## La autorización
 

@@ -760,6 +760,12 @@ Títulos con la tarea de búsqueda en las guías, las comparativas, las alternat
 
 ---
 
+## 2026-11-25 — SEO y respuestas citables del directorio
+
+Títulos de la tanda del 23 nov (y el de investigar, que perdía el sufijo) quedan bajo 60 caracteres con la tarea de búsqueda. La meta description corta en 155. Preguntas nuevas en el índice y en automatización (Kit Digital: 74 acuerdos de clientes con IA y 164 de procesos con IA, frente a 95.150 y 263.606, datos de Red.es al 23 nov 2026), en video (OpusClip gratis para clips de taller o detailing), en diseño (Ideogram gratis para un letrero), en escritura (LanguageTool gratis) y en productividad (el directorio no ficha un programa de contabilidad; el plugin de ChatGPT del 18 nov pide la app de escritorio). Enlaces desde las guías de redes, detailing y la tanda del 23 nov hacia Ideogram, OpusClip y Runway. `llms.txt` lista esas páginas y las respuestas. No se tocó Wompi, `/admin`, Upstash ni la consultoría.
+
+---
+
 ## 2026-11-23 — Tanda editorial del directorio
 
 Edición semanal de `/herramientas-ia`. Cinco noticias (historial de Gemini del 16 nov, dictado en vivo de ChatGPT del 18 nov, Gemini 4 Neon del 18 nov, uso de computadora de Gemini en Mac del 19 nov, ChatGPT Space en Plus del 20 nov), cinco guías (tapicería automotriz, parabrisas, electricidad del carro, alineación y balanceo, veterinarias), herramienta de la semana Gemini, comparativa Gemini frente a Claude, alternativas a Claude y prompts del 23 nov. Entran Ideogram, OpusClip y Runway, con ficha. La página de precios de Ideogram respondió 403: no hay monto de Plus, Pro ni Team. Los dólares de OpusClip y de Runway salen de sus páginas de precios abiertas ese día. Se corrigen enlaces que ya redirigían: idioma de Claude, Lyro de Tidio, Copilot para personas, alojamiento de n8n, español de ElevenLabs y las dos ayudas de Sidekick. La ayuda de Sidekick ya no deja fuera el navegador del celular.

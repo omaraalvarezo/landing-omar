@@ -1,6 +1,6 @@
 ---
 title: "Notion o HubSpot: notas o CRM de pyme"
-description: "Al 19 oct 2026 Notion cuenta a HubSpot entre sus conexiones nuevas. HubSpot describe Agent Hub como agentes sobre el CRM, en Starter, Professional y Enterprise. Aquí no hay puntaje."
+description: "Al 19 oct 2026 Notion cuenta a HubSpot entre sus conexiones nuevas. Agent Hub está en Starter, Professional y Enterprise. Aquí no hay puntaje."
 published: 2026-10-19
 updated: 2026-11-18
 checked: 2026-10-19

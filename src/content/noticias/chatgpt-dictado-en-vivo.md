@@ -1,5 +1,5 @@
 ---
-title: El dictado de ChatGPT ya no espera al final
+title: Dictado de ChatGPT en vivo para pymes
 description: "El 18 nov 2026 OpenAI publicó el dictado en vivo en las notas de ChatGPT. El texto aparece mientras hablas y se quitó el tope de diez minutos. El despliegue es global, en todos los planes, en teléfono, web y escritorio."
 published: 2026-11-23
 edition: 2026-11-23
