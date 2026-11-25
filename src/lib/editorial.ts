@@ -178,7 +178,7 @@ export async function guidesForCategory(categorySlug: string): Promise<{ href: s
       seen.add(item.href);
       return true;
     })
-    .slice(0, 6);
+    .slice(0, 8);
 }
 
 export async function newsForPara(slug: string) {

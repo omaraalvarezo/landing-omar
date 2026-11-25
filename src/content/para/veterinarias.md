@@ -1,5 +1,5 @@
 ---
-title: "IA para una veterinaria chica"
+title: "Mejor IA para una veterinaria chica"
 description: "En una veterinaria chica, la cita y el recordatorio de la vacuna salen de la ficha, no de un chat. Esta guía usa WhatsApp, ChatGPT, Notion, LanguageTool y el perfil de Google. No diagnostica, no receta y no publica la cara de un animal sin permiso."
 published: 2026-11-23
 tools:
@@ -68,7 +68,7 @@ Una veterinaria chica se traba en la cita y en el dato clínico. Si el chat nomb
 
 ## La cita
 
-WhatsApp pide especie, nombre del animal y motivo. ChatGPT confirma con el precio de la consulta que tú pegaste. Un síntoma no se convierte en medicamento. La [guía para atender](/herramientas-ia/para/atender-clientes) cubre las preguntas que ya tienen respuesta. Esta página deja el diagnóstico fuera del borrador.
+WhatsApp pide especie, nombre del animal y motivo. ChatGPT confirma con el precio de la consulta que tú pegaste. Un síntoma no se convierte en medicamento. La [guía para atender](/herramientas-ia/para/atender-clientes) cubre las preguntas que ya tienen respuesta. Esta página deja el diagnóstico fuera del borrador. No generes al animal: [Ideogram](/herramientas-ia/ideogram) sirve, si acaso, para un letrero cuyo texto lees, y en el plan gratis la imagen queda pública. Las respuestas que ya están escritas siguen en [atención al cliente](/herramientas-ia/categoria/atencion-al-cliente).
 
 ## El recordatorio
 

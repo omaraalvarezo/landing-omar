@@ -1,5 +1,5 @@
 ---
-title: "IA para tapicería automotriz"
+title: "Mejor IA para tapicería automotriz"
 description: "En tapicería, el daño y el material los confirma quien vio el asiento, no el chat. Esta guía usa WhatsApp, ChatGPT, Photoroom, Notion, LanguageTool y el perfil de Google. No promete un cuero que no hay en el local ni publica un interior que no tapizaste."
 published: 2026-11-23
 tools:
@@ -79,7 +79,7 @@ WhatsApp pide la foto y el nombre de la pieza. ChatGPT redacta con el precio y e
 
 ## La foto
 
-Photoroom limpia el fondo de una foto real. Si el tono cambió, no sirve. [LanguageTool](/herramientas-ia/languagetool) revisa el mensaje en español. Una sugerencia no puede cambiar el precio ni el material. El 16 nov 2026 la ayuda de suscripciones, fechada el 24 mar 2026, lista el Premium en euros. Esta página no los convierte en pesos.
+Photoroom limpia el fondo de una foto real. Si el tono cambió, no sirve. [LanguageTool](/herramientas-ia/languagetool) revisa el mensaje en español. Una sugerencia no puede cambiar el precio ni el material. El 16 nov 2026 la ayuda de suscripciones, fechada el 24 mar 2026, lista el Premium en euros. Esta página no los convierte en pesos. Un letrero del local, si hace falta, se prueba en [Ideogram](/herramientas-ia/ideogram): en el plan gratis la imagen es pública y no es la foto del asiento. Esa ficha está en [diseño](/herramientas-ia/categoria/diseno).
 
 ## El aviso
 

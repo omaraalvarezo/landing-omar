@@ -1,5 +1,5 @@
 ---
-title: "IA para cambiar un parabrisas"
+title: "Mejor IA para cambiar un parabrisas"
 description: "En un cambio de parabrisas, la medida y la marca las anota quien vio el vidrio. Esta guía usa WhatsApp, ChatGPT, Notion, el perfil de Google, Photoroom y VEED. No adivina un código ni publica un vidrio que no instalaste."
 published: 2026-11-23
 tools:
@@ -79,7 +79,7 @@ WhatsApp pide la foto y el vehículo. ChatGPT redacta con el precio que tú pega
 
 ## La foto y el video
 
-Photoroom limpia el fondo de una foto real. Si la marca deja de leerse, no sirve. [VEED](/herramientas-ia/veed) subtitula un video que grabaste. No genera el carro. [Recraft](/herramientas-ia/recraft) genera imágenes: en el plan gratis, leído el 16 nov 2026, no tienen uso comercial. No lo uses para mostrar un vidrio que no instalaste.
+Photoroom limpia el fondo de una foto real. Si la marca deja de leerse, no sirve. [VEED](/herramientas-ia/veed) subtitula un video que grabaste. No genera el carro. [Recraft](/herramientas-ia/recraft) genera imágenes: en el plan gratis, leído el 16 nov 2026, no tienen uso comercial. No lo uses para mostrar un vidrio que no instalaste. Un aviso con texto tampoco es el vidrio: [Ideogram](/herramientas-ia/ideogram), en el plan gratis del 23 nov 2026, deja la imagen pública. Los clips de un video que grabaste están en [video](/herramientas-ia/categoria/video).
 
 ## El aviso
 

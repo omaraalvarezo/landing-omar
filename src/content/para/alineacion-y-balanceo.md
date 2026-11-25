@@ -1,5 +1,5 @@
 ---
-title: "IA para alinear y balancear"
+title: "Mejor IA para alinear y balancear"
 description: "En alineación y balanceo, la medida y el síntoma los anota quien tuvo el carro en la rampa. Esta guía usa WhatsApp, ChatGPT, Notion, el perfil de Google y CapCut. No inventa un milímetro ni publica un eje que no corregiste."
 published: 2026-11-23
 tools:
@@ -72,7 +72,7 @@ WhatsApp separa alinear de balancear si tu lista los separa. ChatGPT redacta con
 
 ## El video
 
-CapCut corta un video que grabaste. No autoriza la placa ni inventa el eje. Si el corte esconde el estado de la llanta, no se publica.
+CapCut corta un video que grabaste. No autoriza la placa ni inventa el eje. Si el corte esconde el estado de la llanta, no se publica. Si la toma es larga, [OpusClip](/herramientas-ia/opus-clip) saca los clips y el plan gratis trae marca de agua. El corte corto sigue en [video](/herramientas-ia/categoria/video).
 
 ## El aviso
 

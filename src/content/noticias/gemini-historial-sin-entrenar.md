@@ -1,5 +1,5 @@
 ---
-title: Gemini separa el historial del entrenamiento
+title: Historial de Gemini sin entrenar, pyme
 description: "El 16 nov 2026 Google anunció controles nuevos en la app de Gemini. Se puede conservar el historial y salir del entrenamiento del modelo. Si apagas el historial, los chats futuros se guardan cerca de dos meses."
 published: 2026-11-23
 edition: 2026-11-23

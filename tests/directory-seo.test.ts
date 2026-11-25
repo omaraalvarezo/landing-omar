@@ -52,7 +52,7 @@ describe('SEO del directorio', () => {
       expect(page.lead.length, `${page.id}: ${page.lead}`).toBeLessThanOrEqual(320);
       const meta = clipMeta(page.lead);
       expect(meta.length, `${page.id}: ${meta}`).toBeGreaterThanOrEqual(70);
-      expect(meta.length, `${page.id}: ${meta}`).toBeLessThanOrEqual(160);
+      expect(meta.length, `${page.id}: ${meta}`).toBeLessThanOrEqual(155);
       expect(page.lead.startsWith(meta.replace(/…$/, '')) || meta === page.lead, page.id).toBe(true);
     }
   });
@@ -114,7 +114,7 @@ describe('SEO del directorio', () => {
     expect(clipMeta(`${'ChatGPT y Respond.io sirven para la misma tarea de una pyme. '.repeat(4)}Sobra.`)).toContain('Respond.io');
     expect(clipMeta('El modelo es el Haiku 5.5. En prompts cortos baja el precio de la API y deja la ficha para el día en que Anthropic lo publicó, con la fuente al lado y sin convertir esa tarifa en una promesa.')).toContain('5.5');
     const long = `${'Una frase larga. '.repeat(20)}Segunda idea que ya no cabe en el resultado de búsqueda porque sigue y sigue.`;
-    expect(clipMeta(long).length).toBeLessThanOrEqual(160);
+    expect(clipMeta(long).length).toBeLessThanOrEqual(155);
     expect(pageTitle('Título corto', ' — guía para pymes')).toBe('Título corto — guía para pymes');
     expect(pageTitle('La búsqueda de Google sube los enlaces dentro de la respuesta', ' — noticias IA para pymes')).toBe(
       'La búsqueda de Google sube los enlaces dentro de la respuesta',
@@ -124,17 +124,17 @@ describe('SEO del directorio', () => {
     expect(new Set(metas).size).toBe(metas.length);
     for (const [index, meta] of metas.entries()) {
       expect(meta.length, getTools()[index]?.slug).toBeGreaterThanOrEqual(70);
-      expect(meta.length).toBeLessThanOrEqual(160);
+      expect(meta.length).toBeLessThanOrEqual(155);
     }
   });
 
-  it('las metas de las guías quedan en 160 caracteres sin cortar la primera frase útil', () => {
+  it('las metas de las guías quedan en 155 caracteres sin cortar la primera frase útil', () => {
     const columns = ['para', 'noticias', 'prompts', 'semana', 'comparar', 'alternativas', 'casos', 'tendencias'];
     for (const column of columns) {
       for (const file of readdirSync(join('src/content', column)).filter((name) => name.endsWith('.md'))) {
         const data = frontmatter(readFileSync(join('src/content', column, file), 'utf8'));
         const meta = clipMeta(data.description);
-        expect(meta.length, file).toBeLessThanOrEqual(160);
+        expect(meta.length, file).toBeLessThanOrEqual(155);
         expect(meta.length, file).toBeGreaterThanOrEqual(70);
         expect(meta.endsWith('…'), `${file}: ${meta}`).toBe(false);
         expect(data.description.length, file).toBeGreaterThanOrEqual(80);
@@ -148,9 +148,9 @@ describe('SEO del directorio', () => {
     }
   });
 
-  it('las respuestas citables salen de las preguntas del índice y de tres categorías', () => {
+  it('las respuestas citables salen de las preguntas del índice y de las categorías', () => {
     expect(CITABLE_ANSWERS.length).toBeGreaterThanOrEqual(4);
-    expect(CITABLE_ANSWERS.length).toBeLessThanOrEqual(8);
+    expect(CITABLE_ANSWERS.length).toBeLessThanOrEqual(12);
     expect(new Set(CITABLE_ANSWERS.map((item) => item.q)).size).toBe(CITABLE_ANSWERS.length);
     for (const item of CITABLE_ANSWERS) {
       expect(item.href.startsWith('/herramientas-ia')).toBe(true);
@@ -161,6 +161,8 @@ describe('SEO del directorio', () => {
       expect(parts.map((part) => part.text).join('')).toBe(item.a);
     }
     expect(CITABLE_ANSWERS.some((item) => item.a.includes('https://www.acelerapyme.gob.es/'))).toBe(true);
+    expect(CITABLE_ANSWERS.some((item) => item.a.includes('https://www.kitdigital.red.es/'))).toBe(true);
+    expect(CITABLE_ANSWERS.filter((item) => item.a.startsWith('La mejor herramienta de IA gratis')).length).toBeGreaterThanOrEqual(3);
   });
 });
 

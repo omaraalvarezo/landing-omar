@@ -28,7 +28,7 @@ function clipLongSentence(sentence: string, max: number): string {
 }
 
 /** Meta description que cabe en el resultado de búsqueda. El párrafo visible puede ser más largo. */
-export function clipMeta(text: string, max = 160): string {
+export function clipMeta(text: string, max = 155): string {
   const clean = text.replace(/\s+/g, ' ').trim();
   if (clean.length <= max) return clean;
 
@@ -54,7 +54,7 @@ export function toolMeta(desc: string, category: string): string {
 }
 
 /** Quita el sufijo de sección cuando el título ya no cabe en el resultado. */
-export function pageTitle(title: string, suffix: string, max = 65): string {
+export function pageTitle(title: string, suffix: string, max = 60): string {
   const withSuffix = `${title}${suffix}`;
   return withSuffix.length <= max ? withSuffix : title;
 }
@@ -97,8 +97,8 @@ export const DIRECTORY_INDEX: DirectoryPageSeo = {
       a: 'Porque un chat suelto no entra en la operación. Sirve cuando queda atado a una tarea que ya se repite, como la respuesta de siempre o el seguimiento. Esta página no publica una tasa de adopción.',
     },
     {
-      q: '¿Esto reemplaza una capacitación de IA para pymes?',
-      a: 'No hay curso ni diploma en este sitio: hay fichas para elegir y guías para probar una tarea. Los talleres gratuitos los convocan universidades, cámaras de comercio y, en España, también diputaciones; en Chile y en Venezuela, quien los anuncia publica la fecha. Las ayudas para pymes y autónomos, incluido lo que en España se llama bono de IA, se leen en https://www.acelerapyme.gob.es/ y no en un monto de esta página.',
+      q: '¿Hay ayudas públicas para digitalizar una pyme con IA?',
+      a: 'Este sitio no convoca la ayuda: en España el Kit Digital de Red.es incluye gestión de clientes con IA y gestión de procesos con IA, exclusivas de los segmentos IV y V según https://www.acelerapyme.gob.es/kit-digital/soluciones-digitales. Con datos al 23 nov 2026, la portada https://www.kitdigital.red.es/ cuenta 74 acuerdos de clientes con IA y 164 de procesos con IA, frente a 95.150 de gestión de clientes y 263.606 de gestión de procesos.',
     },
     {
       q: '¿Puedo automatizar la atención y el seguimiento de leads?',
@@ -174,6 +174,10 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
         q: '¿El diseño reemplaza al video?',
         a: 'Aquí se arma la imagen fija, no el clip. Si el trabajo es un video, sigue en esa categoría; si falta el texto, un asistente redacta el borrador y diseño lo monta.',
       },
+      {
+        q: '¿Cuál es la mejor herramienta de IA gratis para un letrero de una pyme?',
+        a: 'La mejor herramienta de IA gratis para un letrero con texto que vas a leer es Ideogram, porque el plan gratis existe y la portada del 23 nov 2026 lo describe como generador con texto legible. En ese plan lo generado queda público: no subas un dato de un cliente ni uses la imagen como foto de un trabajo.',
+      },
     ],
   },
   video: {
@@ -193,6 +197,10 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
       {
         q: '¿La voz del video está en esta categoría?',
         a: 'No: la locución está en voz, con ElevenLabs, y aquí se edita o se genera el video. Si solo falta una voz sobre un guion, no abras varias cuentas de video.',
+      },
+      {
+        q: '¿Cuál es la mejor herramienta de IA gratis para los clips de un taller?',
+        a: 'La mejor herramienta de IA gratis para partir en clips un video de taller o detailing que ya grabaste es OpusClip, porque el 23 nov 2026 su plan gratis cuesta 0 dólares al mes, trae 60 créditos y exporta con marca de agua. CapCut hace el corte en el teléfono, Canva arma la imagen del antes y el después, y ninguna ficha publica un trabajo que no hiciste.',
       },
     ],
   },
@@ -241,6 +249,10 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
       {
         q: '¿Sirve la herramienta de IA que lanzó una agencia de mi ciudad?',
         a: 'Sirve si resuelve una tarea que ya haces, igual que cualquier ficha de esta lista. Lee qué no hace, quién guarda los datos y qué pasa si la agencia deja de operarla. El nombre IA no alcanza para elegirla.',
+      },
+      {
+        q: '¿Hay ayudas públicas para digitalizar una pyme con IA?',
+        a: 'Este sitio no convoca la ayuda: en España el Kit Digital de Red.es incluye gestión de clientes con IA y gestión de procesos con IA, exclusivas de los segmentos IV y V según https://www.acelerapyme.gob.es/kit-digital/soluciones-digitales. Con datos al 23 nov 2026, la portada https://www.kitdigital.red.es/ cuenta 74 acuerdos de clientes con IA y 164 de procesos con IA, frente a 95.150 de gestión de clientes y 263.606 de gestión de procesos.',
       },
     ],
   },
@@ -306,6 +318,10 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
         q: '¿Esto pasa el dato de una app a otra?',
         a: 'No por sí solo. Aquí se escribe y se guarda. Si el mismo dato hay que pasarlo a otra herramienta, el puente está en automatización.',
       },
+      {
+        q: '¿Qué herramienta de IA sirve para la contabilidad de una pyme?',
+        a: 'Este directorio no ficha un programa de contabilidad: la guía para cobrar deja el monto y la marca de pagada en una persona, y un chat solo ordena cifras que tú pegas. Las notas de ChatGPT del 18 nov 2026 describen un plugin que concilia movimientos y redacta asientos desde tus registros, en la app de escritorio, y en Enterprise lo aprueba un administrador: https://help.openai.com/en/articles/6825453-chatgpt-release-notes.',
+      },
     ],
   },
   'desarrollo-web': {
@@ -345,6 +361,10 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
       {
         q: '¿Traducir con DeepL alcanza para publicar?',
         a: 'Alcanza como borrador. Léelo en el idioma de salida antes de usarlo con un cliente. Un término de tu oficio puede quedar raro aunque la frase se vea bien.',
+      },
+      {
+        q: '¿Cuál es la mejor herramienta de IA gratis para corregir un mensaje en español?',
+        a: 'La mejor herramienta de IA gratis para corregir un mensaje que ya escribiste en español es LanguageTool, porque la versión gratis marca ortografía y puntuación simple y no arma la lista de precios. Si una sugerencia cambia un número, un material o una hora, no la aceptes.',
       },
     ],
   },
@@ -500,12 +520,16 @@ export interface CitableAnswer {
 }
 
 const CITABLE_SOURCES: { href: string; q: string }[] = [
-  { href: '/herramientas-ia', q: '¿Esto reemplaza una capacitación de IA para pymes?' },
+  { href: '/herramientas-ia', q: '¿Hay ayudas públicas para digitalizar una pyme con IA?' },
   { href: categoryPath('asistentes'), q: '¿Usar IA en una pyme es solo abrir un chat?' },
   { href: categoryPath('asistentes'), q: '¿Crear agentes de IA es un oficio que una pyme debe contratar?' },
   { href: categoryPath('automatizacion'), q: '¿Hay plataformas con IA que conectan pymes que compran y pymes que venden?' },
   { href: categoryPath('automatizacion'), q: '¿Sirve la herramienta de IA que lanzó una agencia de mi ciudad?' },
   { href: categoryPath('atencion-al-cliente'), q: '¿La IA hace más rápidos los ataques a una pyme?' },
+  { href: categoryPath('diseno'), q: '¿Cuál es la mejor herramienta de IA gratis para un letrero de una pyme?' },
+  { href: categoryPath('video'), q: '¿Cuál es la mejor herramienta de IA gratis para los clips de un taller?' },
+  { href: categoryPath('escritura'), q: '¿Cuál es la mejor herramienta de IA gratis para corregir un mensaje en español?' },
+  { href: categoryPath('productividad'), q: '¿Qué herramienta de IA sirve para la contabilidad de una pyme?' },
 ];
 
 function faqAnswer(href: string, q: string): string {
