@@ -75,6 +75,10 @@ export interface CategorySeo extends DirectoryPageSeo {
   faqs: DirectoryFaq[];
 }
 
+/** Misma respuesta en el índice y en automatización. El enlace con etiqueta es [texto](https://...). */
+const KIT_DIGITAL_ANSWER =
+  'Este sitio no convoca la ayuda: en España el Kit Digital de Red.es incluye gestión de clientes con IA y gestión de procesos con IA, exclusivas de los segmentos IV y V según [Acelerapyme (Kit Digital, soluciones digitales)](https://www.acelerapyme.gob.es/kit-digital/soluciones-digitales). Con datos al 23 nov 2026, la portada de [Kit Digital](https://www.kitdigital.red.es/) cuenta 74 acuerdos de clientes con IA y 164 de procesos con IA, frente a 95.150 de gestión de clientes y 263.606 de gestión de procesos.';
+
 export const DIRECTORY_INDEX: DirectoryPageSeo = {
   title: 'Herramientas de IA para pymes en Latinoamérica',
   lead:
@@ -98,7 +102,7 @@ export const DIRECTORY_INDEX: DirectoryPageSeo = {
     },
     {
       q: '¿Hay ayudas públicas para digitalizar una pyme con IA?',
-      a: 'Este sitio no convoca la ayuda: en España el Kit Digital de Red.es incluye gestión de clientes con IA y gestión de procesos con IA, exclusivas de los segmentos IV y V según https://www.acelerapyme.gob.es/kit-digital/soluciones-digitales. Con datos al 23 nov 2026, la portada https://www.kitdigital.red.es/ cuenta 74 acuerdos de clientes con IA y 164 de procesos con IA, frente a 95.150 de gestión de clientes y 263.606 de gestión de procesos.',
+      a: KIT_DIGITAL_ANSWER,
     },
     {
       q: '¿Puedo automatizar la atención y el seguimiento de leads?',
@@ -252,7 +256,7 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
       },
       {
         q: '¿Hay ayudas públicas para digitalizar una pyme con IA?',
-        a: 'Este sitio no convoca la ayuda: en España el Kit Digital de Red.es incluye gestión de clientes con IA y gestión de procesos con IA, exclusivas de los segmentos IV y V según https://www.acelerapyme.gob.es/kit-digital/soluciones-digitales. Con datos al 23 nov 2026, la portada https://www.kitdigital.red.es/ cuenta 74 acuerdos de clientes con IA y 164 de procesos con IA, frente a 95.150 de gestión de clientes y 263.606 de gestión de procesos.',
+        a: KIT_DIGITAL_ANSWER,
       },
     ],
   },
@@ -320,7 +324,7 @@ export const CATEGORY_SEO: Record<string, CategorySeo> = {
       },
       {
         q: '¿Qué herramienta de IA sirve para la contabilidad de una pyme?',
-        a: 'Este directorio no ficha un programa de contabilidad: la guía para cobrar deja el monto y la marca de pagada en una persona, y un chat solo ordena cifras que tú pegas. Las notas de ChatGPT del 18 nov 2026 describen un plugin que concilia movimientos y redacta asientos desde tus registros, en la app de escritorio, y en Enterprise lo aprueba un administrador: https://help.openai.com/en/articles/6825453-chatgpt-release-notes.',
+        a: 'Este directorio no ficha un programa de contabilidad: la guía para cobrar deja el monto y la marca de pagada en una persona, y un chat solo ordena cifras que tú pegas. Las notas de ChatGPT del 18 nov 2026 describen un plugin que concilia movimientos y redacta asientos desde tus registros, en la app de escritorio, y en Enterprise lo aprueba un administrador, según las [notas de publicación de ChatGPT](https://help.openai.com/en/articles/6825453-chatgpt-release-notes).',
       },
     ],
   },
@@ -497,20 +501,73 @@ export interface AnswerPart {
   href?: string;
 }
 
-/** Vuelve clicable una URL https dentro de una respuesta. El texto del schema no cambia. */
+/** Quita del final . , ; : y un ) que no abre dentro de la propia URL. */
+function splitUrlTail(raw: string): { href: string; tail: string } {
+  let href = raw;
+  let tail = '';
+  while (href.length > 'https://'.length) {
+    const last = href[href.length - 1];
+    if (last === '.' || last === ',' || last === ';' || last === ':') {
+      tail = last + tail;
+      href = href.slice(0, -1);
+      continue;
+    }
+    if (last === ')') {
+      let open = 0;
+      let close = 0;
+      for (const char of href) {
+        if (char === '(') open += 1;
+        else if (char === ')') close += 1;
+      }
+      if (close > open) {
+        tail = last + tail;
+        href = href.slice(0, -1);
+        continue;
+      }
+    }
+    break;
+  }
+  return { href, tail };
+}
+
+function linkable(href: string): boolean {
+  return /^https:\/\/[^\s./]/.test(href);
+}
+
+/** Vuelve clicable una URL https. [etiqueta](https://...) usa la etiqueta como texto.
+ *  Una URL suelta no arrastra la puntuación final ni un paréntesis de cierre sin pareja. */
 export function answerParts(text: string): AnswerPart[] {
   const parts: AnswerPart[] = [];
-  const re = /https:\/\/[^\s)]+/g;
+  const labeledOrUrl = /\[([^\]\n]+)\]\((https:\/\/[^)\s]+)\)|https:\/\/\S+/g;
   let last = 0;
-  for (const match of text.matchAll(re)) {
+  for (const match of text.matchAll(labeledOrUrl)) {
     const index = match.index ?? 0;
     if (index > last) parts.push({ text: text.slice(last, index) });
-    parts.push({ text: match[0], href: match[0] });
-    last = index + match[0].length;
+    if (match[1] !== undefined && match[2] !== undefined) {
+      const { href, tail } = splitUrlTail(match[2]);
+      if (linkable(href)) parts.push({ text: match[1], href });
+      else parts.push({ text: match[1] });
+      if (tail) parts.push({ text: tail });
+      last = index + match[0].length;
+      continue;
+    }
+    const raw = match[0];
+    const { href, tail } = splitUrlTail(raw);
+    if (linkable(href)) parts.push({ text: href, href });
+    else parts.push({ text: href });
+    if (tail) parts.push({ text: tail });
+    last = index + raw.length;
   }
   if (last < text.length) parts.push({ text: text.slice(last) });
   if (!parts.length) parts.push({ text });
   return parts;
+}
+
+/** Texto plano para schema y llms.txt: la etiqueta queda y la URL sale del href, con la puntuación fuera. */
+export function answerPlain(text: string): string {
+  return answerParts(text)
+    .map((part) => (part.href && part.text !== part.href ? `${part.text} (${part.href})` : part.text))
+    .join('');
 }
 
 export interface CitableAnswer {

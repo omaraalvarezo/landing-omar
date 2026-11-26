@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { categoryPath, getCategories, getTools } from '../lib/directory';
-import { categorySeo, CITABLE_ANSWERS, clipMeta, DIRECTORY_INDEX, hubSeo, TASK_LINKS } from '../lib/directory-seo';
+import { answerPlain, categorySeo, CITABLE_ANSWERS, clipMeta, DIRECTORY_INDEX, hubSeo, TASK_LINKS } from '../lib/directory-seo';
 import {
   alternativesPath,
   casePath,
@@ -60,7 +60,7 @@ export const GET: APIRoute = async () => {
 
 ## Respuestas directas
 
-${CITABLE_ANSWERS.map((item) => `- **${item.q}** ${item.a} Página: ${SITE}${item.href}.`).join('\n')}
+${CITABLE_ANSWERS.map((item) => `- **${item.q}** ${answerPlain(item.a)} Página: ${SITE}${item.href}.`).join('\n')}
 
 ## Fichas revisadas el 23 nov 2026
 

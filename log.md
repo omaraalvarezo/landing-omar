@@ -769,3 +769,9 @@ Títulos de la tanda del 23 nov (y el de investigar, que perdía el sufijo) qued
 ## 2026-11-23 — Tanda editorial del directorio
 
 Edición semanal de `/herramientas-ia`. Cinco noticias (historial de Gemini del 16 nov, dictado en vivo de ChatGPT del 18 nov, Gemini 4 Neon del 18 nov, uso de computadora de Gemini en Mac del 19 nov, ChatGPT Space en Plus del 20 nov), cinco guías (tapicería automotriz, parabrisas, electricidad del carro, alineación y balanceo, veterinarias), herramienta de la semana Gemini, comparativa Gemini frente a Claude, alternativas a Claude y prompts del 23 nov. Entran Ideogram, OpusClip y Runway, con ficha. La página de precios de Ideogram respondió 403: no hay monto de Plus, Pro ni Team. Los dólares de OpusClip y de Runway salen de sus páginas de precios abiertas ese día. Se corrigen enlaces que ya redirigían: idioma de Claude, Lyro de Tidio, Copilot para personas, alojamiento de n8n, español de ElevenLabs y las dos ayudas de Sidekick. La ayuda de Sidekick ya no deja fuera el navegador del celular.
+
+---
+
+## 2026-11-26 — El punto final ya no entra en el enlace
+
+La FAQ de Kit Digital (índice y automatización) y la de contabilidad pegaban el punto de la frase a la URL. `answerParts` la convertía en `href`. El texto entró en la pasada SEO del 25 nov (`1c5be5c`), no en la tanda del 23. Ahora el enlace lleva etiqueta, el punto queda fuera y una URL suelta no arrastra `. , ; :` ni un paréntesis de cierre sin pareja. El schema y `llms.txt` siguen en prosa, con la URL entre paréntesis.

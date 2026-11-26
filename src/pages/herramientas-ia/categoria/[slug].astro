@@ -10,7 +10,7 @@ import {
   type ToolCategory,
 } from '../../../lib/directory';
 import { faqNode, guidesForCategory } from '../../../lib/editorial';
-import { answerParts, categorySeo, clipMeta } from '../../../lib/directory-seo';
+import { answerParts, answerPlain, categorySeo, clipMeta } from '../../../lib/directory-seo';
 
 export function getStaticPaths() {
   return getCategories()
@@ -61,7 +61,10 @@ const jsonLd = {
         { '@type': 'ListItem', position: 3, name: category.label, item: pageUrl },
       ],
     },
-    faqNode(pageUrl, seo.faqs),
+    faqNode(
+      pageUrl,
+      seo.faqs.map((faq) => ({ ...faq, a: answerPlain(faq.a) })),
+    ),
   ],
 };
 ---

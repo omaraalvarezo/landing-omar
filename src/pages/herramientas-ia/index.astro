@@ -5,7 +5,7 @@ import DirectoryTaskLinks from '../../components/directory/DirectoryTaskLinks.as
 import ToolList from '../../components/directory/ToolList.astro';
 import { categoryPath, getCategories, getTools } from '../../lib/directory';
 import { faqNode } from '../../lib/editorial';
-import { answerParts, clipMeta, DIRECTORY_INDEX } from '../../lib/directory-seo';
+import { answerParts, answerPlain, clipMeta, DIRECTORY_INDEX } from '../../lib/directory-seo';
 
 const tools = getTools();
 const categories = getCategories();
@@ -43,7 +43,10 @@ const jsonLd = {
         { '@type': 'ListItem', position: 2, name: 'Herramientas de IA', item: `${site}/herramientas-ia` },
       ],
     },
-    faqNode(`${site}/herramientas-ia`, faqs),
+    faqNode(
+      `${site}/herramientas-ia`,
+      faqs.map((faq) => ({ ...faq, a: answerPlain(faq.a) })),
+    ),
   ],
 };
 ---

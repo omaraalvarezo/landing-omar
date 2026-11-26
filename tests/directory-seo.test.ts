@@ -9,6 +9,7 @@ import {
   TASK_LINKS,
   categorySeo,
   answerParts,
+  answerPlain,
   CITABLE_ANSWERS,
   clipMeta,
   pageTitle,
@@ -73,6 +74,11 @@ describe('SEO del directorio', () => {
         expect(count, faq.a).toBeLessThanOrEqual(3);
         expect(faq.a.length).toBeGreaterThanOrEqual(40);
         expect(faq.a).not.toMatch(/%|por ciento/i);
+        for (const part of answerParts(faq.a)) {
+          if (!part.href) continue;
+          expect(part.href, faq.q).not.toMatch(/[.,;:]$/);
+          expect(part.text.endsWith('.'), faq.q).toBe(false);
+        }
       }
     }
   });
@@ -158,11 +164,43 @@ describe('SEO del directorio', () => {
       expect(sentences(item.a).length).toBeGreaterThanOrEqual(1);
       expect(sentences(item.a).length).toBeLessThanOrEqual(3);
       const parts = answerParts(item.a);
-      expect(parts.map((part) => part.text).join('')).toBe(item.a);
+      expect(parts.map((part) => part.text).join('')).toBe(item.a.replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g, '$1'));
+      expect(answerPlain(item.a)).not.toMatch(/\[[^\]]+\]\(https:\/\//);
     }
     expect(CITABLE_ANSWERS.some((item) => item.a.includes('https://www.acelerapyme.gob.es/'))).toBe(true);
     expect(CITABLE_ANSWERS.some((item) => item.a.includes('https://www.kitdigital.red.es/'))).toBe(true);
     expect(CITABLE_ANSWERS.filter((item) => item.a.startsWith('La mejor herramienta de IA gratis')).length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('una URL suelta no se lleva la puntuación final ni un paréntesis de cierre sin pareja', () => {
+    const raw =
+      'Ve https://example.com/a. Luego https://example.com/b, https://example.com/c; https://example.com/d: y (https://example.com/e). La ficha https://en.wikipedia.org/wiki/Foo_(bar) queda.';
+    const parts = answerParts(raw);
+    expect(parts.map((part) => part.text).join('')).toBe(raw);
+    expect(parts.filter((part) => part.href).map((part) => part.href)).toEqual([
+      'https://example.com/a',
+      'https://example.com/b',
+      'https://example.com/c',
+      'https://example.com/d',
+      'https://example.com/e',
+      'https://en.wikipedia.org/wiki/Foo_(bar)',
+    ]);
+
+    const labeled = answerParts(
+      'según [Acelerapyme (Kit Digital, soluciones digitales)](https://www.acelerapyme.gob.es/kit-digital/soluciones-digitales). Con datos.',
+    );
+    expect(labeled.find((part) => part.href)?.text).toBe('Acelerapyme (Kit Digital, soluciones digitales)');
+    expect(labeled.find((part) => part.href)?.href).toBe('https://www.acelerapyme.gob.es/kit-digital/soluciones-digitales');
+    expect(labeled.map((part) => part.text).join('')).toBe(
+      'según Acelerapyme (Kit Digital, soluciones digitales). Con datos.',
+    );
+    expect(
+      answerPlain(
+        'según [Acelerapyme (Kit Digital, soluciones digitales)](https://www.acelerapyme.gob.es/kit-digital/soluciones-digitales). Con datos.',
+      ),
+    ).toBe(
+      'según Acelerapyme (Kit Digital, soluciones digitales) (https://www.acelerapyme.gob.es/kit-digital/soluciones-digitales). Con datos.',
+    );
   });
 });
 
